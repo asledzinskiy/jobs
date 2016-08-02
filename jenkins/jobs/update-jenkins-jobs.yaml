@@ -1,0 +1,35 @@
+- job:
+    name: update-jenkins-jobs
+    description: |
+      Update jenkins jobs after the merge event
+    node: standard
+    builders:
+      - shell:
+          !include-raw: builders/update-jenkins-jobs.sh
+    concurrent: true
+    scm:
+      - git:
+          branches:
+            - 'master'
+          remotes:
+            - gerrit:
+                url: 'ssh://mcp-ci-gerrit@review.fuel-infra.org:29418/mcp-ci/project-config.git'
+                credentials-id: 'mcp-ci-gerrit'
+          skip-tag: true
+    triggers:
+      - timed: 'H * * * *'
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'mcp-ci/project-config'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+    wrappers:
+      - credentials-binding:
+          - username-password-separated:
+              credential-id: 'fuel-slave-jenkins'
+              username: JJB_USER
+              password: JJB_PASS
