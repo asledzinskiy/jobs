@@ -1,0 +1,47 @@
+- job:
+    name: mcp-k8s-test-integration
+    description: |
+      Kubernetes integration tests
+    node: k8s
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/release-1.3'
+          description: 'Gerrit refspec for manual building'
+    builders:
+      - inject:
+          properties-content: |
+            COVERAGE=n
+            DOCKER_IMAGE=artifactory.ng.mirantis.net:5003/infra/k8s-ci-tests:unit
+      - shell:
+          !include-raw: builders/mcp-k8s-test.sh
+    wrappers:
+      - workspace-cleanup
+      - ssh-agent-credentials:
+          users:
+            - 'mcp-ci-gerrit'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: kubernetes/kubernetes
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '_artifacts/*'
+          latest-only: false
+      - junit:
+          results: '_artifacts/**.xml'
+      - post-tasks:
+        - matches:
+          - log-text: '.'
+          escalate-status: true
+          script: |
+            sudo chown -R jenkins:jenkins "${WORKSPACE}"

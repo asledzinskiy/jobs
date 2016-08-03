@@ -1,0 +1,33 @@
+- job:
+    name: mcp-k8s-test-unit-with-coverage
+    description: |
+      Kubernetes unit-with-coverage tests
+    node: k8s
+    concurrent: true
+    builders:
+      - inject:
+          properties-content: |
+            COVERAGE=y
+            DOCKER_IMAGE=artifactory.ng.mirantis.net:5003/infra/k8s-ci-tests:unit
+      - shell:
+          !include-raw: builders/mcp-k8s-test.sh
+    wrappers:
+      - workspace-cleanup
+      - ssh-agent-credentials:
+          users:
+            - 'mcp-ci-gerrit'
+    triggers:
+      - timed: 'H H * * *'
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '_artifacts/*'
+          latest-only: false
+      - junit:
+          results: '_artifacts/**.xml'
+      - post-tasks:
+        - matches:
+          - log-text: '.'
+          escalate-status: true
+          script: |
+            sudo chown -R jenkins:jenkins "${WORKSPACE}"
