@@ -1,0 +1,41 @@
+- job:
+    name: mcp-build-run-tests
+    description: |
+      Containers building and running tests
+    node: k8s
+    concurrent: false
+    builders:
+      - shell:
+          !include-raw: builders/mcp-build-run-tests.sh
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@review.fuel-infra.org:29418/mcp-ci/mcp-cicd-poc'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-ci/mcp-cicd-poc
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+    publishers:
+      - post-tasks:
+        - matches:
+          - log-text: '.'
+          escalate-status: true
+          script: !include-raw: builders/mcp-build-run-tests-teardown.sh
