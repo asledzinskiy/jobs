@@ -1,0 +1,5 @@
+-
+  project: kubernetes/kubernetes
+  description: kubernetes main repository
+  upstream: git://github.com/kubernetes/kubernetes.git
+  acl-config: acls/kubernetes/kubernetes.config
