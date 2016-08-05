@@ -13,8 +13,7 @@
             - 'master'
           remotes:
             - gerrit:
-                url: 'ssh://mcp-ci-gerrit@review.fuel-infra.org:29418/mcp-ci/project-config.git'
-                credentials-id: 'mcp-ci-gerrit'
+                url: 'https://review.fuel-infra.org/mcp-ci/project-config.git'
           skip-tag: true
     triggers:
       - timed: 'H * * * *'
