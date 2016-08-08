@@ -1,0 +1,13 @@
+- job:
+    name: k8s-repo-cloner-runner
+    description: |
+      This is a upstream job to run k9s-repo-cloner downstream job
+    concurrent: true
+    builders:
+      - trigger-builds:
+          - project: 'k8s-repo-cloner'
+            parameter-factories:
+              - factory: allnodesforlabel
+                node-label: k8s
+    triggers:
+      - timed: 'H 1 * * *'

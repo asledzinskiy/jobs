@@ -1,0 +1,16 @@
+- job:
+    name: k8s-repo-cloner
+    description: |
+      Kubernetes repository cloner
+    concurrent: true
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@review.fuel-infra.org:29418/kubernetes/kubernetes.git'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - 'master'
+         skip-tag: true
+         timeout: 30
+         basedir: '/home/jenkins/kubernetes'
