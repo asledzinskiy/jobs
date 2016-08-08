@@ -30,6 +30,6 @@
     wrappers:
       - credentials-binding:
           - username-password-separated:
-              credential-id: 'fuel-slave-jenkins'
+              credential-id: 'jjb-updater'
               username: JJB_USER
               password: JJB_PASS
