@@ -1,0 +1,36 @@
+- job:
+    name: mcp-lint-test
+    description: |
+      Run ansible lint test for mcp-ci
+    node: k8s
+    concurrent: true
+    builders:
+      - shell:
+          !include-raw: builders/mcp-lint-test.sh
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@review.fuel-infra.org:29418/mcp-ci/mcp-cicd-poc'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-ci/mcp-cicd-poc
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
