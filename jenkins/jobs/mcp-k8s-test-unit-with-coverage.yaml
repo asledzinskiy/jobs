@@ -9,6 +9,7 @@
           properties-content: |
             COVERAGE=y
             DOCKER_IMAGE=artifactory.ng.mirantis.net:5003/infra/k8s-ci-tests:unit
+            K8S_REPO=kubernetes/kubernetes
       - shell:
           !include-raw: builders/mcp-k8s-test.sh
     wrappers:
