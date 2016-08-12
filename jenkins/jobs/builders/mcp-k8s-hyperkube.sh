@@ -27,16 +27,19 @@ git fetch ssh://mcp-ci-gerrit@review.fuel-infra.org:29418/"${GERRIT_PROJECT}" "$
 
 export GIT_COMMIT_TAG_ID=$(git describe --tags --abbrev=4)
 
+cat <<EOF > "${WORKSPACE}/build.sh"
 source "${WORKSPACE}/build/common.sh"
-
 kube::build::verify_prereqs
 kube::build::build_image
 kube::build::run_build_command hack/build-go.sh cmd/hyperkube
+EOF
+chmod +x "${WORKSPACE}/build.sh"
+sudo -E -s "${WORKSPACE}/build.sh"
 
 export KUBE_DOCKER_VERSION="${GIT_COMMIT_TAG_ID}_${BUILD_NUMBER}"
 export VERSION="${KUBE_DOCKER_VERSION}"
 
-make -C "${KUBE_ROOT}/cluster/images/hyperkube" build
+make -C "${WORKSPACE}/cluster/images/hyperkube" build
 
 # inject calico now
 export KUBE_CONTAINER_TMP="hyperkube-tmp-${BUILD_NUMBER}"
