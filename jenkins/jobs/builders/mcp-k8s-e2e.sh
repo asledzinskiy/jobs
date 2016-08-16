@@ -2,6 +2,11 @@
 
 set -ex
 
+export K8S_REPO_DIR="${WORKSPACE}/kubernetes/"
+
+mkdir -p "${K8S_REPO_DIR}"
+cd "${K8S_REPO_DIR}"
+
 # clone repo from local copy
 git clone file:///home/jenkins/kubernetes .
 
