@@ -21,6 +21,7 @@ git fetch ssh://mcp-ci-gerrit@review.fuel-infra.org:29418/"${GERRIT_PROJECT}" "$
 mkdir "${WORKSPACE}/_artifacts"
 
 # Get image from docker registry
+docker rmi "${DOCKER_IMAGE}" || true
 docker pull "${DOCKER_IMAGE}"
 
 # Start test

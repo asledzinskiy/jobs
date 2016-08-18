@@ -1,0 +1,31 @@
+- job:
+    name: mcp-k8s-images
+    description: |
+      Kubernetes unit and integration tests images build job
+    node: k8s
+    concurrent: false
+    scm:
+      - git:
+          branches:
+            - 'master'
+          remotes:
+            - gerrit:
+                url: 'ssh://mcp-ci-gerrit@review.fuel-infra.org:29418/mcp-ci/mcp-cicd-poc'
+                credentials-id: 'mcp-ci-gerrit'
+    builders:
+      - inject:
+          properties-content: |
+            DOCKER_REGISTRY=artifactory.ng.mirantis.net:5005
+            DOCKER_REPOSITORY=k8s-tests-images
+      - shell:
+          !include-raw: builders/mcp-k8s-images.sh
+    wrappers:
+      - workspace-cleanup
+      - ssh-agent-credentials:
+          users:
+            - 'mcp-ci-gerrit'
+      - credentials-binding:
+          - username-password-separated:
+              credential-id: 'artifactory'
+              username: ARTIFACTORY_LOGIN
+              password: ARTIFACTORY_PASSWORD
