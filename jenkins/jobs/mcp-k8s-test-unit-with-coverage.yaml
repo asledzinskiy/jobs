@@ -10,6 +10,9 @@
             COVERAGE=y
             DOCKER_IMAGE=artifactory.ng.mirantis.net:5003/infra/k8s-ci-tests:unit
             K8S_REPO=kubernetes/kubernetes
+            # TODO: 255 char issue to be fixed by Upstream
+            KUBE_TEST_API_VERSIONS=v1
+            # /TODO
       - shell:
           !include-raw: builders/mcp-k8s-test.sh
     wrappers:
