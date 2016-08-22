@@ -3,7 +3,11 @@
     description: |
       Containers building and running tests
     node: k8s
-    concurrent: false
+    concurrent: true
+    properties:
+      - throttle:
+          max-per-node: 1
+          option: project
     builders:
       - shell:
           !include-raw: builders/mcp-build-run-tests.sh
