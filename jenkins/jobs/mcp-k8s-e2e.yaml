@@ -1,5 +1,5 @@
 - job-template:
-    name: mcp-k8s-e2e-{test_name}
+    name: mcp-k8s-e2e-conformance
     description: |
       Kubernetes e2e conformance tests
     node: k8s-e2e
@@ -10,12 +10,13 @@
             GOPATH=$WORKSPACE/_gopath
             ARTIFACTS=$WORKSPACE/_artifacts
             GERRIT_PROJECT=kubernetes/kubernetes
+            GERRIT_URL={gerrit-url}
             KUBERNETES_VAGRANT_USE_NFS=true
             KUBERNETES_PROVIDER=vagrant
             NUM_NODES=2
             KUBERNETES_MEMORY=3072
       - shell:
-          !include-raw-escape builders/mcp-k8s-e2e.sh
+          !include-raw-escape: builders/mcp-k8s-e2e.sh
 
     concurrent: true
 
@@ -53,9 +54,3 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
-
-- project:
-    name: mcp-k8s-e2e
-    test_name: conformance
-    jobs:
-      - 'mcp-k8s-e2e-{test_name}'

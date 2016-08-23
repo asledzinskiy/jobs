@@ -1,7 +1,7 @@
 - job:
     name: k8s-repo-cloner-runner
     description: |
-      This is a upstream job to run k9s-repo-cloner downstream job
+      This is a upstream job to run k8s-repo-cloner downstream job
     concurrent: true
     builders:
       - trigger-builds:

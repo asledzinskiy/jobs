@@ -1,4 +1,4 @@
-- job:
+- job-template:
     name: mcp-k8s-hyperkube
     description: |
       Kubernetes Hyperkube build job
@@ -7,12 +7,13 @@
     builders:
       - inject:
           properties-content: |
-            KUBE_DOCKER_REGISTRY=artifactory.mcp.mirantis.net:5002
+            KUBE_DOCKER_REGISTRY={kube-registry}
             KUBE_DOCKER_REPOSITORY=hyperkube-amd64
             KUBE_DOCKER_OWNER=jenkins
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
+            GERRIT_URL={gerrit-url}
       - shell:
-          !include-raw: builders/mcp-k8s-hyperkube.sh
+          !include-raw-escape: builders/mcp-k8s-hyperkube.sh
     wrappers:
       - workspace-cleanup
       - ssh-agent-credentials:
@@ -40,4 +41,4 @@
           - log-text: '.'
           escalate-status: true
           script: |
-            sudo chown -R jenkins:jenkins "${WORKSPACE}"
+            sudo chown -R jenkins:jenkins "${{WORKSPACE}}"

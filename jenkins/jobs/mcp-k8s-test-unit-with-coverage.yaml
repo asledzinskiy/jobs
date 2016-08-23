@@ -1,4 +1,4 @@
-- job:
+- job-template:
     name: mcp-k8s-test-unit-with-coverage
     description: |
       Kubernetes unit-with-coverage tests
@@ -8,10 +8,11 @@
       - inject:
           properties-content: |
             COVERAGE=y
-            DOCKER_IMAGE=artifactory.mcp.mirantis.net:5005/k8s-tests-images/k8s-tests-unit:latest
+            DOCKER_IMAGE={k8s-tests-registry}/k8s-tests-images/k8s-tests-unit:latest
             K8S_REPO=kubernetes/kubernetes
+            GERRIT_URL={gerrit-url}
       - shell:
-          !include-raw: builders/mcp-k8s-test.sh
+          !include-raw-escape: builders/mcp-k8s-test.sh
     wrappers:
       - workspace-cleanup
       - ssh-agent-credentials:
@@ -31,4 +32,4 @@
           - log-text: '.'
           escalate-status: true
           script: |
-            sudo chown -R jenkins:jenkins "${WORKSPACE}"
+            sudo chown -R jenkins:jenkins "${{WORKSPACE}}"

@@ -1,4 +1,4 @@
-- job:
+- job-template:
     name: mcp-k8s-images
     description: |
       Kubernetes unit and integration tests images build job
@@ -10,15 +10,15 @@
             - 'master'
           remotes:
             - gerrit:
-                url: 'ssh://mcp-ci-gerrit@review.fuel-infra.org:29418/mcp-ci/mcp-cicd-poc'
+                url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/mcp-ci/mcp-cicd-poc'
                 credentials-id: 'mcp-ci-gerrit'
     builders:
       - inject:
           properties-content: |
-            DOCKER_REGISTRY=artifactory.mcp.mirantis.net:5005
+            DOCKER_REGISTRY={k8s-tests-registry}
             DOCKER_REPOSITORY=k8s-tests-images
       - shell:
-          !include-raw: builders/mcp-k8s-images.sh
+          !include-raw-escape: builders/mcp-k8s-images.sh
     wrappers:
       - workspace-cleanup
       - ssh-agent-credentials:

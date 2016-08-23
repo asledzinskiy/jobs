@@ -1,4 +1,4 @@
-- job:
+- job-template:
     name: mcp-build-run-tests
     description: |
       Containers building and running tests
@@ -10,12 +10,12 @@
           option: project
     builders:
       - shell:
-          !include-raw: builders/mcp-build-run-tests.sh
+          !include-raw-escape: builders/mcp-build-run-tests.sh
     scm:
       - git:
          remotes:
            - gerrit:
-               url: 'ssh://mcp-ci-gerrit@review.fuel-infra.org:29418/mcp-ci/mcp-cicd-poc'
+               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/mcp-ci/mcp-cicd-poc'
                refspec: '$GERRIT_REFSPEC'
                credentials-id: 'mcp-ci-gerrit'
          branches:
@@ -40,4 +40,4 @@
         - matches:
           - log-text: '.'
           escalate-status: true
-          script: !include-raw: builders/mcp-build-run-tests-teardown.sh
+          script: !include-raw-escape: builders/mcp-build-run-tests-teardown.sh

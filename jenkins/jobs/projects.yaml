@@ -1,0 +1,19 @@
+- project:
+    name: tools
+    jobs:
+      - k8s-repo-cloner
+      - k8s-repo-cloner-runner
+      - update-jenkins-jobs
+
+- project:
+    name: mcp
+    jobs:
+      - mcp-build-run-tests
+      - mcp-k8s-e2e-conformance
+      - mcp-k8s-hyperkube
+      - mcp-k8s-images
+      - mcp-k8s-test-integration
+      - mcp-k8s-test-unit-with-coverage
+      - mcp-k8s-test-unit
+      - mcp-lint-test
+      - mcp-deploy-slave

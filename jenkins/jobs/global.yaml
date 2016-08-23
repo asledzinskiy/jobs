@@ -1,0 +1,9 @@
+# This file will be overwritten by Ansible
+
+- defaults:
+    name: global
+    project-type: freestyle
+
+    gerrit-url: review.fuel-infra.org
+    kube-registry: artifactory.mcp.mirantis.net:5002
+    k8s-tests-registry: artifactory.mcp.mirantis.net:5005
