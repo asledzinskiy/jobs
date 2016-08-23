@@ -1,0 +1,31 @@
+- job:
+    name: mcp-deploy-slave
+    description: |
+      Job to deploy Jenkins slave configuration on a selected server
+    node: standard
+    concurrent: true
+    parameters:
+      - string:
+          name: BRANCH_NAME
+          default: 'master'
+          description: 'The branch name of mcp-cicd-poc repo to use'
+      - string:
+          name: HOSTS_LIST
+          default: localhost
+          description: 'A space separated list of hosts to provision'
+    builders:
+      - shell:
+          !include-raw: builders/mcp-deploy-slave.sh
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@review.fuel-infra.org:29418/mcp-ci/mcp-cicd-poc'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+           - '$BRANCH_NAME'
+         skip-tag: true
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - 'jenkins'
