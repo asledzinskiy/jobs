@@ -37,7 +37,7 @@
           - log-text: '.'
           escalate-status: true
           script: |
-            "${{WORKSPACE}}/"kubernetes/cluster/kube-down.sh
+            "${{WORKSPACE}}/"kubernetes/cluster/kube-down.sh || true
             sudo chown -R jenkins:jenkins "${{WORKSPACE}}"
       - junit:
           results: '_artifacts/**.xml'

@@ -22,7 +22,10 @@ mkdir -p "${ARTIFACTS}"
 
 make clean
 
-./cluster/kube-down.sh
+# FIXME: temporary workaround. Best is to have it fixed in upstream.
+# This will not fail the whole job on its first run .
+./cluster/kube-down.sh || true
+# /FIXME.
 
 make release-skip-tests
 
