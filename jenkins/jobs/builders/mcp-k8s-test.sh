@@ -28,5 +28,4 @@ docker pull "${DOCKER_IMAGE}"
 cat << 'EOF' | docker run --rm=true \
     -v "${WORKSPACE}:/workspace" \
     -e "KUBE_COVER=${COVERAGE}" \
-    -e "KUBE_TEST_API_VERSIONS=${KUBE_TEST_API_VERSIONS:-}" \
     "${DOCKER_IMAGE}"
