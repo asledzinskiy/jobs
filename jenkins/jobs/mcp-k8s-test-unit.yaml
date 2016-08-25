@@ -13,7 +13,7 @@
       - inject:
           properties-content: |
             COVERAGE=n
-            DOCKER_IMAGE=artifactory.ng.mirantis.net:5005/k8s-tests-images/k8s-tests-unit:latest
+            DOCKER_IMAGE=artifactory.mcp.mirantis.net:5005/k8s-tests-images/k8s-tests-unit:latest
       - shell:
           !include-raw: builders/mcp-k8s-test.sh
     wrappers:

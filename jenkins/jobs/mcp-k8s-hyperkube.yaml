@@ -7,7 +7,7 @@
     builders:
       - inject:
           properties-content: |
-            KUBE_DOCKER_REGISTRY=artifactory.ng.mirantis.net:5002
+            KUBE_DOCKER_REGISTRY=artifactory.mcp.mirantis.net:5002
             KUBE_DOCKER_REPOSITORY=hyperkube-amd64
             KUBE_DOCKER_OWNER=jenkins
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory

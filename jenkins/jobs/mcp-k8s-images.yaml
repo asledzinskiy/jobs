@@ -15,7 +15,7 @@
     builders:
       - inject:
           properties-content: |
-            DOCKER_REGISTRY=artifactory.ng.mirantis.net:5005
+            DOCKER_REGISTRY=artifactory.mcp.mirantis.net:5005
             DOCKER_REPOSITORY=k8s-tests-images
       - shell:
           !include-raw: builders/mcp-k8s-images.sh

@@ -8,7 +8,7 @@
       - inject:
           properties-content: |
             COVERAGE=y
-            DOCKER_IMAGE=artifactory.ng.mirantis.net:5005/k8s-tests-images/k8s-tests-unit:latest
+            DOCKER_IMAGE=artifactory.mcp.mirantis.net:5005/k8s-tests-images/k8s-tests-unit:latest
             K8S_REPO=kubernetes/kubernetes
       - shell:
           !include-raw: builders/mcp-k8s-test.sh
