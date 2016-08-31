@@ -17,6 +17,7 @@
       - mcp-k8s-test-integration
       - mcp-k8s-test-unit-with-coverage
       - mcp-k8s-test-unit
+      - mcp-k8s-conformance-test-runner
       - mcp-lint-test
       - mcp-deploy-slave
 
