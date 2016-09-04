@@ -2,8 +2,10 @@
 
 set -ex
 
+GIT_K8S_CACHE_DIR="${GIT_K8S_CACHE_DIR:-/home/jenkins/kubernetes}"
+
 # clone repo from local copy
-git clone file:///home/jenkins/kubernetes .
+git clone file://"${GIT_K8S_CACHE_DIR}" .
 
 git reset --hard
 if ! git clean -x -f -d -q ; then

@@ -12,6 +12,9 @@
             KUBE_DOCKER_OWNER=jenkins
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
             GERRIT_URL={gerrit-url}
+            GIT_K8S_CACHE_DIR=/home/jenkins/kubernetes
+      - shell:
+          !include-raw-escape: builders/mcp-create-git-cache.sh
       - shell:
           !include-raw-escape: builders/mcp-k8s-hyperkube.sh
     wrappers:
