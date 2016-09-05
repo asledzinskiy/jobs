@@ -71,8 +71,9 @@ docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/hyperkube:${KUBE_DOC
 docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" || true
 
 # generate image description artifact
-cat <<EOF > "${WORKSPACE}/hyperkube_image.yaml"
+cat <<EOF > "${WORKSPACE}/hyperkube_image_${VERSION}.yaml"
 ---
 hyperkube_image_repo: "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_REPOSITORY}"
 hyperkube_image_tag: "${KUBE_DOCKER_VERSION}"
+gerrit_change_url: "${GERRIT_CHANGE_URL}"
 EOF

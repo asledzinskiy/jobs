@@ -1,20 +1,18 @@
 - job-template:
-    name: mcp-k8s-hyperkube
+    name: mcp-k8s-hyperkube-stable
     description: |
-      Kubernetes Hyperkube build job
+      Kubernetes Hyperkube build job is triggered on merge events.<br>
+      Publishes stable Hyperkube images to the {mcp-k8s-registry} registry.
     node: k8s
     concurrent: false
     builders:
       - inject:
           properties-content: |
-            KUBE_DOCKER_REGISTRY={kube-registry}
+            KUBE_DOCKER_REGISTRY={mcp-k8s-registry}
             KUBE_DOCKER_REPOSITORY=hyperkube-amd64
             KUBE_DOCKER_OWNER=jenkins
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
             GERRIT_URL={gerrit-url}
-            GIT_K8S_CACHE_DIR=/home/jenkins/kubernetes
-      - shell:
-          !include-raw-escape: builders/mcp-create-git-cache.sh
       - shell:
           !include-raw-escape: builders/mcp-k8s-hyperkube.sh
     wrappers:
@@ -27,10 +25,22 @@
               credential-id: 'artifactory'
               username: ARTIFACTORY_HYPERKUBE_LOGIN
               password: ARTIFACTORY_HYPERKUBE_PASSWORD
+      - artifactory-generic:
+          url: '{artifactory-url}'
+          name: 'mcp-ci'
+          deploy-build-info: true
+          key-from-text: 'mcp-k8s'
+          deploy-pattern:
+            - 'hyperkube*.yaml=>images-info'
+          env-vars-include: true
+          env-vars-include-patterns: '*'
+          env-vars-exclude-patterns:
+            - '*PASSWORD*'
+            - '*password*'
     triggers:
       - gerrit:
           trigger-on:
-            - patchset-created-event
+            - change-merged-event
             - comment-added-contains-event:
                 comment-contains-value: '(recheck|reverify)'
           projects:
@@ -38,10 +48,11 @@
               project-pattern: kubernetes/kubernetes
               branches:
                 - branch-compare-type: ANT
-                  branch-pattern: '**'
+                  branch-pattern: '**mcp**'
           custom-url: '* $JOB_NAME $BUILD_URL'
     publishers:
-      # todo: move to artifactory
+      - description-setter:
+          regexp: '\+ docker rmi -f (.*)'
       - archive:
           artifacts: 'hyperkube_image*.yaml'
           allow-empty: true
