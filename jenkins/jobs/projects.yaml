@@ -17,3 +17,22 @@
       - mcp-k8s-test-unit
       - mcp-lint-test
       - mcp-deploy-slave
+
+- project:
+    name: calico-build
+    jobs:
+      - calico-build-{project-name}
+    project-name:
+      - calico
+      - libcalico
+      - confd
+      - calico-bird
+      - calico-containers
+      - calico-cni
+
+- project:
+    name: calico-unit-tests
+    jobs:
+      - calico-unit-test-{project-name}
+    project-name:
+      - calico
