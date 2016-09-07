@@ -37,8 +37,8 @@
       - calico-cni
 
 - project:
-    name: calico-unit-tests
+    name: calico-pep8
     jobs:
-      - calico-unit-test-{project-name}
+      - calico-pep8-{project-name}
     project-name:
       - calico

@@ -1,12 +1,15 @@
 - job-template:
-    name: calico-unit-test-{project-name}
+    name: calico-pep8-{project-name}
     description: |
-      Run unit test for calico
+      Run pep8 style check for calico
     node: standard
     concurrent: true
     builders:
       - shell: |
-            tox -v
+            #!/bin/bash -ex
+            if tox -l | grep -qw pep8; then
+                tox -v -e pep8
+            fi
     scm:
       - git:
          remotes:
