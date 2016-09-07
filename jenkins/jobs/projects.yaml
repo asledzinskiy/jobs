@@ -4,6 +4,8 @@
       - k8s-repo-cloner
       - k8s-repo-cloner-runner
       - update-jenkins-jobs
+      - jenkins-jobs.compare
+      - jenkins-jobs.verify
 
 - project:
     name: mcp

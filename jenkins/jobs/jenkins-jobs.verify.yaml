@@ -1,0 +1,43 @@
+- job-template:
+    name: 'jenkins-jobs.verify'
+    description: |
+        <h2>Jenkins Job Builder Verify</h2>
+
+    concurrent: true
+    node: standard
+
+    builders:
+      - shell: 'tox -v -e jjb-verify'
+
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: refs/heads/master
+
+    publishers:
+      - archive:
+          artifacts: 'output/**'
+          allow-empty: 'true'
+
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/mcp-ci/project-config'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-ci/project-config
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
