@@ -6,6 +6,7 @@
       - update-jenkins-jobs
       - jenkins-jobs.compare
       - jenkins-jobs.verify
+      - jeepyb-verify
 
 - project:
     name: mcp
