@@ -47,3 +47,4 @@
     name: calico-unit-tests
     jobs:
       - calico-unit-test
+      - calico-containers-unit-test
