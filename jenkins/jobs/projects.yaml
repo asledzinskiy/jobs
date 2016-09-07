@@ -42,3 +42,8 @@
       - calico-pep8-{project-name}
     project-name:
       - calico
+
+- project:
+    name: calico-unit-tests
+    jobs:
+      - calico-unit-test
