@@ -39,6 +39,10 @@
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
     publishers:
+      # todo: move to artifactory
+      - archive:
+          artifacts: 'conformance_image.yaml'
+          allow_empty: true
       - post-tasks:
         - matches:
           - log-text: '.'

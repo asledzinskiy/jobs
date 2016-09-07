@@ -39,6 +39,10 @@
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
     publishers:
+      # todo: move to artifactory
+      - archive:
+          artifacts: 'hyperkube_image.yaml'
+          allow-empty: true
       - post-tasks:
         - matches:
           - log-text: '.'

@@ -69,3 +69,10 @@ docker push "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VER
 docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" || true
 docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/hyperkube:${KUBE_DOCKER_VERSION}" || true
 docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" || true
+
+# generate image description artifact
+cat <<EOF > "${WORKSPACE}/hyperkube_image.yaml"
+---
+hyperkube_image_repo: "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_REPOSITORY}"
+hyperkube_image_tag: "${KUBE_DOCKER_VERSION}"
+EOF
