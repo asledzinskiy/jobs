@@ -5,5 +5,6 @@
     project-type: freestyle
 
     gerrit-url: review.fuel-infra.org
+    artifactory-url: artifactory.mcp.mirantis.net
     kube-registry: artifactory.mcp.mirantis.net:5002
     k8s-tests-registry: artifactory.mcp.mirantis.net:5005

@@ -20,6 +20,14 @@
           - '$GERRIT_BRANCH'
          choosing-strategy: gerrit
          skip-tag: true
+    wrappers:
+      - artifactory-generic:
+          url: '{artifactory-url}'
+          name: 'mcp-ci'
+          deploy-build-info: true
+          key-from-select: 'projectcalico'
+          deploy-pattern:
+            - 'artifacts/**=>{project-name}'
     triggers:
       - gerrit:
           trigger-on:
