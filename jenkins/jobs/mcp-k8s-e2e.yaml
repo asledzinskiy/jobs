@@ -50,6 +50,8 @@
       - gerrit:
           trigger-on:
             - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
           projects:
             - project-compare-type: PLAIN
               project-pattern: kubernetes/kubernetes
