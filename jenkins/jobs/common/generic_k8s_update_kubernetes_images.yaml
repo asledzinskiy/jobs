@@ -1,0 +1,36 @@
+- job-template:
+    name: "{name}-k8s-update-kubernetes-images"
+    description: |
+      Update tags of images used by k8s cluster
+    node: installer
+    builders:
+      - shell:
+          !include-raw-escape: 'builders/mcp-installer-update-kubernetes-images.sh'
+    concurrent: false
+    wrappers:
+      - timeout:
+          timeout: 7200
+          fail: false
+      - ssh-agent-credentials:
+          users:
+            - "{name}-cluster-key"
+            - mcp-ci-gerrit
+    parameters:
+      - string:
+          name: HYPERKUBE_BUILD_NUMBER
+          default: "lastSuccessfulBuild"
+      - string:
+          name: K8S_CONFORMANCE_BUILD_NUMBER
+          default: "lastSuccessfulBuild"
+      - string:
+          name: INVENTORY_REPO
+          default: "{gerrit-host}/{name}/inventory"
+      - string:
+          name: CLUSTERNAME
+          default: "{name}"
+      - string:
+          name: GERRIT_USERNAME
+          default: "{name}-ci"
+      - string:
+          name: GERRIT_EMAIL
+          default: "{name}-ci@example.org"

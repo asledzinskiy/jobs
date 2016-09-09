@@ -120,7 +120,6 @@ docker rmi -f "${KUBE_DOCKER_CONFORMANCE_TAG}" || true
 
 # generate image description artifact
 cat <<EOF > "${WORKSPACE}/conformance_image.yaml"
----
 e2e_conformance_image_repo: "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_CONFORMANCE_REPOSITORY}"
 e2e_conformance_image_tag: "${KUBE_DOCKER_VERSION}"
 EOF
