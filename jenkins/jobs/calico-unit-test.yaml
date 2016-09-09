@@ -99,3 +99,37 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
+    name: confd-unit-test
+    project-name: confd
+    description: |
+      Run unit tests for confd
+    node: standard
+    concurrent: true
+    builders:
+      - shell: |
+            bash -x ./test-containerized.sh
+
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/projectcalico/{project-name}'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/{project-name}
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
