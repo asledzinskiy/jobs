@@ -18,7 +18,6 @@ cat > jenkins_jobs.ini << EOF
 user=${JJB_USER}
 password=${JJB_PASS}
 url=${JENKINS_URL}
-query_plugins_info=False
 [job_builder]
 ignore_cache=True
 recursive=True
