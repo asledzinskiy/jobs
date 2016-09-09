@@ -1,0 +1,61 @@
+- job-template:
+    name: mcp-cluster-create
+    description: |
+      Initialize a new Kubernetes cluster with required Jenkins jobs and
+      Gerrit configuration.
+    node: standard
+    builders:
+      - shell:
+          !include-raw-escape: builders/mcp-cluster-create.sh
+    concurrent: true
+    scm:
+      - git:
+          branches:
+            - 'master'
+          remotes:
+            - gerrit:
+                url: 'ssh://$GERRIT_USER@$GERRIT_SERVER:$GERRIT_PORT/mcp-ci/cluster-create.git'
+                credentials-id: 'mcp-ci-gerrit'
+    wrappers:
+      - workspace-cleanup
+      - ssh-agent-credentials:
+          users:
+            - 'mcp-ci-gerrit'
+    parameters:
+      - string:
+          name: CLUSTERNAME
+          description: "Give your cluster a name without spaces, such as my-cluster."
+      - string:
+          name: CI_EMAIL
+          description: "Leave empty to disable CI alerts."
+      - string:
+          name: GERRIT_SERVER
+          default: "{gerrit-url}"
+          description: "hostname for your gerrit server without https:// prefix"
+      - string:
+          name: GERRIT_PORT
+          default: "29418"
+          description: "SSH port for Gerrit"
+      - string:
+          name: GERRIT_USER
+          default: "mcp-ci-gerrit"
+          description: "MCP CI user which has credentials to access gerrit. (Must be in Administrators group)"
+      - string:
+          name: JENKINS_SERVER
+          default: ""
+          description: "Full URL of your Jenkins host. Defaults to $JENKINS_URL variable, no overriding should be needed."
+      - text:
+          name: SSH_PRIVKEY
+          default: ""
+          description: "SSH private key for your new cluster. Leave blank to generate a new key."
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '_artifacts/*'
+          latest-only: false
+    wrappers:
+      - credentials-binding:
+          - username-password-separated:
+              credential-id: 'jjb-updater'
+              username: JENKINS_USER
+              password: JENKINS_PASSWORD
