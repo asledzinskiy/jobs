@@ -25,7 +25,7 @@
           url: '{artifactory-url}'
           name: 'mcp-ci'
           deploy-build-info: true
-          key-from-select: 'projectcalico'
+          key-from-text: 'projectcalico'
           deploy-pattern:
             - 'artifacts/**=>{project-name}'
     triggers:
