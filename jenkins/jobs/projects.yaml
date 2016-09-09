@@ -48,3 +48,4 @@
     jobs:
       - calico-unit-test
       - calico-containers-unit-test
+      - libcalico-unit-test
