@@ -2,28 +2,29 @@
 
 set -ex
 
-export ENV_DIR="${WORKSPACE}/.tox/mcp-ci"
+export VENV_PATH="${WORKSPACE}/.tox/mcp-ci"
 export HOSTS=("${HOSTS_LIST}")
 export HOSTNAME=$(hostname)
 export ANSIBLE_HOST_KEY_CHECKING=False
+export INVENTORY="${WORKSPACE}/conf/slave_nodes_inventory"
 
-if [[ -e "${ENV_DIR}" ]]; then
-  rm -rf "${ENV_DIR}"
+if [[ -e "${VENV_PATH}" ]]; then
+  rm -rf "${VENV_PATH}"
 fi
 
 tox -e mcp-ci
-source "${ENV_DIR}/bin/activate"
+source "${VENV_PATH}/bin/activate"
 
-sed -i 's/- hosts: slave-node/- hosts: all/g' "${WORKSPACE}/ansible/prepare-slave-node.yml"
+echo "[slave-nodes]" > "${INVENTORY}"
+cp tests/test_conf.yml conf/conf.yml
 
 # construct inventory for every host from HOSTS_LIST variable
 for host in ${HOSTS[@]}; do
   if [[ "${host}" == "localhost" ]] || [[ "${host}" =~ ^127\. ]] || [[ "${host}" =~ ^${HOSTNAME}.* ]]; then
     echo "localhost detected - skipping!"
   else
-    echo "${host} ansible_user=root ansible_connection=ssh" >> "${WORKSPACE}/inventory"
+    echo "${host} ansible_user=root ansible_connection=ssh" >> "${INVENTORY}"
   fi
 done
 
-ansible-playbook "${WORKSPACE}/ansible/prepare-slave-node.yml" -i "${WORKSPACE}/inventory"
-
+./mcp-ci.sh prepare-slave-nodes
