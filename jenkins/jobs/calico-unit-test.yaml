@@ -6,9 +6,8 @@
     node: standard
     concurrent: true
     builders:
-      - shell: |
-            bash -x ./run-unit-test.sh
-
+      - shell:
+          !include-raw-escape: builders/calico-run-unit-tests.sh
     scm:
       - git:
          remotes:
