@@ -49,7 +49,7 @@
       - calico-unit-test
       - calico-containers-unit-test
       - libcalico-unit-test
-      - confd-unit-test
+      - calico-confd-unit-test
       - calico-cni-unit-test
 
 - project:

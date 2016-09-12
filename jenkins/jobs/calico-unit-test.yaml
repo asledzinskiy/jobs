@@ -100,7 +100,7 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: confd-unit-test
+    name: calico-confd-unit-test
     project-name: confd
     description: |
       Run unit tests for confd
