@@ -18,10 +18,12 @@
             CALICO_VER=mcp-0.1
             LIBCALICO_VER=mcp-0.1
             GERRIT_URL={gerrit-url}
-            CONFD_URL=""
-            BIRD_URL=""
-            BIRD6_URL=""
-            BIRDCL_URL=""
+            CONFD_URL=
+            BIRD_URL=
+            BIRD6_URL=
+            BIRDCL_URL=
+            BIRD_BUILD=
+            CONFD_BUILD=
       - shell: |
             ./build-artifacts.sh
     scm:
