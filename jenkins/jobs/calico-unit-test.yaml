@@ -136,9 +136,9 @@
 
 - job-template:
     name: calico-cni-unit-test
-    project-name: calcio-cni
+    project-name: calico-cni
     description: |
-      Run unit tests for calcio-cni plugin
+      Run unit tests for calico-cni plugin
     node: standard
     concurrent: true
     builders:
