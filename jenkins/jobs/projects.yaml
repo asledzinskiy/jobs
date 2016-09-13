@@ -101,3 +101,20 @@
         project-name:
           - mcp-netchecker-server
           - mcp-netchecker-agent
+
+- project:
+    name: mcp-netchecker-integration-tests
+    # TODO(apanchenko): take the latest image from artifactory
+    image_link: 'http://share01-scc.ng.mirantis.net/ubuntu-1604-server-18.qcow2'
+    image_path: '/home/jenkins/images/ubuntu-1604-server-18.qcow2'
+    jobs:
+    - '{project-name}.system-test.{test-name}':
+        project-name: 'mcp-netchecker-agent'
+        project-space: 'mcp-netchecker'
+        test-name: 'deploy'
+        project-to-clone: mcp-netchecker-server
+    - '{project-name}.system-test.{test-name}':
+        project-name: 'mcp-netchecker-server'
+        project-space: 'mcp-netchecker'
+        test-name: 'deploy'
+        project-to-clone: mcp-netchecker-agent
