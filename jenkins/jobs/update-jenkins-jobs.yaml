@@ -2,7 +2,7 @@
     name: update-jenkins-jobs
     description: |
       Update jenkins jobs after the merge event
-    node: standard
+    node: tools
     builders:
       - shell:
           !include-raw-escape: builders/update-jenkins-jobs.sh

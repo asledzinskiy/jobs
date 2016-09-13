@@ -1,8 +1,8 @@
 - job-template:
-    name: mcp-deploy-slave
+    name: prepare-slave-nodes
     description: |
       Job to deploy Jenkins slave configuration on a selected server
-    node: standard
+    node: tools
     concurrent: true
     parameters:
       - string:
@@ -15,7 +15,7 @@
           description: 'A space separated list of hosts to provision'
     builders:
       - shell:
-          !include-raw-escape: builders/mcp-deploy-slave.sh
+          !include-raw-escape: builders/prepare-slave-nodes.sh
     scm:
       - git:
          remotes:

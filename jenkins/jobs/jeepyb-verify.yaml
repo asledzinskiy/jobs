@@ -1,7 +1,7 @@
 - job-template:
     name: jeepyb-verify
     description: 'This job makes syntax check for jeepyb config projects.yml'
-    node: standard
+    node: verify-tests
     concurrent: true
 
     builders:

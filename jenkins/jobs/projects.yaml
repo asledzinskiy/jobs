@@ -7,6 +7,7 @@
       - jenkins-jobs.compare
       - jenkins-jobs.verify
       - jeepyb-verify
+      - prepare-slave-nodes
 
 - project:
     name: mcp
@@ -22,7 +23,6 @@
       - mcp-k8s-test-unit
       - mcp-k8s-conformance-test-runner
       - mcp-lint-test
-      - mcp-deploy-slave
 
 - project:
     name: calico-build

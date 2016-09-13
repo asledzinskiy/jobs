@@ -3,7 +3,7 @@
     project-name: calico
     description: |
       Run unit tests for Calico
-    node: standard
+    node: calico
     concurrent: true
     builders:
       - shell:
@@ -36,7 +36,7 @@
     project-name: calico-containers
     description: |
       Run unit tests for Calico Containers
-    node: standard
+    node: calico
     concurrent: true
     builders:
       - shell: |
@@ -70,7 +70,7 @@
     project-name: libcalico
     description: |
       Run unit tests for libcalico
-    node: standard
+    node: calico
     concurrent: true
     builders:
       - shell: |
@@ -104,7 +104,7 @@
     project-name: confd
     description: |
       Run unit tests for confd
-    node: standard
+    node: calico
     concurrent: true
     builders:
       - shell: |
@@ -138,7 +138,7 @@
     project-name: calico-cni
     description: |
       Run unit tests for calico-cni plugin
-    node: standard
+    node: calico
     concurrent: true
     builders:
       - shell: |

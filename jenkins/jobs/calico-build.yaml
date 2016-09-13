@@ -4,7 +4,7 @@
       Build artifacts<br>
       This is simple job without storing artifacts, only for first stage of
       jobs implementation
-    node: standard
+    node: calico
     concurrent: true
     builders:
       - inject:

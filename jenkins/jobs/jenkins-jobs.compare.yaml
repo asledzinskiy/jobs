@@ -4,7 +4,7 @@
         <h2>Jenkins Job Builder Compare XML</h2>
         <h3>Check for changed jobs. If changed job is present on a blocked list, fail the build.</h3>
     concurrent: true
-    node: 'standard'
+    node: verify-tests
 
     builders:
       - shell:

@@ -2,7 +2,7 @@
     name: calico-pep8-{project-name}
     description: |
       Run pep8 style check for calico
-    node: standard
+    node: calico
     concurrent: true
     builders:
       - shell: |

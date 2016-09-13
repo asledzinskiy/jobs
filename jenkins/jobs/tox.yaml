@@ -7,7 +7,7 @@
     name: '{project-name}-tox-{testenv}'
     description: |
       Run {project-name} tests via tox: {testenv}
-    node: standard
+    node: verify-tests
     concurrent: true
     builders:
       - check-tox:

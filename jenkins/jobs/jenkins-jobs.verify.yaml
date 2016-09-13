@@ -4,7 +4,7 @@
         <h2>Jenkins Job Builder Verify</h2>
 
     concurrent: true
-    node: standard
+    node: verify-tests
 
     builders:
       - shell: 'tox -v -e jjb-verify'

@@ -2,7 +2,7 @@
     name: mcp-lint-test
     description: |
       Run ansible lint test for mcp-ci
-    node: k8s
+    node: verify-tests
     concurrent: true
     builders:
       - shell:
