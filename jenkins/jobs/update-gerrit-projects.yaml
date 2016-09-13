@@ -1,12 +1,12 @@
 - job-template:
-    name: update-jenkins-jobs
+    name: update-gerrit-projects
     description: |
-      Update jenkins jobs after the merge event
+      Update Gerrit projects after the merge event
     node: tools
     builders:
       - shell:
-          !include-raw-escape: builders/update-jenkins-jobs.sh
-    concurrent: true
+          !include-raw-escape: builders/update-gerrit-projects.sh
+    concurrent: false
     scm:
       - git:
           branches:
@@ -17,7 +17,6 @@
                 credentials-id: 'mcp-ci-gerrit'
           skip-tag: true
     triggers:
-      - timed: 'H * * * *'
       - gerrit:
           trigger-on:
             - change-merged-event
@@ -29,11 +28,5 @@
                   branch-pattern: '**'
               file-paths:
                 - compare-type: ANT
-                  pattern: '**/jenkins/**'
+                  pattern: '**/gerrit/**'
           custom-url: '* $JOB_NAME $BUILD_URL'
-    wrappers:
-      - credentials-binding:
-          - username-password-separated:
-              credential-id: 'jjb-updater'
-              username: JJB_USER
-              password: JJB_PASS

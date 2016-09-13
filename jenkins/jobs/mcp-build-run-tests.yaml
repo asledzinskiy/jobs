@@ -2,7 +2,7 @@
     name: mcp-build-run-tests
     description: |
       Containers building and running tests
-    node: verify-tests
+    node: mcp-ci-tests
     concurrent: true
     properties:
       - throttle:
