@@ -1,0 +1,36 @@
+- builder:
+    name: check-tox
+    builders:
+      - shell: 'tox -v -e {tox-test}'
+
+- job-template:
+    name: '{project-name}-tox-{testenv}'
+    description: |
+      Run {project-name} tests via tox: {testenv}
+    node: standard
+    concurrent: true
+    builders:
+      - check-tox:
+          tox-test: {testenv}
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/{project-space}/{project-name}'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: '{project-space}/{project-name}'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'

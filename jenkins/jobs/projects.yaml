@@ -51,3 +51,19 @@
       - libcalico-unit-test
       - confd-unit-test
       - calico-cni-unit-test
+
+- project:
+    name: mcp-netchecker-unit-tests
+    jobs:
+    - '{project-name}-tox-{testenv}':
+        project-name: mcp-netchecker-agent
+        project-space: mcp-netchecker
+        testenv:
+          - pep8
+    - '{project-name}-tox-{testenv}':
+        project-name: mcp-netchecker-server
+        project-space: mcp-netchecker
+        testenv:
+          - py27
+          - py34
+          - pep8
