@@ -30,6 +30,7 @@ git fetch ssh://mcp-ci-gerrit@"${GERRIT_URL}":29418/"${GERRIT_PROJECT}" "${GERRI
 export GIT_COMMIT_TAG_ID=$(git describe --tags --abbrev=4)
 
 cat <<EOF > "${WORKSPACE}/build.sh"
+#!/bin/bash
 source "${WORKSPACE}/build/common.sh"
 kube::build::verify_prereqs
 kube::build::build_image
