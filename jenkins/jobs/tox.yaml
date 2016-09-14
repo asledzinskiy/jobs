@@ -11,7 +11,7 @@
     concurrent: true
     builders:
       - check-tox:
-          tox-test: {testenv}
+          tox-test: '{testenv}'
     scm:
       - git:
          remotes:
