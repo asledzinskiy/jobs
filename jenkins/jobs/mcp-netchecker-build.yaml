@@ -19,7 +19,7 @@
       - git:
          remotes:
            - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/mcp-netchecker/{project-name}'
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mcp-netchecker/{project-name}'
                refspec: '$GERRIT_REFSPEC'
                credentials-id: 'mcp-ci-gerrit'
          branches:
