@@ -25,7 +25,7 @@ if ! git clean -x -f -d -q ; then
   git clean -x -f -d -q
 fi
 
-git fetch ssh://mcp-ci-gerrit@"${GERRIT_URL}":29418/"${GERRIT_PROJECT}" "${GERRIT_REFSPEC}" && git checkout FETCH_HEAD
+git fetch ssh://mcp-ci-gerrit@"${GERRIT_HOST}":29418/"${GERRIT_PROJECT}" "${GERRIT_REFSPEC}" && git checkout FETCH_HEAD
 
 export GIT_COMMIT_TAG_ID=$(git describe --tags --abbrev=4)
 

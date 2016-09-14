@@ -10,7 +10,7 @@
             COVERAGE=y
             DOCKER_IMAGE={k8s-tests-registry}/k8s-tests-images/k8s-tests-unit:latest
             K8S_REPO=kubernetes/kubernetes
-            GERRIT_URL={gerrit-url}
+            GERRIT_HOST={gerrit-host}
             GIT_K8S_CACHE_DIR=/home/jenkins/kubernetes
       - shell:
           !include-raw-escape: builders/mcp-create-git-cache.sh

@@ -12,7 +12,7 @@
             KUBE_DOCKER_REPOSITORY=hyperkube-amd64
             KUBE_DOCKER_OWNER=jenkins
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
-            GERRIT_URL={gerrit-url}
+            GERRIT_HOST={gerrit-host}
       - shell:
           !include-raw-escape: builders/mcp-k8s-hyperkube.sh
     wrappers:

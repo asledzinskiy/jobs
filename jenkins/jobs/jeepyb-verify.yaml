@@ -22,7 +22,7 @@
             - $GERRIT_BRANCH
           remotes:
             - gerrit:
-                url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/mcp-ci/project-config'
+                url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mcp-ci/project-config'
                 refspec: '$GERRIT_REFSPEC'
                 credentials-id: 'mcp-ci-gerrit'
           choosing-strategy: gerrit

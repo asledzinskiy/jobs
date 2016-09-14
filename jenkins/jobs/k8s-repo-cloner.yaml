@@ -7,7 +7,7 @@
       - git:
          remotes:
            - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/kubernetes/kubernetes.git'
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/kubernetes/kubernetes.git'
                credentials-id: 'mcp-ci-gerrit'
          branches:
           - 'master'

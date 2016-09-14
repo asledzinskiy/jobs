@@ -10,7 +10,7 @@
             GOPATH=$WORKSPACE/_gopath
             ARTIFACTS=$WORKSPACE/_artifacts
             GERRIT_PROJECT=kubernetes/kubernetes
-            GERRIT_URL={gerrit-url}
+            GERRIT_HOST={gerrit-host}
             KUBERNETES_VAGRANT_USE_NFS=true
             KUBERNETES_PROVIDER=vagrant
             NUM_NODES=2

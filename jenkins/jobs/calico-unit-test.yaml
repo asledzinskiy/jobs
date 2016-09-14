@@ -12,7 +12,7 @@
       - git:
          remotes:
            - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/projectcalico/{project-name}'
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
                refspec: '$GERRIT_REFSPEC'
                credentials-id: 'mcp-ci-gerrit'
          branches:
@@ -46,7 +46,7 @@
       - git:
          remotes:
            - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/projectcalico/{project-name}'
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
                refspec: '$GERRIT_REFSPEC'
                credentials-id: 'mcp-ci-gerrit'
          branches:
@@ -80,7 +80,7 @@
       - git:
          remotes:
            - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/projectcalico/{project-name}'
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
                refspec: '$GERRIT_REFSPEC'
                credentials-id: 'mcp-ci-gerrit'
          branches:
@@ -114,7 +114,7 @@
       - git:
          remotes:
            - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/projectcalico/{project-name}'
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
                refspec: '$GERRIT_REFSPEC'
                credentials-id: 'mcp-ci-gerrit'
          branches:
@@ -148,7 +148,7 @@
       - git:
          remotes:
            - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/projectcalico/{project-name}'
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
                refspec: '$GERRIT_REFSPEC'
                credentials-id: 'mcp-ci-gerrit'
          branches:

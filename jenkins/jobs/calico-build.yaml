@@ -17,7 +17,7 @@
             BUILD_IMAGE_TAG=v0.15.0
             CALICO_VER=mcp-0.1
             LIBCALICO_VER=mcp-0.1
-            GERRIT_URL={gerrit-url}
+            GERRIT_HOST={gerrit-host}
             CONFD_URL=
             BIRD_URL=
             BIRD6_URL=
@@ -30,7 +30,7 @@
       - git:
          remotes:
            - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/projectcalico/{project-name}'
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
                refspec: '$GERRIT_REFSPEC'
                credentials-id: 'mcp-ci-gerrit'
          branches:

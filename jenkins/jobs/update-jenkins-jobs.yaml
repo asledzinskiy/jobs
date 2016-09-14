@@ -13,7 +13,7 @@
             - 'master'
           remotes:
             - gerrit:
-                url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/mcp-ci/project-config.git'
+                url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mcp-ci/project-config.git'
                 credentials-id: 'mcp-ci-gerrit'
           skip-tag: true
     triggers:

@@ -4,8 +4,11 @@
     name: global
     project-type: freestyle
 
-    gerrit-url: review.fuel-infra.org
-    artifactory-url: artifactory.mcp.mirantis.net
+    gerrit-host: review.fuel-infra.org
+    gerrit-url: https://review.fuel-infra.org
+    artifactory-host: artifactory.mcp.mirantis.net
+    artifactory-url: https://artifactory.mcp.mirantis.net/artifactory
+
     mcp-k8s-registry: artifactory.mcp.mirantis.net:5000
     mcp-k8s-ci-registry: artifactory.mcp.mirantis.net:5001
     kube-registry: artifactory.mcp.mirantis.net:5002
