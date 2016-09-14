@@ -67,3 +67,11 @@
           - py27
           - py34
           - pep8
+
+- project:
+    name: mcp-netchecker-build
+    jobs:
+    - 'mcp-netchecker-build-{project-name}':
+        project-name:
+          - mcp-netchecker-server
+          - mcp-netchecker-agent
