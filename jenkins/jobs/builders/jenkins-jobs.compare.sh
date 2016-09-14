@@ -15,6 +15,9 @@ tox -e jjb-generate -- old
 git checkout "${GITHEAD}"
 tox -e jjb-generate -- new
 
+# Create directory for diff files
+mkdir -p "${JOBS_OUT_DIR}/diff"
+
 compare_xml() {
     # Replace arguments with built-in variables ($1 - path to jobs or views output directory, $2 - path to jobs or views log file)
     OUT_DIR=$1
