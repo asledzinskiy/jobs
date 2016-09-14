@@ -85,6 +85,7 @@
         project-space: mcp-netchecker
         testenv:
           - pep8
+          - shellcheck
     - '{project-name}-tox-{testenv}':
         project-name: mcp-netchecker-server
         project-space: mcp-netchecker
