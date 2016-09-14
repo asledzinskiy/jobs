@@ -23,7 +23,7 @@ for host in ${HOSTS[@]}; do
   if [[ "${host}" == "localhost" ]] || [[ "${host}" =~ ^127\. ]] || [[ "${host}" =~ ^${HOSTNAME}.* ]]; then
     echo "localhost detected - skipping!"
   else
-    echo "${host} ansible_user=root ansible_connection=ssh" >> "${INVENTORY}"
+    echo "${host} ansible_user=ubuntu ansible_connection=ssh" >> "${INVENTORY}"
   fi
 done
 
