@@ -9,7 +9,7 @@
     builders:
       - inject:
           properties-content: |
-            CALICO_DOCKER_REGISTRY={kube-registry}
+            CALICO_DOCKER_REGISTRY={mcp-k8s-ci-registry}
             CALICO_DOCKER_OWNER=jenkins
             ARTIFACTORY_URL={artifactory-url}/projectcalico
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory

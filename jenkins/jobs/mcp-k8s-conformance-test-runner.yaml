@@ -7,7 +7,7 @@
     builders:
       - inject:
           properties-content: |
-            KUBE_DOCKER_REGISTRY={kube-registry}
+            KUBE_DOCKER_REGISTRY={mcp-k8s-ci-registry}
             KUBE_DOCKER_CONFORMANCE_REPOSITORY=k8s-conformance
             KUBE_DOCKER_OWNER=jenkins
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory

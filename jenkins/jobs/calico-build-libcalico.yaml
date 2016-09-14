@@ -9,7 +9,7 @@
     builders:
       - inject:
           properties-content: |
-            CALICO_DOCKER_REGISTRY={kube-registry}
+            CALICO_DOCKER_REGISTRY={mcp-k8s-ci-registry}
             CALICO_DOCKER_OWNER=jenkins
       - shell:
           !include-raw-escape: builders/calico-build-libcalico.sh
