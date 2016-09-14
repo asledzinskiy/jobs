@@ -1,0 +1,54 @@
+- job-template:
+    name: mcp-netchecker-build-{project-name}
+    description: |
+      Build artifacts<br>
+    node: calico
+    concurrent: true
+    builders:
+      - inject:
+          properties-content: |
+            DOCKER_REGISTRY={kube-registry}
+            DOCKER_OWNER=jenkins
+            ARTIFACTORY_URL={artifactory-url}
+            ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
+            NETCHECKER_VER=mcp-0.1
+            GERRIT_URL={gerrit-url}
+      - shell: |
+            ./build-artifacts.sh
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-url}:29418/mcp-netchecker/{project-name}'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    wrappers:
+      - credentials-binding:
+          - username-password-separated:
+              credential-id: 'artifactory'
+              username: ARTIFACTORY_LOGIN
+              password: ARTIFACTORY_PASSWORD
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-netchecker/{project-name}
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    publishers:
+      - post-tasks:
+          - matches:
+              - log-text: '.'
+            escalate-status: true
+            script: |
+              sudo chown -R jenkins:jenkins "${{WORKSPACE}}"
