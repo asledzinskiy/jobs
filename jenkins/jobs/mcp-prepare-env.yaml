@@ -1,0 +1,38 @@
+- job:
+    builders:
+      - shell:
+          !include-raw 'builders/mcp-prepare-env.sh'
+    concurrent: true
+    description: |
+      Creates a python virtual environment for MCP deployment and system tests. Stores additional images.<br><br>
+    logrotate:
+      daysToKeep: 14
+    name: mcp-prepare-env
+    parameters:
+      - bool:
+          name: 'update_devops'
+          default: false
+      - bool:
+          name: FORCE_DELETE_DEVOPS
+          default: false
+          description: 'Force to delete devops venv before update'
+      - node:
+          name: NODE
+          allowed-multiselect: true
+      - string:
+          name: BRANCH
+          default: 'master'
+          description: 'Branch name used during fuel-ccp-tests repo cloning'
+      - text:
+          name: VENV_REQUIREMENTS
+          default: ''
+          description: 'Use custom requirements for venv'
+    scm:
+      - git:
+          url: 'https://github.com/openstack/fuel-ccp-tests.git'
+          branches:
+            - $BRANCH
+          skip-tag: true
+    wrappers:
+      - timeout:
+          timeout: 60
