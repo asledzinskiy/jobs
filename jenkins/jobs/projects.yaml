@@ -31,7 +31,6 @@
       - calico-build-{project-name}
     project-name:
       - calico
-      - libcalico
       - confd
       - calico-cni
 
@@ -45,6 +44,12 @@
     name: calico-build-calico-containers
     jobs:
       - calico-build-calico-containers
+
+- project:
+    name: calico-build-libcalico
+    jobs:
+      - calico-build-libcalico
+      - calico-build-libcalico-gate
 
 - project:
     name: calico-pep8
