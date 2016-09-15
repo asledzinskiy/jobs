@@ -39,6 +39,7 @@
     name: calico-build-calico-bird
     jobs:
       - calico-build-calico-bird
+      - calico-build-calico-bird-gate
 
 - project:
     name: calico-build-calico-containers

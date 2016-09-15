@@ -1,11 +1,11 @@
 - job-template:
-    name: calico-build-calico-bird
+    name: calico-build-calico-bird-gate
     description: |
       Build artifacts<br>
       This is simple job without storing artifacts, only for first stage of
       jobs implementation
     node: calico
-    concurrent: true
+    concurrent: false
     builders:
       - inject:
           properties-content: |
@@ -18,11 +18,9 @@
          remotes:
            - gerrit:
                url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/calico-bird'
-               refspec: '$GERRIT_REFSPEC'
                credentials-id: 'mcp-ci-gerrit'
          branches:
-          - '$GERRIT_BRANCH'
-         choosing-strategy: gerrit
+          - 'mcp-0.1'
          skip-tag: true
     wrappers:
       - credentials-binding:
@@ -36,19 +34,19 @@
           deploy-build-info: true
           key-from-text: 'projectcalico'
           deploy-pattern:
-            - 'artifacts/**=>$GERRIT_CHANGE_NUMBER/calico-bird'
+            - 'artifacts/**=>mcp-0.1/calico-bird'
     triggers:
       - gerrit:
           trigger-on:
-            - patchset-created-event
+            - change-merged-event
             - comment-added-contains-event:
                 comment-contains-value: '(recheck|reverify)'
           projects:
             - project-compare-type: PLAIN
               project-pattern: projectcalico/calico-bird
               branches:
-                - branch-compare-type: ANT
-                  branch-pattern: '**'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp-0.1'
           custom-url: '* $JOB_NAME $BUILD_URL'
     publishers:
       - post-tasks:
