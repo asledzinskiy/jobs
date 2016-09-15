@@ -10,8 +10,8 @@ append_arg () {
 }
 
 DOCKER_REPO="${DOCKER_REPO:-$CALICO_DOCKER_REGISTRY}"
-ARTIFACTORY_URL="${ARTIFACTORY_URL:-artifactory.mcp.mirantis.net}"
-ARTIFACTS_URL="https://${ARTIFACTORY_URL}/artifactory/projectcalico"
+ARTIFACTORY_HOST="${ARTIFACTORY_HOST:-artifactory.mcp.mirantis.net}"
+ARTIFACTS_URL="https://${ARTIFACTORY_HOST}/artifactory/projectcalico"
 
 NODE_IMAGE="${NODE_IMAGE:-calico/node}"
 NODE_IMAGE_TAG="${NODE_IMAGE_TAG:-v0.20.0}"
