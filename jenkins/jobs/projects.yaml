@@ -31,13 +31,18 @@
       - calico-build-{project-name}
     project-name:
       - calico
-      - confd
 
 - project:
     name: calico-build-calico-bird
     jobs:
       - calico-build-calico-bird
       - calico-build-calico-bird-gate
+
+- project:
+    name: calico-build-confd
+    jobs:
+      - calico-build-confd
+      - calico-build-confd-gate
 
 - project:
     name: calico-build-calico-containers
