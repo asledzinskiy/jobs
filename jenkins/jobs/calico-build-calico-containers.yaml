@@ -25,7 +25,7 @@
             BIRD_BUILD=
             CONFD_BUILD=
       - shell:
-          !include-raw-escape: builders/calico-build-calico-bird.sh
+          !include-raw-escape: builders/calico-build-calico-containers.sh
     scm:
       - git:
          remotes:
