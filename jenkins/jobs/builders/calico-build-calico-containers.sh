@@ -10,8 +10,6 @@ append_arg () {
 }
 
 DOCKER_REPO="${DOCKER_REPO:-$CALICO_DOCKER_REGISTRY}"
-ARTIFACTORY_HOST="${ARTIFACTORY_HOST:-artifactory.mcp.mirantis.net}"
-ARTIFACTS_URL="https://${ARTIFACTORY_HOST}/artifactory/projectcalico"
 
 NODE_IMAGE="${NODE_IMAGE:-calico/node}"
 NODE_IMAGE_TAG="${NODE_IMAGE_TAG:-v0.20.0}"
@@ -28,13 +26,13 @@ CALICO_VER="${CALICO_VER:-mcp-0.1}"
 LIBCALICO_REPO="${LIBCALICO_REPO:-https://$GERRIT_HOST/projectcalico/libcalico}"
 LIBCALICO_VER="${LIBCALICO_VER:-mcp-0.1}"
 
-CONFD_BUILD="${CONFD_BUILD:-$(curl -s $ARTIFACTS_URL/confd/lastbuild)}"
-CONFD_URL="${CONFD_URL:-$ARTIFACTS_URL/confd/confd-$CONFD_BUILD}"
+CONFD_BUILD="${CONFD_BUILD:-$(curl -s $ARTIFACTORY_URL/confd/lastbuild)}"
+CONFD_URL="${CONFD_URL:-$ARTIFACTORY_URL/confd/confd-$CONFD_BUILD}"
 
-BIRD_BUILD="${BIRD_BUILD:-$(curl -s $ARTIFACTS_URL/calico-bird/lastbuild)}"
-BIRD_URL="${BIRD_URL:-$ARTIFACTS_URL/calico-bird/bird-$BIRD_BUILD}"
-BIRD6_URL="${BIRD6_URL:-$ARTIFACTS_URL/calico-bird/bird6-$BIRD_BUILD}"
-BIRDCL_URL="${BIRDCL_URL:-$ARTIFACTS_URL/calico-bird/birdcl-$BIRD_BUILD}"
+BIRD_BUILD="${BIRD_BUILD:-$(curl -s $ARTIFACTORY_URL/calico-bird/lastbuild)}"
+BIRD_URL="${BIRD_URL:-$ARTIFACTORY_URL/calico-bird/bird-$BIRD_BUILD}"
+BIRD6_URL="${BIRD6_URL:-$ARTIFACTORY_URL/calico-bird/bird6-$BIRD_BUILD}"
+BIRDCL_URL="${BIRDCL_URL:-$ARTIFACTORY_URL/calico-bird/birdcl-$BIRD_BUILD}"
 
 BUILD_ARGS=`append_arg "CALICO_REPO=$CALICO_REPO"`
 BUILD_ARGS=`append_arg "CALICO_VER=$CALICO_VER"`

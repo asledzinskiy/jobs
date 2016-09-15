@@ -11,6 +11,7 @@
           properties-content: |
             CALICO_DOCKER_REGISTRY={kube-registry}
             CALICO_DOCKER_OWNER=jenkins
+            ARTIFACTORY_URL={artifactory-url}/projectcalico
       - shell:
           !include-raw-escape: builders/calico-build-calico-bird.sh
     scm:
