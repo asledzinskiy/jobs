@@ -13,6 +13,7 @@
     name: mcp
     jobs:
       - mcp-build-run-tests
+      - mcp-cluster-create
       - mcp-k8s-e2e-conformance
       - mcp-k8s-hyperkube
       - mcp-k8s-hyperkube-ci
