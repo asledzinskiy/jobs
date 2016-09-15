@@ -32,7 +32,6 @@
     project-name:
       - calico
       - confd
-      - calico-cni
 
 - project:
     name: calico-build-calico-bird
@@ -44,6 +43,12 @@
     name: calico-build-calico-containers
     jobs:
       - calico-build-calico-containers
+
+- project:
+    name: calico-build-calico-cni
+    jobs:
+      - calico-build-calico-cni
+      - calico-build-calico-cni-gate
 
 - project:
     name: calico-build-libcalico
