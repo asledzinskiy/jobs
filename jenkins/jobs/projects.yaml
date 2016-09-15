@@ -32,13 +32,17 @@
       - calico
       - libcalico
       - confd
-      - calico-containers
       - calico-cni
 
 - project:
     name: calico-build-calico-bird
     jobs:
       - calico-build-calico-bird
+
+- project:
+    name: calico-build-calico-containers
+    jobs:
+      - calico-build-calico-containers
 
 - project:
     name: calico-pep8
