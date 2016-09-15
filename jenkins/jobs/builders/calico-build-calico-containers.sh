@@ -22,10 +22,10 @@ CTL_IMAGE_TAG="${CTL_IMAGE_TAG:-v0.20.0}"
 BUILD_IMAGE="calico/build"
 BUILD_IMAGE_TAG="${BUILD_IMAGE_TAG:-v0.15.0}"
 
-CALICO_REPO="${CALICO_REPO:-https://$GERRIT_URL/projectcalico/calico}"
+CALICO_REPO="${CALICO_REPO:-https://$GERRIT_HOST/projectcalico/calico}"
 CALICO_VER="${CALICO_VER:-mcp-0.1}"
 
-LIBCALICO_REPO="${LIBCALICO_REPO:-https://$GERRIT_URL/projectcalico/libcalico}"
+LIBCALICO_REPO="${LIBCALICO_REPO:-https://$GERRIT_HOST/projectcalico/libcalico}"
 LIBCALICO_VER="${LIBCALICO_VER:-mcp-0.1}"
 
 CONFD_BUILD="${CONFD_BUILD:-$(curl -s $ARTIFACTS_URL/confd/lastbuild)}"
