@@ -42,6 +42,19 @@ sudo -E -s "${WORKSPACE}/build.sh"
 export KUBE_DOCKER_VERSION="${GIT_COMMIT_TAG_ID}_${BUILD_NUMBER}"
 export VERSION="${KUBE_DOCKER_VERSION}"
 
+# Inject build info to the image
+pushd "${WORKSPACE}/cluster/images/hyperkube"
+if grep -q 'LABEL com.mirantis' Dockerfile; then
+   sed -i.back '/.*com.mirantis.*/d' Dockerfile
+fi
+cat <<EOF >> Dockerfile
+# Apply additional build metadata
+LABEL com.mirantis.image-specs.gerrit_change_url="${GERRIT_CHANGE_URL}" \
+      com.mirantis.image-specs.build_url="${BUILD_URL}" \
+      com.mirantis.image-specs.patchset="${GERRIT_PATCHSET_REVISION}"
+EOF
+popd
+
 make -C "${WORKSPACE}/cluster/images/hyperkube" build
 
 # inject calico now
