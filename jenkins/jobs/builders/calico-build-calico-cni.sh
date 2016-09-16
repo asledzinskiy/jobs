@@ -8,9 +8,7 @@ WORKSPACE="${WORKSPACE:-$(pwd)}"
 
 DOCKER_REPO="${DOCKER_REPO:-$CALICO_DOCKER_REGISTRY}"
 
-BUILD_IMAGE="calico/build"
-BUILD_IMAGE_TAG="${BUILD_IMAGE_TAG:-v0.15.0}"
-BUILD_IMAGE_BUILD="${BUILD_IMAGE_BUILD:-$(curl -s ${ARTIFACTORY_URL}/libcalico/lastbuild)}"
+LIBCALICO_DOCKER_IMAGE="${LIBCALICO_DOCKER_IMAGE:-$(curl -s ${ARTIFACTORY_URL}/mcp-0.1/libcalico/lastbuild)}"
 
 BUILD=$(git rev-parse --short HEAD)
 
@@ -18,11 +16,9 @@ rm -rf "${WORKSPACE}/dist" \
     "${WORKSPACE}/build" \
     "${WORKSPACE}/artifacts"
 
-BUILD_IMAGE_NAME="${DOCKER_REPO}/${BUILD_IMAGE}:${BUILD_IMAGE_TAG}-${BUILD_IMAGE_BUILD}"
-
 docker run --rm \
     -v ${WORKSPACE}:/code \
-    ${BUILD_IMAGE_NAME} \
+    ${LIBCALICO_DOCKER_IMAGE} \
     /bin/sh -c "pip install pykube && pyinstaller calico.py -ayF"
 
 mkdir -p "${WORKSPACE}/artifacts"

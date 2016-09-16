@@ -22,4 +22,4 @@ set -x
 docker push "${NAME}-${BUILD}"
 
 mkdir ./artifacts
-echo "${BUILD}" > ./artifacts/lastbuild
+echo "${NAME}-${BUILD}" > ./artifacts/lastbuild
