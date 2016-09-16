@@ -58,3 +58,7 @@
             escalate-status: true
             script: |
               sudo chown -R jenkins:jenkins "${{WORKSPACE}}"
+
+      - trigger-parameterized-builds:
+        - project: calico-build-calico-containers-gate
+          condition: SUCCESS

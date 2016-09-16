@@ -5,7 +5,7 @@
       This is simple job without storing artifacts, only for first stage of
       jobs implementation
     node: calico
-    concurrent: true
+    concurrent: false
     builders:
       - inject:
           properties-content: |
