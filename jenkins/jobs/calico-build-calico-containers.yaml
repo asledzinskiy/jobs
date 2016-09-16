@@ -11,7 +11,7 @@
           properties-content: |
             CALICO_DOCKER_REGISTRY={kube-registry}
             CALICO_DOCKER_OWNER=jenkins
-            ARTIFACTORY_HOST={artifactory-host}
+            ARTIFACTORY_URL={artifactory-url}/projectcalico
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
             NODE_IMAGE_TAG=v0.20.0
             BUILD_IMAGE_TAG=v0.15.0
