@@ -22,7 +22,10 @@
           !include-raw-escape: builders/mcp-k8s-e2e.sh
 
     concurrent: true
-
+    properties:
+      - throttle:
+          max-per-node: 1
+          option: project
     parameters:
         - string:
             name: GERRIT_REFSPEC
