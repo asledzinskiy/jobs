@@ -132,6 +132,13 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
+    publishers:
+      - post-tasks:
+          - matches:
+              - log-text: '.'
+            escalate-status: true
+            script: |
+              sudo chown -R jenkins:jenkins "${{WORKSPACE}}"
 
 - job-template:
     name: calico-cni-unit-test
