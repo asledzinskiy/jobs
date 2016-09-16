@@ -26,11 +26,10 @@
       - mcp-lint-test
 
 - project:
-    name: calico-build
+    name: calico-build-calico
     jobs:
-      - calico-build-{project-name}
-    project-name:
-      - calico
+      - calico-build-calico
+      - calico-build-calico-gate
 
 - project:
     name: calico-build-calico-bird

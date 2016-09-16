@@ -1,5 +1,5 @@
 - job-template:
-    name: calico-build-{project-name}
+    name: calico-build-calico
     description: |
       Build artifacts<br>
       This is simple job without storing artifacts, only for first stage of
@@ -7,30 +7,13 @@
     node: calico
     concurrent: true
     builders:
-      - inject:
-          properties-content: |
-            CALICO_DOCKER_REGISTRY={kube-registry}
-            CALICO_DOCKER_OWNER=jenkins
-            ARTIFACTORY_URL={artifactory-url}
-            ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
-            NODE_IMAGE_TAG=v0.20.0
-            BUILD_IMAGE_TAG=v0.15.0
-            CALICO_VER=mcp-0.1
-            LIBCALICO_VER=mcp-0.1
-            GERRIT_HOST={gerrit-host}
-            CONFD_URL=
-            BIRD_URL=
-            BIRD6_URL=
-            BIRDCL_URL=
-            BIRD_BUILD=
-            CONFD_BUILD=
       - shell: |
-            ./build-artifacts.sh
+            exit 0
     scm:
       - git:
          remotes:
            - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/calico'
                refspec: '$GERRIT_REFSPEC'
                credentials-id: 'mcp-ci-gerrit'
          branches:
@@ -49,7 +32,7 @@
           deploy-build-info: true
           key-from-text: 'projectcalico'
           deploy-pattern:
-            - 'artifacts/**=>{project-name}'
+            - 'artifacts/**=>$GERRIT_CHANGE_NUMBER/calico'
     triggers:
       - gerrit:
           trigger-on:
@@ -58,7 +41,7 @@
                 comment-contains-value: '(recheck|reverify)'
           projects:
             - project-compare-type: PLAIN
-              project-pattern: projectcalico/{project-name}
+              project-pattern: projectcalico/calico
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'
