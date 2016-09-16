@@ -62,5 +62,7 @@
       - trigger-parameterized-builds:
         - project: calico-build-calico-containers-gate
           condition: SUCCESS
+          predefined-parameters: TRIGGERED_ON=$GERRIT_CHANGE_NUMBER
         - project: calico-build-calico-cni-gate
           condition: SUCCESS
+          predefined-parameters: TRIGGERED_ON=$GERRIT_CHANGE_NUMBER
