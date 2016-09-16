@@ -48,6 +48,7 @@
     name: calico-build-calico-containers
     jobs:
       - calico-build-calico-containers
+      - calico-build-calico-containers-gate
 
 - project:
     name: calico-build-calico-cni

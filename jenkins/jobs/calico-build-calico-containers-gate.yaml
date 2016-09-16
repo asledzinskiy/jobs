@@ -1,5 +1,5 @@
 - job-template:
-    name: calico-build-calico-containers
+    name: calico-build-calico-containers-gate
     description: |
       Build artifacts<br>
       This is simple job without storing artifacts, only for first stage of
@@ -26,16 +26,16 @@
             CONFD_BUILD=
       - shell:
           !include-raw-escape: builders/calico-build-calico-containers.sh
+      - shell:
+          !include-raw-escape: builders/calico-delete-artifact-for-patchset.sh
     scm:
       - git:
          remotes:
            - gerrit:
                url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/calico-containers'
-               refspec: '$GERRIT_REFSPEC'
                credentials-id: 'mcp-ci-gerrit'
          branches:
-          - '$GERRIT_BRANCH'
-         choosing-strategy: gerrit
+          - 'mcp-0.1'
          skip-tag: true
     wrappers:
       - credentials-binding:
@@ -49,7 +49,7 @@
           deploy-build-info: true
           key-from-text: 'projectcalico'
           deploy-pattern:
-            - 'artifacts/**=>$GERRIT_CHANGE_NUMBER/calico-containers'
+            - 'artifacts/**=>mcp-0.1/calico-containers'
     triggers:
       - gerrit:
           trigger-on:
