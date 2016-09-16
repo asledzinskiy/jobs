@@ -139,7 +139,9 @@
                  refspec: '$GERRIT_REFSPEC'
                  credentials-id: 'mcp-ci-gerrit'
            branches:
-            - 'master'
+            - '$GERRIT_BRANCH'
+           choosing-strategy: gerrit
+           skip-tag: true
            basedir: '{project-name}'
 
     triggers:
