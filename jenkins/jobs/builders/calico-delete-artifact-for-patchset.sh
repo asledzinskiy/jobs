@@ -6,4 +6,6 @@ set -ex
 [ -z "${GERRIT_CHANGE_NUMBER}" ] && exit 0
 
 # delete merged artifact
+set +x
 curl -u "${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD}" -X DELETE "${ARTIFACTORY_URL}/${GERRIT_CHANGE_NUMBER}" || true
+set -x
