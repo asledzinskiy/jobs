@@ -6,8 +6,8 @@
     timeout: '180'
     weight: '1'
     envname: "$JOB_NAME"
-    netchecker-agent-dir: "${{WORKSPACE}}/mcp-netchecker-agent"
-    netchecker-server-dir: "${{WORKSPACE}}/mcp-netchecker-server"
+    netchecker-agent-dir: "$WORKSPACE/mcp-netchecker-agent"
+    netchecker-server-dir: "$WORKSPACE/mcp-netchecker-server"
     pre-script: |
         if [ -n "$IMAGE_LINK" ]; then
           mkdir -p $(dirname "$IMAGE_PATH")
