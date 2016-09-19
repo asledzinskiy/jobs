@@ -1,14 +1,14 @@
 - job-template:
-    name: mcp-k8s-conformance-test-runner
+    name: mcp-k8s-conformance-test-runner-ci
     description: |
-      Kubernetes Conformance Test Runner build job is invoked on merge events<br>
-      Publishes Kubernetes Conformance images to the {mcp-k8s-registry} registry.
+      Kubernetes Conformance Test Runner build job is invoked on creating patchsets<br>
+      Publishes Kubernetes Conformance images to the {mcp-k8s-ci-registry} registry.
     node: k8s
     concurrent: false
     builders:
       - inject:
           properties-content: |
-            KUBE_DOCKER_REGISTRY={mcp-k8s-registry}
+            KUBE_DOCKER_REGISTRY={mcp-k8s-ci-registry}
             KUBE_DOCKER_CONFORMANCE_REPOSITORY=k8s-conformance
             KUBE_DOCKER_OWNER=jenkins
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
@@ -32,7 +32,7 @@
           url: '{artifactory-url}'
           name: 'mcp-ci'
           deploy-build-info: true
-          key-from-text: 'mcp-k8s'
+          key-from-text: 'mcp-k8s-ci'
           deploy-pattern:
             - 'conformance_image*.yaml=>images-info'
           env-vars-include: true
@@ -43,7 +43,7 @@
     triggers:
       - gerrit:
           trigger-on:
-            - change-merged-event
+            - patchset-created-event
             - comment-added-contains-event:
                 comment-contains-value: '(recheck|reverify)'
           projects:
@@ -51,7 +51,7 @@
               project-pattern: kubernetes/kubernetes
               branches:
                 - branch-compare-type: ANT
-                  branch-pattern: '**mcp**'
+                  branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
     publishers:
       - description-setter:

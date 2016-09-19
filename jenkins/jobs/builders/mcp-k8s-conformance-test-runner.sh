@@ -47,6 +47,9 @@ COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 WORKDIR /go/src/k8s.io/kubernetes
 CMD /entrypoint.sh
+LABEL com.mirantis.image-specs.gerrit_change_url="${GERRIT_CHANGE_URL}" \
+      com.mirantis.image-specs.build_url="${BUILD_URL}" \
+      com.mirantis.image-specs.patchset="${GERRIT_PATCHSET_REVISION}"
 EOF
 
 cat >"${WORKSPACE}/_build_test_runner/entrypoint.sh" <<'EOF'
@@ -119,7 +122,8 @@ docker push "${KUBE_DOCKER_CONFORMANCE_TAG}"
 docker rmi -f "${KUBE_DOCKER_CONFORMANCE_TAG}" || true
 
 # generate image description artifact
-cat <<EOF > "${WORKSPACE}/conformance_image.yaml"
+cat <<EOF > "${WORKSPACE}/conformance_image_${KUBE_DOCKER_VERSION}.yaml"
 e2e_conformance_image_repo: "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_CONFORMANCE_REPOSITORY}"
 e2e_conformance_image_tag: "${KUBE_DOCKER_VERSION}"
+gerrit_change_url: "${GERRIT_CHANGE_URL}"
 EOF
