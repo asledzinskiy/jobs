@@ -2,7 +2,11 @@
     name: '{project-name}.system-test.{test-name}'
     description: 'Run system test "{test-name}" for "{project-name}" project'
     node: 'system-test'
-    concurrent: false
+    concurrent: true
+    properties:
+      - throttle:
+          max-per-node: 1
+          option: project
     timeout: '180'
     weight: '1'
     envname: "$JOB_NAME"
