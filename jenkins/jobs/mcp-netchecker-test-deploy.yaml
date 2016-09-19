@@ -7,7 +7,7 @@
       - throttle:
           max-per-node: 1
           option: project
-    timeout: '180'
+    timeout: '60'
     weight: '1'
     envname: "$JOB_NAME"
     netchecker-agent-dir: "$WORKSPACE/mcp-netchecker-agent"
@@ -148,6 +148,14 @@
            skip-tag: true
            basedir: '{project-name}'
 
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - ansicolor:
+        colormap: xterm
+
     builders:
       - inject:
           properties-content: |
@@ -172,6 +180,7 @@
           {post-script}
 
     publishers:
+    - post-destroy-vms # Destroy envs if left undestroyed
     - archive:
         allow-empty: true
         artifacts: '**/nosetests.xml,logs/*,tests.log,*.txt'

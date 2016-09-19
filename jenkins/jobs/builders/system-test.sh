@@ -48,6 +48,9 @@ if ! [[ "${KEEP_BEFORE}" == "yes" || "${KEEP_BEFORE}" == "true" ]]; then
   dos.py erase "${ENV_NAME}" || true
 fi
 
+# save environment name to destroy it by publisher in case of hang/abort
+echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
+
 # run tests
 declare -a TEST_ARGS
 TEST_ARGS=("-s")
