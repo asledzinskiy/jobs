@@ -98,10 +98,10 @@
 - project:
     name: mcp-netchecker-build
     jobs:
-    - 'mcp-netchecker-build-{project-name}':
-        project-name:
-          - mcp-netchecker-server
-          - mcp-netchecker-agent
+    - 'mcp-netchecker-{type}-build':
+        type:
+          - server
+          - agent
 
 - project:
     name: mcp-netchecker-integration-tests

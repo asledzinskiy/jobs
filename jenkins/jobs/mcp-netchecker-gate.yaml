@@ -1,23 +1,24 @@
 - job-template:
-    name: mcp-netchecker-{type}-build
+    name: mcp-netchecker-{type}-gate
     description: |
       Build artifacts<br>
     node: calico
     concurrent: true
-    properties-data-file: 'artifacts-data.txt'
     builders:
       - inject:
           properties-content: |
-            DOCKER_REGISTRY={mcp-k8s-ci-registry}
+            DOCKER_REGISTRY={kube-registry}
             DOCKER_OWNER=jenkins
             ARTIFACTORY_URL={artifactory-url}
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
-            NETCHECKER_ARTIFACTS_FILE={properties-data-file}
             NETCHECKER_TYPE={type}
             NETCHECKER_VER=mcp-0.1
             GERRIT_URL={gerrit-url}
+            PUBLISH=true
       - shell:
           !include-raw-escape: builders/mcp-netchecker-build.sh
+      - shell:
+          !include-raw-escape: builders/calico-delete-artifact-for-patchset.sh
     scm:
       - git:
          remotes:
@@ -38,7 +39,7 @@
     triggers:
       - gerrit:
           trigger-on:
-            - patchset-created-event
+            - change-merged-event
             - comment-added-contains-event:
                 comment-contains-value: '(recheck|reverify)'
           projects:
@@ -55,8 +56,3 @@
             escalate-status: true
             script: |
               sudo chown -R jenkins:jenkins "${{WORKSPACE}}"
-      - trigger-parameterized-builds:
-          - project: 'mcp-netchecker-{type}.system-test.deploy'
-            condition: 'SUCCESS'
-            current-parameters: true
-            property-file: '{properties-data-file}'

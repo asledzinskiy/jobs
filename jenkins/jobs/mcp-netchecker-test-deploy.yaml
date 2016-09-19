@@ -148,23 +148,6 @@
            skip-tag: true
            basedir: '{project-name}'
 
-    triggers:
-      - gerrit:
-          trigger-on:
-            - patchset-created-event
-          projects:
-            - project-compare-type: PLAIN
-              project-pattern: '{project-space}/{project-name}'
-              branches:
-                - branch-compare-type: ANT
-                  branch-pattern: '**'
-          custom-url: '* $JOB_NAME $BUILD_URL'
-          skip-vote:
-              successful: true
-              failed: true
-              unstable: true
-              notbuilt: true
-
     builders:
       - inject:
           properties-content: |
