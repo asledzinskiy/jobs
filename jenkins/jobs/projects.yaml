@@ -92,6 +92,7 @@
         testenv:
           - py27
           - py34
+          - py35
           - pep8
 
 - project:
