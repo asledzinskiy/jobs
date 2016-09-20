@@ -14,7 +14,7 @@
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
             NETCHECKER_ARTIFACTS_FILE={properties-data-file}
             NETCHECKER_TYPE={type}
-            NETCHECKER_VER=mcp-0.1
+            NETCHECKER_VERSION=mcp-0.1
             GERRIT_URL={gerrit-url}
       - shell:
           !include-raw-escape: builders/mcp-netchecker-build.sh
