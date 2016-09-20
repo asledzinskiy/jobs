@@ -7,7 +7,7 @@
     builders:
       - inject:
           properties-content: |
-            DOCKER_REGISTRY={kube-registry}
+            DOCKER_REGISTRY={mcp-k8s-ci-registry}
             DOCKER_OWNER=jenkins
             ARTIFACTORY_URL={artifactory-url}
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory

@@ -105,6 +105,14 @@
           - agent
 
 - project:
+    name: mcp-netchecker-gate
+    jobs:
+    - 'mcp-netchecker-{type}-gate':
+        type:
+          - server
+          - agent
+
+- project:
     name: mcp-netchecker-integration-tests
     # TODO(apanchenko): take the latest image from artifactory
     image_link: 'http://share01-scc.ng.mirantis.net/ubuntu-1604-server-21.qcow2'
