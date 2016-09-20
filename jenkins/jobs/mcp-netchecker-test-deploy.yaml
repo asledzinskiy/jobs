@@ -16,7 +16,7 @@
         if [ -n "$IMAGE_LINK" ]; then
           mkdir -p $(dirname "$IMAGE_PATH")
           pushd $(dirname "$IMAGE_PATH")
-          wget -qN "$IMAGE_LINK"
+          wget -N "$IMAGE_LINK"
           popd
         fi
     post-script: |
