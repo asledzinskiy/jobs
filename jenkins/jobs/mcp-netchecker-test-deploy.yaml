@@ -30,6 +30,22 @@
 
     parameters:
     - string:
+        name: MCP_NETCHECKER_AGENT_IMAGE_REPO
+        default: 'artifactory.mcp.mirantis.net:5002/mcp-netchecker/agent'
+
+    - string:
+        name: MCP_NETCHECKER_AGENT_VERSION
+        default: 'mcp-0.1'
+
+    - string:
+        name: MCP_NETCHECKER_SERVER_IMAGE_REPO
+        default: 'artifactory.mcp.mirantis.net:5001/mcp-netchecker/server'
+
+    - string:
+        name: MCP_NETCHECKER_SERVER_VERSION
+        default: 'mcp-0.1'
+
+    - string:
         name: IMAGE_LINK
         default: '{image_link}'
         description: "Which image to use in tests"
