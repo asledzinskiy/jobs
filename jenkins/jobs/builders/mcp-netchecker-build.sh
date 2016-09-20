@@ -30,6 +30,9 @@ if [[ "${PUBLISH}" =~ ^[Tt][Rr][Uu][Ee]|[Yy][Ee][Ss]$ ]]; then
     docker push "${NAME}"
 fi
 
+rm -rf './artifacts'
+mkdir './artifacts'
+
 NETCHECKER_ARTIFACTS_FILE_YAML="./artifacts/mcp-netchecker-${NETCHECKER_TYPE}-${BUILD}.yaml"
 
 cat > "${NETCHECKER_ARTIFACTS_FILE_YAML}" << EOF
