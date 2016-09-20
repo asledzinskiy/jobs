@@ -13,6 +13,7 @@
           branches:
             - master
     wrappers:
+      - workspace-cleanup
       - timeout:
           timeout: 7200
           fail: false
