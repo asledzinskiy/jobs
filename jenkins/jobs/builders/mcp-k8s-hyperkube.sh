@@ -9,6 +9,9 @@ fi
 
 export REGISTRY="${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}"
 
+CALICO_CNI="${CALICO_CNI:https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico}"
+CALICO_IPAM="${CALICO_IPAM:https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam}"
+
 if [[ -z "${KUBE_DOCKER_REGISTRY:-}" ]]; then
   echo "KUBE_DOCKER_REGISTRY must be set"
   exit -1
@@ -64,8 +67,21 @@ mkdir -p "${WORKSPACE}/artifacts"
 export KUBE_CONTAINER_TMP="hyperkube-tmp-${BUILD_NUMBER}"
 export CALICO_BINDIR="/opt/cni/bin"
 echo "Calico injection will happen now..."
-wget https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam
-wget https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico
+
+if [ "$CALICO_DOWNSTREAM" == "true" ] ; then
+  TMPURL="${ARTIFACTORY_URL}/projectcalico/${CALICO_VER}/calico-cni/"
+  lastbuild=$(curl -s $TMPURL/lastbuild)
+  wget ${TMPURL}/calico-${lastbuild} -O calico
+  wget ${TMPURL}/calico-ipam-${lastbuild} -O calico-ipam
+  calico_checksum=$(sha1sum calico | awk '{ print $1 }')
+  calico_ipam_checksum=$(sha1sum calico-ipam | awk '{ print $1 }')
+  [ "$calico_checksum" == "$(curl -s ${TMPURL}/calico-${lastbuild}.sha1)" ]
+  [ "$calico_ipam_checksum" == "$(curl -s ${TMPURL}/calico-ipam-${lastbuild}.sha1)" ]
+else
+  wget "${CALICO_IPAM}" -O calico-ipam
+  wget "${CALICO_CNI}" -O calico
+fi
+
 chmod +x calico calico-ipam
 docker run --name "${KUBE_CONTAINER_TMP}" -d -t "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
 docker exec -t "${KUBE_CONTAINER_TMP}" /bin/bash -c "/bin/mkdir -p ${CALICO_BINDIR}"
