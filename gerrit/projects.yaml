@@ -1,8 +1,14 @@
 -
   project: kubernetes/kubernetes
   description: kubernetes main repository
-  upstream: git://github.com/kubernetes/kubernetes.git
+  upstream: git://review.fuel-infra.org/kubernetes/kubernetes.git
   acl-config: acls/kubernetes/kubernetes.config
+
+-
+  project: mcp-ci/mcp-cicd-poc
+  description: MCP CI/CD project
+  upstream: git://review.fuel-infra.org/mcp-ci/mcp-cicd-poc
+  acl-config: acls/mcp-ci/mcp-cicd-poc.config
 
 -
   project: mcp/mcp-installer
