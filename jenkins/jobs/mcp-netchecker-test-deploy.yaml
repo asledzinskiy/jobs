@@ -31,7 +31,7 @@
     parameters:
     - string:
         name: MCP_NETCHECKER_AGENT_IMAGE_REPO
-        default: 'artifactory.mcp.mirantis.net:5002/mcp-netchecker/agent'
+        default: '{mcp-k8s-ci-registry}/mcp-netchecker/agent'
 
     - string:
         name: MCP_NETCHECKER_AGENT_VERSION
@@ -39,7 +39,7 @@
 
     - string:
         name: MCP_NETCHECKER_SERVER_IMAGE_REPO
-        default: 'artifactory.mcp.mirantis.net:5002/mcp-netchecker/server'
+        default: '{mcp-k8s-ci-registry}/mcp-netchecker/server'
 
     - string:
         name: MCP_NETCHECKER_SERVER_VERSION

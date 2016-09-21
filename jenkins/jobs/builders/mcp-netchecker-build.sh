@@ -11,11 +11,13 @@ BUILD="$(git rev-parse --short HEAD)"
 NAME="${DOCKER_REPO}/${BUILD_IMAGE}:${BUILD_IMAGE_TAG}"
 
 if [[ ! -f "Dockerfile" && -f "docker/Dockerfile" ]]; then
-    cd docker
+    pushd docker
 fi
 
 echo "Building docker image"
 docker build -t "${NAME}-${BUILD}" .
+
+popd || true
 
 echo "Pushing docker image"
 set +x
@@ -36,7 +38,7 @@ mkdir './artifacts'
 NETCHECKER_ARTIFACTS_FILE_YAML="./artifacts/mcp-netchecker-${NETCHECKER_TYPE}-${BUILD}.yaml"
 
 cat > "${NETCHECKER_ARTIFACTS_FILE_YAML}" << EOF
-mcp_netchecker_${NETCHECKER_TYPE}_image_repo: ${NAME}
+mcp_netchecker_${NETCHECKER_TYPE}_image_repo: ${DOCKER_REPO}/${BUILD_IMAGE}
 mcp_netchecker_${NETCHECKER_TYPE}_version: ${BUILD_IMAGE_TAG}-${BUILD}
 EOF
 

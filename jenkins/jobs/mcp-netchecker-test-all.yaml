@@ -1,9 +1,10 @@
 - job-template:
-    name: mcp-netchecker-{type}-build
+    name: mcp-netchecker-{type}-test-all
     description: |
       Build artifacts<br>
     node: calico
     concurrent: true
+    properties-data-file: 'artifacts-data.txt'
     builders:
       - inject:
           properties-content: |
@@ -11,11 +12,18 @@
             DOCKER_OWNER=jenkins
             ARTIFACTORY_URL={artifactory-url}
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
+            NETCHECKER_ARTIFACTS_FILE={properties-data-file}
             NETCHECKER_TYPE={type}
             NETCHECKER_VERSION=mcp-0.1
             GERRIT_URL={gerrit-url}
       - shell:
           !include-raw-escape: builders/mcp-netchecker-build.sh
+      - trigger-builds:
+          - project: 'mcp-netchecker-{type}.system-test.deploy'
+            current-parameters: true
+            property-file: '{properties-data-file}'
+            property-file-fail-on-missing: false
+            block: true
     scm:
       - git:
          remotes:
@@ -46,7 +54,16 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
+          skip-vote:
+              successful: true
+              failed: true
+              unstable: true
+              notbuilt: true
     publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'artifacts/*'
+          latest-only: false
       - post-tasks:
           - matches:
               - log-text: '.'

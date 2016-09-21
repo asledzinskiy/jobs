@@ -113,11 +113,15 @@
           - agent
 
 - project:
-    name: mcp-netchecker-integration-tests
+    name: mcp-netchecker-test-all
     # TODO(apanchenko): take the latest image from artifactory
     image_link: 'http://share01-scc.ng.mirantis.net/ubuntu-1604-server-21.qcow2'
     image_path: '/home/jenkins/images/ubuntu-1604-server-21.qcow2'
     jobs:
+    - 'mcp-netchecker-{type}-test-all':
+        type:
+          - server
+          - agent
     - '{project-name}.system-test.{test-name}':
         project-name: 'mcp-netchecker-agent'
         project-space: 'mcp-netchecker'
