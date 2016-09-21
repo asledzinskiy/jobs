@@ -1,0 +1,19 @@
+- job:
+    name: mcp-clean-env
+    description: |
+      Job helper which destroys running environment on a Jenkins slave
+    node: tools
+    concurrent: true
+    parameters:
+      - string:
+          name: ACTION
+          description: 'dos.py action to execute. example: erase, destroy.'
+      - string:
+          name: ENV_NAME
+          description: 'specify env name for the dos.py script'
+      - node:
+          name: NODE
+          allowed-multiselect: true
+    builders:
+      - shell:
+          !include-raw: builders/mcp-clean-env.sh
