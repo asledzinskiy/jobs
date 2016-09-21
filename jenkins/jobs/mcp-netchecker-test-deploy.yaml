@@ -39,7 +39,7 @@
 
     - string:
         name: MCP_NETCHECKER_SERVER_IMAGE_REPO
-        default: 'artifactory.mcp.mirantis.net:5001/mcp-netchecker/server'
+        default: 'artifactory.mcp.mirantis.net:5002/mcp-netchecker/server'
 
     - string:
         name: MCP_NETCHECKER_SERVER_VERSION
