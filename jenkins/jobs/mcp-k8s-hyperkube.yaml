@@ -36,6 +36,7 @@
           key-from-text: 'mcp-k8s'
           deploy-pattern:
             - 'hyperkube*.yaml=>images-info'
+            - 'artifacts/hyperkube**=>hyperkube-binaries'
           env-vars-include: true
           env-vars-include-patterns: '*'
           env-vars-exclude-patterns:

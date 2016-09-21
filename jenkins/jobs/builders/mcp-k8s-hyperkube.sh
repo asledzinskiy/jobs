@@ -57,6 +57,9 @@ popd
 
 make -C "${WORKSPACE}/cluster/images/hyperkube" build
 
+rm -rf "${WORKSPACE}/artifacts"
+mkdir -p "${WORKSPACE}/artifacts"
+
 # inject calico now
 export KUBE_CONTAINER_TMP="hyperkube-tmp-${BUILD_NUMBER}"
 export CALICO_BINDIR="/opt/cni/bin"
@@ -68,6 +71,7 @@ docker run --name "${KUBE_CONTAINER_TMP}" -d -t "${KUBE_DOCKER_REGISTRY}/${KUBE_
 docker exec -t "${KUBE_CONTAINER_TMP}" /bin/bash -c "/bin/mkdir -p ${CALICO_BINDIR}"
 docker cp calico "${KUBE_CONTAINER_TMP}":"${CALICO_BINDIR}/calico"
 docker cp calico-ipam "${KUBE_CONTAINER_TMP}":"${CALICO_BINDIR}/calico-ipam"
+docker cp "${KUBE_CONTAINER_TMP}":/hyperkube "${WORKSPACE}/artifacts/hyperkube_${VERSION}"
 docker stop "${KUBE_CONTAINER_TMP}"
 docker commit "${KUBE_CONTAINER_TMP}" "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
 docker rm "${KUBE_CONTAINER_TMP}"
