@@ -3,10 +3,6 @@
     description: 'Run system test "{test-name}" for "{project-name}" project'
     node: 'system-test'
     concurrent: true
-    properties:
-      - throttle:
-          max-per-node: 1
-          option: project
     timeout: '60'
     weight: '1'
     envname: "$JOB_NAME"
@@ -130,8 +126,11 @@
           NAME1=VALUE1
 
     properties:
-    - heavy-job:
-        weight: '{weight}'
+      - heavy-job:
+          weight: '{weight}'
+      - throttle:
+          max-per-node: 1
+          option: project
 
     scm:
       - git:
