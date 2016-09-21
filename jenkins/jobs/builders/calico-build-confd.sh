@@ -21,3 +21,4 @@ docker run --rm \
 BUILD=$(git rev-parse --short HEAD)
 cp "./${src_suffix}/confd" "./artifacts/confd-${BUILD}"
 echo "${BUILD}" > ./artifacts/lastbuild
+echo "GIT_SHA=${BUILD}" > build.property

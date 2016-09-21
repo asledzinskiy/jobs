@@ -17,3 +17,4 @@ cp ./dist/bird6 ./artifacts/bird6-"${BUILD}"
 cp ./dist/birdcl ./artifacts/birdcl-"${BUILD}"
 rm -rf ./dist
 echo "${BUILD}" > ./artifacts/lastbuild
+echo "GIT_SHA=${BUILD}" > build.property

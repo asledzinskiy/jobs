@@ -23,3 +23,4 @@ docker push "${NAME}-${BUILD}"
 
 mkdir ./artifacts
 echo "${NAME}-${BUILD}" > ./artifacts/lastbuild
+echo "LIBCALICO_IMAGE=${NAME}-${BUILD}" > build.property

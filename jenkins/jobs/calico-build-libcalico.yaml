@@ -11,8 +11,19 @@
           properties-content: |
             CALICO_DOCKER_REGISTRY={mcp-k8s-ci-registry}
             CALICO_DOCKER_OWNER=jenkins
+            ARTIFACTORY_URL={artifactory-url}/projectcalico
       - shell:
           !include-raw-escape: builders/calico-build-libcalico.sh
+      - shell:
+          !include-raw-escape: builders/calico-publish-artifact-for-patchset.sh
+      - trigger-builds:
+        - project: calico-build-calico-cni
+          property-file: build.property
+          predefined-parameters: |
+            GERRIT_REFSPEC=refs/heads/mcp-0.1
+            GERRIT_CHANGE_NUMBER=$GERRIT_CHANGE_NUMBER
+            LIBCALICO_DOCKER_IMAGE=$LIBCALICO_IMAGE
+          block: true
     scm:
       - git:
          remotes:
@@ -30,13 +41,6 @@
               credential-id: 'artifactory'
               username: ARTIFACTORY_LOGIN
               password: ARTIFACTORY_PASSWORD
-      - artifactory-generic:
-          url: '{artifactory-url}'
-          name: 'mcp-ci'
-          deploy-build-info: true
-          key-from-text: 'projectcalico'
-          deploy-pattern:
-            - 'artifacts/**=>$GERRIT_CHANGE_NUMBER/libcalico'
     triggers:
       - gerrit:
           trigger-on:
