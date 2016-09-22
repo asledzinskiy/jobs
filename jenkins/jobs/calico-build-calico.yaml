@@ -9,8 +9,6 @@
     builders:
       - shell: |
             exit 0
-      - shell:
-          !include-raw-escape: builders/calico-delete-artifact-for-patchset.sh
     scm:
       - git:
          remotes:
