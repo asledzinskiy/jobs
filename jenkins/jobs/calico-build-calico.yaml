@@ -7,32 +7,15 @@
     node: calico
     concurrent: true
     builders:
-      - shell: |
-            exit 0
-    scm:
-      - git:
-         remotes:
-           - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/calico'
-               refspec: '$GERRIT_REFSPEC'
-               credentials-id: 'mcp-ci-gerrit'
-         branches:
-          - '$GERRIT_BRANCH'
-         choosing-strategy: gerrit
-         skip-tag: true
-    wrappers:
-      - credentials-binding:
-          - username-password-separated:
-              credential-id: 'artifactory'
-              username: ARTIFACTORY_LOGIN
-              password: ARTIFACTORY_PASSWORD
-      - artifactory-generic:
-          url: '{artifactory-url}'
-          name: 'mcp-ci'
-          deploy-build-info: true
-          key-from-text: 'projectcalico'
-          deploy-pattern:
-            - 'artifacts/**=>$GERRIT_CHANGE_NUMBER/calico'
+      - trigger-builds:
+        - project: calico-build-calico-containers
+          predefined-parameters: |
+            CALICO_GERRIT_REFSPEC=$GERRIT_REFSPEC
+            CALICO_GERRIT_BRANCH=$GERRIT_BRANCH
+            CALICO_REPO=file:///tmp/calico_share
+            GERRIT_REFSPEC=refs/heads/mcp-0.1
+            GERRIT_CHANGE_NUMBER=$GERRIT_CHANGE_NUMBER
+          block: true
     triggers:
       - gerrit:
           trigger-on:
@@ -46,10 +29,3 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
-    publishers:
-      - post-tasks:
-          - matches:
-              - log-text: '.'
-            escalate-status: true
-            script: |
-              sudo chown -R jenkins:jenkins "${{WORKSPACE}}"

@@ -60,6 +60,21 @@ docker build --build-arg CTLBIN=calicoctl -t ${CTL_NAME}-${BUILD} .
 cd ..
 
 echo "Building calico/node"
+LOCAL_CALICO_REPO="${WORKSPACE}/calico_node/calico_share"
+
+# if we have CALICO_GERRIT_REFSPEC then this job was triggered by upstream calico and we need to prepare
+# custom code
+if [ -n "${CALICO_GERRIT_REFSPEC}" ]; then
+  echo "Preparing calico repo from patchset"
+  echo "Clean directory defore cloning into it"
+  rm -rf "${LOCAL_CALICO_REPO}/.gitkeep"
+  cd "${LOCAL_CALICO_REPO}"
+  git clone "ssh://mcp-ci-gerrit@${GERRIT_HOST}:29418/projectcalico/calico" --branch "${CALICO_GERRIT_BRANCH}" .
+  git fetch "ssh://mcp-ci-gerrit@${GERRIT_HOST}:29418/projectcalico/calico" "${CALICO_GERRIT_REFSPEC}" && \
+    git cherry-pick FETCH_HEAD
+  cd "${WORKSPACE}"
+fi
+
 cd calico_node
 docker build $BUILD_ARGS -t ${NAME}-${BUILD} .
 cd ..

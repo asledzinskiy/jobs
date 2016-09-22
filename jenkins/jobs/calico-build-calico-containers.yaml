@@ -38,6 +38,10 @@
          choosing-strategy: gerrit
          skip-tag: true
     wrappers:
+      - workspace-cleanup
+      - ssh-agent-credentials:
+          users:
+            - 'mcp-ci-gerrit'
       - credentials-binding:
           - username-password-separated:
               credential-id: 'artifactory'
