@@ -23,6 +23,10 @@ if ! git clean -x -f -d -q ; then
   git clean -x -f -d -q
 fi
 
+# sync local copy of kubernetes repo with the remote
+git remote add kubernetes ssh://mcp-ci-gerrit@"${GERRIT_HOST}":29418/"${GERRIT_PROJECT}"
+$(git pull kubernetes; echo true)
+
 git fetch ssh://mcp-ci-gerrit@"${GERRIT_HOST}":29418/"${GERRIT_PROJECT}" "${GERRIT_REFSPEC}" && git checkout FETCH_HEAD
 
 export GIT_COMMIT_TAG_ID=$(git describe --tags --abbrev=4)
