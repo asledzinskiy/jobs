@@ -43,7 +43,18 @@ BUILD_ARGS=`append_arg "BIRD_URL=$BIRD_URL"`
 BUILD_ARGS=`append_arg "BIRD6_URL=$BIRD6_URL"`
 BUILD_ARGS=`append_arg "BIRDCL_URL=$BIRDCL_URL"`
 
-BUILD=`git rev-parse --short HEAD`
+case "${GERRIT_EVENT_TYPE}X" in
+  change-mergedX | X)
+    # This is merged event or job triggered manually, so tag is mcp-0.1
+    IMG_BUILD_TAG=mcp-0.1
+    ;;
+  * )
+    # otherwise let's user GERRIT_CHANGE_NUMBER
+    IMG_BUILD_TAG="${GERRIT_CHANGE_NUMBER}"
+    ;;
+esac
+
+BUILD="${IMG_BUILD_TAG}-$(git rev-parse --short HEAD)"
 NAME="${DOCKER_REPO}/${NODE_IMAGE}:${NODE_IMAGE_TAG}"
 CTL_NAME="${DOCKER_REPO}/${CTL_IMAGE}:${NODE_IMAGE_TAG}"
 
