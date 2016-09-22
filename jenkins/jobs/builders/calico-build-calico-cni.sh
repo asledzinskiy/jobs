@@ -10,16 +10,13 @@ DOCKER_REPO="${DOCKER_REPO:-$CALICO_DOCKER_REGISTRY}"
 
 LIBCALICO_DOCKER_IMAGE="${LIBCALICO_DOCKER_IMAGE:-$(curl -s ${ARTIFACTORY_URL}/mcp-0.1/libcalico/lastbuild)}"
 
-case "${GERRIT_EVENT_TYPE}X" in
-  change-mergedX | X)
-    # This is merged event or job triggered manually, so tag is mcp-0.1
-    IMG_BUILD_TAG=mcp-0.1
-    ;;
-  * )
-    # otherwise let's user GERRIT_CHANGE_NUMBER
-    IMG_BUILD_TAG="${GERRIT_CHANGE_NUMBER}"
-    ;;
-esac
+if [ "${GERRIT_EVENT_TYPE}X" = "change-mergedX" -o "${GERRIT_CHANGE_NUMBER}X" = "X" ]; then
+  # This is merged event or job triggered manually, so tag is mcp-0.1
+  IMG_BUILD_TAG=mcp-0.1
+else
+  # otherwise let's user GERRIT_CHANGE_NUMBER
+  IMG_BUILD_TAG="${GERRIT_CHANGE_NUMBER}"
+fi
 
 BUILD="${IMG_BUILD_TAG}-$(git rev-parse --short HEAD)"
 
