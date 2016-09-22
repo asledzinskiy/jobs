@@ -44,5 +44,4 @@
     wrappers:
       - timeout:
           fail: true
-          write-description: true
           timeout: 10

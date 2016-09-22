@@ -167,7 +167,6 @@
     - timeout:
         fail: false
         timeout: '{timeout}'
-        write-description: false
     - ansicolor:
         colormap: xterm
 
