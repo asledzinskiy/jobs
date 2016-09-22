@@ -9,8 +9,8 @@ fi
 
 export REGISTRY="${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}"
 
-CALICO_CNI="${CALICO_CNI:https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico}"
-CALICO_IPAM="${CALICO_IPAM:https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam}"
+CALICO_CNI="${CALICO_CNI:-https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico}"
+CALICO_IPAM="${CALICO_IPAM:-https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam}"
 
 if [[ -z "${KUBE_DOCKER_REGISTRY:-}" ]]; then
   echo "KUBE_DOCKER_REGISTRY must be set"
