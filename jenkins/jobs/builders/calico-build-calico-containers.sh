@@ -94,12 +94,25 @@ set -x
 docker push ${NAME}-${BUILD}
 docker push ${CTL_NAME}-${BUILD}
 
+# Save the last build ID
+echo $BUILD > ./artifacts/lastbuild
+
+CALICO_CONTAINERS_ARTIFACTS_FILE_YAML="./artifacts/calico-containers-${BUILD}.yaml"
+
 # Create config yaml for Kargo
-cat > ./artifacts/calico-containers-${BUILD}.yaml << EOF
+cat > "${CALICO_CONTAINERS_ARTIFACTS_FILE_YAML}" << EOF
 calico_node_image_repo: ${DOCKER_REPO}/${NODE_IMAGE}
 calicoctl_image_repo: ${DOCKER_REPO}/${CTL_IMAGE}
 calico_version: ${NODE_IMAGE_TAG}-${BUILD}
 EOF
 
-# Save the last build ID
-echo $BUILD > ./artifacts/lastbuild
+if [ -z "${CALICO_CONTAINERS_ARTIFACTS_FILE}" ]; then
+    # Skip test artifacts data storing
+    exit 0
+fi
+
+python2 > "${CALICO_CONTAINERS_ARTIFACTS_FILE}" <<EOF
+import yaml
+for k,v in yaml.load(open("${CALICO_CONTAINERS_ARTIFACTS_FILE_YAML}")).items():
+    print '{0}={1}'.format(k.upper(), v)
+EOF

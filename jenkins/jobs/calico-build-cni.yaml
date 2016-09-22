@@ -6,12 +6,14 @@
       jobs implementation
     node: calico
     concurrent: true
+    properties-data-file: 'artifacts-data.txt'
     builders:
       - inject:
           properties-content: |
             CALICO_DOCKER_REGISTRY={mcp-k8s-ci-registry}
             CALICO_DOCKER_OWNER=jenkins
             ARTIFACTORY_URL={artifactory-url}/projectcalico
+            CALICO_CNI_ARTIFACTS_FILE={properties-data-file}
       - shell:
           !include-raw-escape: builders/calico-build-calico-cni.sh
     scm:
@@ -58,3 +60,11 @@
             escalate-status: true
             script: |
               sudo chown -R jenkins:jenkins "${{WORKSPACE}}"
+      # (FIXME): move to the builders after moving of artifacts
+      # (FIXME): publishing to the builders as pre test step
+      - trigger-parameterized-builds:
+          - project: 'calico.system-test.deploy'
+            current-parameters: true
+            property-file: '{properties-data-file}'
+            property-file-fail-on-missing: false
+            block: true

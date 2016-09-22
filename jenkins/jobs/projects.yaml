@@ -132,3 +132,12 @@
         project-space: 'mcp-netchecker'
         test-name: 'deploy'
         project-to-clone: mcp-netchecker-agent
+
+- project:
+    name: calico-test-all
+    # TODO(apanchenko): take the latest image from artifactory
+    image_link: 'http://share01-scc.ng.mirantis.net/ubuntu-1604-server-21.qcow2'
+    image_path: '/home/jenkins/images/ubuntu-1604-server-21.qcow2'
+    jobs:
+    - 'calico.system-test.{test-name}':
+        test-name: 'deploy'

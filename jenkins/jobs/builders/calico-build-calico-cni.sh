@@ -32,12 +32,25 @@ mkdir -p "${WORKSPACE}/artifacts"
 cp "${WORKSPACE}/dist/calico" "${WORKSPACE}/artifacts/calico-${BUILD}"
 cp "${WORKSPACE}/dist/calico-ipam" "${WORKSPACE}/artifacts/calico-ipam-${BUILD}"
 
+echo "${BUILD}" > ./artifacts/lastbuild
+
+CALICO_CNI_ARTIFACTS_FILE_YAML="./artifacts/calico-cni-${BUILD}.yaml"
+
 # Create config yaml for Kargo
-cat > ./artifacts/calico-cni-${BUILD}.yaml << EOF
-calico_cni_download_url: ${ARTIFACTORY_URL}/calico-cni/calico-${BUILD}
+cat > "${CALICO_CNI_ARTIFACTS_FILE_YAML}" << EOF
+calico_cni_download_url: ${ARTIFACTORY_URL}/${IMG_BUILD_TAG}/calico-cni/calico-${BUILD}
 calico_cni_checksum: $(sha256sum ${WORKSPACE}/artifacts/calico-${BUILD} | awk '{ print $1 }')
-calico_cni_ipam_download_url: ${ARTIFACTORY_URL}/calico-cni/calico-ipam-${BUILD}
+calico_cni_ipam_download_url: ${ARTIFACTORY_URL}/${IMG_BUILD_TAG}/calico-cni/calico-ipam-${BUILD}
 calico_cni_ipam_checksum: $(sha256sum ${WORKSPACE}/artifacts/calico-ipam-${BUILD} | awk '{ print $1 }')
 EOF
 
-echo "${BUILD}" > ./artifacts/lastbuild
+if [ -z "${CALICO_CNI_ARTIFACTS_FILE}" ]; then
+    # Skip test artifacts data storing
+    exit 0
+fi
+
+python2 > "${CALICO_CNI_ARTIFACTS_FILE}" <<EOF
+import yaml
+for k,v in yaml.load(open("${CALICO_CNI_ARTIFACTS_FILE_YAML}")).items():
+    print '{0}={1}'.format(k.upper(), v)
+EOF

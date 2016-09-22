@@ -6,6 +6,7 @@
       jobs implementation
     node: calico
     concurrent: true
+    properties-data-file: 'artifacts-data.txt'
     builders:
       - inject:
           properties-content: |
@@ -24,8 +25,15 @@
             BIRDCL_URL=
             BIRD_BUILD=
             CONFD_BUILD=
+            CALICO_CONTAINERS_ARTIFACTS_FILE={properties-data-file}
       - shell:
           !include-raw-escape: builders/calico-build-calico-containers.sh
+
+      - trigger-builds:
+          - project: 'calico.system-test.deploy'
+            current-parameters: true
+            property-file: '{properties-data-file}'
+            property-file-fail-on-missing: false
     scm:
       - git:
          remotes:
