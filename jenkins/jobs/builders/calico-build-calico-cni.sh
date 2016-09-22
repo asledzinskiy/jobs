@@ -2,7 +2,6 @@
 
 set -o xtrace
 set -o errexit
-set -o nounset
 
 WORKSPACE="${WORKSPACE:-$(pwd)}"
 
