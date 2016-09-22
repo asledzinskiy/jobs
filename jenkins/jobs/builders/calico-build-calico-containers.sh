@@ -69,8 +69,8 @@ if [ -n "${CALICO_GERRIT_REFSPEC}" ]; then
   echo "Clean directory defore cloning into it"
   rm -rf "${LOCAL_CALICO_REPO}/.gitkeep"
   cd "${LOCAL_CALICO_REPO}"
-  git clone "ssh://mcp-ci-gerrit@${GERRIT_HOST}:29418/projectcalico/calico" --branch "${CALICO_GERRIT_BRANCH}" .
-  git fetch "ssh://mcp-ci-gerrit@${GERRIT_HOST}:29418/projectcalico/calico" "${CALICO_GERRIT_REFSPEC}" && \
+  git clone "ssh://mcp-ci-gerrit@${GERRIT_HOST}:29418/${CALICO_GERRIT_PROJECT}" --branch "${CALICO_GERRIT_BRANCH}" .
+  git fetch "ssh://mcp-ci-gerrit@${GERRIT_HOST}:29418/${CALICO_GERRIT_PROJECT}" "${CALICO_GERRIT_REFSPEC}" && \
     git cherry-pick FETCH_HEAD
   cd "${WORKSPACE}"
 fi
