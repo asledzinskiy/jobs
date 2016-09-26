@@ -12,6 +12,11 @@ if [[ -e "${VENV_PATH}" ]]; then
   rm -rf "${VENV_PATH}"
 fi
 
+if [[ -z "${USERNAME}" ]]; then
+  echo "No username is set!"
+  exit 1
+fi
+
 tox -e mcp-ci
 source "${VENV_PATH}/bin/activate"
 
@@ -23,7 +28,7 @@ for host in ${HOSTS[@]}; do
   if [[ "${host}" == "localhost" ]] || [[ "${host}" =~ ^127\. ]] || [[ "${host}" =~ ^${HOSTNAME}.* ]]; then
     echo "localhost detected - skipping!"
   else
-    echo "${host} ansible_user=ubuntu ansible_connection=ssh" >> "${INVENTORY}"
+    echo "${host} ansible_user=${USERNAME} ansible_connection=ssh" >> "${INVENTORY}"
   fi
 done
 

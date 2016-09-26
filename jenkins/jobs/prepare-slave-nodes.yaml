@@ -6,6 +6,10 @@
     concurrent: true
     parameters:
       - string:
+          name: USERNAME
+          default: 'ubuntu'
+          description: 'Username used for ansible when connecting to the sshd daemon on a remote host'
+      - string:
           name: BRANCH_NAME
           default: 'master'
           description: 'The branch name of mcp-cicd-poc repo to use'
