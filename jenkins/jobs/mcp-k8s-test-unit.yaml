@@ -39,6 +39,11 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
+          skip-vote:
+            successfull: false
+            failed: true
+            unstable: false
+            notbuilt: false
     publishers:
       - archive:
           allow-empty: true
