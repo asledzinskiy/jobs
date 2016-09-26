@@ -107,7 +107,7 @@
 
     - string:
         name: KEEP_BEFORE
-        default: 'yes'
+        default: 'no'
         description: 'If yes/true, then DO NOT ERASE existing environment'
 
     - string:
