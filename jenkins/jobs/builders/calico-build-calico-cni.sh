@@ -23,6 +23,11 @@ rm -rf "${WORKSPACE}/dist" \
     "${WORKSPACE}/build" \
     "${WORKSPACE}/artifacts"
 
+echo "# Auto-generated contents.  Do not manually edit" > calico_cni/version.py
+echo "__version__ = '$(git describe --tags)'" >> calico_cni/version.py
+echo "__commit__ = '$(git rev-parse HEAD)'" >> calico_cni/version.py
+echo "__branch__ = '$(git rev-parse --abbrev-ref HEAD)'" >> calico_cni/version.py
+
 docker run --rm \
     -v ${WORKSPACE}:/code \
     ${LIBCALICO_DOCKER_IMAGE} \
