@@ -6,6 +6,30 @@
       jobs implementation
     node: calico
     concurrent: true
+    parameters:
+    - string:
+        name: CALICO_GERRIT_REFSPEC
+        default: refs/heads/mcp-0.1
+        description: gerrit refspec from upstream job
+    - string:
+        name: CALICO_GERRIT_BRANCH
+        default: mcp-0.1
+        description: gerrit branch from upstream job
+    - string:
+        name: CALICO_GERRIT_PROJECT
+        default: projectcalico/some_project
+        description: gerrit project from upstream job
+    - string:
+        name: LIBCALICO_REPO
+        default: path_to_repo
+        description: custom path to git libcalico repo
+    - string:
+        name: GERRIT_REFSPEC
+        default: refs/heads/mcp-0.1
+    - string:
+        name: GERRIT_CHANGE_NUMBER
+        default: '0'
+        description: Upstream job should pass GERRIT_CHANGE_NUMBER from upstream project
     properties-data-file: 'artifacts-data.txt'
     builders:
       - inject:

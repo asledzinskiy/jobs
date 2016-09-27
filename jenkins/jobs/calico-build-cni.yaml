@@ -7,6 +7,22 @@
     node: calico
     concurrent: true
     properties-data-file: 'artifacts-data.txt'
+    parameters:
+    - string:
+        name: GERRIT_REFSPEC
+        default: refs/heads/mcp-0.1
+    - string:
+        name: GERRIT_CHANGE_NUMBER
+        default: '0'
+        description: Upstream job should pass GERRIT_CHANGE_NUMBER from upstream project
+    - string:
+        name: LIBCALICO_IMAGE
+        default: docker_image
+        description: The name of the libcalico docker image passed from libcalico-build job
+    - string:
+        name: LIBCALICO_DOCKER_IMAGE
+        default: docker_image
+        description: by default LIBCALICO_DOCKER_IMAGE=LIBCALICO_IMAGE
     builders:
       - inject:
           properties-content: |
