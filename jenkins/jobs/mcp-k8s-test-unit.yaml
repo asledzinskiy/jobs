@@ -41,7 +41,7 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
           skip-vote:
             successfull: false
-            failed: true
+            failed: false
             unstable: false
             notbuilt: false
     publishers:
