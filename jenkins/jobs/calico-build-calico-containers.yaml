@@ -24,12 +24,32 @@
         default: path_to_repo
         description: custom path to git libcalico repo
     - string:
+        name: CALICO_REPO
+        default: path_to_repo
+        description: custom path to git calico repo
+    - string:
         name: GERRIT_REFSPEC
         default: refs/heads/mcp-0.1
     - string:
         name: GERRIT_CHANGE_NUMBER
         default: '0'
         description: Upstream job should pass GERRIT_CHANGE_NUMBER from upstream project
+    - string:
+        name: CONFD_URL
+        default: 'http://localhost/confd'
+        description: Custom URL to confd, should be defined and passed from upstream job
+    - string:
+        name: BIRD_URL
+        default: 'http://localhost/bird'
+        description: Custom URL to bird, should be defined and passed from upstream job
+    - string:
+        name: BIRD6_URL
+        default: 'http://localhost/bird6'
+        description: Custom URL to bird6, should be defined and passed from upstream job
+    - string:
+        name: BIRDCL_URL
+        default: 'http://localhost/birdcl'
+        description: Custom URL to birdcl, should be defined and passed from upstream job
     properties-data-file: 'artifacts-data.txt'
     builders:
       - inject:
