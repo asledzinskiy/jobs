@@ -18,6 +18,7 @@
       - mcp-k8s-e2e-conformance
       - mcp-k8s-hyperkube
       - mcp-k8s-hyperkube-ci
+      - mcp-k8s-hyperkube-test-all
       - mcp-k8s-images
       - mcp-k8s-test-integration
       - mcp-k8s-test-unit-with-coverage
