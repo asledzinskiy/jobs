@@ -1,0 +1,21 @@
+- job-template:
+    name: mcp-build-debian-base
+    description: |
+      Build debian base container.
+    concurrent: false
+    project-type: workflow
+    parameters:
+      - string:
+          name: DEBIAN_DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for images'
+      - string:
+          name: ARTIFACTORY_URL
+          default: '{artifactory-url}'
+          desription: 'Custom Artifactory URL'
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+          description: 'Gerrit host'
+    dsl:
+      !include-raw-escape: mcp-build-debian-base.groovy

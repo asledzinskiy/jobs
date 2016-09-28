@@ -15,6 +15,7 @@
 - project:
     name: mcp
     jobs:
+      - mcp-build-debian-base
       - mcp-build-run-tests
       - mcp-k8s-e2e-conformance
       - mcp-k8s-hyperkube
