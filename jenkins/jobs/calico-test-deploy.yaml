@@ -119,6 +119,39 @@
          name: GERRIT_REFSPEC
          default: 'refs/heads/master'
 
+    - string:
+        name: GERRIT_CHANGE_NUMBER
+        default: ''
+        description: gerrit change number from upstream job
+    - string:
+        name: CALICO_GERRIT_REFSPEC
+        default: ''
+        description: gerrit refspec from upstream job
+    - string:
+        name: CALICO_GERRIT_PROJECT
+        default: ''
+        description: gerrit project from upstream job
+    - string:
+        name: CALICO_REPO
+        default: ''
+        description: custom path to git calico repo
+    - string:
+        name: CALICO_GERRIT_BRANCH
+        default: ''
+        description: gerrit branch from upstream job
+    - string:
+        name: CALICO_NODE_IMAGE_REPO
+        default: ''
+        description: custom node image path from upstream job
+    - string:
+        name: CALICOCTL_IMAGE_REPO
+        default: ''
+        description: custom path to calicoctl from upstream job
+    - string:
+        name: CALICO_VERSION
+        default: ''
+        description: calico version from upstream job
+
     - text:
         name: ADDITIONAL_PARAMETERS
         description: |
