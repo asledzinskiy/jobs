@@ -42,6 +42,14 @@
         default: 'mcp-0.1'
 
     - string:
+        name: HYPERKUBE_IMAGE_REPO
+        default: 'artifactory.mcp.mirantis.net:5002/hyperkube-amd64'
+
+    - string:
+        name: HYPERKUBE_IMAGE_TAG
+        default: 'latest'
+
+    - string:
         name: IMAGE_LINK
         default: '{image_link}'
         description: "Which image to use in tests"
@@ -192,6 +200,11 @@
            basedir: 'mcp-netchecker-server'
 
     wrappers:
+    - credentials-binding:
+      - username-password-separated:
+          credential-id: 'artifactory'
+          username: ARTIFACTORY_LOGIN
+          password: ARTIFACTORY_PASSWORD
     - timeout:
         fail: false
         timeout: '{timeout}'
@@ -206,6 +219,7 @@
             ENV_NAME={envname}
             NETCHECKER_AGENT_DIR={netchecker-agent-dir}
             NETCHECKER_SERVER_DIR={netchecker-server-dir}
+            ARTIFACTORY_URL={artifactory-url}
 
       - inject:
           properties-content: $ADDITIONAL_PARAMETERS

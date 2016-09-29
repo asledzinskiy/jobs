@@ -19,6 +19,32 @@ error_exit () {
   exit 1
 }
 
+set_latest_artifatcs () {
+    HYPERKUBE_IMAGES_DIR="mcp-k8s"
+    set +x
+    HYPERKUBE_LATEST=$(curl -s -u "${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD}" \
+    "${ARTIFACTORY_URL}/api/storage/${HYPERKUBE_IMAGES_DIR}/images-info/?lastModified")
+    HYPERKUBE_LATEST_LINK=$(echo "$HYPERKUBE_LATEST" | \
+    python -c 'import sys,json; print json.load(sys.stdin)["uri"]')
+    HYPERKUBE_LATEST_YAML=$(curl -s -u "${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD}" \
+    "${HYPERKUBE_LATEST_LINK}" |
+    python -c 'import sys,json; print json.load(sys.stdin)["downloadUri"]')
+    HYPERKUBE_LATEST_ARTIFACTS=$(curl -s -u "${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD}" \
+    "${HYPERKUBE_LATEST_YAML}")
+    set -x
+
+    # export hyperkube related parameters to uppercase environment vars
+    set -a
+    source <(python2 <<EOF
+import sys, yaml
+for k,v in yaml.load('''${HYPERKUBE_LATEST_ARTIFACTS}''').items():
+    if 'hyperkube' not in k.lower():
+        continue
+    print '{0}={1}'.format(k.upper(), v)
+EOF
+    )
+    set +a
+}
 
 # get custom refs from gerrit
 if [[ -n "$FUEL_CCP_TESTS_REFS" && "$FUEL_CCP_TESTS_REFS" != "none" ]]; then
@@ -50,6 +76,11 @@ fi
 
 # save environment name to destroy it by publisher in case of hang/abort
 echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
+
+# set version of downstream k8s artifacts
+if [[ -z "${HYPERKUBE_IMAGE_TAG}" || "${HYPERKUBE_IMAGE_TAG}" == "latest" ]]; then
+    set_latest_artifatcs
+fi
 
 # run tests
 declare -a TEST_ARGS
