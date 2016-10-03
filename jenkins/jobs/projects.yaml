@@ -142,3 +142,13 @@
     jobs:
     - 'calico.system-test.{test-name}':
         test-name: 'deploy'
+
+- project:
+    name: pipeline-calico
+    jobs:
+      - pipeline-calico-bird
+      - pipeline-calico-cni
+      - pipeline-calico-confd
+      - pipeline-calico-containers
+      - pipeline-calico-felix
+      - pipeline-calico-libcalico
