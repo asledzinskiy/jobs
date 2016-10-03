@@ -9,6 +9,16 @@ append_arg () {
   echo "$BUILD_ARGS --build-arg $1"
 }
 
+save_tests_params () {
+    local SOURCE_YAML="$1"
+    local RESULT_PROPERTIES_FILE="$2"
+    python2 > "${RESULT_PROPERTIES_FILE}" <<EOF
+import yaml
+for k,v in yaml.load(open("${SOURCE_YAML}")).items():
+    print '{0}={1}'.format(k.upper(), v)
+EOF
+}
+
 DOCKER_REPO="${DOCKER_REPO:-$CALICO_DOCKER_REGISTRY}"
 
 NODE_IMAGE="${NODE_IMAGE:-calico/node}"
@@ -106,13 +116,6 @@ calicoctl_image_repo: ${DOCKER_REPO}/${CTL_IMAGE}
 calico_version: ${NODE_IMAGE_TAG}-${BUILD}
 EOF
 
-if [ -z "${CALICO_CONTAINERS_ARTIFACTS_FILE}" ]; then
-    # Skip test artifacts data storing
-    exit 0
+if [ -n "${CALICO_CONTAINERS_ARTIFACTS_FILE}" ]; then
+    save_tests_params "${CALICO_CONTAINERS_ARTIFACTS_FILE_YAML}" "${CALICO_CONTAINERS_ARTIFACTS_FILE}"
 fi
-
-python2 > "${CALICO_CONTAINERS_ARTIFACTS_FILE}" <<EOF
-import yaml
-for k,v in yaml.load(open("${CALICO_CONTAINERS_ARTIFACTS_FILE_YAML}")).items():
-    print '{0}={1}'.format(k.upper(), v)
-EOF

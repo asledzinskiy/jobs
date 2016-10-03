@@ -81,6 +81,8 @@
       - trigger-parameterized-builds:
           - project: 'calico.system-test.deploy'
             current-parameters: true
+            predefined-parameters: |
+              OVERWRITE_HYPERKUBE_CNI=true
             property-file: '{properties-data-file}'
             property-file-fail-on-missing: false
             block: true

@@ -19,7 +19,24 @@ error_exit () {
   exit 1
 }
 
-set_latest_artifatcs () {
+export_params_from_yaml () {
+    # Export parameters from YAML ($1) which match filter ($2)
+    # to uppercase environment variables. The variables are used by tests.
+    local MYAML="$1"
+    local FILTER="$2"
+    set -a
+    source <(python2 <<EOF
+import sys, yaml
+for k,v in yaml.load('''${MYAML}''').items():
+    if '${FILTER}' not in k.lower():
+        continue
+    print '{0}={1}'.format(k.upper(), v)
+EOF
+    )
+    set +a
+}
+
+set_latest_k8s_artifacts () {
     HYPERKUBE_IMAGES_DIR="mcp-k8s"
     set +x
     HYPERKUBE_LATEST=$(curl -s -u "${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD}" \
@@ -32,18 +49,25 @@ set_latest_artifatcs () {
     HYPERKUBE_LATEST_ARTIFACTS=$(curl -s -u "${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD}" \
     "${HYPERKUBE_LATEST_YAML}")
     set -x
+    export_params_from_yaml "${HYPERKUBE_LATEST_ARTIFACTS}" "hyperkube"
+}
 
-    # export hyperkube related parameters to uppercase environment vars
-    set -a
-    source <(python2 <<EOF
-import sys, yaml
-for k,v in yaml.load('''${HYPERKUBE_LATEST_ARTIFACTS}''').items():
-    if 'hyperkube' not in k.lower():
-        continue
-    print '{0}={1}'.format(k.upper(), v)
-EOF
-    )
-    set +a
+set_latest_calico_containers_artifacts () {
+    CALICO_ARTIFACTS_DIR="projectcalico/mcp-0.1/calico-containers"
+    CALICO_ARTIFACTS_URL="${ARTIFACTORY_URL}/${CALICO_ARTIFACTS_DIR}/"
+    CALICO_LATEST_VERSION=$(curl -s "${CALICO_ARTIFACTS_URL}/lastbuild")
+    CALICO_LATEST_YAML="${CALICO_ARTIFACTS_URL}/calico-containers-${CALICO_LATEST_VERSION}.yaml"
+    CALICO_LATEST_ARTIFACTS=$(curl -s "${CALICO_LATEST_YAML}")
+    export_params_from_yaml "${CALICO_LATEST_ARTIFACTS}" "calico"
+}
+
+set_latest_calico_cni_artifacts () {
+    CALICOCNI_ARTIFACTS_DIR="projectcalico/mcp-0.1/calico-cni"
+    CALICOCNI_ARTIFACTS_URL="${ARTIFACTORY_URL}/${CALICOCNI_ARTIFACTS_DIR}/"
+    CALICOCNI_LATEST_VERSION=$(curl -s "${CALICOCNI_ARTIFACTS_URL}/lastbuild")
+    CALICOCNI_LATEST_YAML="${CALICOCNI_ARTIFACTS_URL}/calico-cni-${CALICOCNI_LATEST_VERSION}.yaml"
+    CALICOCNI_LATEST_ARTIFACTS=$(curl -s "${CALICOCNI_LATEST_YAML}")
+    export_params_from_yaml "${CALICOCNI_LATEST_ARTIFACTS}" "calico_cni"
 }
 
 # get custom refs from gerrit
@@ -78,8 +102,27 @@ fi
 echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
 # set version of downstream k8s artifacts
-if [[ -z "${HYPERKUBE_IMAGE_TAG}" || "${HYPERKUBE_IMAGE_TAG}" == "latest" ]]; then
-    set_latest_artifatcs
+if printenv &>/dev/null HYPERKUBE_IMAGE_TAG && \
+   [[ -z "${HYPERKUBE_IMAGE_TAG}" || "${HYPERKUBE_IMAGE_TAG}" == "latest" ]]; then
+    set_latest_k8s_artifacts
+fi
+
+# set version of downstream calico artifacts
+if printenv &>/dev/null CALICO_VERSION && \
+   [[ -z "${CALICO_VERSION}" || "${CALICO_VERSION}" == "latest" ]]; then
+    set_latest_calico_containers_artifacts
+fi
+if [[ "${OVERWRITE_HYPERKUBE_CNI}" == "true" ]]; then
+    if printenv &>/dev/null CALICO_CNI_DOWNLOAD_URL && \
+       printenv &>/dev/null CALICO_CNI_IPAM_DOWNLOAD_URL && \
+       [[ -z "${CALICO_CNI_DOWNLOAD_URL}" || \
+          "${CALICO_CNI_DOWNLOAD_URL}" == "latest" || \
+          -z "${CALICO_CNI_IPAM_DOWNLOAD_URL}" || \
+          "${CALICO_CNI_IPAM_DOWNLOAD_URL}" == "latest" ]]; then
+        set_latest_calico_cni_artifacts
+    fi
+else
+    unset CALICO_CNI_DOWNLOAD_URL CALICO_CNI_IPAM_DOWNLOAD_URL
 fi
 
 # run tests

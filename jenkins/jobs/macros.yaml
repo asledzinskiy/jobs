@@ -11,3 +11,138 @@
           source "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
           source "${VENV_PATH}/bin/activate"
           dos.py destroy "${ENV_NAME}"
+
+
+- parameter:
+    name: calico-systest-params
+    parameters:
+    - string:
+        name: TEST_EXPRESSION
+        default: "none"
+        description: "Tests will be executed with '-k' option. Example: 'test_method or test other'"
+
+    - string:
+        name: HYPERKUBE_IMAGE_REPO
+        default: '{mcp-k8s-ci-registry}/hyperkube-amd64'
+
+    - string:
+        name: HYPERKUBE_IMAGE_TAG
+        default: 'latest'
+
+    - string:
+        name: CALICO_NODE_IMAGE_REPO
+        default: '{mcp-k8s-ci-registry}/calico/node'
+
+    - string:
+        name: CALICOCTL_IMAGE_REPO
+        default: '{mcp-k8s-ci-registry}/calico/ctl'
+
+    - string:
+        name: CALICO_VERSION
+        default: 'latest'
+
+    - string:
+        name: CALICO_CNI_DOWNLOAD_URL
+        default: 'latest'
+
+    - string:
+        name: CALICO_CNI_CHECKSUM
+        default: ''
+
+    - string:
+        name: CALICO_CNI_IPAM_DOWNLOAD_URL
+        default: 'latest'
+
+    - string:
+        name: CALICO_CNI_IPAM_CHECKSUM
+        default: ''
+
+    - bool:
+        name: OVERWRITE_HYPERKUBE_CNI
+        default: false
+        description: 'Overwrite Calico CNI binaries copied from hyperkube image'
+
+    - string:
+        name: MCP_NETCHECKER_AGENT_IMAGE_REPO
+        default: '{mcp-k8s-ci-registry}/mcp-netchecker/agent'
+
+    - string:
+        name: MCP_NETCHECKER_AGENT_VERSION
+        default: 'mcp-0.1'
+
+    - string:
+        name: MCP_NETCHECKER_SERVER_IMAGE_REPO
+        default: '{mcp-k8s-ci-registry}/mcp-netchecker/server'
+
+    - string:
+        name: MCP_NETCHECKER_SERVER_VERSION
+        default: 'mcp-0.1'
+
+    - string:
+        name: IMAGE_LINK
+        default: '{image_link}'
+        description: "Which image to use in tests"
+
+    - string:
+        name: IMAGE_PATH
+        default: '{image_path}'
+        description: "Local path to the image"
+
+    - string:
+        name: ARTIFACTORY_URL
+        default: '{artifactory-url}'
+        description: "Link to artifactory"
+
+    - string:
+        name: VERBOSE
+        default: "true"
+
+    - string:
+        name: FUEL_CCP_TESTS_COMMIT
+        default: 'master'
+        description: "fuel-ccp-tests commit"
+
+    - string:
+        name: FUEL_CCP_TESTS_REFS
+        default: 'none'
+        description: 'Refspecs for commits in fuel-ccp-tests gerrit separated by spaces. For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
+
+    - string:
+        name: FUEL_CCP_INSTALLER_COMMIT
+        default: 'master'
+        description: "fuel-ccp-installer commit"
+
+    - string:
+        name: FUEL_CCP_INSTALLER_REFS
+        default: 'none'
+        description: 'Refspecs for commits in fuel-ccp-installer gerrit separated by spaces. For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
+
+    - string:
+        name: DEPLOY_SCRIPT_REL_PATH
+        default: 'utils/jenkins/kargo_deploy.sh'
+        description: "Relative path to the deployment script (fuel-ccp-installer)"
+
+    - string:
+        name: VENV_PATH
+        default: '/home/jenkins/venv-fuel-devops-3.0/'
+        description: "Path to the python virtual environment for fuel-ccp-tests"
+
+    - string:
+        name: DEVOPS_DB_NAME
+        default: '/home/jenkins/venv-fuel-devops-3.0.sqlite3.db'
+        description: "Name of Postgresql DB or path to the sqlite DB file"
+
+    - string:
+        name: DEVOPS_DB_ENGINE
+        default: 'django.db.backends.sqlite3'
+        description: "DB engine for fuel-devops: 'django.db.backends.sqlite3' or 'django.db.backends.postgresql_psycopg2'"
+
+    - string:
+         name: GERRIT_REFSPEC
+         default: 'refs/heads/master'
+
+    - text:
+        name: ADDITIONAL_PARAMETERS
+        description: |
+          NAME1=VALUE1</br>
+          NAME1=VALUE1

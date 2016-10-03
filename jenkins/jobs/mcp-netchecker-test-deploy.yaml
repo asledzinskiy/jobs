@@ -26,104 +26,22 @@
 
     parameters:
     - string:
-        name: MCP_NETCHECKER_AGENT_IMAGE_REPO
-        default: '{mcp-k8s-ci-registry}/mcp-netchecker/agent'
-
-    - string:
-        name: MCP_NETCHECKER_AGENT_VERSION
-        default: 'mcp-0.1'
-
-    - string:
-        name: MCP_NETCHECKER_SERVER_IMAGE_REPO
-        default: '{mcp-k8s-ci-registry}/mcp-netchecker/server'
-
-    - string:
-        name: MCP_NETCHECKER_SERVER_VERSION
-        default: 'mcp-0.1'
-
-    - string:
-        name: IMAGE_LINK
-        default: '{image_link}'
-        description: "Which image to use in tests"
-
-    - string:
-        name: IMAGE_PATH
-        default: '{image_path}'
-        description: "Local path to the image"
-
-    - string:
         name: TEST_PATH
         default: "fuel_ccp_tests/tests/system/test_netchecker.py"
         description: "Path to the test module/class/function"
-
-    - string:
-        name: TEST_EXPRESSION
-        default: "none"
-        description: "Tests will be executed with '-k' option. Example: 'test_method or test other'"
-
-    - string:
-        name: VERBOSE
-        default: "true"
-
-    - string:
-        name: FUEL_CCP_TESTS_COMMIT
-        default: 'master'
-        description: "fuel-ccp-tests commit"
-
-    - string:
-        name: FUEL_CCP_TESTS_REFS
-        default: 'none'
-        description: 'Refspecs for commits in fuel-ccp-tests gerrit separated by spaces. For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
-
-    - string:
-        name: FUEL_CCP_INSTALLER_COMMIT
-        default: 'master'
-        description: "fuel-ccp-installer commit"
-
-    - string:
-        name: FUEL_CCP_INSTALLER_REFS
-        default: 'none'
-        description: 'Refspecs for commits in fuel-ccp-installer gerrit separated by spaces. For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
-
-    - string:
-        name: DEPLOY_SCRIPT_REL_PATH
-        default: 'utils/jenkins/kargo_deploy.sh'
-        description: "Relative path to the deployment script (fuel-ccp-installer)"
-
-    - string:
-        name: VENV_PATH
-        default: '/home/jenkins/venv-fuel-devops-3.0/'
-        description: "Path to the python virtual environment for fuel-ccp-tests"
-
-    - string:
-        name: DEVOPS_DB_NAME
-        default: '/home/jenkins/venv-fuel-devops-3.0.sqlite3.db'
-        description: "Name of Postgresql DB or path to the sqlite DB file"
-
-    - string:
-        name: DEVOPS_DB_ENGINE
-        default: 'django.db.backends.sqlite3'
-        description: "DB engine for fuel-devops: 'django.db.backends.sqlite3' or 'django.db.backends.postgresql_psycopg2'"
-
     - string:
         name: KEEP_BEFORE
         default: 'no'
         description: 'If yes/true, then DO NOT ERASE existing environment'
-
     - string:
         name: KEEP_AFTER
         default: 'yes'
         description: 'If yes/true, then DO NOT ERASE existing environment'
-
-    - string:
-         name: GERRIT_REFSPEC
-         default: 'refs/heads/master'
-
-    - text:
-        name: ADDITIONAL_PARAMETERS
-        description: |
-          NAME1=VALUE1</br>
-          NAME1=VALUE1
+    - calico-systest-params:
+        mcp-k8s-ci-registry: '{mcp-k8s-ci-registry}'
+        image_link: '{image_link}'
+        image_path: '{image_path}'
+        artifactory-url: '{artifactory-url}'
 
     properties:
       - heavy-job:
@@ -164,6 +82,11 @@
            basedir: '{project-name}'
 
     wrappers:
+    - credentials-binding:
+      - username-password-separated:
+          credential-id: 'artifactory'
+          username: ARTIFACTORY_LOGIN
+          password: ARTIFACTORY_PASSWORD
     - timeout:
         fail: false
         timeout: '{timeout}'
