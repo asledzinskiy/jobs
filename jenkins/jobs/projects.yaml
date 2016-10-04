@@ -26,6 +26,8 @@
       - mcp-k8s-conformance-test-runner-ci
       - mcp-lint-test
       - mcp-prepare-env
+      - mcp-k8s-merge-pipeline
+      - mcp-k8s-test-pipeline
 
 - project:
     name: calico-build-calico
