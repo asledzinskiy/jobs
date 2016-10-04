@@ -1,0 +1,105 @@
+//
+// Function used to analyse diff file output
+// return array with differences
+//
+@NonCPS
+def diff_check(diff_data) {
+
+    def output = [
+        new: [],
+        old: [],
+        diff: []
+    ]
+    diff_data.eachLine { line ->
+        def job_file = ''
+        def job_type = ''
+        def job_name = ''
+        if ( line =~ /Files/ ) {
+            job_file = line.tokenize()[1]
+            job_name = job_file.tokenize('/').last()
+            job_type = 'diff'
+        } else if ( line =~ /Only in/ ) {
+            s1 = line.tokenize(':')
+            job_name = s1[1].trim()
+            job_type = s1[0].tokenize('/').last()
+        }
+
+        if (job_name != '') {
+            output[job_type].push(job_name)
+        }
+    }
+    return output
+}
+
+node('tools') {
+
+    env.OUT_DIR = "${WORKSPACE}/output/jobs"
+    env.LOGFILE = "${OUT_DIR}/jobs-diff.log"
+
+    def diff_list = [:]
+
+    stage('Code checkout') {
+        gerritPatchsetCheckout {
+            credentialsId = "mcp-ci-gerrit"
+        }
+    }
+
+    stage('JJB verify') {
+        sh 'tox -e jjb-generate -- new'
+    }
+
+    stage('JJB compare') {
+        sh 'git checkout "${BASE_COMMIT}"'
+        sh 'tox -e jjb-generate -- old'
+
+        sh 'mkdir -p "${OUT_DIR}/diff"'
+
+        // get return code from diff, when 1 it mean there was differences
+        def diff_status = sh returnStatus: true, script: 'diff -q -r ${OUT_DIR}/old ${OUT_DIR}/new >"${LOGFILE}"'
+        if (diff_status == 1) {
+
+            // Analyse output file and prepare array with results
+            diff_list = diff_check( readFile("${LOGFILE}") )
+
+            // Set job description
+            description = ''
+            if (diff_list['diff'].size() > 0) {
+                description += '<b>CHANGED</b><ul>'
+                diff_list['diff'].each {
+                    description += "<li><a href=\"${env.BUILD_URL}artifact/output/jobs/diff/${it}/*view*/\">${it}</a></li>"
+                    // Generate diff file
+                    def diff_exit_code = sh returnStatus: true, script: "diff -U 50 ${env.OUT_DIR}/old/${it} ${env.OUT_DIR}/new/${it} > ${env.OUT_DIR}/diff/${it}"
+                    // catch normal errors, diff should always return 1
+                    if (diff_exit_code != 1) {
+                        throw new RuntimeException('Error with diff file generation')
+                    }
+                }
+            }
+            if (diff_list['new'].size() > 0) {
+                description += '<b>ADDED</b><ul>'
+                diff_list['new'].each {
+                    description += "<li><a href=\"${env.BUILD_URL}artifact/output/jobs/new/${it}/*view*/\">${it}</a></li>"
+                }
+            }
+            if (diff_list['old'].size() > 0) {
+                description += '<b>DELETED</b><ul>'
+                diff_list['old'].each {
+                    description += "<li><a href=\"${env.BUILD_URL}artifact/output/jobs/old/${it}/*view*/\">${it}</a></li>"
+                }
+            }
+            if (description != '') {
+                currentBuild.description = description
+            } else {
+                currentBuild.description = 'No job changes'
+            }
+        }
+    }
+
+
+    stage('Publish artifacts') {
+        archiveArtifacts allowEmptyArchive: true,
+            artifacts: 'output/**',
+            excludes: null
+    }
+
+}

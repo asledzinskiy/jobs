@@ -5,8 +5,7 @@
       - k8s-repo-cloner-runner
       - update-jenkins-jobs
       - update-gerrit-projects
-      - jenkins-jobs.compare
-      - jenkins-jobs.verify
+      - jenkins-jobs.test
       - jeepyb-verify
       - prepare-slave-nodes
 
