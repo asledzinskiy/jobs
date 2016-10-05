@@ -9,12 +9,7 @@
     netchecker-agent-dir: "$WORKSPACE/mcp-netchecker-agent"
     netchecker-server-dir: "$WORKSPACE/mcp-netchecker-server"
     pre-script: |
-        if [ -n "$IMAGE_LINK" ]; then
-          mkdir -p $(dirname "$IMAGE_PATH")
-          pushd $(dirname "$IMAGE_PATH")
-          wget -N "$IMAGE_LINK"
-          popd
-        fi
+        echo "SKIP"
     post-script: |
         source "$VENV_PATH/bin/activate"
         dos.py destroy "$ENV_NAME" || true
@@ -108,6 +103,10 @@
           #!/bin/bash -xe
           echo "=== [systest PRE-script] ==="
           {pre-script}
+
+      - shell:
+          !include-raw-escape: builders/get-systest-image.sh
+
       - shell:
           !include-raw-escape: builders/system-test.sh
 

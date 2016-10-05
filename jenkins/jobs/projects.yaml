@@ -115,8 +115,8 @@
 - project:
     name: mcp-netchecker-test-all
     # TODO(apanchenko): take the latest image from artifactory
-    image_link: 'http://share01-scc.ng.mirantis.net/ubuntu-1604-server-21.qcow2'
-    image_path: '/home/jenkins/images/ubuntu-1604-server-21.qcow2'
+    image_link: 'http://share01-scc.ng.mirantis.net/images.lst'
+    image_path: '/home/jenkins/images/ubuntu-1604-server.qcow2'
     jobs:
     - 'mcp-netchecker-{type}-test-all':
         type:
@@ -136,8 +136,8 @@
 - project:
     name: calico-test-all
     # TODO(apanchenko): take the latest image from artifactory
-    image_link: 'http://share01-scc.ng.mirantis.net/ubuntu-1604-server-21.qcow2'
-    image_path: '/home/jenkins/images/ubuntu-1604-server-21.qcow2'
+    image_link: 'http://share01-scc.ng.mirantis.net/images.lst'
+    image_path: '/home/jenkins/images/ubuntu-1604-server.qcow2'
     jobs:
     - 'calico.system-test.{test-name}':
         test-name: 'deploy'
