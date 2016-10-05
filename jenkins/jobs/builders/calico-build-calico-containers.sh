@@ -27,8 +27,7 @@ NODE_IMAGE_TAG="${NODE_IMAGE_TAG:-v0.20.0}"
 CTL_IMAGE="${CTL_IMAGE:-calico/ctl}"
 CTL_IMAGE_TAG="${CTL_IMAGE_TAG:-v0.20.0}"
 
-BUILD_IMAGE="calico/build"
-BUILD_IMAGE_TAG="${BUILD_IMAGE_TAG:-v0.15.0}"
+BUILD_IMAGE="${LIBCALICO_DOCKER_IMAGE:-$(curl -s ${ARTIFACTORY_URL}/mcp-0.1/libcalico/lastbuild)}"
 
 CALICO_REPO="${CALICO_REPO:-https://$GERRIT_HOST/projectcalico/calico}"
 CALICO_VER="${CALICO_VER:-mcp-0.1}"
@@ -71,7 +70,7 @@ rm -f artifacts/*
 echo "Building calico/ctl"
 wget -N $BIRDCL_URL -O birdcl
 chmod +x birdcl
-docker run -v `pwd`:/code --rm $BUILD_IMAGE:$BUILD_IMAGE_TAG pyinstaller calicoctl.spec -ayF
+docker run -v `pwd`:/code --rm "${BUILD_IMAGE}" pyinstaller calicoctl.spec -ayF
 cp dist/calicoctl ./calicoctl/
 cd calicoctl
 docker build --build-arg CTLBIN=calicoctl -t ${CTL_NAME}-${BUILD} .

@@ -20,6 +20,10 @@
         default: ''
         description: gerrit project from upstream job
     - string:
+        name: LIBCALICO_DOCKER_IMAGE
+        default: ''
+        description: custom libcalico docker image
+    - string:
         name: LIBCALICO_REPO
         default: ''
         description: custom path to git libcalico repo
@@ -59,7 +63,6 @@
             ARTIFACTORY_URL={artifactory-url}/projectcalico
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
             NODE_IMAGE_TAG=v0.20.0
-            BUILD_IMAGE_TAG=v0.15.0
             CALICO_VER=mcp-0.1
             LIBCALICO_VER=mcp-0.1
             GERRIT_HOST={gerrit-host}

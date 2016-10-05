@@ -26,10 +26,12 @@
           block: true
       - trigger-builds:
         - project: calico-build-calico-containers
+          property-file: build.property
           predefined-parameters: |
             CALICO_GERRIT_REFSPEC=$GERRIT_REFSPEC
             CALICO_GERRIT_BRANCH=$GERRIT_BRANCH
             CALICO_GERRIT_PROJECT=$GERRIT_PROJECT
+            LIBCALICO_DOCKER_IMAGE=$LIBCALICO_IMAGE
             LIBCALICO_REPO=file:///tmp/calico_share
             GERRIT_REFSPEC=refs/heads/mcp-0.1
             GERRIT_CHANGE_NUMBER=$GERRIT_CHANGE_NUMBER
