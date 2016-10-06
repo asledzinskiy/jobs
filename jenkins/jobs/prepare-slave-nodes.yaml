@@ -3,6 +3,7 @@
     description: |
       Job to deploy Jenkins slave configuration on a selected server
     node: tools
+    project-type: workflow
     concurrent: true
     parameters:
       - string:
@@ -17,9 +18,8 @@
           name: HOSTS_LIST
           default: localhost
           description: 'A space separated list of hosts to provision'
-    builders:
-      - shell:
-          !include-raw-escape: builders/prepare-slave-nodes.sh
+    dsl:
+      !include-raw-escape: builders/groovy/prepare-slave-nodes.groovy
     scm:
       - git:
          remotes:
