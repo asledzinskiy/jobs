@@ -28,9 +28,18 @@ node('calico'){
         withWipeOut = true
       }
 
+
       stage ('Run UnitTest for confd'){
-        sh "bash -x ./test-containerized.sh"
+        sh """
+        docker run --rm \
+          -v ${WORKSPACE}/confd_repo:/usr/src/confd \
+          -w /usr/src/confd \
+          golang:1.7 \
+          bash -c \
+          \"go get github.com/constabulary/gb/...; gb test -v\"
+        """
       }
+
 
       stage ('Build confd binary'){
         sh """
@@ -43,6 +52,7 @@ node('calico'){
             \"go build -a -installsuffix cgo -ldflags '-extld ld -extldflags -static' -a -x .\"
         """
       }
+
 
       stage('Publishing confd artifacts'){
         dir("artifacts"){
