@@ -6,6 +6,11 @@ node('calico'){
   // TODO(skulanov) use sandbox
   //def server = Artifactory.server("mcp-ci")
   def server = Artifactory.newServer url: "https://artifactory.mcp.mirantis.net/artifactory", username: "sandbox", password: "sandbox"
+  def DOCKER_REPO = "artifactory.mcp.mirantis.net:5004"
+  def ARTIFACTORY_URL = "https://artifactory.mcp.mirantis.net/artifactory/sandbox"
+
+  def FELIX_IMAGE = "calico/felix"
+  def FELIX_IMAGE_TAG = "v0.0.7"
 
   try {
 
@@ -16,15 +21,20 @@ node('calico'){
       project = "projectcalico/calico-containers"
     }
 
-    dir("${WORKSPACE}/calico_node/calico_share"){
-      sh "rm -rf .gitkeep"
+    dir("${WORKSPACE}/tmp_calico-felix"){
+      // Let's do all the stuff with calico/felix in tmp_calico-felix sub-dir
 
+      // checkout felix code from patchset
       gerritPatchsetCheckout {
         credentialsId = "mcp-ci-gerrit"
-        withMerge = true
         withWipeOut = true
       }
 
+      // get felix git-sha
+      def gitCommit = sh(returnStdout: true, script: "git -C ${WORKSPACE}/tmp_calico-felix rev-parse --short HEAD").trim()
+      // FELIX_DOCKER_IMAGE defined here globaly, since we depends on git-sha and need to pass this
+      // variable to the next stages
+      FELIX_DOCKER_IMAGE="${DOCKER_REPO}/${FELIX_IMAGE}:${FELIX_IMAGE_TAG}-${GERRIT_CHANGE_NUMBER}-${gitCommit}"
 
       stage ('Run Calico unittests'){
         parallel (
@@ -52,7 +62,7 @@ node('calico'){
 
                   prepare_pyenv
 
-                  if bash -x -c 'VIRTUAL_ENV="" ./run-unit-test.sh'; then
+                  if bash -x -c \'COMPARE_BRANCH=gerrit/${GERRIT_BRANCH} VIRTUAL_ENV="" ./run-unit-test.sh\'; then
                       clean_pyenv
                       echo "Tests passed!"
                   else
@@ -74,6 +84,62 @@ node('calico'){
           failFast: true
         ) //parallel
       } // stage
+
+      // TODO(skulanov): the below should be used if we need to customize building container name
+      // stage ('Build calico-pyi-build image') {
+      //   sh "docker build -t calico-pyi-build -f pyi/Dockerfile ."
+      // }
+
+      // // use build image from prev stage to build binary
+      // stage ('Build calico-felix binary') {
+      //   sh "docker run --user `id -u` --rm -v ${WORKSPACE}/tmp_calico-felix:/code calico-pyi-build /code/pyi/run-pyinstaller.sh"
+      // }
+      stage ('Build calico-felix binary'){
+        sh "./build-pyi-bundle.sh"
+      }
+
+      // build calico/felix image which consumes bin from prev step
+      stage ('Build calico/felix image') {
+        sh "docker build -t ${FELIX_DOCKER_IMAGE} ."
+      }
+
+
+      stage ('Publishing felix artifacts') {
+
+        withCredentials([
+          [$class: 'UsernamePasswordMultiBinding',
+            credentialsId: 'artifactory-sandbox',
+            passwordVariable: 'ARTIFACTORY_PASSWORD',
+            usernameVariable: 'ARTIFACTORY_LOGIN']
+        ]) {
+          sh """
+            echo 'Pushing images'
+            docker login -u ${ARTIFACTORY_LOGIN} -p ${ARTIFACTORY_PASSWORD} ${DOCKER_REPO}
+            docker push ${FELIX_DOCKER_IMAGE}
+          """
+        }
+
+        dir("artifacts"){
+
+          // Save Image name ID
+          writeFile file: "lastbuild", text: "${FELIX_DOCKER_IMAGE}"
+          // Create the upload spec.
+          def uploadSpec = """{
+              "files": [
+                      {
+                          "pattern": "**",
+                          "target": "sandbox/${GERRIT_CHANGE_NUMBER}/felix/"
+                      }
+                  ]
+              }"""
+
+          // Upload to Artifactory.
+          def buildInfo1 = server.upload(uploadSpec)
+        } // dir artifacts
+
+      } // stage
+
+
     }// dir
 
 
@@ -81,11 +147,6 @@ node('calico'){
       // Fake stage to show that we switched to calico-containers
       echo "Start building calico-containers"
     }
-
-    def DOCKER_REPO = "artifactory.mcp.mirantis.net:5004"
-    def ARTIFACTORY_URL = "https://artifactory.mcp.mirantis.net/artifactory/sandbox"
-    def ARTIFACTORY_USER_EMAIL = "jenkins@mcp-ci-artifactory"
-    def GERRIT_HOST = "review.fuel-infra.org"
 
     def NODE_IMAGE = "calico/node"
     def NODE_IMAGE_TAG = "v0.20.0"
@@ -98,11 +159,6 @@ node('calico'){
     def BUILD_IMAGE = "calico/build"
     def BUILD_IMAGE_TAG = "v0.15.0"
 
-    def CALICO_REPO = "file:///tmp/calico_share"
-    def CALICO_VER = "mcp"
-    def LIBCALICO_REPO = "https://${GERRIT_HOST}/projectcalico/libcalico"
-    def LIBCALICO_VER = "mcp"
-
     def CONFD_BUILD = "${ARTIFACTORY_URL}/mcp/confd/lastbuild".toURL().text.trim()
     def CONFD_URL = "${ARTIFACTORY_URL}/mcp/confd/confd-${CONFD_BUILD}"
 
@@ -111,7 +167,7 @@ node('calico'){
     def BIRD6_URL="${ARTIFACTORY_URL}/mcp/calico-bird/bird6-${BIRD_BUILD}"
     def BIRDCL_URL="${ARTIFACTORY_URL}/mcp/calico-bird/birdcl-${BIRD_BUILD}"
 
-    gitCommit = sh(returnStdout: true, script: "git -C ${WORKSPACE} rev-parse --short HEAD").trim()
+    def gitCommit = sh(returnStdout: true, script: "git -C ${WORKSPACE} rev-parse --short HEAD").trim()
 
     def BUILD = "${GERRIT_CHANGE_NUMBER}-${gitCommit}"
 
@@ -132,6 +188,7 @@ node('calico'){
         make node_image \
           NODE_CONTAINER_NAME=${NODE_NAME}-${BUILD} \
           BUILD_CONTAINER_NAME=${BUILD_IMAGE}:${BUILD_IMAGE_TAG} \
+          FELIX_CONTAINER_NAME=${FELIX_DOCKER_IMAGE} \
           CONFD_URL=${CONFD_URL} \
           BIRD_URL=${BIRD_URL} \
           BIRD6_URL=${BIRD6_URL} \
