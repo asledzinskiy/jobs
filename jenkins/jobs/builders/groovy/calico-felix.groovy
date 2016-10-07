@@ -10,7 +10,7 @@ node('calico'){
   def ARTIFACTORY_URL = "https://artifactory.mcp.mirantis.net/artifactory/sandbox"
 
   def FELIX_IMAGE = "calico/felix"
-  def FELIX_IMAGE_TAG = "v0.0.7"
+  def FELIX_IMAGE_TAG = "dev"
 
   try {
 
