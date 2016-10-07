@@ -6,7 +6,7 @@
       - update-jenkins-jobs
       - update-gerrit-projects
       - jenkins-jobs.test
-      - jeepyb-verify
+      - gerrit-projects.test
       - prepare-slave-nodes
 
 - project:

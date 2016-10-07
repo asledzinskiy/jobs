@@ -1,0 +1,22 @@
+- job-template:
+    name: gerrit-projects.test
+    description: 'This job makes syntax check for jeepyb config projects.yml'
+    concurrent: true
+
+    project-type: workflow
+    dsl:
+      !include-raw-escape: gerrit-projects.test.groovy
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-ci/project-config
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
