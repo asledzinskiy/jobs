@@ -3,10 +3,10 @@
     jobs:
       - k8s-repo-cloner
       - k8s-repo-cloner-runner
-      - update-jenkins-jobs
       - update-gerrit-projects
-      - jenkins-jobs.test
       - gerrit-projects.test
+      - jenkins-jobs.update
+      - jenkins-jobs.test
       - prepare-slave-nodes
 
 - project:
