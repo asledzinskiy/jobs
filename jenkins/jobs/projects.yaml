@@ -3,7 +3,7 @@
     jobs:
       - k8s-repo-cloner
       - k8s-repo-cloner-runner
-      - update-gerrit-projects
+      - gerrit-projects.update
       - gerrit-projects.test
       - jenkins-jobs.update
       - jenkins-jobs.test

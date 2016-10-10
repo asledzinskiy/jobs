@@ -1,21 +1,17 @@
 - job-template:
-    name: update-gerrit-projects
+    name: gerrit-projects.update
     description: |
       Update Gerrit projects after the merge event
-    node: tools
-    builders:
-      - shell:
-          !include-raw-escape: builders/update-gerrit-projects.sh
-    concurrent: false
-    scm:
-      - git:
-          branches:
-            - 'master'
-          remotes:
-            - gerrit:
-                url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mcp-ci/project-config.git'
-                credentials-id: 'mcp-ci-gerrit'
-          skip-tag: true
+
+    project-type: workflow
+    dsl:
+      !include-raw-escape: gerrit-projects.update.groovy
+
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+
     triggers:
       - gerrit:
           trigger-on:
