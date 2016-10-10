@@ -12,3 +12,5 @@
     mcp-k8s-registry: artifactory.mcp.mirantis.net:5000
     mcp-k8s-ci-registry: artifactory.mcp.mirantis.net:5001
     k8s-tests-registry: artifactory.mcp.mirantis.net:5005
+    docker-dev-virtual: artifactory.mcp.mirantis.net:5007
+    docker-prod-virtual: artifactory.mcp.mirantis.net:5008
