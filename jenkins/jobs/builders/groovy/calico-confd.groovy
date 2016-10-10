@@ -1,5 +1,3 @@
-def tools = new ci.mcp.Tools()
-
 node('calico'){
 
   // Get Artifactory server instance, defined in the Artifactory Plugin administration page.
@@ -98,6 +96,8 @@ node('calico'){
 
     // calico/build goes from {ARTIFACTORY_URL}/mcp/libcalico/
     def BUILD_NAME = "${ARTIFACTORY_URL}/mcp/libcalico/lastbuild".toURL().text.trim()
+    // calico/felix goes from {ARTIFACTORY_URL}/mcp/felix/
+    def FELIX_NAME = "${ARTIFACTORY_URL}/mcp/felix/lastbuild".toURL().text.trim()
 
     def CONFD_BUILD = "${ARTIFACTORY_URL}/${GERRIT_CHANGE_NUMBER}/confd/lastbuild".toURL().text.trim()
     def CONFD_URL = "${ARTIFACTORY_URL}/${GERRIT_CHANGE_NUMBER}/confd/confd-${CONFD_BUILD}"
@@ -128,6 +128,7 @@ node('calico'){
         make node_image \
           NODE_CONTAINER_NAME=${NODE_NAME}-${BUILD} \
           BUILD_CONTAINER_NAME=${BUILD_NAME} \
+          FELIX_CONTAINER_NAME=${FELIX_NAME} \
           CONFD_URL=${CONFD_URL} \
           BIRD_URL=${BIRD_URL} \
           BIRD6_URL=${BIRD6_URL} \

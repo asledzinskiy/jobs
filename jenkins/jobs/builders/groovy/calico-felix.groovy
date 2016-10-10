@@ -1,5 +1,3 @@
-def tools = new ci.mcp.Tools()
-
 node('calico'){
 
   // Get Artifactory server instance, defined in the Artifactory Plugin administration page.

@@ -93,6 +93,8 @@ node('calico'){
       echo "Start building calico-containers"
     }
 
+    // calico/felix goes from {ARTIFACTORY_URL}/mcp/felix/
+    def FELIX_NAME = "${ARTIFACTORY_URL}/mcp/felix/lastbuild".toURL().text.trim()
 
     def CONFD_BUILD = "${ARTIFACTORY_URL}/mcp/confd/lastbuild".toURL().text.trim()
     def CONFD_URL = "${ARTIFACTORY_URL}/mcp/confd/confd-${CONFD_BUILD}"
@@ -123,6 +125,7 @@ node('calico'){
         make node_image \
           NODE_CONTAINER_NAME=${NODE_NAME}-${BUILD} \
           BUILD_CONTAINER_NAME=${LIBCALICO_DOCKER_IMAGE} \
+          FELIX_CONTAINER_NAME=${FELIX_NAME} \
           CONFD_URL=${CONFD_URL} \
           BIRD_URL=${BIRD_URL} \
           BIRD6_URL=${BIRD6_URL} \
