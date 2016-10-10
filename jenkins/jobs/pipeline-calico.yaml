@@ -84,6 +84,27 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
+    name: pipeline-calico-libcalico-go
+    project-name: pipeline-calico
+    description: |
+      Pipeline for libcalico-go project
+    project-type: workflow
+    dsl:
+      !include-raw-escape: 'builders/groovy/calico-libcalico-go.groovy'
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/libcalico-go
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
     name: pipeline-calico-cni
     project-name: pipeline-calico
     description: |

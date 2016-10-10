@@ -151,3 +151,4 @@
       - pipeline-calico-containers
       - pipeline-calico-felix
       - pipeline-calico-libcalico
+      - pipeline-calico-libcalico-go
