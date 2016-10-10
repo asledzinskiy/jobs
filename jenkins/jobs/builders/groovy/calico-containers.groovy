@@ -9,8 +9,6 @@ node('calico'){
 
   def DOCKER_REPO = "artifactory.mcp.mirantis.net:5004"
   def ARTIFACTORY_URL = "https://artifactory.mcp.mirantis.net/artifactory/sandbox"
-  def ARTIFACTORY_USER_EMAIL = "jenkins@mcp-ci-artifactory"
-  def GERRIT_HOST = "review.fuel-infra.org"
 
   def NODE_IMAGE = "calico/node"
   def NODE_IMAGE_TAG = "v0.20.0"
@@ -20,13 +18,8 @@ node('calico'){
   def CTL_IMAGE_TAG = "v0.20.0"
   def CTL_NAME = "${DOCKER_REPO}/${CTL_IMAGE}:${CTL_IMAGE_TAG}"
 
-  def BUILD_IMAGE = "calico/build"
-  def BUILD_IMAGE_TAG = "v0.15.0"
-
-  def CALICO_REPO = "https://${GERRIT_HOST}/projectcalico/calico"
-  def CALICO_VER = "mcp"
-  def LIBCALICO_REPO = "https://${GERRIT_HOST}/projectcalico/libcalico"
-  def LIBCALICO_VER = "mcp"
+  // calico/build goes from {ARTIFACTORY_URL}/mcp/libcalico/
+  def BUILD_NAME = "${ARTIFACTORY_URL}/mcp/libcalico/lastbuild".toURL().text.trim()
 
   def CONFD_BUILD = "${ARTIFACTORY_URL}/mcp/confd/lastbuild".toURL().text.trim()
   def CONFD_URL = "${ARTIFACTORY_URL}/mcp/confd/confd-${CONFD_BUILD}"
@@ -59,7 +52,7 @@ node('calico'){
         make ctl_image \
           REBUILD_CALICOCTL=1 \
           CTL_CONTAINER_NAME=${CTL_NAME}-${BUILD} \
-          BUILD_CONTAINER_NAME=${BUILD_IMAGE}:${BUILD_IMAGE_TAG} \
+          BUILD_CONTAINER_NAME=${BUILD_NAME} \
           BIRDCL_URL=${BIRDCL_URL}
       """
     }
@@ -69,7 +62,7 @@ node('calico'){
       sh """
         make node_image \
           NODE_CONTAINER_NAME=${NODE_NAME}-${BUILD} \
-          BUILD_CONTAINER_NAME=${BUILD_IMAGE}:${BUILD_IMAGE_TAG} \
+          BUILD_CONTAINER_NAME=${BUILD_NAME} \
           CONFD_URL=${CONFD_URL} \
           BIRD_URL=${BIRD_URL} \
           BIRD6_URL=${BIRD6_URL} \
