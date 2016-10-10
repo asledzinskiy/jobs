@@ -1,21 +1,18 @@
-- job:
-    builders:
-      - shell:
-          !include-raw 'builders/mcp-prepare-env.sh'
+- job-template:
+    dsl:
+      !include-raw-escape: 'builders/groovy/mcp-prepare-env.groovy'
     concurrent: true
     description: |
       Creates a python virtual environment for MCP deployment and system tests. Stores additional images.<br><br>
+    project-type: workflow
     logrotate:
       daysToKeep: 14
     name: mcp-prepare-env
     parameters:
       - bool:
-          name: 'update_devops'
+          name: DELETE_DB
           default: false
-      - bool:
-          name: FORCE_DELETE_DEVOPS
-          default: false
-          description: 'Force to delete devops venv before update'
+          description: 'Remove the devops database before creating a new one'
       - node:
           name: NODE
           allowed-multiselect: true
@@ -27,12 +24,6 @@
           name: VENV_REQUIREMENTS
           default: ''
           description: 'Use custom requirements for venv'
-    scm:
-      - git:
-          url: 'https://github.com/openstack/fuel-ccp-tests.git'
-          branches:
-            - $BRANCH
-          skip-tag: true
     wrappers:
       - timeout:
           timeout: 60
