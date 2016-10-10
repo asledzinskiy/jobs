@@ -65,10 +65,10 @@ node('tools') {
             description = ''
             if (diff_list['diff'].size() > 0) {
                 description += '<b>CHANGED</b><ul>'
-                diff_list['diff'].each {
-                    description += "<li><a href=\"${env.BUILD_URL}artifact/output/jobs/diff/${it}/*view*/\">${it}</a></li>"
+                for (item in diff_list['diff']) {
+                    description += "<li><a href=\"${env.BUILD_URL}artifact/output/jobs/diff/${item}/*view*/\">${item}</a></li>"
                     // Generate diff file
-                    def diff_exit_code = sh returnStatus: true, script: "diff -U 50 ${env.OUT_DIR}/old/${it} ${env.OUT_DIR}/new/${it} > ${env.OUT_DIR}/diff/${it}"
+                    def diff_exit_code = sh returnStatus: true, script: "diff -U 50 ${env.OUT_DIR}/old/${item} ${env.OUT_DIR}/new/${item} > ${env.OUT_DIR}/diff/${item}"
                     // catch normal errors, diff should always return 1
                     if (diff_exit_code != 1) {
                         throw new RuntimeException('Error with diff file generation')
@@ -77,14 +77,14 @@ node('tools') {
             }
             if (diff_list['new'].size() > 0) {
                 description += '<b>ADDED</b><ul>'
-                diff_list['new'].each {
-                    description += "<li><a href=\"${env.BUILD_URL}artifact/output/jobs/new/${it}/*view*/\">${it}</a></li>"
+                for (item in diff_list['new']) {
+                    description += "<li><a href=\"${env.BUILD_URL}artifact/output/jobs/new/${item}/*view*/\">${item}</a></li>"
                 }
             }
             if (diff_list['old'].size() > 0) {
                 description += '<b>DELETED</b><ul>'
-                diff_list['old'].each {
-                    description += "<li><a href=\"${env.BUILD_URL}artifact/output/jobs/old/${it}/*view*/\">${it}</a></li>"
+                for (item in diff_list['old']) {
+                    description += "<li><a href=\"${env.BUILD_URL}artifact/output/jobs/old/${item}/*view*/\">${item}</a></li>"
                 }
             }
             if (description != '') {
