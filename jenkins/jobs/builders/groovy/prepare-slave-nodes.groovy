@@ -11,7 +11,7 @@ node('tools') {
     def HOSTNAME = sh(returnStdout: true, script: "hostname").trim()
     ArrayList HOST = new ArrayList(Arrays.asList(HOSTS.split("\\s* \\s*")));
 
-    stage ('Git checkout') {
+    stage ('Code checkout') {
       gitSSHCheckout {
         credentialsId = "mcp-ci-gerrit"
         branch = BRANCH

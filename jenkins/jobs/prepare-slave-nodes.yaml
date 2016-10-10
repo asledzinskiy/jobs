@@ -20,15 +20,6 @@
           description: 'A space separated list of hosts to provision'
     dsl:
       !include-raw-escape: builders/groovy/prepare-slave-nodes.groovy
-    scm:
-      - git:
-         remotes:
-           - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mcp-ci/mcp-cicd-poc'
-               credentials-id: 'mcp-ci-gerrit'
-         branches:
-           - '$BRANCH_NAME'
-         skip-tag: true
     wrappers:
       - ssh-agent-credentials:
           users:
