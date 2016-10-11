@@ -1,12 +1,10 @@
 node('calico'){
 
   // Get Artifactory server instance, defined in the Artifactory Plugin administration page.
-  // TODO(skulanov) use sandbox
-  //def server = Artifactory.server("mcp-ci")
-  def server = Artifactory.newServer url: "https://artifactory.mcp.mirantis.net/artifactory", username: "sandbox", password: "sandbox"
+  def server = Artifactory.server("mcp-ci")
 
-  def DOCKER_REPO = "artifactory.mcp.mirantis.net:5004"
-  def ARTIFACTORY_URL = "https://artifactory.mcp.mirantis.net/artifactory/sandbox"
+  def DOCKER_REPO = "artifactory.mcp.mirantis.net:5001"
+  def ARTIFACTORY_URL = "https://artifactory.mcp.mirantis.net/artifactory/projectcalico"
 
   def NODE_IMAGE = "calico/node"
   def NODE_IMAGE_TAG = "v0.20.0"
@@ -54,7 +52,7 @@ node('calico'){
 
         withCredentials([
           [$class: 'UsernamePasswordMultiBinding',
-            credentialsId: 'artifactory-sandbox',
+            credentialsId: 'artifactory',
             passwordVariable: 'ARTIFACTORY_PASSWORD',
             usernameVariable: 'ARTIFACTORY_LOGIN']
         ]) {
@@ -74,7 +72,7 @@ node('calico'){
               "files": [
                       {
                           "pattern": "**",
-                          "target": "sandbox/${GERRIT_CHANGE_NUMBER}/libcalico/"
+                          "target": "projectcalico/${GERRIT_CHANGE_NUMBER}/libcalico/"
                       }
                   ]
               }"""
@@ -138,7 +136,7 @@ node('calico'){
 
       withCredentials([
         [$class: 'UsernamePasswordMultiBinding',
-          credentialsId: 'artifactory-sandbox',
+          credentialsId: 'artifactory',
           passwordVariable: 'ARTIFACTORY_PASSWORD',
           usernameVariable: 'ARTIFACTORY_LOGIN']
       ]) {
@@ -165,7 +163,7 @@ node('calico'){
             "files": [
                     {
                         "pattern": "**",
-                        "target": "sandbox/${GERRIT_CHANGE_NUMBER}/calico-containers/"
+                        "target": "projectcalico/${GERRIT_CHANGE_NUMBER}/calico-containers/"
                     }
                 ]
             }"""

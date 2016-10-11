@@ -1,11 +1,9 @@
 node('calico'){
 
   // Get Artifactory server instance, defined in the Artifactory Plugin administration page.
-  // TODO(skulanov) use sandbox
-  //def server = Artifactory.server("mcp-ci")
-  def server = Artifactory.newServer url: "https://artifactory.mcp.mirantis.net/artifactory", username: "sandbox", password: "sandbox"
+  def server = Artifactory.server("mcp-ci")
 
-  def ARTIFACTORY_URL = "https://artifactory.mcp.mirantis.net/artifactory/sandbox"
+  def ARTIFACTORY_URL = "https://artifactory.mcp.mirantis.net/artifactory/projectcalico"
 
   try {
 
@@ -41,7 +39,7 @@ node('calico'){
             "files": [
                     {
                         "pattern": "**",
-                        "target": "sandbox/${GERRIT_CHANGE_NUMBER}/libcalico-go/"
+                        "target": "projectcalico/${GERRIT_CHANGE_NUMBER}/libcalico-go/"
                     }
                 ]
             }"""
