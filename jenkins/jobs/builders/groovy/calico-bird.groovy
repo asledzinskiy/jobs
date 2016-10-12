@@ -84,7 +84,7 @@ node('calico'){
     def BIRD6_URL="${ARTIFACTORY_URL}/${GERRIT_CHANGE_NUMBER}/calico-bird/bird6-${BIRD_BUILD}"
     def BIRDCL_URL="${ARTIFACTORY_URL}/${GERRIT_CHANGE_NUMBER}/calico-bird/birdcl-${BIRD_BUILD}"
 
-    gitCommit = sh(returnStdout: true, script: "git -C ${WORKSPACE} rev-parse --short HEAD").trim()
+    def gitCommit = sh(returnStdout: true, script: "git -C ${WORKSPACE} rev-parse --short HEAD").trim()
 
     def BUILD = "${GERRIT_CHANGE_NUMBER}-${gitCommit}"
 
