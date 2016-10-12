@@ -153,3 +153,14 @@
       - pipeline-calico-felix
       - pipeline-calico-libcalico
       - pipeline-calico-libcalico-go
+
+- project:
+    name: pipeline-calico-gate
+    jobs:
+      - pipeline-calico-bird-gate
+      - pipeline-calico-cni-gate
+      - pipeline-calico-confd-gate
+      - pipeline-calico-containers-gate
+      - pipeline-calico-felix-gate
+      - pipeline-calico-libcalico-gate
+      - pipeline-calico-libcalico-go-gate
