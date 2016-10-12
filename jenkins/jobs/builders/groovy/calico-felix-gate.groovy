@@ -60,7 +60,7 @@ node('calico'){
 
                   prepare_pyenv
 
-                  if bash -x -c \'COMPARE_BRANCH=gerrit/${GERRIT_BRANCH} VIRTUAL_ENV="" ./run-unit-test.sh\'; then
+                  if bash -x -c \'COMPARE_BRANCH=origin/mcp VIRTUAL_ENV="" ./run-unit-test.sh\'; then
                       clean_pyenv
                       echo "Tests passed!"
                   else
