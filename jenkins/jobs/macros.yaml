@@ -63,6 +63,11 @@
         description: 'Overwrite Calico CNI binaries copied from hyperkube image'
 
     - string:
+        name: MCP_BRANCH
+        default: '{mcp-branch}'
+        description: 'Branch name to use for searching latest artifacts'
+
+    - string:
         name: MCP_NETCHECKER_AGENT_IMAGE_REPO
         default: '{mcp-k8s-ci-registry}/mcp-netchecker/agent'
 

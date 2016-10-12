@@ -53,7 +53,7 @@ set_latest_k8s_artifacts () {
 }
 
 set_latest_calico_containers_artifacts () {
-    CALICO_ARTIFACTS_DIR="projectcalico/mcp-0.1/calico-containers"
+    CALICO_ARTIFACTS_DIR="projectcalico/${MCP_BRANCH}/calico-containers"
     CALICO_ARTIFACTS_URL="${ARTIFACTORY_URL}/${CALICO_ARTIFACTS_DIR}/"
     CALICO_LATEST_VERSION=$(curl -s "${CALICO_ARTIFACTS_URL}/lastbuild")
     CALICO_LATEST_YAML="${CALICO_ARTIFACTS_URL}/calico-containers-${CALICO_LATEST_VERSION}.yaml"
@@ -62,7 +62,7 @@ set_latest_calico_containers_artifacts () {
 }
 
 set_latest_calico_cni_artifacts () {
-    CALICOCNI_ARTIFACTS_DIR="projectcalico/mcp-0.1/calico-cni"
+    CALICOCNI_ARTIFACTS_DIR="projectcalico/${MCP_BRANCH}/calico-cni"
     CALICOCNI_ARTIFACTS_URL="${ARTIFACTORY_URL}/${CALICOCNI_ARTIFACTS_DIR}/"
     CALICOCNI_LATEST_VERSION=$(curl -s "${CALICOCNI_ARTIFACTS_URL}/lastbuild")
     CALICOCNI_LATEST_YAML="${CALICOCNI_ARTIFACTS_URL}/calico-cni-${CALICOCNI_LATEST_VERSION}.yaml"

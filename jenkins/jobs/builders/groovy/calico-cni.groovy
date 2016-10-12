@@ -30,18 +30,20 @@ node('calico'){
           cp ${WORKSPACE}/dist/calico-ipam calico-ipam-${CNI_BUILD}
         """
 
-        def calico_cni_checksum = sh(returnStdout: true, script: "sha256sum calico-${CNI_BUILD} | cut -d' ' -f1").trim()
-        def calico_cni_ipam_checksum = sh(returnStdout: true, script: "sha256sum calico-ipam-${CNI_BUILD} | cut -d' ' -f1").trim()
+        CALICO_CNI_DOWNLOAD_URL="${ARTIFACTORY_URL}/${GERRIT_CHANGE_NUMBER}/calico-cni/calico-${CNI_BUILD}"
+        CALICO_CNI_CHECKSUM=sh(returnStdout: true, script: "sha256sum calico-${CNI_BUILD} | cut -d' ' -f1").trim()
+        CALICO_CNI_IPAM_DOWNLOAD_URL="${ARTIFACTORY_URL}/${GERRIT_CHANGE_NUMBER}/calico-cni/calico-ipam-${CNI_BUILD}"
+        CALICO_CNI_IPAM_CHECKSUM=sh(returnStdout: true, script: "sha256sum calico-ipam-${CNI_BUILD} | cut -d' ' -f1").trim()
 
         // Save Image name ID
         writeFile file: "lastbuild", text: "${CNI_BUILD}"
         // Create the upload spec.
         writeFile file: "calico-cni-${CNI_BUILD}.yaml",
                   text: """\
-                    calico_cni_download_url: ${ARTIFACTORY_URL}/${GERRIT_CHANGE_NUMBER}/calico-cni/calico-${CNI_BUILD}
-                    calico_cni_checksum: ${calico_cni_checksum}
-                    calico_cni_ipam_download_url: ${ARTIFACTORY_URL}/${GERRIT_CHANGE_NUMBER}/calico-cni/calico-ipam-${CNI_BUILD}
-                    calico_cni_ipam_checksum: ${calico_cni_ipam_checksum}
+                    calico_cni_download_url: ${CALICO_CNI_DOWNLOAD_URL}
+                    calico_cni_checksum: ${CALICO_CNI_CHECKSUM}
+                    calico_cni_ipam_download_url: ${CALICO_CNI_IPAM_DOWNLOAD_URL}
+                    calico_cni_ipam_checksum: ${CALICO_CNI_IPAM_CHECKSUM}
                   """.stripIndent()
 
         def uploadSpec = """{
@@ -56,6 +58,18 @@ node('calico'){
         // Upload to Artifactory.
         def buildInfo1 = server.upload(uploadSpec)
       }
+    }
+
+    stage ("Run system tests") {
+       build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
+        [
+            [$class: 'StringParameterValue', name: 'CALICO_CNI_DOWNLOAD_URL', value: CALICO_CNI_DOWNLOAD_URL],
+            [$class: 'StringParameterValue', name: 'CALICO_CNI_CHECKSUM', value: CALICO_CNI_CHECKSUM],
+            [$class: 'StringParameterValue', name: 'CALICO_CNI_IPAM_DOWNLOAD_URL', value: CALICO_CNI_IPAM_DOWNLOAD_URL],
+            [$class: 'StringParameterValue', name: 'CALICO_CNI_IPAM_CHECKSUM', value: CALICO_CNI_IPAM_CHECKSUM],
+            [$class: 'StringParameterValue', name: 'OVERWRITE_HYPERKUBE_CNI', value: 'true'],
+            [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
+        ]
     }
 
   }

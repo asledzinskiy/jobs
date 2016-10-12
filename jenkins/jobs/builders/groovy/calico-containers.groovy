@@ -86,14 +86,17 @@ node('calico'){
       }
 
       dir("artifacts"){
+        CALICO_NODE_IMAGE_REPO="${DOCKER_REPO}/${NODE_IMAGE}"
+        CALICOCTL_IMAGE_REPO="${DOCKER_REPO}/${CTL_IMAGE}"
+        CALICO_VERSION="${NODE_IMAGE_TAG}-${BUILD}"
         // Save the last build ID
         writeFile file: "lastbuild", text: "${BUILD}"
         // Create config yaml for Kargo
         writeFile file: "calico-containers-${BUILD}.yaml",
                   text: """\
-                    calico_node_image_repo: ${DOCKER_REPO}/${NODE_IMAGE}
-                    calicoctl_image_repo: ${DOCKER_REPO}/${CTL_IMAGE}
-                    calico_version: ${NODE_IMAGE_TAG}-${BUILD}
+                    calico_node_image_repo: ${CALICO_NODE_IMAGE_REPO}
+                    calicoctl_image_repo: ${CALICOCTL_IMAGE_REPO}
+                    calico_version: ${CALICO_VERSION}
                   """.stripIndent()
         // Create the upload spec.
         def uploadSpec = """{
@@ -109,6 +112,16 @@ node('calico'){
         def buildInfo1 = server.upload(uploadSpec)
       } // dir artifacts
     } //stage
+
+    stage ("Run system tests") {
+       build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
+        [
+            [$class: 'StringParameterValue', name: 'CALICO_NODE_IMAGE_REPO', value: CALICO_NODE_IMAGE_REPO],
+            [$class: 'StringParameterValue', name: 'CALICOCTL_IMAGE_REPO', value: CALICOCTL_IMAGE_REPO],
+            [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: CALICO_VERSION],
+            [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
+        ]
+    }
 
   }
   catch(err) {
