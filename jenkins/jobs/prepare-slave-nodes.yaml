@@ -7,6 +7,9 @@
     concurrent: true
     parameters:
       - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
           name: USERNAME
           default: 'ubuntu'
           description: 'Username used for ansible when connecting to the sshd daemon on a remote host'

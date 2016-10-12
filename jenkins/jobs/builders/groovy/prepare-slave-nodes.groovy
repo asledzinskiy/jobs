@@ -12,10 +12,11 @@ node('tools') {
     ArrayList HOST = new ArrayList(Arrays.asList(HOSTS.split("\\s* \\s*")));
 
     stage ('Code checkout') {
+      def HOST = env.GERRIT_HOST
       gitSSHCheckout {
         credentialsId = "mcp-ci-gerrit"
         branch = BRANCH
-        host = "review.fuel-infra.org"
+        host = HOST
         project = "mcp-ci/mcp-cicd-poc"
       }
     }
