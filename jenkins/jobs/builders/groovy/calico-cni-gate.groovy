@@ -7,9 +7,11 @@ node('calico'){
 
   try {
 
-    gerritPatchsetCheckout {
+    gitSSHCheckout {
       credentialsId = "mcp-ci-gerrit"
-      withWipeOut = true
+      branch = "mcp"
+      host = "review.fuel-infra.org"
+      project = "projectcalico/calico-cni"
     }
 
     def gitCommit = sh(returnStdout: true, script: "git -C ${WORKSPACE} rev-parse --short HEAD").trim()

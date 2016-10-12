@@ -3,6 +3,9 @@ node('calico'){
   // Get Artifactory server instance, defined in the Artifactory Plugin administration page.
   def server = Artifactory.server("mcp-ci")
 
+  def DOCKER_REPO = "artifactory.mcp.mirantis.net:5001"
+  def ARTIFACTORY_URL = "https://artifactory.mcp.mirantis.net/artifactory/projectcalico"
+
   def FELIX_IMAGE = "calico/felix"
   def FELIX_IMAGE_TAG = "dev"
 
