@@ -173,7 +173,6 @@ node('calico'){
     stage ('Build calico/ctl image'){
       sh """
         make ctl_image \
-          REBUILD_CALICOCTL=1 \
           CTL_CONTAINER_NAME=${CTL_NAME}-${BUILD} \
           BUILD_CONTAINER_NAME=${BUILD_NAME} \
           BIRDCL_URL=${BIRDCL_URL}
