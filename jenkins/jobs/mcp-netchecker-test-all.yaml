@@ -16,6 +16,7 @@
             NETCHECKER_TYPE={type}
             NETCHECKER_VERSION=mcp-0.1
             GERRIT_URL={gerrit-url}
+            ONLY_WAIT_FOR_ARTIFACTS=true
       - shell:
           !include-raw-escape: builders/mcp-netchecker-build.sh
       - trigger-builds:
