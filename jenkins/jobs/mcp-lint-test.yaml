@@ -2,22 +2,10 @@
     name: mcp-lint-test
     description: |
       Run ansible lint test for mcp-ci
-    node: verify-tests
+    project-type: workflow
     concurrent: true
-    builders:
-      - shell:
-          !include-raw-escape: builders/mcp-lint-test.sh
-    scm:
-      - git:
-         remotes:
-           - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mcp-ci/mcp-cicd-poc'
-               refspec: '$GERRIT_REFSPEC'
-               credentials-id: 'mcp-ci-gerrit'
-         branches:
-          - '$GERRIT_BRANCH'
-         choosing-strategy: gerrit
-         skip-tag: true
+    dsl:
+      !include-raw-escape: builders/groovy/mcp-lint-test.groovy
     triggers:
       - gerrit:
           trigger-on:
