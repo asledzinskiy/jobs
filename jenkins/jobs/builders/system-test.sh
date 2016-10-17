@@ -47,7 +47,7 @@ set_latest_k8s_artifacts () {
     "${HYPERKUBE_LATEST_LINK}" |
     python -c 'import sys,json; print json.load(sys.stdin)["downloadUri"]')
     HYPERKUBE_LATEST_ARTIFACTS=$(curl -s -u "${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD}" \
-    "${HYPERKUBE_LATEST_YAML}")
+    "${HYPERKUBE_LATEST_YAML}" | sed "s/e2e_conformance/hyperkube/g")
     set -x
     export_params_from_yaml "${HYPERKUBE_LATEST_ARTIFACTS}" "hyperkube"
 }
