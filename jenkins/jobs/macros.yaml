@@ -23,11 +23,13 @@
 
     - string:
         name: HYPERKUBE_IMAGE_REPO
-        default: '{mcp-k8s-ci-registry}/hyperkube-amd64'
+        #default: '{mcp-k8s-ci-registry}/hyperkube-amd64'
+        default: 'artifactory.mcp.mirantis.net:5000/hyperkube-amd64'
 
     - string:
         name: HYPERKUBE_IMAGE_TAG
-        default: 'latest'
+        #default: 'latest'
+        default: 'v1.4.1-mirantis_100'
 
     - string:
         name: CALICO_NODE_IMAGE_REPO
