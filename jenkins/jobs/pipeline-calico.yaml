@@ -134,6 +134,11 @@
     dsl:
       !include-raw-escape: 'builders/groovy/calico-containers.groovy'
 
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+
     triggers:
       - gerrit:
           trigger-on:

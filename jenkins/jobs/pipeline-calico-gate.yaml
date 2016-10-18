@@ -186,7 +186,12 @@
           option: category
     project-type: workflow
     dsl:
-      !include-raw-escape: 'builders/groovy/calico-containers-gate.groovy'
+      !include-raw-escape: 'builders/groovy/calico-containers.groovy'
+
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
 
     triggers:
       - gerrit:
