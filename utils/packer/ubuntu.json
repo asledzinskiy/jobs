@@ -1,0 +1,123 @@
+{
+  "_comment": "Build with `PACKER_LOG=1 UBUNTU_MAJOR_VERSION=16.04 UBUNTU_MINOR_VERSION=.1 UBUNTU_TYPE=server ARCH=amd64 HEADLESS=true packer build ubuntu.json`",
+  "_comment": "Use `build -only=qemu`",
+  "_comment": "See checksums at {{ user `ubuntu_mirror` }}{{ user `ubuntu_version` }}/SHA256SUMS",
+  "variables": {
+    "name": "ubuntu-{{ env `UBUNTU_MAJOR_VERSION` }}{{ env `UBUNTU_MINOR_VERSION` }}-{{ env `UBUNTU_TYPE` }}-{{ env `ARCH` }}",
+    "iso_name": "ubuntu-{{ env `UBUNTU_MAJOR_VERSION` }}{{ env `UBUNTU_MINOR_VERSION` }}-{{ env `UBUNTU_TYPE` }}-{{ env `ARCH` }}",
+    "ubuntu_type": "{{ env `UBUNTU_TYPE` }}",
+    "ubuntu_version": "{{ env `UBUNTU_MAJOR_VERSION` }}",
+    "ubuntu_mirror": "http://releases.ubuntu.com/",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "ssh_wait_timeout": "30m",
+    "preseed_file_name": "ubuntu-{{ env `UBUNTU_MAJOR_VERSION` }}/preseed.cfg",
+    "accelerator": "kvm",
+    "cpus": "1",
+    "memory": "1024",
+    "disk_size": "102400",
+    "headless": "{{ env `HEADLESS` }}",
+    "boot_wait": "10s",
+    "install_vagrant_key": "true",
+    "update": "true",
+    "cleanup": "true",
+    "pull_images": "true"
+  },
+
+  "builders":
+  [
+    {
+      "type": "qemu",
+      "vm_name": "qemu-{{ user `name` }}",
+      "iso_checksum_type": "sha256",
+      "iso_checksum": "29a8b9009509b39d542ecb229787cdf48f05e739a932289de9e9858d7c487c80",
+      "iso_url": "{{ user `ubuntu_mirror` }}{{ user `ubuntu_version` }}/{{ user `iso_name` }}.iso",
+      "shutdown_command": "echo '{{ user `ssh_password` }}' | sudo -S shutdown -P now",
+      "disk_size": "{{ user `disk_size` }}",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "http",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_wait_timeout": "{{ user `ssh_wait_timeout` }}",
+
+      "accelerator": "{{ user `accelerator` }}",
+      "qemuargs": [
+        [ "-smp", "{{ user `cpus` }}" ],
+        [ "-m", "{{ user `memory` }}M" ]
+      ],
+
+      "boot_wait": "{{ user `boot_wait` }}",
+      "boot_command":
+      [
+        "<esc><f6><esc>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs>",
+        "initrd=/install/initrd.gz ",
+        "auto=true ",
+        "url=http://{{.HTTPIP}}:{{.HTTPPort}}//{{ user `preseed_file_name` }} ",
+        "language=en ",
+        "country=CA ",
+        "locale=en_CA.UTF-8 ",
+        "hostname=ubuntu1604 ",
+        "domain=ubuntu1604 ",
+        "console-setup/ask_detect=false ",
+        "keyboard-configuration/layoutcode=us ",
+        "vga=788 noprompt quiet --<enter>"
+      ]
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "INSTALL_VAGRANT_KEY={{ user `install_vagrant_key` }}",
+        "UPDATE={{ user `update` }}",
+        "PULL_IMAGES={{ user `pull_images` }}",
+        "DEBIAN_FRONTEND=noninteractive"
+      ],
+      "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -S -E bash -x '{{.Path}}'",
+      "scripts": [
+        "scripts/ubuntu/update.sh",
+        "scripts/ubuntu/packages.sh",
+        "scripts/ubuntu/setup.sh",
+        "scripts/sshd.sh"
+      ]
+    },
+    {
+      "type": "shell",
+      "environment_vars": [
+        "CLEANUP={{ user `cleanup` }}"
+      ],
+      "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -S -E bash -x '{{.Path}}'",
+      "scripts": [
+        "scripts/ubuntu/cleanup.sh",
+        "scripts/minimize.sh"
+      ]
+    }
+  ],
+
+  "post-processors": [
+    {
+      "type": "shell-local",
+      "only": [ "qemu" ],
+      "inline": [
+        "qemu-img convert -c -f qcow2 -O qcow2 -o cluster_size=2M ./output-qemu/qemu-{{user `name`}} {{user `name`}}.qcow2"
+      ]
+    },
+    {
+      "type": "vagrant",
+      "only": [ "qemu" ],
+      "compression_level": 9,
+      "vagrantfile_template": "Vagrantfile-qemu.template",
+      "output": "{{ user `name` }}-{{.Provider}}.box"
+    }
+  ]
+}

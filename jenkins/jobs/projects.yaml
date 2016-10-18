@@ -1,6 +1,7 @@
 - project:
     name: tools
     jobs:
+      - 'build-vm-{distro}-images'
       - k8s-repo-cloner
       - k8s-repo-cloner-runner
       - gerrit-projects.update
@@ -8,6 +9,8 @@
       - jenkins-jobs.update
       - jenkins-jobs.test
       - prepare-slave-nodes
+    distro:
+      - ubuntu
 
 - project:
     name: mcp
