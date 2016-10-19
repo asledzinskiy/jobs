@@ -7,7 +7,7 @@
     parameters:
       - string:
           name: KUBE_DOCKER_REGISTRY
-          default: '{mcp-k8s-registry}'
+          default: '{docker-prod-virtual}'
           description: 'Docker registry for binaries and images'
       - string:
           name: ARTIFACTORY_URL

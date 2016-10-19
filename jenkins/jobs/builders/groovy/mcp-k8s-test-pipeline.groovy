@@ -6,9 +6,12 @@ git_commit_tag_id = ''
 timestamp = System.currentTimeMillis().toString()
 kube_docker_registry = env.KUBE_DOCKER_REGISTRY
 kube_docker_repo = 'hyperkube-amd64'
+kube_namespace = 'mirantis/kubernetes'
 conformance_docker_repo = 'k8s-conformance'
-artifactory_dev_repo = "mcp-k8s-ci"
-artifactory_prod_repo = "mcp-k8s"
+docker_dev_repo = "docker-dev-local"
+docker_prod_repo = "docker-prod-local"
+binary_dev_repo = "binary-dev-local"
+binary_prod_repo = "binary-prod-local"
 buildInfo = Artifactory.newBuildInfo()
 
 if ( event == 'patchset-created' ) {
@@ -24,9 +27,8 @@ def run_unit_tests () {
     stage('unit-tests') {
         node ('k8s') {
             def docker_image_unit = "${env.DOCKER_IMAGE_UNIT}"
-            update_k8s_mirror()
             deleteDir()
-            git url: "${git_k8s_cache_dir}"
+            clone_k8s_repo()
             gerritPatchsetCheckout{
                 credentialsId = "mcp-ci-gerrit"
             }
@@ -54,14 +56,13 @@ def run_unit_tests () {
 }
 
 def run_integration_tests () {
-    stage('integration-tests') {
-        def docker_image_int = "${env.DOCKER_IMAGE_INTEGRATION}"
-        parallel integration: {
-            node ('k8s') {
-                update_k8s_mirror()
+    def docker_image_int = "${env.DOCKER_IMAGE_INTEGRATION}"
+    parallel integration: {
+        stage('integration-tests') {
+            node('k8s') {
                 deleteDir()
-                git url: "${git_k8s_cache_dir}"
-                gerritPatchsetCheckout{
+                clone_k8s_repo()
+                gerritPatchsetCheckout {
                     credentialsId = "mcp-ci-gerrit"
                 }
                 sh "mkdir ${env.WORKSPACE}/${artifacts_dir}"
@@ -70,10 +71,10 @@ def run_integration_tests () {
                              "DOCKER_IMAGE=${docker_image_int}",
                              "WORKSPACE=${env.WORKSPACE}"]) {
                         sh '''
-                            docker rmi ${DOCKER_IMAGE} || true
-                            docker pull ${DOCKER_IMAGE}
-                            docker run --rm=true -v ${WORKSPACE}:/workspace -e KUBE_COVER=${COVERAGE} ${DOCKER_IMAGE}
-                        '''
+                        docker rmi ${DOCKER_IMAGE} || true
+                        docker pull ${DOCKER_IMAGE}
+                        docker run --rm=true -v ${WORKSPACE}:/workspace -e KUBE_COVER=${COVERAGE} ${DOCKER_IMAGE}
+                    '''
                     }
                 } catch (InterruptedException x) {
                     echo "The job was aborted"
@@ -84,18 +85,19 @@ def run_integration_tests () {
                 }
 
             }
+        }
 
-        }, conformance: {
-            node ('k8s-e2e') {
+    }, conformance: {
+        stage('e2e-tests') {
+            node('k8s-e2e') {
 
                 def k8s_repo_dir = "${env.WORKSPACE}/kubernetes"
 
-                update_k8s_mirror()
                 deleteDir()
                 sh "mkdir ${env.WORKSPACE}/${artifacts_dir}"
                 dir("${k8s_repo_dir}") {
-                    git url: "${git_k8s_cache_dir}"
-                    gerritPatchsetCheckout{
+                    clone_k8s_repo()
+                    gerritPatchsetCheckout {
                         credentialsId = "mcp-ci-gerrit"
                     }
                     withEnv(["PATH=${env.PATH}:/usr/local/go/bin",
@@ -108,12 +110,12 @@ def run_integration_tests () {
                              "REPORT_DIR=${env.WORKSPACE}/${artifacts_dir}"]) {
                         try {
                             sh '''
-                               make clean
-                               ./cluster/kube-down.sh || true
-                               make release-skip-tests
-                               ./cluster/kube-up.sh
-                               go run hack/e2e.go -v --test --test_args="--report-dir=${REPORT_DIR} --ginkgo.focus=\\[Conformance\\]"
-                            '''
+                           make clean
+                           ./cluster/kube-down.sh || true
+                           make release-skip-tests
+                           ./cluster/kube-up.sh
+                           go run hack/e2e.go -v --test --test_args="--report-dir=${REPORT_DIR} --ginkgo.focus=\\[Conformance\\]"
+                        '''
                         } catch (InterruptedException x) {
                             echo "The job was aborted"
                         } finally {
@@ -125,96 +127,94 @@ def run_integration_tests () {
                         }
                     }
                 }
-
             }
         }
-        failFast: true
-    }
+    },
+    failFast: true
 }
 
 def build_publish_binaries () {
-    stage('hyperkube-build') {
-        node('k8s') {
-            update_k8s_mirror()
-            deleteDir()
+    parallel hyperkube_image: {
+        stage('hyperkube-build') {
+            node('k8s') {
+                deleteDir()
 
+                def calico_cni = env.CALICO_CNI
+                def calico_ipam = env.CALICO_IPAM
+                def k8s_repo_dir = "${env.WORKSPACE}/kubernetes"
 
-            def calico_cni = env.CALICO_CNI
-            def calico_ipam = env.CALICO_IPAM
-            def k8s_repo_dir = "${env.WORKSPACE}/kubernetes"
+                def kube_docker_owner = 'jenkins'
+                def registry = "${kube_docker_registry}/${kube_docker_owner}/${kube_namespace}"
 
-            def kube_docker_owner = 'jenkins'
-            def registry = "${kube_docker_registry}/${kube_docker_owner}"
-
-            if ( ! kube_docker_registry ) {
-                error('KUBE_DOCKER_REGISTRY must be set')
-            }
-            if ( ! kube_docker_owner ) {
-                error('KUBE_DOCKER_OWNER must be set')
-            }
-            if ( ! calico_cni ) {
-                calico_cni = "https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico"
-            }
-            if ( ! calico_ipam ) {
-                calico_ipam = "https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam"
-            }
-
-            dir("${k8s_repo_dir}") {
-                git url: "${git_k8s_cache_dir}"
-                gerritPatchsetCheckout{
-                    credentialsId = "mcp-ci-gerrit"
+                if (!kube_docker_registry) {
+                    error('KUBE_DOCKER_REGISTRY must be set')
                 }
-                git_commit_tag_id = sh(script: "git describe | sed 's/\\-[^-]*\$//'", returnStdout: true).trim()
+                if (!kube_docker_owner) {
+                    error('KUBE_DOCKER_OWNER must be set')
+                }
+                if (!calico_cni) {
+                    calico_cni = "https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico"
+                }
+                if (!calico_ipam) {
+                    calico_ipam = "https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam"
+                }
 
-                def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
-                def version = "${kube_docker_version}"
+                dir("${k8s_repo_dir}") {
+                    clone_k8s_repo()
+                    gerritPatchsetCheckout {
+                        credentialsId = "mcp-ci-gerrit"
+                    }
+                    git_commit_tag_id = sh(script: "git describe | sed 's/\\-[^-]*\$//'", returnStdout: true).trim()
 
-                withEnv(["WORKSPACE=${env.WORKSPACE}/kubernetes",
-                         "VERSION=${version}",
-                         "KUBE_DOCKER_VERSION=${kube_docker_version}",
-                         "REGISTRY=${registry}",
-                         "CALICO_CNI=${calico_cni}",
-                         "CALICO_IPAM=${calico_ipam}",
-                         "GERRIT_PATCHSET_REVISION=${env.GERRIT_PATCHSET_REVISION}",
-                         "GERRIT_CHANGE_URL=${env.GERRIT_CHANGE_URL}",
-                         "BUILD_URL=${env.BUILD_URL}",
-                         "KUBE_DOCKER_REPOSITORY=${kube_docker_repo}",
-                         "KUBE_DOCKER_OWNER=${kube_docker_owner}",
-                         "ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory",
-                         "KUBE_DOCKER_REGISTRY=${kube_docker_registry}",
-                         "KUBE_CONTAINER_TMP=hyperkube-tmp-${env.BUILD_NUMBER}",
-                         "CALICO_BINDIR=/opt/cni/bin",
-                         // downstream options
-                         "CALICO_DOWNSTREAM=${env.CALICO_DOWNSTREAM}",
-                         "ARTIFACTORY_URL=${env.ARTIFACTORY_URL}",
-                         "CALICO_VER=${env.CALICO_VER}"]) {
-                    writeFile file: 'build.sh', text: '''#!/bin/bash
+                    def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
+                    def version = "${kube_docker_version}"
+
+                    withEnv(["WORKSPACE=${env.WORKSPACE}/kubernetes",
+                             "VERSION=${version}",
+                             "KUBE_DOCKER_VERSION=${kube_docker_version}",
+                             "REGISTRY=${registry}",
+                             "CALICO_CNI=${calico_cni}",
+                             "CALICO_IPAM=${calico_ipam}",
+                             "GERRIT_PATCHSET_REVISION=${env.GERRIT_PATCHSET_REVISION}",
+                             "GERRIT_CHANGE_URL=${env.GERRIT_CHANGE_URL}",
+                             "BUILD_URL=${env.BUILD_URL}",
+                             "KUBE_DOCKER_REPOSITORY=${kube_namespace}/${kube_docker_repo}",
+                             "KUBE_DOCKER_OWNER=${kube_docker_owner}",
+                             "ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory",
+                             //"KUBE_DOCKER_REGISTRY=${kube_docker_registry}",
+                             "KUBE_CONTAINER_TMP=hyperkube-tmp-${env.BUILD_NUMBER}",
+                             "CALICO_BINDIR=/opt/cni/bin",
+                             // downstream options
+                             "CALICO_DOWNSTREAM=${env.CALICO_DOWNSTREAM}",
+                             "ARTIFACTORY_URL=${env.ARTIFACTORY_URL}",
+                             "CALICO_VER=${env.CALICO_VER}"]) {
+                        writeFile file: 'build.sh', text: '''#!/bin/bash
                         source "${WORKSPACE}/build/common.sh"
                         kube::build::verify_prereqs
                         kube::build::build_image
                         kube::build::run_build_command hack/build-go.sh cmd/hyperkube
                     '''.stripIndent()
-                    try {
-                        sh '''
+                        try {
+                            sh '''
                             chmod +x build.sh
                             sudo -E -s ${WORKSPACE}/build.sh
                         '''
-                        dir("cluster/images/hyperkube") {
-                            sh '''
+                            dir("cluster/images/hyperkube") {
+                                sh '''
                                 if grep -q 'LABEL com.mirantis' Dockerfile; then
                                     sed -i.back '/.*com.mirantis.*/d' Dockerfile
                                 fi
                                 cat <<EOF>> Dockerfile
                                 # Apply additional build metadata
                                 LABEL com.mirantis.image-specs.gerrit_change_url="${GERRIT_CHANGE_URL}" \
-                                  com.mirantis.image-specs.build_url="${BUILD_URL}" \
-                                  com.mirantis.image-specs.patchset="${GERRIT_PATCHSET_REVISION}"
+                                  com.mirantis.image-specs.changeid="${GERRIT_CHANGE_ID}" \
+                                  com.mirantis.image-specs.version="${KUBE_DOCKER_VERSION}"
                             '''
-                        }
-                        sh "make -C cluster/images/hyperkube build"
-                        echo "Calico injection will happen now..."
-                        if ("${env.CALICO_DOWNSTREAM}" == "true") {
-                            sh '''#!/bin/bash
+                            }
+                            sh "make -C cluster/images/hyperkube build"
+                            echo "Calico injection will happen now..."
+                            if ("${env.CALICO_DOWNSTREAM}" == "true") {
+                                sh '''#!/bin/bash
                                 TMPURL=${ARTIFACTORY_URL}/projectcalico/${CALICO_VER}/calico-cni
                                 lastbuild=\$(curl -s $TMPURL/lastbuild)
                                 wget ${TMPURL}/calico-${lastbuild} -O calico
@@ -224,14 +224,14 @@ def build_publish_binaries () {
                                 [ "$calico_checksum" == "\$(curl -s ${TMPURL}/calico-${lastbuild}.sha1)" ]
                                 [ "$calico_ipam_checksum" == "\$(curl -s ${TMPURL}/calico-ipam-${lastbuild}.sha1)" ]
                             '''
-                        } else {
-                            sh '''
+                            } else {
+                                sh '''
                                 wget "${CALICO_IPAM}" -O calico-ipam
                                 wget "${CALICO_CNI}" -O calico
                             '''
-                        }
+                            }
 
-                        sh '''
+                            sh '''
                             chmod +x calico calico-ipam
                             mkdir -p ${WORKSPACE}/artifacts
                             docker run --name "${KUBE_CONTAINER_TMP}" -d -t "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
@@ -244,94 +244,81 @@ def build_publish_binaries () {
                             docker rm "${KUBE_CONTAINER_TMP}"
                             docker tag "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
                         '''
-                        writeFile file: "hyperkube_image_${env.VERSION}.yaml",
-                                text: """
-                                      hyperkube_image_repo: ${env.KUBE_DOCKER_REGISTRY}/${env.KUBE_DOCKER_REPOSITORY}
-                                      hyperkube_image_tag: ${env.KUBE_DOCKER_VERSION}
-                                      gerrit_change_url: ${env.GERRIT_CHANGE_URL}
-                        """.stripIndent()
 
-                        stage('publish') {
-                            def uploadSpec = """{
+                            stage('hyperkube-publish') {
+                                def uploadSpec = """{
                                   "files": [
                                     {
-                                      "pattern": "hyperkube*.yaml",
-                                      "target": "${artifactory_dev_repo}/images-info/"
-                                    },
-                                    {
                                       "pattern": "artifacts/hyperkube**",
-                                      "target": "${artifactory_dev_repo}/hyperkube-binaries/"
+                                       "target": "${binary_dev_repo}/${kube_namespace}/hyperkube-binaries/"
                                     }
-                                  ]
-                            }"""
-                            upload_binaries_to_artifactory(uploadSpec)
-                            upload_image_to_artifactory ("${kube_docker_registry}", "${kube_docker_repo}", "${kube_docker_version}", "${artifactory_dev_repo}")
-                            currentBuild.description = "${kube_docker_registry}/${kube_docker_repo}:${kube_docker_version}"
-                        }
-                    } catch (InterruptedException x) {
-                        echo "The job was aborted"
-                    } finally {
-                        sh '''
+                                 ]
+                                }"""
+                                upload_binaries_to_artifactory(uploadSpec, true)
+                                upload_image_to_artifactory("${kube_docker_registry}", "${kube_namespace}/${kube_docker_repo}", "${kube_docker_version}", "${docker_dev_repo}")
+                                currentBuild.description = "${kube_docker_registry}/${kube_namespace}/${kube_docker_repo}:${kube_docker_version}"
+                            }
+                        } catch (InterruptedException x) {
+                            echo "The job was aborted"
+                        } finally {
+                            sh '''
                             docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" || true
                             docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" || true
                         '''
-                        sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
+                            sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
+                        }
                     }
                 }
             }
         }
-    }
-    stage('conformance-runner') {
-        node('k8s') {
-            update_k8s_mirror()
-            deleteDir()
+    }, conformance_image: {
+        stage('conformance-build') {
+            node('k8s') {
+                deleteDir()
 
-            def kube_docker_registry = env.KUBE_DOCKER_REGISTRY
-            def kube_docker_conformance_repository = 'k8s-conformance'
-            def kube_docker_owner = 'jenkins'
-            def registry = "${kube_docker_registry}/${kube_docker_owner}"
-            def kube_docker_repo = 'hyperkube-amd64'
-            def workspace = "${env.WORKSPACE}"
+                def kube_docker_conformance_repository = 'k8s-conformance'
+                def kube_docker_owner = 'jenkins'
+                def registry = "${kube_docker_registry}/${kube_docker_owner}/${kube_namespace}"
+                def workspace = "${env.WORKSPACE}"
 
-            if ( ! kube_docker_registry ) {
-                error('KUBE_DOCKER_REGISTRY must be set')
-            }
-            if ( ! kube_docker_owner ) {
-                error('KUBE_DOCKER_OWNER must be set')
-            }
-            if ( ! kube_docker_conformance_repository ) {
-                error('KUBE_DOCKER_CONFORMANCE_REPOSITORY must be set')
-            }
+                if (!kube_docker_registry) {
+                    error('KUBE_DOCKER_REGISTRY must be set')
+                }
+                if (!kube_docker_owner) {
+                    error('KUBE_DOCKER_OWNER must be set')
+                }
+                if (!kube_docker_conformance_repository) {
+                    error('KUBE_DOCKER_CONFORMANCE_REPOSITORY must be set')
+                }
 
-            git url: "${git_k8s_cache_dir}"
-            gerritPatchsetCheckout{
-                credentialsId = "mcp-ci-gerrit"
-            }
-            def git_commit_tag_id = sh(script: "git describe | sed 's/\\-[^-]*\$//'", returnStdout: true).trim()
-            def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
-            def version = "${kube_docker_version}"
+                clone_k8s_repo()
+                gerritPatchsetCheckout {
+                    credentialsId = "mcp-ci-gerrit"
+                }
+                def git_commit_tag_id = sh(script: "git describe | sed 's/\\-[^-]*\$//'", returnStdout: true).trim()
+                def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
 
-            withEnv(["WORKSPACE=${env.WORKSPACE}",
-                     "KUBE_DOCKER_VERSION=${kube_docker_version}",
-                     "REGISTRY=${registry}",
-                     "KUBE_DOCKER_REPOSITORY=${kube_docker_repo}",
-                     "KUBE_DOCKER_OWNER=${kube_docker_owner}",
-                     "ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory",
-                     "KUBE_DOCKER_REGISTRY=${kube_docker_registry}",
-                     "KUBE_DOCKER_CONFORMANCE_TAG=${kube_docker_registry}/${kube_docker_conformance_repository}:${kube_docker_version}",
-                     "ARTIFACTORY_URL=${env.ARTIFACTORY_URL}",
-                     "KUBERNETES_PROVIDER=skeleton",
-                     "KUBERNETES_CONFORMANCE_TEST=y",
-                     "CALICO_VER=${env.CALICO_VER}"]) {
-                try {
-                    sh """
+                withEnv(["WORKSPACE=${env.WORKSPACE}",
+                         "KUBE_DOCKER_VERSION=${kube_docker_version}",
+                         "REGISTRY=${registry}",
+                         "KUBE_DOCKER_REPOSITORY=${kube_namespace}/${kube_docker_repo}",
+                         "KUBE_DOCKER_OWNER=${kube_docker_owner}",
+                         "ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory",
+                         //"KUBE_DOCKER_REGISTRY=${registry}",
+                         "KUBE_DOCKER_CONFORMANCE_TAG=${kube_docker_registry}/${kube_namespace}/${kube_docker_conformance_repository}:${kube_docker_version}",
+                         "ARTIFACTORY_URL=${env.ARTIFACTORY_URL}",
+                         "KUBERNETES_PROVIDER=skeleton",
+                         "KUBERNETES_CONFORMANCE_TEST=y",
+                         "CALICO_VER=${env.CALICO_VER}"]) {
+                    try {
+                        sh """
                         make -C "${WORKSPACE}" release-skip-tests
                         mkdir "${WORKSPACE}/_build_test_runner"
                         mv "${WORKSPACE}/_output/release-tars/kubernetes-test.tar.gz" \
                            "${WORKSPACE}/_output/release-tars/kubernetes.tar.gz" \
                            "${WORKSPACE}/_build_test_runner"
                     """
-                    writeFile file: workspace + '/_build_test_runner/Dockerfile', text: '''\
+                        writeFile file: workspace + '/_build_test_runner/Dockerfile', text: '''\
                       FROM golang:1.6.3
 
                       RUN mkdir -p /go/src/k8s.io
@@ -346,7 +333,7 @@ def build_publish_binaries () {
                             com.mirantis.image-specs.patchset="${GERRIT_PATCHSET_REVISION}"
                     '''.stripIndent()
 
-                    writeFile file: workspace + '/_build_test_runner/entrypoint.sh', text: '''\
+                        writeFile file: workspace + '/_build_test_runner/entrypoint.sh', text: '''\
                       #!/bin/bash
                       set -u -e
 
@@ -401,39 +388,22 @@ def build_publish_binaries () {
                             --test_args="--ginkgo.focus=$(escape_test_name "$FOCUS")"
                       fi
                     '''.stripIndent()
-                    stage('Build the docker image') {
-                      sh 'docker build -t "${KUBE_DOCKER_CONFORMANCE_TAG}" "${WORKSPACE}/_build_test_runner"'
+                        sh 'docker build -t "${KUBE_DOCKER_CONFORMANCE_TAG}" "${WORKSPACE}/_build_test_runner"'
+                        stage('conformance-publish') {
+                            upload_image_to_artifactory("${kube_docker_registry}", "${kube_namespace}/${conformance_docker_repo}", "${kube_docker_version}", "${docker_dev_repo}")
+                        }
+                    } catch (InterruptedException x) {
+                        echo "The job was aborted"
+                    } finally {
+                        sh "docker rmi -f ${KUBE_DOCKER_CONFORMANCE_TAG} || true"
+                        sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
                     }
-                    stage('Generate image description artifact') {
-                      writeFile file: workspace + "/conformance_image_" + kube_docker_version + ".yaml", text: '''\
-                        e2e_conformance_image_repo: "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_CONFORMANCE_REPOSITORY}"
-                        e2e_conformance_image_tag: "${KUBE_DOCKER_VERSION}"
-                        gerrit_change_url: "${GERRIT_CHANGE_URL}"
-                      '''.stripIndent()
-                    }
-                    stage('publish') {
-                      def uploadSpec = """{
-                            "files": [
-                              {
-                                "pattern": "conformance_image*.yaml",
-                                "target": "${artifactory_dev_repo}/images-info/"
-                              }
-                            ]
-                      }"""
-                      upload_binaries_to_artifactory(uploadSpec, true)
-                      upload_image_to_artifactory ("${kube_docker_registry}", "${conformance_docker_repo}", "${kube_docker_version}", "${artifactory_dev_repo}")
-                      currentBuild.description = "${kube_docker_registry}/${conformance_docker_repo}:${kube_docker_version}"
-                    }
-                } catch (InterruptedException x) {
-                    echo "The job was aborted"
-                } finally {
-                    sh "docker rmi -f ${KUBE_DOCKER_CONFORMANCE_TAG} || true"
-                    sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
+                    archiveArtifacts allowEmptyArchive: true, artifacts: '_artifacts', excludes: null
                 }
-                archiveArtifacts allowEmptyArchive: true, artifacts: '_artifacts/*', excludes: null
             }
         }
-    }
+    },
+    failFast: true
 }
 
 def run_system_test () {
@@ -441,7 +411,7 @@ def run_system_test () {
         build job: 'calico.system-test.deploy',
                 parameters: [
                         string(name: 'HYPERKUBE_IMAGE_TAG', value: "${git_commit_tag_id}_${timestamp}"),
-                        string(name: 'HYPERKUBE_IMAGE_REPO', value: "${kube_docker_registry}/${kube_docker_repo}"),
+                        string(name: 'HYPERKUBE_IMAGE_REPO', value: "${kube_docker_registry}/${kube_namespace}/${kube_docker_repo}"),
                         string(name: 'GERRIT_CHANGE_URL', value: "${env.GERRIT_CHANGE_URL}")]
     }
 }
@@ -460,34 +430,21 @@ def promote_artifacts () {
                 def promotionConfig = [
                         'buildName'  : buildInfo.get('com.mirantis.build_name').join(','), // value for each key property is an array
                         'buildNumber': buildInfo.get('com.mirantis.build_id').join(','),
-                        'targetRepo' : artifactory_prod_repo.toString()]
+                        'targetRepo' : binary_prod_repo.toString()]
                 // promote build artifacts except docker because of jfrog bug
                 server.promote promotionConfig
                 // promote docker image
                 promote_docker_artifact(env.ARTIFACTORY_URL,
-                        artifactory_dev_repo,
-                        artifactory_prod_repo,
-                        kube_docker_repo,
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${kube_namespace}/${kube_docker_repo}",
                         buildInfo.get('com.mirantis.target_tag').join(','),
                         buildInfo.get('com.mirantis.target_tag').join(',').split("_")[0],
                         true)
                 promote_docker_artifact(env.ARTIFACTORY_URL,
-                        artifactory_dev_repo,
-                        artifactory_prod_repo,
-                        kube_docker_repo,
-                        buildInfo.get('com.mirantis.target_tag').join(','),
-                        'latest')
-                promote_docker_artifact(env.ARTIFACTORY_URL,
-                        artifactory_dev_repo,
-                        artifactory_prod_repo,
-                        conformance_docker_repo,
-                        buildInfo.get('com.mirantis.target_tag').join(','),
-                        buildInfo.get('com.mirantis.target_tag').join(',').split("_")[0],
-                        true)
-                promote_docker_artifact(env.ARTIFACTORY_URL,
-                        artifactory_dev_repo,
-                        artifactory_prod_repo,
-                        conformance_docker_repo,
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${kube_namespace}/${kube_docker_repo}",
                         buildInfo.get('com.mirantis.target_tag').join(','),
                         'latest')
             } else {
@@ -538,9 +495,9 @@ def get_properties_for_artifact(artifact_url) {
     return properties.get("properties")
 }
 
-def promote_docker_artifact(artifactory_url, artifactory_dev_repo, artifactory_prod_repo,
+def promote_docker_artifact(artifactory_url, docker_dev_repo, docker_prod_repo,
                             docker_repo, artifact_tag, target_tag, copy=false) {
-    def url = "${artifactory_url}/api/docker/${artifactory_dev_repo}/v2/promote"
+    def url = "${artifactory_url}/api/docker/${docker_dev_repo}/v2/promote"
     withCredentials([
             [$class: 'UsernamePasswordMultiBinding',
              credentialsId: 'artifactory',
@@ -549,12 +506,13 @@ def promote_docker_artifact(artifactory_url, artifactory_dev_repo, artifactory_p
     ]) {
         writeFile file: "query.json",
                 text: """{
-                  \"targetRepo\": \"${artifactory_prod_repo}\",
+                  \"targetRepo\": \"${docker_prod_repo}\",
                   \"dockerRepository\": \"${docker_repo}\",
                   \"tag\": \"${artifact_tag}\",
                   \"targetTag\" : \"${target_tag}\",
                   \"copy\": \"${copy}\"
               }""".stripIndent()
+        sh 'cat query.json'
         sh "bash -c \"curl  -u ${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD} -H \"Content-Type:application/json\" -X POST -d @query.json ${url}\""
     }
 }
@@ -579,10 +537,22 @@ def uri_by_properties(artifactory_url, properties) {
     }
 }
 
-def update_k8s_mirror () {
+def clone_k8s_repo () {
     def k8s_repo_url = "ssh://${GERRIT_NAME}@${GERRIT_HOST}:${GERRIT_PORT}/${GERRIT_PROJECT}.git"
-    dir(git_k8s_cache_dir) {
-        git credentialsId: 'mcp-ci-gerrit', url: "${k8s_repo_url}"
+    sshagent (credentials: ['mcp-ci-gerrit']) {
+        withEnv(["GIT_K8S_CACHE_DIR=${git_k8s_cache_dir}",
+                 "GIT_K8S_REPO_URL=${k8s_repo_url}"]) {
+            sh '''
+                git clone file://${GIT_K8S_CACHE_DIR} .
+                git remote add kubernetes ${GIT_K8S_REPO_URL}
+                git reset --hard
+                if ! git clean -x -f -d -q ; then
+                  sleep 1
+                  git clean -x -f -d -q
+                fi
+                git fetch kubernetes --tags
+            '''
+        }
     }
 }
 
