@@ -5,6 +5,7 @@
     project-type: freestyle
 
     gerrit-host: review.fuel-infra.org
+    gerrit-port: '29418'
     gerrit-url: https://review.fuel-infra.org
     artifactory-host: artifactory.mcp.mirantis.net
     artifactory-url: https://artifactory.mcp.mirantis.net/artifactory

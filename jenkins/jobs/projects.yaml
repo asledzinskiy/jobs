@@ -171,3 +171,64 @@
     name: sync-upstream-repos
     jobs:
        - 'sync-upstream'
+
+- project:
+    name: 'calico-sync-mcp'
+    sync-node: 'sync-code'
+
+    # Branches to sync (see also short names below)
+    upstream-branch: 'master'
+    downstream-branch: 'mcp'
+    fallback-branch: 'master'
+
+    # Branch short names for jobs naming
+    src-branch: master
+    dst-branch: mcp
+
+    # Syncronization schedule
+    timer: '@midnight'
+
+    # Gerrit parameters
+    gerrit-user: 'mcp-ci-mirroring'
+    gerrit-creds: 'mcp-ci-mirroring'
+    gerrit-topic: 'sync/{src-branch}/{dst-branch}'
+
+    # List of projects to sync
+    gerrit-project-name:
+    - 'calico-cni'
+    - 'calico-container'
+    - 'confd'
+    - 'felix'
+    - 'libcalico'
+    - 'libcalico-go'
+
+    jobs:
+    - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
+
+- project:
+    name: 'calico-bird-sync-mcp'
+    sync-node: 'sync-code'
+
+    # Branches to sync (see also short names below)
+    upstream-branch: 'feature-ipinip'
+    downstream-branch: 'mcp'
+    fallback-branch: 'feature-ipinip'
+
+    # Branch short names for jobs naming
+    src-branch: feature-ipinip
+    dst-branch: mcp
+
+    # Syncronization schedule
+    timer: '@midnight'
+
+    # Gerrit parameters
+    gerrit-user: 'mcp-ci-mirroring'
+    gerrit-creds: 'mcp-ci-mirroring'
+    gerrit-topic: 'sync/{src-branch}/{dst-branch}'
+
+    # List of projects to sync
+    gerrit-project-name:
+    - 'calico-bird'
+
+    jobs:
+    - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
