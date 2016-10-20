@@ -166,3 +166,8 @@
       - pipeline-calico-felix-gate
       - pipeline-calico-libcalico-gate
       - pipeline-calico-libcalico-go-gate
+
+- project:
+    name: sync-upstream-repos
+    jobs:
+       - 'sync-upstream'
