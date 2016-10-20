@@ -17,12 +17,23 @@ node('calico'){
     def gitCommit = sh(returnStdout: true, script: "git -C ${WORKSPACE} rev-parse --short HEAD").trim()
     def CNI_BUILD = "mcp-${gitCommit}"
 
-
     // TODO(skulanov) GO_CONTAINER_NAME should be defined some arti image
     stage ('Build calico-cni') {
-      sh "make build-containerized"
+      def LIBCALICOGO_PATH = "${WORKSPACE}/tmp_libcalico-go"
+      gitSSHCheckout {
+        credentialsId = "mcp-ci-gerrit"
+        branch = "mcp"
+        host = "review.fuel-infra.org"
+        project = "projectcalico/libcalico-go"
+        targetDir = "${LIBCALICOGO_PATH}"
+      }
+      // TODO(apanchenko): replace `sed` by Yaml.load() -> modify map -> Yaml.dump()
+      sh """
+        sed -e '/^- name: .*\\/libcalico-go\$/{n;s/version:.*\$/repo: file:\\/\\/\\/go\\/src\\/github.com\\/projectcalico\\/libcalico-go\\n  vcs: git/;}' -i.bak glide.lock
+        grep -qP '.*repo:\\s+file:.*libcalico-go' glide.lock || { echo 1>&2 \'Repository (libcalico-go) path was not properly set in glide.lock!'; exit 1; }
+        """
+      sh "LIBCALICOGO_PATH=${LIBCALICOGO_PATH} make build-containerized"
     }
-
 
     stage('Publishing cni artifacts') {
       dir("artifacts"){
