@@ -15,7 +15,8 @@
           description: 'Remove the devops database before creating a new one'
       - node:
           name: NODE
-          allowed-multiselect: true
+          allowed-multiselect: false
+          ignore-offline-nodes: true
       - string:
           name: BRANCH
           default: 'master'

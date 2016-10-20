@@ -1,4 +1,6 @@
-node('tools') {
+def NODE="${NODE}"
+
+node(NODE) {
 
   def DELETE_DB = "${DELETE_DB}"
   def VIRTUAL_ENV = "/home/jenkins/venv-fuel-devops-3.0"
