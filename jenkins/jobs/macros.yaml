@@ -17,33 +17,6 @@
     name: calico-systest-params
     parameters:
     - string:
-        name: TEST_EXPRESSION
-        default: "none"
-        description: "Tests will be executed with '-k' option. Example: 'test_method or test other'"
-
-    - string:
-        name: HYPERKUBE_IMAGE_REPO
-        #default: '{mcp-k8s-ci-registry}/hyperkube-amd64'
-        default: 'artifactory.mcp.mirantis.net:5000/hyperkube-amd64'
-
-    - string:
-        name: HYPERKUBE_IMAGE_TAG
-        #default: 'latest'
-        default: 'v1.4.1-mirantis_100'
-
-    - string:
-        name: CALICO_NODE_IMAGE_REPO
-        default: '{mcp-k8s-ci-registry}/calico/node'
-
-    - string:
-        name: CALICOCTL_IMAGE_REPO
-        default: '{mcp-k8s-ci-registry}/calico/ctl'
-
-    - string:
-        name: CALICO_VERSION
-        default: 'latest'
-
-    - string:
         name: CALICO_CNI_DOWNLOAD_URL
         default: 'latest'
 
@@ -65,11 +38,6 @@
         description: 'Overwrite Calico CNI binaries copied from hyperkube image'
 
     - string:
-        name: MCP_BRANCH
-        default: '{mcp-branch}'
-        description: 'Branch name to use for searching latest artifacts'
-
-    - string:
         name: MCP_NETCHECKER_AGENT_IMAGE_REPO
         default: '{mcp-k8s-ci-registry}/mcp-netchecker/agent'
 
@@ -84,6 +52,22 @@
     - string:
         name: MCP_NETCHECKER_SERVER_VERSION
         default: 'mcp-0.1'
+
+- parameter:
+    name: systest-params
+    parameters:
+    - string:
+        name: TEST_EXPRESSION
+        default: "none"
+        description: "Tests will be executed with '-k' option. Example: 'test_method or test other'"
+    - string:
+        name: HYPERKUBE_IMAGE_REPO
+        #default: '{mcp-k8s-ci-registry}/hyperkube-amd64'
+        default: 'artifactory.mcp.mirantis.net:5000/hyperkube-amd64'
+    - string:
+        name: HYPERKUBE_IMAGE_TAG
+        #default: 'latest'
+        default: 'v1.4.1-mirantis_100'
 
     - string:
         name: IMAGE_LINK
@@ -147,6 +131,18 @@
     - string:
          name: GERRIT_REFSPEC
          default: 'refs/heads/master'
+
+    - string:
+        name: CALICO_NODE_IMAGE_REPO
+        default: '{mcp-k8s-ci-registry}/calico/node'
+
+    - string:
+        name: CALICOCTL_IMAGE_REPO
+        default: '{mcp-k8s-ci-registry}/calico/ctl'
+
+    - string:
+        name: CALICO_VERSION
+        default: 'latest'
 
     - text:
         name: ADDITIONAL_PARAMETERS

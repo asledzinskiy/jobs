@@ -32,12 +32,14 @@
         name: KEEP_AFTER
         default: 'yes'
         description: 'If yes/true, then DO NOT ERASE existing environment'
-    - calico-systest-params:
-        mcp-k8s-ci-registry: '{mcp-k8s-ci-registry}'
+    - systest-params:
         mcp-branch: 'mcp-0.1'
         image_link: '{image_link}'
         image_path: '{image_path}'
         artifactory-url: '{artifactory-url}'
+        mcp-k8s-ci-registry: '{mcp-k8s-ci-registry}'
+    - calico-systest-params:
+        mcp-k8s-ci-registry: '{mcp-k8s-ci-registry}'
 
     properties:
       - heavy-job:
