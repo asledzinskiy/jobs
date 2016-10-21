@@ -16,9 +16,11 @@ node('calico'){
 
     dir("${WORKSPACE}/tmp_libcalico-go") {
 
-      gerritPatchsetCheckout {
+      gitSSHCheckout {
         credentialsId = "mcp-ci-gerrit"
-        withWipeOut = true
+        branch = "mcp"
+        host = "review.fuel-infra.org"
+        project = "projectcalico/libcalico-go"
       }
 
       stage ('Running libcalico-go unittests') {
