@@ -1,27 +1,16 @@
 - job-template:
     name: mcp-build-run-tests
     description: |
-      Containers building and running tests
+      Containers building and running tests on the devops VM
     node: mcp-ci-tests
+    project-type: workflow
     concurrent: true
-    properties:
-      - throttle:
-          max-per-node: 1
-          option: project
-    builders:
-      - shell:
-          !include-raw-escape: builders/mcp-build-run-tests.sh
-    scm:
-      - git:
-         remotes:
-           - gerrit:
-               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mcp-ci/mcp-cicd-poc'
-               refspec: '$GERRIT_REFSPEC'
-               credentials-id: 'mcp-ci-gerrit'
-         branches:
-          - '$GERRIT_BRANCH'
-         choosing-strategy: gerrit
-         skip-tag: true
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+    dsl:
+      !include-raw-escape: builders/groovy/mcp-build-run-tests.groovy
     triggers:
       - gerrit:
           trigger-on:
@@ -35,9 +24,3 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
-    publishers:
-      - post-tasks:
-        - matches:
-          - log-text: '.'
-          escalate-status: true
-          script: !include-raw-escape: builders/mcp-build-run-tests-teardown.sh
