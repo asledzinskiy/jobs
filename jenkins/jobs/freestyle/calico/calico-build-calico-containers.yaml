@@ -1,0 +1,131 @@
+- job-template:
+    name: calico-build-calico-containers
+    description: |
+      Build artifacts<br>
+      This is simple job without storing artifacts, only for first stage of
+      jobs implementation
+    node: calico
+    concurrent: true
+    parameters:
+    - string:
+        name: CALICO_GERRIT_REFSPEC
+        default: ''
+        description: gerrit refspec from upstream job
+    - string:
+        name: CALICO_GERRIT_BRANCH
+        default: ''
+        description: gerrit branch from upstream job
+    - string:
+        name: CALICO_GERRIT_PROJECT
+        default: ''
+        description: gerrit project from upstream job
+    - string:
+        name: LIBCALICO_DOCKER_IMAGE
+        default: ''
+        description: custom libcalico docker image
+    - string:
+        name: LIBCALICO_REPO
+        default: ''
+        description: custom path to git libcalico repo
+    - string:
+        name: CALICO_REPO
+        default: ''
+        description: custom path to git calico repo
+    - string:
+        name: GERRIT_REFSPEC
+        default: refs/heads/mcp-0.1
+    - string:
+        name: GERRIT_CHANGE_NUMBER
+        default: '0'
+        description: Upstream job should pass GERRIT_CHANGE_NUMBER from upstream project
+    - string:
+        name: CONFD_URL
+        default: ''
+        description: Custom URL to confd, should be defined and passed from upstream job
+    - string:
+        name: BIRD_URL
+        default: ''
+        description: Custom URL to bird, should be defined and passed from upstream job
+    - string:
+        name: BIRD6_URL
+        default: ''
+        description: Custom URL to bird6, should be defined and passed from upstream job
+    - string:
+        name: BIRDCL_URL
+        default: ''
+        description: Custom URL to birdcl, should be defined and passed from upstream job
+    properties-data-file: 'artifacts-data.txt'
+    builders:
+      - inject:
+          properties-content: |
+            CALICO_DOCKER_REGISTRY={mcp-k8s-ci-registry}
+            CALICO_DOCKER_OWNER=jenkins
+            ARTIFACTORY_URL={artifactory-url}/projectcalico
+            ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
+            NODE_IMAGE_TAG=v0.20.0
+            CALICO_VER=mcp-0.1
+            LIBCALICO_VER=mcp-0.1
+            GERRIT_HOST={gerrit-host}
+            CONFD_URL=
+            BIRD_URL=
+            BIRD6_URL=
+            BIRDCL_URL=
+            BIRD_BUILD=
+            CONFD_BUILD=
+            CALICO_CONTAINERS_ARTIFACTS_FILE={properties-data-file}
+      - shell:
+          !include-raw-escape: ../../builders/calico-build-calico-containers.sh
+
+      - trigger-builds:
+          - project: 'calico.system-test.deploy'
+            current-parameters: true
+            property-file: '{properties-data-file}'
+            property-file-fail-on-missing: false
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/calico-containers'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    wrappers:
+      - workspace-cleanup
+      - ssh-agent-credentials:
+          users:
+            - 'mcp-ci-gerrit'
+      - credentials-binding:
+          - username-password-separated:
+              credential-id: 'artifactory'
+              username: ARTIFACTORY_LOGIN
+              password: ARTIFACTORY_PASSWORD
+      - artifactory-generic:
+          url: '{artifactory-url}'
+          name: 'mcp-ci'
+          deploy-build-info: true
+          key-from-text: 'projectcalico'
+          deploy-pattern:
+            - 'artifacts/**=>$GERRIT_CHANGE_NUMBER/calico-containers'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/calico-containers
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp-0.1'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    publishers:
+      - post-tasks:
+          - matches:
+              - log-text: '.'
+            escalate-status: true
+            script: |
+              sudo chown -R jenkins:jenkins "${{WORKSPACE}}"

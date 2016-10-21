@@ -1,0 +1,72 @@
+- job-template:
+    name: calico-build-calico-containers-gate
+    description: |
+      Build artifacts<br>
+      This is simple job without storing artifacts, only for first stage of
+      jobs implementation
+    node: calico
+    concurrent: false
+    builders:
+      - inject:
+          properties-content: |
+            CALICO_DOCKER_REGISTRY={mcp-k8s-ci-registry}
+            CALICO_DOCKER_OWNER=jenkins
+            ARTIFACTORY_URL={artifactory-url}/projectcalico
+            ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
+            NODE_IMAGE_TAG=v0.20.0
+            BUILD_IMAGE_TAG=v0.15.0
+            CALICO_VER=mcp-0.1
+            LIBCALICO_VER=mcp-0.1
+            GERRIT_HOST={gerrit-host}
+            CONFD_URL=
+            BIRD_URL=
+            BIRD6_URL=
+            BIRDCL_URL=
+            BIRD_BUILD=
+            CONFD_BUILD=
+      - shell:
+          !include-raw-escape: ../../builders/calico-build-calico-containers.sh
+      - shell:
+          !include-raw-escape: ../../builders/calico-delete-artifact-for-patchset.sh
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/calico-containers'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - 'mcp-0.1'
+         skip-tag: true
+    wrappers:
+      - credentials-binding:
+          - username-password-separated:
+              credential-id: 'artifactory'
+              username: ARTIFACTORY_LOGIN
+              password: ARTIFACTORY_PASSWORD
+      - artifactory-generic:
+          url: '{artifactory-url}'
+          name: 'mcp-ci'
+          deploy-build-info: true
+          key-from-text: 'projectcalico'
+          deploy-pattern:
+            - 'artifacts/**=>mcp-0.1/calico-containers'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/calico-containers
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp-0.1'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    publishers:
+      - post-tasks:
+          - matches:
+              - log-text: '.'
+            escalate-status: true
+            script: |
+              sudo chown -R jenkins:jenkins "${{WORKSPACE}}"

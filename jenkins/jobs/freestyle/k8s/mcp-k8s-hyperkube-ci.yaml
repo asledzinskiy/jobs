@@ -1,0 +1,65 @@
+- job-template:
+    name: mcp-k8s-hyperkube-ci
+    description: |
+      Kubernetes Hyperkube build job is triggered on creating patchsets.<br>
+      Publishes test Hyperkube images to the {mcp-k8s-ci-registry} registry.
+    node: k8s
+    concurrent: false
+    builders:
+      - inject:
+          properties-content: |
+            KUBE_DOCKER_REGISTRY={mcp-k8s-ci-registry}
+            KUBE_DOCKER_REPOSITORY=hyperkube-amd64
+            KUBE_DOCKER_OWNER=jenkins
+            ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
+            GERRIT_HOST={gerrit-host}
+      - shell:
+          !include-raw-escape: ../../builders/mcp-k8s-hyperkube.sh
+    wrappers:
+      - workspace-cleanup
+      - ssh-agent-credentials:
+          users:
+            - 'mcp-ci-gerrit'
+      - credentials-binding:
+          - username-password-separated:
+              credential-id: 'artifactory'
+              username: ARTIFACTORY_HYPERKUBE_LOGIN
+              password: ARTIFACTORY_HYPERKUBE_PASSWORD
+      - artifactory-generic:
+          url: '{artifactory-url}'
+          name: 'mcp-ci'
+          deploy-build-info: true
+          key-from-text: 'mcp-k8s-ci'
+          deploy-pattern:
+            - 'hyperkube*.yaml=>images-info'
+            - 'artifacts/hyperkube**=>hyperkube-binaries'
+          env-vars-include: true
+          env-vars-include-patterns: '*'
+          env-vars-exclude-patterns:
+            - '*PASSWORD*'
+            - '*password*'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: kubernetes/kubernetes
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    publishers:
+      - description-setter:
+          regexp: '\+ docker rmi -f (.*)'
+      - archive:
+          artifacts: 'hyperkube_image*.yaml'
+          allow-empty: true
+      - post-tasks:
+        - matches:
+          - log-text: '.'
+          escalate-status: true
+          script: |
+            sudo chown -R jenkins:jenkins "${{WORKSPACE}}"

@@ -1,0 +1,60 @@
+- job-template:
+    name: calico-build-calico-gate
+    description: |
+      Build artifacts<br>
+      This is simple job without storing artifacts, only for first stage of
+      jobs implementation
+    node: calico
+    concurrent: false
+    builders:
+      - shell: |
+            exit 0
+      - shell:
+          !include-raw-escape: ../../builders/calico-delete-artifact-for-patchset.sh
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/calico'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - 'mcp-0.1'
+         skip-tag: true
+    wrappers:
+      - credentials-binding:
+          - username-password-separated:
+              credential-id: 'artifactory'
+              username: ARTIFACTORY_LOGIN
+              password: ARTIFACTORY_PASSWORD
+      - artifactory-generic:
+          url: '{artifactory-url}'
+          name: 'mcp-ci'
+          deploy-build-info: true
+          key-from-text: 'projectcalico'
+          deploy-pattern:
+            - 'artifacts/**=>mcp-0.1/calico'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/calico
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp-0.1'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    publishers:
+      - post-tasks:
+          - matches:
+              - log-text: '.'
+            escalate-status: true
+            script: |
+              sudo chown -R jenkins:jenkins "${{WORKSPACE}}"
+
+      - trigger-parameterized-builds:
+        - project: calico-build-calico-containers-gate
+          condition: SUCCESS
+          predefined-parameters: TRIGGERED_ON=$GERRIT_CHANGE_NUMBER

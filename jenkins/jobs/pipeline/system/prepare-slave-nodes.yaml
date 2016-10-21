@@ -1,0 +1,29 @@
+- job-template:
+    name: prepare-slave-nodes
+    description: |
+      Job to deploy Jenkins slave configuration on a selected server
+    node: tools
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: USERNAME
+          default: 'ubuntu'
+          description: 'Username used for ansible when connecting to the sshd daemon on a remote host'
+      - string:
+          name: BRANCH_NAME
+          default: 'master'
+          description: 'The branch name of mcp-cicd-poc repo to use'
+      - string:
+          name: HOSTS_LIST
+          default: localhost
+          description: 'A space separated list of hosts to provision'
+    dsl:
+      !include-raw-escape: prepare-slave-nodes.groovy
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - 'jenkins'

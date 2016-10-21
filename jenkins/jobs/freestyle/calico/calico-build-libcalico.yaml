@@ -1,0 +1,75 @@
+- job-template:
+    name: calico-build-libcalico
+    description: |
+      Build artifacts<br>
+      This is simple job without storing artifacts, only for first stage of
+      jobs implementation
+    node: calico
+    concurrent: true
+    builders:
+      - inject:
+          properties-content: |
+            CALICO_DOCKER_REGISTRY={mcp-k8s-ci-registry}
+            CALICO_DOCKER_OWNER=jenkins
+            ARTIFACTORY_URL={artifactory-url}/projectcalico
+      - shell:
+          !include-raw-escape: ../../builders/calico-build-libcalico.sh
+      - shell:
+          !include-raw-escape: ../../builders/calico-publish-artifact-for-patchset.sh
+      - trigger-builds:
+        - project: calico-build-calico-cni
+          property-file: build.property
+          predefined-parameters: |
+            GERRIT_REFSPEC=refs/heads/mcp-0.1
+            GERRIT_CHANGE_NUMBER=$GERRIT_CHANGE_NUMBER
+            LIBCALICO_DOCKER_IMAGE=$LIBCALICO_IMAGE
+          block: true
+      - trigger-builds:
+        - project: calico-build-calico-containers
+          property-file: build.property
+          predefined-parameters: |
+            CALICO_GERRIT_REFSPEC=$GERRIT_REFSPEC
+            CALICO_GERRIT_BRANCH=$GERRIT_BRANCH
+            CALICO_GERRIT_PROJECT=$GERRIT_PROJECT
+            LIBCALICO_DOCKER_IMAGE=$LIBCALICO_IMAGE
+            LIBCALICO_REPO=file:///tmp/calico_share
+            GERRIT_REFSPEC=refs/heads/mcp-0.1
+            GERRIT_CHANGE_NUMBER=$GERRIT_CHANGE_NUMBER
+          block: true
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/libcalico'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    wrappers:
+      - credentials-binding:
+          - username-password-separated:
+              credential-id: 'artifactory'
+              username: ARTIFACTORY_LOGIN
+              password: ARTIFACTORY_PASSWORD
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/libcalico
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp-0.1'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    publishers:
+      - post-tasks:
+          - matches:
+              - log-text: '.'
+            escalate-status: true
+            script: |
+              sudo chown -R jenkins:jenkins "${{WORKSPACE}}"

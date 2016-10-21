@@ -1,0 +1,32 @@
+- job-template:
+    name: sync-upstream
+    description: |
+      Sync upstream repos to downstream
+    node: sync-code
+    builders:
+      - shell:
+          !include-raw-escape '../../builders/sync-upstream.sh'
+    concurrent: false
+
+    parameters:
+      - string:
+          name: GIT_PUSH_USERNAME
+          default: "mcp-ci-mirroring"
+          description: "Pushing username"
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+
+    scm:
+      - git:
+         url: '{gerrit-url}/mcp-ci/gitrepo'
+         branches:
+          - 'master'
+
+    wrappers:
+      - workspace-cleanup
+      - ssh-agent-credentials:
+          users:
+            - 'mcp-ci-mirroring'
+    triggers:
+      - timed: '*/15 * * * *'

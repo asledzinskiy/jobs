@@ -1,0 +1,21 @@
+- job-template:
+    name: mcp-lint-test
+    description: |
+      Run ansible lint test for mcp-ci
+    project-type: workflow
+    concurrent: true
+    dsl:
+      !include-raw-escape: mcp-lint-test.groovy
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-ci/mcp-cicd-poc
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'

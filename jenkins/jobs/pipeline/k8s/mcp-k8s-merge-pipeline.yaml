@@ -1,0 +1,44 @@
+- job-template:
+    name: mcp-k8s-merge-pipeline
+    description: |
+      Kubernetes merge pipeline
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: KUBE_DOCKER_REGISTRY
+          default: '{docker-prod-virtual}'
+          description: 'Docker registry for binaries and images'
+      - string:
+          name: ARTIFACTORY_URL
+          default: '{artifactory-url}'
+          desription: 'Custom Artifactory URL'
+      - string:
+          name: CALICO_CNI
+          default: ''
+          description: 'Custom Calico CNI url'
+      - string:
+          name: CALICO_IPAM
+          default: ''
+          description: 'Custom Calico IPAM url'
+      - bool:
+          name: CALICO_DOWNSTREAM
+          default: true
+          description: 'Use Calico downstream'
+      - string:
+          name: CALICO_VER
+          default: 'mcp-0.1'
+          description: 'Custom Calico version'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: kubernetes/kubernetes
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**mcp**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    dsl:
+      !include-raw-escape: mcp-k8s-test-pipeline.groovy

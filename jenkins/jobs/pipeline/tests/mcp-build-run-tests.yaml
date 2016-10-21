@@ -1,0 +1,26 @@
+- job-template:
+    name: mcp-build-run-tests
+    description: |
+      Containers building and running tests on the devops VM
+    node: mcp-ci-tests
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+    dsl:
+      !include-raw-escape: mcp-build-run-tests.groovy
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-ci/mcp-cicd-poc
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'

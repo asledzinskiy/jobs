@@ -1,0 +1,175 @@
+- job-template:
+    name: calico-unit-test
+    project-name: calico
+    description: |
+      Run unit tests for Calico
+    node: calico
+    concurrent: true
+    builders:
+      - shell:
+          !include-raw-escape: ../../builders/calico-run-unit-tests.sh
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/{project-name}
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp-0.1'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
+    name: calico-containers-unit-test
+    project-name: calico-containers
+    description: |
+      Run unit tests for Calico Containers
+    node: calico
+    concurrent: true
+    builders:
+      - shell: |
+            make ut
+
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/{project-name}
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp-0.1'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
+    name: libcalico-unit-test
+    project-name: libcalico
+    description: |
+      Run unit tests for libcalico
+    node: calico
+    concurrent: true
+    builders:
+      - shell: |
+            make test
+
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/{project-name}
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp-0.1'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
+    name: calico-confd-unit-test
+    project-name: confd
+    description: |
+      Run unit tests for confd
+    node: calico
+    concurrent: true
+    builders:
+      - shell: |
+            bash -x ./test-containerized.sh
+
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/{project-name}
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp-0.1'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    publishers:
+      - post-tasks:
+          - matches:
+              - log-text: '.'
+            escalate-status: true
+            script: |
+              sudo chown -R jenkins:jenkins "${{WORKSPACE}}"
+
+- job-template:
+    name: calico-cni-unit-test
+    project-name: calico-cni
+    description: |
+      Run unit tests for calico-cni plugin
+    node: calico
+    concurrent: true
+    builders:
+      - shell: |
+            make test
+
+    scm:
+      - git:
+         remotes:
+           - gerrit:
+               url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/projectcalico/{project-name}'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'mcp-ci-gerrit'
+         branches:
+          - '$GERRIT_BRANCH'
+         choosing-strategy: gerrit
+         skip-tag: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/{project-name}
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp-0.1'
+          custom-url: '* $JOB_NAME $BUILD_URL'
