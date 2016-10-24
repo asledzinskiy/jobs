@@ -1,0 +1,106 @@
+- job-template:
+    name: 'k8s.system-test.{test-name}'
+    description: 'Run system test "{test-name}" for "k8s" project'
+    node: 'system-test'
+    concurrent: true
+    timeout: '60'
+    weight: '1'
+    envname: "$JOB_NAME.$BUILD_NUMBER"
+    pre-script: |
+        echo "SKIP"
+    post-script: |
+        source "$VENV_PATH/bin/activate"
+        dos.py destroy "$ENV_NAME" || true
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+
+    parameters:
+    - string:
+        name: TEST_PATH
+        default: "none"
+        description: "Path to the test module/class/function"
+    - string:
+        name: KEEP_BEFORE
+        default: 'no'
+        description: 'If yes/true, then DO NOT ERASE existing environment'
+    - string:
+        name: KEEP_AFTER
+        default: 'no'
+        description: 'If yes/true, then DO NOT ERASE existing environment'
+    - systest-params:
+        test-expression: '{test-name}'
+        mcp-k8s-ci-registry: '{mcp-k8s-ci-registry}'
+        mcp-branch: 'mcp-0.1'
+        image_link: '{image_link}'
+        image_path: '{image_path}'
+        artifactory-url: '{artifactory-url}'
+
+    properties:
+      - heavy-job:
+          weight: '{weight}'
+      - throttle:
+          max-per-node: 1
+          option: project
+
+    scm:
+      - git:
+          url: 'https://github.com/openstack/fuel-ccp-tests'
+          branches:
+           - "$FUEL_CCP_TESTS_COMMIT"
+
+      - git:
+          url: 'https://github.com/openstack/fuel-ccp-installer'
+          branches:
+           - "$FUEL_CCP_INSTALLER_COMMIT"
+          basedir: 'fuel-ccp-installer'
+
+    wrappers:
+    - credentials-binding:
+      - username-password-separated:
+          credential-id: 'artifactory'
+          username: ARTIFACTORY_LOGIN
+          password: ARTIFACTORY_PASSWORD
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+      - inject:
+          properties-content: |
+            CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+            ENV_NAME={envname}
+            ARTIFACTORY_URL={artifactory-url}
+
+      - shell: |
+          #!/bin/bash -xe
+          echo "=== [systest PRE-script] ==="
+          {pre-script}
+
+      - trigger-builds:
+        - project: 'download-mcp-systest-image'
+          current-parameters: true
+          block: true
+          same-node: true
+
+      - run-systest
+
+      - shell: |
+          #!/bin/bash -xe
+          echo "=== [systest POST-script] ==="
+          {post-script}
+
+    publishers:
+    - post-destroy-vms # Destroy envs if left undestroyed
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*,tests.log,*.txt'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'

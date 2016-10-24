@@ -230,8 +230,19 @@
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
-
 - project:
     name: download-mcp-systest-image
     jobs:
        - 'download-mcp-systest-image'
+
+- project:
+    name: 'k8s-gate-tests'
+    image_link: 'http://share01-scc.ng.mirantis.net/images.lst'
+    image_path: '/home/jenkins/images/ubuntu-1604-server.qcow2'
+    timeout: 360
+    description: 'k8s gate tests'
+    weight: '1'
+    jobs:
+     - 'k8s.system-test.{test-name}':
+         test-name: 'test_k8s_installed_custom'
+
