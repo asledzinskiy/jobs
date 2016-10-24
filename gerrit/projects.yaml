@@ -5,13 +5,65 @@
   acl-config: acls/kubernetes/kubernetes.config
 
 -
+  project: mcp-ci/gitrepo
+  description: Tool for git repo manipulation
+  upstream: https://review.fuel-infra.org/mcp-ci/gitrepo.git
+  acl-config: acls/mcp-ci/mcp-ci.gitrepo.config
+
+-
   project: mcp-ci/mcp-cicd-poc
   description: MCP CI/CD project
   upstream: https://review.fuel-infra.org/mcp-ci/mcp-cicd-poc.git
   acl-config: acls/mcp-ci/mcp-cicd-poc.config
 
 -
+  project: mcp-ci/pipeline-library
+  description: CI pipelines library for MCP-CICD project
+  upstream: https://review.fuel-infra.org/mcp-ci/pipeline-library.git
+  acl-config: acls/mcp/mcp-ci.pipeline-library.config
+
+-
   project: mcp/mcp-installer
   description: MCP Installer project
   upstream: git://github.com/openstack/fuel-ccp-installer.git
   acl-config: acls/mcp/mcp-installer.config
+
+-
+  project: projectcalico
+  description: Parent project for projectcalico
+  acl-config: acls/projectcalico/calico.config
+
+-
+  project: projectcalico/calico-bird
+  description: Routing daemon for UNIX-like systems
+  upstream: git://github.com/projectcalico/calico-bird.git
+
+-
+  project: projectcalico/calico-cni
+  description: Calico networking for CNI
+  upstream: git://github.com/projectcalico/calico-cni.git
+
+-
+  project: projectcalico/calico-containers
+  description: Calico for containers
+  upstream: git://github.com/projectcalico/calico-containers.git
+
+-
+  project: projectcalico/confd
+  description: Lightweight configuration management tool
+  upstream: git://github.com/projectcalico/confd.git
+
+-
+  project: projectcalico/felix
+  description: Calico main repository
+  upstream: git://github.com/projectcalico/felix.git
+
+-
+  project: projectcalico/libcalico
+  description: Library for interacting with the Calico data model
+  upstream: git://github.com/projectcalico/libcalico.git
+
+-
+  project: projectcalico/libcalico-go
+  description: Golang Calico library functions
+  upstream: git://github.com/projectcalico/libcalico-go.git
