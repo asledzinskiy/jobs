@@ -70,7 +70,7 @@
           option: category
     project-type: workflow
     dsl:
-      !include-raw-escape: calico-bird-gate.groovy
+      !include-raw-escape: calico-bird.groovy
 
     triggers:
       - gerrit:
