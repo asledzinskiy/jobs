@@ -41,7 +41,12 @@
           option: category
     project-type: workflow
     dsl:
-      !include-raw-escape: calico-confd-gate.groovy
+      !include-raw-escape: calico-confd.groovy
+
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
 
     triggers:
       - gerrit:
