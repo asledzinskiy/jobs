@@ -12,7 +12,7 @@
             ARTIFACTORY_URL={artifactory-url}
             ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory
             NETCHECKER_TYPE={type}
-            NETCHECKER_VERSION=mcp-0.1
+            NETCHECKER_VERSION=mcp
             GERRIT_URL={gerrit-url}
             PUBLISH=true
       - shell:

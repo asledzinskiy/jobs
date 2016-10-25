@@ -73,6 +73,9 @@
             BIRD_BUILD=
             CONFD_BUILD=
             CALICO_CONTAINERS_ARTIFACTS_FILE={properties-data-file}
+            MCP_BRANCH=mcp-0.1
+            MCP_NETCHECKER_AGENT_VERSION=mcp-0.1
+            MCP_NETCHECKER_SERVER_VERSION=mcp-0.1
       - shell:
           !include-raw-escape: ../../builders/calico-build-calico-containers.sh
 

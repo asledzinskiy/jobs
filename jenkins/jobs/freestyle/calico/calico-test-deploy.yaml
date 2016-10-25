@@ -33,7 +33,7 @@
         default: 'no'
         description: 'If yes/true, then DO NOT ERASE existing environment'
     - systest-params:
-        mcp-branch: 'mcp-0.1'
+        mcp-branch: 'mcp'
         image_link: '{image_link}'
         image_path: '{image_path}'
         artifactory-url: '{artifactory-url}'

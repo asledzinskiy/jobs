@@ -43,7 +43,7 @@
 
     - string:
         name: MCP_NETCHECKER_AGENT_VERSION
-        default: 'mcp-0.1'
+        default: 'mcp'
 
     - string:
         name: MCP_NETCHECKER_SERVER_IMAGE_REPO
@@ -51,7 +51,7 @@
 
     - string:
         name: MCP_NETCHECKER_SERVER_VERSION
-        default: 'mcp-0.1'
+        default: 'mcp'
 
 - parameter:
     name: systest-params
@@ -78,6 +78,11 @@
         name: IMAGE_PATH
         default: '{image_path}'
         description: "Local path to the image"
+
+    - string:
+        name: MCP_BRANCH
+        default: '{mcp-branch}'
+        description: 'Branch name to use for searching latest artifacts'
 
     - string:
         name: ARTIFACTORY_URL
