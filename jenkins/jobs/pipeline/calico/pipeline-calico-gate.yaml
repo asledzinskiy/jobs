@@ -82,6 +82,11 @@
     dsl:
       !include-raw-escape: calico-bird.groovy
 
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+
     triggers:
       - gerrit:
           trigger-on:
