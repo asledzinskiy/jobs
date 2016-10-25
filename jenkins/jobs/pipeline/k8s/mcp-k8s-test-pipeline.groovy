@@ -164,7 +164,7 @@ def build_publish_binaries () {
                     gerritPatchsetCheckout {
                         credentialsId = "mcp-ci-gerrit"
                     }
-                    git_commit_tag_id = sh(script: "git describe | sed 's/\\-[^-]*\$//'", returnStdout: true).trim()
+                    git_commit_tag_id = generate_git_version()
 
                     def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
                     def version = "${kube_docker_version}"
@@ -295,7 +295,7 @@ def build_publish_binaries () {
                 gerritPatchsetCheckout {
                     credentialsId = "mcp-ci-gerrit"
                 }
-                def git_commit_tag_id = sh(script: "git describe | sed 's/\\-[^-]*\$//'", returnStdout: true).trim()
+                def git_commit_tag_id = generate_git_version()
                 def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
 
                 withEnv(["WORKSPACE=${env.WORKSPACE}",
@@ -595,4 +595,14 @@ def upload_binaries_to_artifactory (uploadSpec, publish_info=false) {
         server.publishBuildInfo(buildInfo)
     }
 
+}
+
+def generate_git_version () {
+    def current_tag = sh(script: "git describe --abbrev=0 --tags", returnStdout: true).trim()
+    def commit_num = sh(script: "git rev-list ${current_tag}..HEAD --count", returnStdout: true).trim()
+    if (commit_num == "0") {
+        return "${current_tag}"
+    } else {
+        return "${current_tag}-${commit_num}"
+    }
 }
