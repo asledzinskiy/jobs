@@ -160,6 +160,13 @@ def build_publish_binaries () {
                     calico_ipam = "https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam"
                 }
 
+                writeFile file: 'build.sh', text: '''#!/bin/bash
+                        source "${WORKSPACE}/kubernetes/build/common.sh"
+                        kube::build::verify_prereqs
+                        kube::build::build_image
+                        kube::build::run_build_command hack/build-go.sh cmd/hyperkube
+                 '''.stripIndent()
+
                 dir("${k8s_repo_dir}") {
                     clone_k8s_repo()
                     gerritPatchsetCheckout {
@@ -170,8 +177,7 @@ def build_publish_binaries () {
                     def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
                     def version = "${kube_docker_version}"
 
-                    withEnv(["WORKSPACE=${env.WORKSPACE}/kubernetes",
-                             "VERSION=${version}",
+                    withEnv(["VERSION=${version}",
                              "KUBE_DOCKER_VERSION=${kube_docker_version}",
                              "REGISTRY=${registry}",
                              "CALICO_CNI=${calico_cni}",
@@ -189,29 +195,14 @@ def build_publish_binaries () {
                              "CALICO_DOWNSTREAM=${env.CALICO_DOWNSTREAM}",
                              "ARTIFACTORY_URL=${env.ARTIFACTORY_URL}",
                              "CALICO_VER=${env.CALICO_VER}"]) {
-                        writeFile file: 'build.sh', text: '''#!/bin/bash
-                        source "${WORKSPACE}/build/common.sh"
-                        kube::build::verify_prereqs
-                        kube::build::build_image
-                        kube::build::run_build_command hack/build-go.sh cmd/hyperkube
-                    '''.stripIndent()
+
                         try {
                             sh '''
-                            chmod +x build.sh
+                            chmod +x ${WORKSPACE}/build.sh
                             sudo -E -s ${WORKSPACE}/build.sh
-                        '''
-                            dir("cluster/images/hyperkube") {
-                                sh '''
-                                if grep -q 'LABEL com.mirantis' Dockerfile; then
-                                    sed -i.back '/.*com.mirantis.*/d' Dockerfile
-                                fi
-                                cat <<EOF>> Dockerfile
-                                # Apply additional build metadata
-                                LABEL com.mirantis.image-specs.gerrit_change_url="${GERRIT_CHANGE_URL}" \
-                                  com.mirantis.image-specs.changeid="${GERRIT_CHANGE_ID}" \
-                                  com.mirantis.image-specs.version="${KUBE_DOCKER_VERSION}"
                             '''
-                            }
+
+
                             sh "make -C cluster/images/hyperkube build"
                             echo "Calico injection will happen now..."
                             if ("${env.CALICO_DOWNSTREAM}" == "true") {
@@ -233,18 +224,27 @@ def build_publish_binaries () {
                             }
 
                             sh '''
-                            chmod +x calico calico-ipam
-                            mkdir -p ${WORKSPACE}/artifacts
-                            docker run --name "${KUBE_CONTAINER_TMP}" -d -t "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
-                            docker exec -t "${KUBE_CONTAINER_TMP}" /bin/bash -c "/bin/mkdir -p ${CALICO_BINDIR}"
-                            docker cp calico "${KUBE_CONTAINER_TMP}":"${CALICO_BINDIR}/calico"
-                            docker cp calico-ipam "${KUBE_CONTAINER_TMP}":"${CALICO_BINDIR}/calico-ipam"
-                            docker cp "${KUBE_CONTAINER_TMP}":/hyperkube "${WORKSPACE}/artifacts/hyperkube_${VERSION}"
-                            docker stop "${KUBE_CONTAINER_TMP}"
-                            docker commit "${KUBE_CONTAINER_TMP}" "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
-                            docker rm "${KUBE_CONTAINER_TMP}"
-                            docker tag "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
-                        '''
+                                cat <<EOF>> Dockerfile
+                                FROM ${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}
+                                # Apply additional build metadata
+                                LABEL com.mirantis.image-specs.gerrit_change_url="${GERRIT_CHANGE_URL}" \
+                                  com.mirantis.image-specs.changeid="${GERRIT_CHANGE_ID}" \
+                                  com.mirantis.image-specs.version="${KUBE_DOCKER_VERSION}"
+                                '''
+                                sh '''
+                                chmod +x calico calico-ipam
+                                mkdir -p ${WORKSPACE}/kubernetes/artifacts
+                                docker build -t ${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION} .
+                                docker run --name "${KUBE_CONTAINER_TMP}" -d -t "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
+                                docker exec -t "${KUBE_CONTAINER_TMP}" /bin/bash -c "/bin/mkdir -p ${CALICO_BINDIR}"
+                                docker cp calico "${KUBE_CONTAINER_TMP}":"${CALICO_BINDIR}/calico"
+                                docker cp calico-ipam "${KUBE_CONTAINER_TMP}":"${CALICO_BINDIR}/calico-ipam"
+                                docker cp "${KUBE_CONTAINER_TMP}":/hyperkube "${WORKSPACE}/kubernetes/artifacts/hyperkube_${VERSION}"
+                                docker stop "${KUBE_CONTAINER_TMP}"
+                                docker commit "${KUBE_CONTAINER_TMP}" "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
+                                docker rm "${KUBE_CONTAINER_TMP}"
+                                docker tag "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
+                            '''
 
                             stage('hyperkube-publish') {
                                 def uploadSpec = """{
