@@ -25,7 +25,7 @@
   project: mcp-ci/pipeline-library
   description: CI pipelines library for MCP-CICD project
   upstream: https://review.fuel-infra.org/mcp-ci/pipeline-library.git
-  acl-config: acls/mcp/mcp-ci.pipeline-library.config
+  acl-config: acls/mcp-ci/mcp-ci.pipeline-library.config
 
 -
   project: mcp/mcp-installer
