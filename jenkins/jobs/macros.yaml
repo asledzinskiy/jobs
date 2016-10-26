@@ -154,3 +154,15 @@
         description: |
           NAME1=VALUE1</br>
           NAME1=VALUE1
+
+- builder:
+    name: get-systest-image
+    builders:
+      - shell:
+          !include-raw: builders/get-systest-image.sh
+
+- builder:
+    name: run-systest
+    builders:
+      - shell:
+          !include-raw: builders/system-test.sh

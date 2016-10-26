@@ -106,12 +106,13 @@
           #!/bin/bash -xe
           echo "=== [systest PRE-script] ==="
           {pre-script}
+      - trigger-builds:
+        - project: 'download-mcp-systest-image'
+          current-parameters: true
+          block: true
+          samenode: true
 
-      - shell:
-          !include-raw-escape: ../../builders/get-systest-image.sh
-
-      - shell:
-          !include-raw-escape: ../../builders/system-test.sh
+      - run-systest
 
       - shell: |
           #!/bin/bash -xe

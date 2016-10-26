@@ -1,0 +1,11 @@
+- job-template:
+    name: download-mcp-systest-image
+    description: |
+      Downloads prebuilt Ubuntu image for fuel-devops
+    builders:
+      - get-systest-image
+    concurrent: true
+    properties:
+      - throttle:
+          max-per-node: 1
+          option: project

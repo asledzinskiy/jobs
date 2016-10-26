@@ -141,6 +141,8 @@ fi
 
 exit_code=0
 
+export IMAGE_PATH=$(readlink -f "${IMAGE_PATH}")
+
 if ! py.test "${TEST_ARGS[@]}"; then
   exit_code=1
 fi

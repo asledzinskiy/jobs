@@ -234,3 +234,8 @@
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
+
+- project:
+    name: download-mcp-systest-image
+    jobs:
+       - 'download-mcp-systest-image'
