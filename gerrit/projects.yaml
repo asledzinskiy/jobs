@@ -42,33 +42,40 @@
   project: projectcalico/calico-bird
   description: Routing daemon for UNIX-like systems
   upstream: git://github.com/projectcalico/calico-bird.git
+  acl-config: acls/projectcalico/calico.config
 
 -
   project: projectcalico/calico-cni
   description: Calico networking for CNI
   upstream: git://github.com/projectcalico/calico-cni.git
+  acl-config: acls/projectcalico/calico.config
 
 -
   project: projectcalico/calico-containers
   description: Calico for containers
   upstream: git://github.com/projectcalico/calico-containers.git
+  acl-config: acls/projectcalico/calico.config
 
 -
   project: projectcalico/confd
   description: Lightweight configuration management tool
   upstream: git://github.com/projectcalico/confd.git
+  acl-config: acls/projectcalico/calico.config
 
 -
   project: projectcalico/felix
   description: Calico main repository
   upstream: git://github.com/projectcalico/felix.git
+  acl-config: acls/projectcalico/calico.config
 
 -
   project: projectcalico/libcalico
   description: Library for interacting with the Calico data model
   upstream: git://github.com/projectcalico/libcalico.git
+  acl-config: acls/projectcalico/calico.config
 
 -
   project: projectcalico/libcalico-go
   description: Golang Calico library functions
   upstream: git://github.com/projectcalico/libcalico-go.git
+  acl-config: acls/projectcalico/calico.config
