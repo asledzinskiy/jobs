@@ -5,6 +5,11 @@
   acl-config: acls/kubernetes/kubernetes.config
 
 -
+  project: mcp-ci
+  description: Parent project for mcp-ci projects
+  acl-config: acls/mcp-ci/mcp-ci.config
+
+-
   project: mcp-ci/gitrepo
   description: Tool for git repo manipulation
   upstream: https://review.fuel-infra.org/mcp-ci/gitrepo.git
