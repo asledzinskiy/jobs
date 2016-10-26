@@ -412,7 +412,8 @@ def run_system_test () {
                 parameters: [
                         string(name: 'HYPERKUBE_IMAGE_TAG', value: "${git_commit_tag_id}_${timestamp}"),
                         string(name: 'HYPERKUBE_IMAGE_REPO', value: "${kube_docker_registry}/${kube_namespace}/${kube_docker_repo}"),
-                        string(name: 'GERRIT_CHANGE_URL', value: "${env.GERRIT_CHANGE_URL}")]
+                        string(name: 'GERRIT_CHANGE_URL', value: "${env.GERRIT_CHANGE_URL}"),
+                        string(name: 'MCP_BRANCH', value: "${env.CALICO_VER}")]
     }
 }
 

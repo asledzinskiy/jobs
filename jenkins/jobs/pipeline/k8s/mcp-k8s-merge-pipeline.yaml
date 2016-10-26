@@ -27,7 +27,7 @@
           description: 'Use Calico downstream'
       - string:
           name: CALICO_VER
-          default: 'mcp-0.1'
+          default: 'mcp'
           description: 'Custom Calico version'
     triggers:
       - gerrit:
