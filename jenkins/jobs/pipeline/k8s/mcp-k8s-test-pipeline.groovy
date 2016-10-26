@@ -13,6 +13,7 @@ docker_prod_repo = "docker-prod-local"
 binary_dev_repo = "binary-dev-local"
 binary_prod_repo = "binary-prod-local"
 buildInfo = Artifactory.newBuildInfo()
+buildDesc = ''
 
 if ( event == 'patchset-created' ) {
     run_unit_tests()
@@ -256,7 +257,9 @@ def build_publish_binaries () {
                                 }"""
                                 upload_binaries_to_artifactory(uploadSpec, true)
                                 upload_image_to_artifactory("${kube_docker_registry}", "${kube_namespace}/${kube_docker_repo}", "${kube_docker_version}", "${docker_dev_repo}")
-                                currentBuild.description = "${kube_docker_registry}/${kube_namespace}/${kube_docker_repo}:${kube_docker_version}"
+                                buildDesc = "hyperkube-image: ${kube_docker_registry}/${kube_namespace}/${kube_docker_repo}:${kube_docker_version}<br>\
+                                             hyperkube-binary: ${env.ARTIFACTORY_URL}/${binary_dev_repo}/${kube_namespace}/hyperkube-binaries/hyperkube_${kube_docker_version}<br>"
+                                currentBuild.description = buildDesc
                             }
                         } catch (InterruptedException x) {
                             echo "The job was aborted"
@@ -398,12 +401,15 @@ def build_publish_binaries () {
                         sh "docker rmi -f ${KUBE_DOCKER_CONFORMANCE_TAG} || true"
                         sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
                     }
+                    buildDesc = "${buildDesc}conformance-image: ${kube_docker_registry}/${kube_namespace}/${conformance_docker_repo}:${kube_docker_version}"
+                    currentBuild.description = buildDesc
                     archiveArtifacts allowEmptyArchive: true, artifacts: '_artifacts', excludes: null
                 }
             }
         }
     },
     failFast: true
+
 }
 
 def run_system_test () {
