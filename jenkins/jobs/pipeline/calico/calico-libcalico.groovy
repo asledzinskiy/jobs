@@ -1,41 +1,60 @@
 node('calico'){
 
-  // Get Artifactory server instance, defined in the Artifactory Plugin administration page.
-  def server = Artifactory.server("mcp-ci")
-
-  def DOCKER_REPO = "artifactory.mcp.mirantis.net:5001"
-  def ARTIFACTORY_URL = "https://artifactory.mcp.mirantis.net/artifactory/projectcalico"
-
-  def NODE_IMAGE = "calico/node"
-  def NODE_IMAGE_TAG = "v0.20.0"
-  def NODE_NAME = "${DOCKER_REPO}/${NODE_IMAGE}:${NODE_IMAGE_TAG}"
-
-  def CTL_IMAGE = "calico/ctl"
-  def CTL_IMAGE_TAG = "v0.20.0"
-  def CTL_NAME = "${DOCKER_REPO}/${CTL_IMAGE}:${CTL_IMAGE_TAG}"
-
-  def BUILD_IMAGE = "calico/build"
-  def BUILD_IMAGE_TAG = "v0.15.0"
-
   try {
 
+    def tools = new ci.mcp.Tools()
+
+    def server = Artifactory.server("mcp-ci")
+    def dockerRepository = "artifactory.mcp.mirantis.net:5001"
+
+    def buildInfo = Artifactory.newBuildInfo()
+    buildInfo.env.capture = true
+    buildInfo.env.filter.addInclude("*")
+    buildInfo.env.collect()
+
+    def currentBuildId = ""
+    // this name goes to calico-containers
+    def buildName = ""
+
+    def HOST = env.GERRIT_HOST
     gitSSHCheckout {
       credentialsId = "mcp-ci-gerrit"
       branch = "mcp"
-      host = "review.fuel-infra.org"
+      host = HOST
       project = "projectcalico/calico-containers"
     }
 
     dir("${WORKSPACE}/tmp_libcalico"){
 
-      gerritPatchsetCheckout {
-        credentialsId = "mcp-ci-gerrit"
-        withWipeOut = true
-      }
+      // Let's do all the stuff with calico/felix in tmp_calico-felix sub-dir
+      def buildImg = "calico/build"
+      def buildImgTag = "v0.15.0"
 
-      def gitCommit = sh(returnStdout: true, script: "git -C ${WORKSPACE}/tmp_libcalico rev-parse --short HEAD").trim()
+      if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
+        currentBuildId = env.GERRIT_CHANGE_NUMBER
+
+        stage ('Checkout calico-containers'){
+          gerritPatchsetCheckout {
+            credentialsId = "mcp-ci-gerrit"
+            withWipeOut = true
+          }
+        }
+      } else {
+        currentBuildId = "mcp"
+
+        stage ('Checkout calico-containers'){
+          gitSSHCheckout {
+            credentialsId = "mcp-ci-gerrit"
+            branch = "mcp"
+            host = HOST
+            project = "projectcalico/libcalico"
+          }
+        }
+      } // else
+
+      def gitCommit = tools.getGitCommit().take(7)
       // LIBCALICO_DOCKER_IMAGE defined here globaly, since we depends on git-sha
-      LIBCALICO_DOCKER_IMAGE="${DOCKER_REPO}/${BUILD_IMAGE}:${BUILD_IMAGE_TAG}-${GERRIT_CHANGE_NUMBER}-${gitCommit}"
+      buildName="${dockerRepository}/${buildImg}:${buildImgTag}-${currentBuildId}-${gitCommit}"
 
 
       stage ('Run libcalico unittest') {
@@ -44,7 +63,7 @@ node('calico'){
 
 
       stage ('Build libcalico image') {
-        sh "docker build -t ${LIBCALICO_DOCKER_IMAGE} ."
+        sh "docker build -t ${buildName} ."
       }
 
 
@@ -58,76 +77,39 @@ node('calico'){
         ]) {
           sh """
             echo 'Pushing images'
-            docker login -u ${ARTIFACTORY_LOGIN} -p ${ARTIFACTORY_PASSWORD} ${DOCKER_REPO}
-            docker push ${LIBCALICO_DOCKER_IMAGE}
+            docker login -u ${ARTIFACTORY_LOGIN} -p ${ARTIFACTORY_PASSWORD} ${dockerRepository}
+            docker push ${buildName}
           """
         }
 
         dir("artifacts"){
 
+          def properties = tools.getBinaryBuildProperties()
           // Save Image name ID
-          writeFile file: "lastbuild", text: "${LIBCALICO_DOCKER_IMAGE}"
+          writeFile file: "lastbuild", text: "${buildName}"
           // Create the upload spec.
           def uploadSpec = """{
               "files": [
                       {
                           "pattern": "**",
-                          "target": "projectcalico/${GERRIT_CHANGE_NUMBER}/libcalico/"
+                          "target": "projectcalico/${currentBuildId}/libcalico/",
+                          "props": "${properties}"
                       }
                   ]
               }"""
 
           // Upload to Artifactory.
-          def buildInfo1 = server.upload(uploadSpec)
+          server.upload(uploadSpec, buildInfo)
         } // dir artifacts
 
       } // stage
 
     } // build libcalico
 
-
-    stage ('Start building calico-containers') {
-      // Fake stage to show that we switched to calico-containers
-      echo "Start building calico-containers"
-    }
-
-    // calico/felix goes from {ARTIFACTORY_URL}/mcp/felix/
-    def FELIX_NAME = "${ARTIFACTORY_URL}/mcp/felix/lastbuild".toURL().text.trim()
-
-    def CONFD_BUILD = "${ARTIFACTORY_URL}/mcp/confd/lastbuild".toURL().text.trim()
-    def CONFD_URL = "${ARTIFACTORY_URL}/mcp/confd/confd-${CONFD_BUILD}"
-
-    def BIRD_BUILD="${ARTIFACTORY_URL}/mcp/calico-bird/lastbuild".toURL().text.trim()
-    def BIRD_URL="${ARTIFACTORY_URL}/mcp/calico-bird/bird-${BIRD_BUILD}"
-    def BIRD6_URL="${ARTIFACTORY_URL}/mcp/calico-bird/bird6-${BIRD_BUILD}"
-    def BIRDCL_URL="${ARTIFACTORY_URL}/mcp/calico-bird/birdcl-${BIRD_BUILD}"
-
-    def gitCommit = sh(returnStdout: true, script: "git -C ${WORKSPACE} rev-parse --short HEAD").trim()
-
-    def BUILD = "${GERRIT_CHANGE_NUMBER}-${gitCommit}"
-
-
-    stage ('Build calico/ctl image'){
-      sh """
-        make ctl_image \
-          CTL_CONTAINER_NAME=${CTL_NAME}-${BUILD} \
-          BUILD_CONTAINER_NAME=${LIBCALICO_DOCKER_IMAGE} \
-          BIRDCL_URL=${BIRDCL_URL}
-      """
-    }
-
-
-    stage('Build calico/node'){
-      sh """
-        make node_image \
-          NODE_CONTAINER_NAME=${NODE_NAME}-${BUILD} \
-          BUILD_CONTAINER_NAME=${LIBCALICO_DOCKER_IMAGE} \
-          FELIX_CONTAINER_NAME=${FELIX_NAME} \
-          CONFD_URL=${CONFD_URL} \
-          BIRD_URL=${BIRD_URL} \
-          BIRD6_URL=${BIRD6_URL} \
-          BIRDCL_URL=${BIRDCL_URL}
-      """
+    // start building calico-containers
+    def calicoContainersArts = buildCalicoContainers {
+      containersBuildId = currentBuildId
+      buildImage = buildName
     }
 
 
@@ -141,46 +123,39 @@ node('calico'){
       ]) {
         sh """
           echo 'Pushing images'
-          docker login -u ${ARTIFACTORY_LOGIN} -p ${ARTIFACTORY_PASSWORD} ${DOCKER_REPO}
-          docker push ${NODE_NAME}-${BUILD}
-          docker push ${CTL_NAME}-${BUILD}
+          docker login -u ${ARTIFACTORY_LOGIN} -p ${ARTIFACTORY_PASSWORD} ${dockerRepository}
+          docker push ${calicoContainersArts["CTL_CONTAINER_NAME"]}
+          docker push ${calicoContainersArts["NODE_CONTAINER_NAME"]}
         """
       }
 
       dir("artifacts"){
-        CALICO_NODE_IMAGE_REPO="${DOCKER_REPO}/${NODE_IMAGE}"
-        CALICOCTL_IMAGE_REPO="${DOCKER_REPO}/${CTL_IMAGE}"
-        CALICO_VERSION="${NODE_IMAGE_TAG}-${BUILD}"
-        // Save the last build ID
-        writeFile file: "lastbuild", text: "${BUILD}"
-        // Create config yaml for Kargo
-        writeFile file: "calico-containers-${BUILD}.yaml",
-                  text: """\
-                    calico_node_image_repo: ${CALICO_NODE_IMAGE_REPO}
-                    calicoctl_image_repo: ${CALICOCTL_IMAGE_REPO}
-                    calico_version: ${CALICO_VERSION}
-                  """.stripIndent()
+        def properties = tools.getBinaryBuildProperties()
         // Create the upload spec.
         def uploadSpec = """{
             "files": [
                     {
                         "pattern": "**",
-                        "target": "projectcalico/${GERRIT_CHANGE_NUMBER}/calico-containers/"
+                        "target": "projectcalico/${currentBuildId}/calico-containers/",
+                        "props": "${properties}"
                     }
                 ]
             }"""
 
         // Upload to Artifactory.
-        def buildInfo1 = server.upload(uploadSpec)
+        server.upload(uploadSpec, buildInfo)
       } // dir artifacts
     } //stage
+
+    // publish buildInfo
+    server.publishBuildInfo buildInfo
 
     stage ("Run system tests") {
        build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
         [
-            [$class: 'StringParameterValue', name: 'CALICO_NODE_IMAGE_REPO', value: CALICO_NODE_IMAGE_REPO],
-            [$class: 'StringParameterValue', name: 'CALICOCTL_IMAGE_REPO', value: CALICOCTL_IMAGE_REPO],
-            [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: CALICO_VERSION],
+            [$class: 'StringParameterValue', name: 'CALICO_NODE_IMAGE_REPO', value: calicoContainersArts["CALICO_NODE_IMAGE_REPO"]],
+            [$class: 'StringParameterValue', name: 'CALICOCTL_IMAGE_REPO', value: calicoContainersArts["CALICOCTL_IMAGE_REPO"]],
+            [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: calicoContainersArts["CALICO_VERSION"]],
             [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
         ]
     }

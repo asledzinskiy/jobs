@@ -114,7 +114,7 @@
           option: category
     project-type: workflow
     dsl:
-      !include-raw-escape: calico-libcalico-gate.groovy
+      !include-raw-escape: calico-libcalico.groovy
 
     triggers:
       - gerrit:
