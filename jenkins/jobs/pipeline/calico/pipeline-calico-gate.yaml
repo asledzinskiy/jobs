@@ -116,6 +116,11 @@
     dsl:
       !include-raw-escape: calico-libcalico.groovy
 
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+
     triggers:
       - gerrit:
           trigger-on:
@@ -143,7 +148,12 @@
           option: category
     project-type: workflow
     dsl:
-      !include-raw-escape: calico-libcalico-go-gate.groovy
+      !include-raw-escape: calico-libcalico-go.groovy
+
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
 
     triggers:
       - gerrit:
