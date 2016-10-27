@@ -1,19 +1,44 @@
 node('calico'){
 
-  // Get Artifactory server instance, defined in the Artifactory Plugin administration page.
-  def server = Artifactory.server("mcp-ci")
-
-  def ARTIFACTORY_URL = "https://artifactory.mcp.mirantis.net/artifactory/projectcalico"
-
   try {
 
-    gerritPatchsetCheckout {
-      credentialsId = "mcp-ci-gerrit"
-      withWipeOut = true
+    def tools = new ci.mcp.Tools()
+
+    def server = Artifactory.server("mcp-ci")
+    def artifactoryUrl = "https://artifactory.mcp.mirantis.net/artifactory/projectcalico"
+
+    def buildInfo = Artifactory.newBuildInfo()
+    buildInfo.env.capture = true
+    buildInfo.env.filter.addInclude("*")
+    buildInfo.env.collect()
+
+    def currentBuildId = ""
+    def HOST = env.GERRIT_HOST
+
+    if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
+      currentBuildId = env.GERRIT_CHANGE_NUMBER
+
+      stage ('Checkout calico-cni'){
+        gerritPatchsetCheckout {
+          credentialsId = "mcp-ci-gerrit"
+          withWipeOut = true
+        }
+      }
+    } else {
+      currentBuildId = "mcp"
+
+      stage ('Checkout calico-cni'){
+        gitSSHCheckout {
+          credentialsId = "mcp-ci-gerrit"
+          branch = "mcp"
+          host = HOST
+          project = "projectcalico/calico-cni"
+        }
+      }
     }
 
-    def gitCommit = sh(returnStdout: true, script: "git -C ${WORKSPACE} rev-parse --short HEAD").trim()
-    def CNI_BUILD = "${GERRIT_CHANGE_NUMBER}-${gitCommit}"
+    def gitCommit = tools.getGitCommit().take(7)
+    def cniBuildId = "${currentBuildId}-${gitCommit}"
 
 
     // TODO(skulanov) GO_CONTAINER_NAME should be defined some arti image
@@ -22,7 +47,7 @@ node('calico'){
       gitSSHCheckout {
         credentialsId = "mcp-ci-gerrit"
         branch = "mcp"
-        host = "review.fuel-infra.org"
+        host = HOST
         project = "projectcalico/libcalico-go"
         targetDir = "${LIBCALICOGO_PATH}"
       }
@@ -39,19 +64,19 @@ node('calico'){
       dir("artifacts"){
 
         sh """
-          cp ${WORKSPACE}/dist/calico calico-${CNI_BUILD}
-          cp ${WORKSPACE}/dist/calico-ipam calico-ipam-${CNI_BUILD}
+          cp ${WORKSPACE}/dist/calico calico-${cniBuildId}
+          cp ${WORKSPACE}/dist/calico-ipam calico-ipam-${cniBuildId}
         """
 
-        CALICO_CNI_DOWNLOAD_URL="${ARTIFACTORY_URL}/${GERRIT_CHANGE_NUMBER}/calico-cni/calico-${CNI_BUILD}"
-        CALICO_CNI_CHECKSUM=sh(returnStdout: true, script: "sha256sum calico-${CNI_BUILD} | cut -d' ' -f1").trim()
-        CALICO_CNI_IPAM_DOWNLOAD_URL="${ARTIFACTORY_URL}/${GERRIT_CHANGE_NUMBER}/calico-cni/calico-ipam-${CNI_BUILD}"
-        CALICO_CNI_IPAM_CHECKSUM=sh(returnStdout: true, script: "sha256sum calico-ipam-${CNI_BUILD} | cut -d' ' -f1").trim()
+        CALICO_CNI_DOWNLOAD_URL="${artifactoryUrl}/${currentBuildId}/calico-cni/calico-${cniBuildId}"
+        CALICO_CNI_CHECKSUM=sh(returnStdout: true, script: "sha256sum calico-${cniBuildId} | cut -d' ' -f1").trim()
+        CALICO_CNI_IPAM_DOWNLOAD_URL="${artifactoryUrl}/${currentBuildId}/calico-cni/calico-ipam-${cniBuildId}"
+        CALICO_CNI_IPAM_CHECKSUM=sh(returnStdout: true, script: "sha256sum calico-ipam-${cniBuildId} | cut -d' ' -f1").trim()
 
         // Save Image name ID
-        writeFile file: "lastbuild", text: "${CNI_BUILD}"
+        writeFile file: "lastbuild", text: "${cniBuildId}"
         // Create the upload spec.
-        writeFile file: "calico-cni-${CNI_BUILD}.yaml",
+        writeFile file: "calico-cni-${cniBuildId}.yaml",
                   text: """\
                     calico_cni_download_url: ${CALICO_CNI_DOWNLOAD_URL}
                     calico_cni_checksum: ${CALICO_CNI_CHECKSUM}
@@ -59,19 +84,25 @@ node('calico'){
                     calico_cni_ipam_checksum: ${CALICO_CNI_IPAM_CHECKSUM}
                   """.stripIndent()
 
+        def properties = tools.getBinaryBuildProperties()
+
         def uploadSpec = """{
             "files": [
                     {
                         "pattern": "**",
-                        "target": "projectcalico/${GERRIT_CHANGE_NUMBER}/calico-cni/"
+                        "target": "projectcalico/${currentBuildId}/calico-cni/",
+                        "props": "${properties}"
                     }
                 ]
             }"""
 
         // Upload to Artifactory.
-        def buildInfo1 = server.upload(uploadSpec)
+        server.upload(uploadSpec, buildInfo)
       }
-    }
+    } // publishing cni artifacts
+
+    // publish buildInfo
+    server.publishBuildInfo buildInfo
 
     stage ("Run system tests") {
        build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:

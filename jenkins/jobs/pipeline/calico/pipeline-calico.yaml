@@ -138,6 +138,11 @@
     dsl:
       !include-raw-escape: calico-cni.groovy
 
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+
     triggers:
       - gerrit:
           trigger-on:
