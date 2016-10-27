@@ -1,0 +1,13 @@
+- job:
+    name: env-cleaner-worker
+    description: |
+      This job removes the fuel-devops environments when older than
+      two days.
+    properties:
+      - throttle:
+          max-per-node: 1
+          option: project
+    concurrent: true
+    builders:
+      - shell:
+          !include-raw: '../../builders/env-cleaner-worker.sh'

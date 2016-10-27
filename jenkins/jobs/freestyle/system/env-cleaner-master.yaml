@@ -1,0 +1,13 @@
+- job:
+    name: env-cleaner-master
+    description: |
+      This is a upstream job to run env-cleaner-worker downstream job
+    concurrent: true
+    builders:
+      - trigger-builds:
+          - project: 'env-cleaner-worker'
+            parameter-factories:
+              - factory: allnodesforlabel
+                node-label: cleanable
+    triggers:
+      - timed: 'H 2 * * *'
