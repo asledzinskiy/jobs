@@ -4,6 +4,10 @@
       Build artifacts<br>
     node: calico
     concurrent: true
+    parameters:
+    - string:
+        name: GERRIT_REFSPEC
+        default: refs/heads/master
     builders:
       - inject:
           properties-content: |
