@@ -108,7 +108,7 @@
         - project: 'download-mcp-systest-image'
           current-parameters: true
           block: true
-          samenode: true
+          same-node: true
 
       - run-systest
 
