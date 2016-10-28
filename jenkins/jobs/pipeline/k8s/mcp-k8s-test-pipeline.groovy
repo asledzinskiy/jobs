@@ -160,8 +160,12 @@ def build_publish_binaries () {
                     calico_ipam = "https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam"
                 }
 
-                writeFile file: 'build.sh', text: '''#!/bin/bash
-                        source "${WORKSPACE}/kubernetes/build/common.sh"
+                writeFile file: 'build.sh', text: '''#!/bin/bash -xe
+                        if [ -f ${WORKSPACE}/kubernetes/build/common.sh ]; then
+                          source "${WORKSPACE}/kubernetes/build/common.sh"
+                        else
+                          source "${WORKSPACE}/kubernetes/build-tools/common.sh"
+                        fi
                         kube::build::verify_prereqs
                         kube::build::build_image
                         kube::build::run_build_command hack/build-go.sh cmd/hyperkube
