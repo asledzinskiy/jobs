@@ -13,6 +13,8 @@ docker_prod_repo = "docker-prod-local"
 binary_dev_repo = "binary-dev-local"
 binary_prod_repo = "binary-prod-local"
 server = Artifactory.server('mcp-ci')
+artifactory_tools = new com.mirantis.mcp.MCPArtifactory()
+git_tools = new com.mirantis.mcp.Git()
 buildInfo = Artifactory.newBuildInfo()
 buildDesc = ''
 
@@ -233,6 +235,10 @@ def run_integration_tests () {
 }
 
 def build_publish_binaries () {
+    def kube_docker_owner = 'jenkins'
+    if (!kube_docker_registry) {
+        error('KUBE_DOCKER_REGISTRY must be set')
+    }
     parallel hyperkube_image: {
         stage('hyperkube-build') {
             node('k8s') {
@@ -244,17 +250,10 @@ def build_publish_binaries () {
                 def calico_cni_image_tag = env.CALICO_CNI_IMAGE_TAG
                 def k8s_repo_dir = "${env.WORKSPACE}/kubernetes"
 
-                def kube_docker_owner = 'jenkins'
                 def registry = "${kube_docker_registry}/${kube_docker_owner}/${kube_namespace}"
 
                 if (!k8s_base_image) {
                     error('K8S_BASE_IMAGE must be set')
-                }
-                if (!kube_docker_registry) {
-                    error('KUBE_DOCKER_REGISTRY must be set')
-                }
-                if (!kube_docker_owner) {
-                    error('KUBE_DOCKER_OWNER must be set')
                 }
 
                 if ("${env.CALICO_DOWNSTREAM}" == "true") {
@@ -277,7 +276,7 @@ def build_publish_binaries () {
                         gerritPatchsetCheckout{
                             credentialsId = "mcp-ci-gerrit"
                         }
-                        git_commit_tag_id = generate_git_version()
+                        git_commit_tag_id = git_tools.getGitDescribe(true)
                     } else {
                         def gerrit_host = "${env.GERRIT_HOST}"
                         gitSSHCheckout {
@@ -371,8 +370,10 @@ def build_publish_binaries () {
                                     }
                                  ]
                                 }"""
-                                upload_binaries_to_artifactory(uploadSpec, true)
-                                upload_image_to_artifactory("${kube_docker_registry}", "${kube_namespace}/${kube_docker_repo}", "${kube_docker_version}", "${docker_dev_repo}")
+                                artifactory_tools.uploadBinariesToArtifactory(server, buildInfo, uploadSpec, true)
+                                artifactory_tools.uploadImageToArtifactory(server, "${kube_docker_registry}",
+                                                               "${kube_namespace}/${kube_docker_repo}",
+                                                               "${kube_docker_version}", "${docker_dev_repo}")
                                 buildDesc = "hyperkube-image: ${kube_docker_registry}/${kube_namespace}/${kube_docker_repo}:${kube_docker_version}<br>\
                                              hyperkube-binary: ${env.ARTIFACTORY_URL}/${binary_dev_repo}/${kube_namespace}/hyperkube-binaries/hyperkube_${kube_docker_version}<br>"
                                 currentBuild.description = buildDesc
@@ -400,19 +401,8 @@ def build_publish_binaries () {
                 deleteDir()
 
                 def kube_docker_conformance_repository = 'k8s-conformance'
-                def kube_docker_owner = 'jenkins'
                 def registry = "${kube_docker_registry}/${kube_docker_owner}/${kube_namespace}"
                 def workspace = "${env.WORKSPACE}"
-
-                if (!kube_docker_registry) {
-                    error('KUBE_DOCKER_REGISTRY must be set')
-                }
-                if (!kube_docker_owner) {
-                    error('KUBE_DOCKER_OWNER must be set')
-                }
-                if (!kube_docker_conformance_repository) {
-                    error('KUBE_DOCKER_CONFORMANCE_REPOSITORY must be set')
-                }
 
                 def gerrit_host = "${env.GERRIT_HOST}"
                 if ( env.GERRIT_EVENT_TYPE ) {
@@ -420,7 +410,7 @@ def build_publish_binaries () {
                     gerritPatchsetCheckout{
                         credentialsId = "mcp-ci-gerrit"
                     }
-                    git_commit_tag_id = generate_git_version()
+                    git_commit_tag_id = git_tools.getGitDescribe(true)
                 } else {
                     gitSSHCheckout {
                         credentialsId = "mcp-ci-gerrit"
@@ -499,7 +489,9 @@ def build_publish_binaries () {
                         sh "cp ${helpersDir}/conformance-entrypoint.sh ${workspace}/_build_test_runner/entrypoint.sh"
                         sh 'docker build -t "${KUBE_DOCKER_CONFORMANCE_TAG}" "${WORKSPACE}/_build_test_runner"'
                         stage('conformance-publish') {
-                            upload_image_to_artifactory("${kube_docker_registry}", "${kube_namespace}/${conformance_docker_repo}", "${kube_docker_version}", "${docker_dev_repo}")
+                            artifactory_tools.uploadImageToArtifactory(server, "${kube_docker_registry}",
+                                                           "${kube_namespace}/${conformance_docker_repo}",
+                                                           "${kube_docker_version}", "${docker_dev_repo}")
                         }
                     } catch (InterruptedException x) {
                         echo "The job was aborted"
@@ -536,121 +528,38 @@ def run_system_test () {
 def promote_artifacts () {
     stage('promote') {
         node('k8s') {
-            def server = Artifactory.server('mcp-ci')
-            def properties = ['com.mirantis.changeid': "${env.GERRIT_CHANGE_ID}",
-                              'com.mirantis.patchset_number': "${env.GERRIT_PATCHSET_NUMBER}" ]
+            def properties = ['com.mirantis.gerritChangeId': "${env.GERRIT_CHANGE_ID}",
+                              'com.mirantis.gerritPatchsetNumber': "${env.GERRIT_PATCHSET_NUMBER}",
+                              'com.mirantis.targetImg': "${kube_namespace}/${kube_docker_repo}" ]
             // Search for an artifact with required properties
-            def artifact_uri = uri_by_properties(env.ARTIFACTORY_URL, properties)
+            def artifact_uri = artifactory_tools.uriByProperties(server.getUrl(), properties)
             // Get build info: build id and job name
             if ( artifact_uri ) {
-                def buildInfo = get_properties_for_artifact(artifact_uri)
+                def buildInfo = artifactory_tools.getPropertiesForArtifact(artifact_uri)
                 def promotionConfig = [
-                        'buildName'  : buildInfo.get('com.mirantis.build_name').join(','), // value for each key property is an array
-                        'buildNumber': buildInfo.get('com.mirantis.build_id').join(','),
+                        'buildName'  : buildInfo.get('com.mirantis.buildName').join(','), // value for each key property is an array
+                        'buildNumber': buildInfo.get('com.mirantis.buildNumber').join(','),
                         'targetRepo' : binary_prod_repo.toString()]
                 // promote build artifacts except docker because of jfrog bug
                 server.promote promotionConfig
                 // promote docker image
-                promote_docker_artifact(env.ARTIFACTORY_URL,
-                        docker_dev_repo,
-                        docker_prod_repo,
-                        "${kube_namespace}/${kube_docker_repo}",
-                        buildInfo.get('com.mirantis.target_tag').join(','),
-                        buildInfo.get('com.mirantis.target_tag').join(',').split("_")[0],
-                        true)
-                promote_docker_artifact(env.ARTIFACTORY_URL,
-                        docker_dev_repo,
-                        docker_prod_repo,
-                        "${kube_namespace}/${kube_docker_repo}",
-                        buildInfo.get('com.mirantis.target_tag').join(','),
-                        'latest')
+                artifactory_tools.promoteDockerArtifact(server.getUrl(),
+                                            docker_dev_repo,
+                                            docker_prod_repo,
+                                            "${kube_namespace}/${kube_docker_repo}",
+                                            buildInfo.get('com.mirantis.targetTag').join(','),
+                                            buildInfo.get('com.mirantis.targetTag').join(',').split("_")[0],
+                                            true)
+                artifactory_tools.promoteDockerArtifact(server.getUrl(),
+                                            docker_dev_repo,
+                                            docker_prod_repo,
+                                            "${kube_namespace}/${kube_docker_repo}",
+                                            buildInfo.get('com.mirantis.targetTag').join(','),
+                                            'latest')
             } else {
                 echo 'Artifacts were not found, nothing to promote'
             }
         }
-    }
-}
-
-def set_properties (artifact_url, properties, recursive=false) {
-    def properties_str = 'properties='
-    def key,value
-    if (recursive) {
-        recursive = 'recursive=1'
-    } else {
-        recursive = 'recursive=0'
-    }
-    for ( int i = 0; i < properties.size(); i++ ) {
-        // avoid serialization errors
-        key = properties.entrySet().toArray()[i].key
-        value = properties.entrySet().toArray()[i].value
-        properties_str += "${key}=${value}|"
-    }
-    def url = "${artifact_url}?${properties_str}&${recursive}"
-    withCredentials([
-            [$class: 'UsernamePasswordMultiBinding',
-             credentialsId: 'artifactory',
-             passwordVariable: 'ARTIFACTORY_PASSWORD',
-             usernameVariable: 'ARTIFACTORY_LOGIN']
-    ]) {
-        sh "bash -c \"curl -X PUT -u ${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD} \'${url}\'\""
-    }
-}
-
-def get_properties_for_artifact(artifact_url) {
-    def url = "${artifact_url}?properties"
-    def result
-    withCredentials([
-            [$class: 'UsernamePasswordMultiBinding',
-             credentialsId: 'artifactory',
-             passwordVariable: 'ARTIFACTORY_PASSWORD',
-             usernameVariable: 'ARTIFACTORY_LOGIN']
-    ]) {
-        result = sh(script: "bash -c \"curl -X GET -u ${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD} \'${url}\'\"",
-                returnStdout: true).trim()
-    }
-    def properties = new groovy.json.JsonSlurperClassic().parseText(result)
-    return properties.get("properties")
-}
-
-def promote_docker_artifact(artifactory_url, docker_dev_repo, docker_prod_repo,
-                            docker_repo, artifact_tag, target_tag, copy=false) {
-    def url = "${artifactory_url}/api/docker/${docker_dev_repo}/v2/promote"
-    withCredentials([
-            [$class: 'UsernamePasswordMultiBinding',
-             credentialsId: 'artifactory',
-             passwordVariable: 'ARTIFACTORY_PASSWORD',
-             usernameVariable: 'ARTIFACTORY_LOGIN']
-    ]) {
-        writeFile file: "query.json",
-                text: """{
-                  \"targetRepo\": \"${docker_prod_repo}\",
-                  \"dockerRepository\": \"${docker_repo}\",
-                  \"tag\": \"${artifact_tag}\",
-                  \"targetTag\" : \"${target_tag}\",
-                  \"copy\": \"${copy}\"
-              }""".stripIndent()
-        sh 'cat query.json'
-        sh "bash -c \"curl  -u ${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD} -H \"Content-Type:application/json\" -X POST -d @query.json ${url}\""
-    }
-}
-
-def uri_by_properties(artifactory_url, properties) {
-    def key, value
-    def properties_str = ''
-    for ( int i = 0; i < properties.size(); i++ ) {
-        // avoid serialization errors
-        key = properties.entrySet().toArray()[i].key
-        value = properties.entrySet().toArray()[i].value
-        properties_str += "${key}=${value}&"
-    }
-    def search_url = "${artifactory_url}/api/search/prop?${properties_str}"
-
-    def result = sh(script: "bash -c \"curl -X GET \'${search_url}\'\"",
-            returnStdout: true).trim()
-    def content = new groovy.json.JsonSlurperClassic().parseText(result)
-    def uri = content.get("results")
-    if ( uri ) {
-        return uri.last().get("uri")
     }
 }
 
@@ -670,56 +579,5 @@ def clone_k8s_repo () {
                 git fetch kubernetes --tags
             '''
         }
-    }
-}
-
-def upload_image_to_artifactory (registry, image, version, repository) {
-    def server = Artifactory.server('mcp-ci')
-    def artDocker
-    withCredentials([
-            [$class: 'UsernamePasswordMultiBinding',
-             credentialsId: 'artifactory',
-             passwordVariable: 'ARTIFACTORY_PASSWORD',
-             usernameVariable: 'ARTIFACTORY_LOGIN']
-    ]) {
-        sh ("docker login -u ${ARTIFACTORY_LOGIN} -p ${ARTIFACTORY_PASSWORD} ${registry}")
-        sh ("docker push ${registry}/${image}:${version}")
-        //artDocker = Artifactory.docker("${env.ARTIFACTORY_LOGIN}", "${env.ARTIFACTORY_PASSWORD}")
-    }
-
-    //artDocker.push("${registry}/${image}:${version}", "${repository}")
-    def image_url = "${env.ARTIFACTORY_URL}/api/storage/${repository}/${image}/${version}"
-    def properties = ['com.mirantis.build_name':"${env.JOB_NAME}",
-                      'com.mirantis.build_id': "${env.BUILD_NUMBER}",
-                      'com.mirantis.changeid': "${env.GERRIT_CHANGE_ID}",
-                      'com.mirantis.patchset_number': "${env.GERRIT_PATCHSET_NUMBER}",
-                      'com.mirantis.target_tag': "${version}"]
-
-    set_properties(image_url, properties)
-}
-
-def upload_binaries_to_artifactory (uploadSpec, publish_info=false) {
-    def server = Artifactory.server('mcp-ci')
-    buildInfo.append(server.upload(uploadSpec))
-
-    if ( publish_info ) {
-        buildInfo.env.capture = true
-        buildInfo.env.filter.addInclude("*")
-        buildInfo.env.filter.addExclude("*PASSWORD*")
-        buildInfo.env.filter.addExclude("*password*")
-        buildInfo.env.collect()
-
-        server.publishBuildInfo(buildInfo)
-    }
-
-}
-
-def generate_git_version () {
-    def current_tag = sh(script: "git describe --abbrev=0 --tags", returnStdout: true).trim()
-    def commit_num = sh(script: "git rev-list ${current_tag}..HEAD --count", returnStdout: true).trim()
-    if (commit_num == "0") {
-        return "${current_tag}"
-    } else {
-        return "${current_tag}-${commit_num}"
     }
 }
