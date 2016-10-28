@@ -54,11 +54,7 @@
       - throttle:
           max-per-node: 1
           option: project
-      - authorization:
-          authenticated:
-            - job-read
-            - job-build
-            - job-cancel
+      - authorization-allow-qa-group
 
     scm:
       - git:
