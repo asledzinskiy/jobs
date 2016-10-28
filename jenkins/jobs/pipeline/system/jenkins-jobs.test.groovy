@@ -33,8 +33,8 @@ def diff_check(diff_data) {
 
 node('tools') {
 
-    env.OUT_DIR = "${WORKSPACE}/output/jobs"
-    env.LOGFILE = "${OUT_DIR}/jobs-diff.log"
+    env.OUT_DIR = "${env.WORKSPACE}/output/jobs"
+    env.LOGFILE = "${env.OUT_DIR}/jobs-diff.log"
 
     def diff_list = [:]
 

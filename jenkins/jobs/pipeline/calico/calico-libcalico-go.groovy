@@ -22,7 +22,7 @@ node('calico'){
       project = "projectcalico/calico-cni"
     }
 
-    dir("${WORKSPACE}/tmp_libcalico-go") {
+    dir("${env.WORKSPACE}/tmp_libcalico-go") {
 
       if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
         currentBuildId = env.GERRIT_CHANGE_NUMBER

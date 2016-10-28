@@ -35,7 +35,7 @@ node('calico'){
       targetDir = "calico_node/node_share/libcalico"
     }
 
-    dir("${WORKSPACE}/tmp_calico-felix"){
+    dir("${env.WORKSPACE}/tmp_calico-felix"){
       // Let's do all the stuff with calico/felix in tmp_calico-felix sub-dir
       def felixImg = "calico/felix"
       def felixImgTag = "dev"

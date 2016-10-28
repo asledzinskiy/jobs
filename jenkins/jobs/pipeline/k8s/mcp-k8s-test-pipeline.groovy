@@ -548,7 +548,7 @@ def uri_by_properties(artifactory_url, properties) {
 }
 
 def clone_k8s_repo () {
-    def k8s_repo_url = "ssh://${GERRIT_NAME}@${GERRIT_HOST}:${GERRIT_PORT}/${GERRIT_PROJECT}.git"
+    def k8s_repo_url = "ssh://${env.GERRIT_NAME}@${env.GERRIT_HOST}:${env.GERRIT_PORT}/${env.GERRIT_PROJECT}.git"
     sshagent (credentials: ['mcp-ci-gerrit']) {
         withEnv(["GIT_K8S_CACHE_DIR=${git_k8s_cache_dir}",
                  "GIT_K8S_REPO_URL=${k8s_repo_url}"]) {

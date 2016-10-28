@@ -1,9 +1,9 @@
-def NODE="${NODE}"
+def NODE="${env.NODE}"
 
 node(NODE) {
 
-  def ACTION="${ACTION}"
-  def ENV_NAME="${ENV_NAME}"
+  def ACTION="${env.ACTION}"
+  def ENV_NAME="${env.ENV_NAME}"
   def VIRTUAL_ENV = "/home/jenkins/venv-fuel-devops-3.0"
   def DEVOPS_DB_ENGINE = "django.db.backends.sqlite3"
   def DEVOPS_DB_NAME = "/home/jenkins/venv-fuel-devops-3.0.sqlite3.db"

@@ -1,14 +1,15 @@
-def NODE="${NODE}"
+def NODE="${env.NODE}"
 
 node(NODE) {
 
-  def DELETE_DB = "${DELETE_DB}"
+  def DELETE_DB = "${env.DELETE_DB}"
   def VIRTUAL_ENV = "/home/jenkins/venv-fuel-devops-3.0"
   def LOG_FILE = "/home/jenkins/.devops/log.yaml"
   def DEVOPS_DB_ENGINE = "django.db.backends.sqlite3"
   def DEVOPS_DB_NAME = "/home/jenkins/venv-fuel-devops-3.0.sqlite3.db"
-  def VENV_REQUIREMENTS = "${VENV_REQUIREMENTS}"
-  def BRANCH = "${BRANCH}"
+  def VENV_REQUIREMENTS = "${env.VENV_REQUIREMENTS}"
+  def BRANCH = "${env.BRANCH}"
+  def WORKSPACE = "${env.WORKSPACE}"
 
   deleteDir()
 
@@ -26,6 +27,7 @@ node(NODE) {
            "DEVOPS_DB_NAME=${DEVOPS_DB_NAME}",
            "BRANCH=${BRANCH}",
            "LOG_FILE=${LOG_FILE}",
+           "WORKSPACE=${WORKSPACE}"
           ]) {
 
     if (fileExists(LOG_FILE)) {
@@ -52,7 +54,7 @@ node(NODE) {
     {
       if(VENV_REQUIREMENTS) {
           echo "Install with custom requirements"
-          writeFile file: "${env.WORKSPACE}/venv-requirements.txt", text: VENV_REQUIREMENTS
+          writeFile file: WORKSPACE + "/venv-requirements.txt", text: VENV_REQUIREMENTS
       } else {
           echo "Using default requirements.txt"
           sh "cp ${WORKSPACE}/fuel_ccp_tests/requirements.txt ${WORKSPACE}/venv-requirements.txt"
@@ -60,7 +62,7 @@ node(NODE) {
     }
 
     stage('Install the fuel-devops in VENV') {
-      writeFile file: "${env.WORKSPACE}/install_devops.sh", text: '''\
+      writeFile file: WORKSPACE + "/install_devops.sh", text: '''\
         #!/bin/bash -ex
         source ${VIRTUAL_ENV}/bin/activate
         pip install pip --upgrade
@@ -73,7 +75,7 @@ node(NODE) {
         deactivate
       '''.stripIndent()
       sh "chmod 755 ${WORKSPACE}/install_devops.sh"
-      sh(returnStdout: true, script: "${env.WORKSPACE}/install_devops.sh").trim()
+      sh(returnStdout: true, script: WORKSPACE + "/install_devops.sh").trim()
     }
   }
 

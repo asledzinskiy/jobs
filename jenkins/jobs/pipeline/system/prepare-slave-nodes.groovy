@@ -2,12 +2,12 @@ node('tools') {
   try {
 
     def TEST_MODE = "True"
-    def VENV_PATH = "${WORKSPACE}/.tox/mcp-ci"
+    def VENV_PATH = "${env.WORKSPACE}/.tox/mcp-ci"
     def ANSIBLE_HOST_KEY_CHECKING="False"
-    def INVENTORY = "${WORKSPACE}/conf/slave_nodes_inventory"
-    def HOSTS = "${HOSTS_LIST}"
-    def USER = "${USERNAME}"
-    def BRANCH = "${BRANCH_NAME}"
+    def INVENTORY = "${env.WORKSPACE}/conf/slave_nodes_inventory"
+    def HOSTS = "${env.HOSTS_LIST}"
+    def USER = "${env.USERNAME}"
+    def BRANCH = "${env.BRANCH_NAME}"
     def HOSTNAME = sh(returnStdout: true, script: "hostname").trim()
     ArrayList HOST = new ArrayList(Arrays.asList(HOSTS.split("\\s* \\s*")));
 

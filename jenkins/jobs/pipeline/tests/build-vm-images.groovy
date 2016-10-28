@@ -6,7 +6,7 @@ def server = Artifactory.server('mcp-ci')
 node('builder') {
 
   // defines
-  def distro = "${DISTRO}"
+  def distro = "${env.DISTRO}"
   def packer_log = 1
   def arch = "amd64"
   def headless = true

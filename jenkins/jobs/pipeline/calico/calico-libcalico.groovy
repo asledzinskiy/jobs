@@ -24,7 +24,7 @@ node('calico'){
       project = "projectcalico/calico-containers"
     }
 
-    dir("${WORKSPACE}/calico_node/node_share/libcalico"){
+    dir("${env.WORKSPACE}/calico_node/node_share/libcalico"){
 
       // Let's do all the stuff with calico/felix in tmp_calico-felix sub-dir
       def buildImg = "calico/build"

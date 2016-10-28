@@ -11,7 +11,7 @@ node('tools') {
     }
 
     stage('Gerrit update') {
-        env.PROJECT_CONFIG_PATH = "${WORKSPACE}"
+        env.PROJECT_CONFIG_PATH = "${env.WORKSPACE}"
         sh 'jeepyb-manage-projects.sh'
     }
 
