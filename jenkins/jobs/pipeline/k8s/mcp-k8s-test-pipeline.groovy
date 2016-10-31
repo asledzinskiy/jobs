@@ -1,7 +1,7 @@
 coverage = "n"
 artifacts_dir = "_artifacts"
 git_k8s_cache_dir = "/home/jenkins/kubernetes"
-event = env.GERRIT_EVENT_TYPE
+event = env.GERRIT_EVENT_TYPE ?: env.MANUAL_EVENT_TYPE
 git_commit_tag_id = ''
 timestamp = System.currentTimeMillis().toString()
 kube_docker_registry = env.KUBE_DOCKER_REGISTRY
@@ -22,6 +22,9 @@ if ( event == 'patchset-created' ) {
     run_system_test()
 } else if ( event == 'change-merged' ) {
     promote_artifacts()
+} else if ( event == 'coverage-by-timer' ) {
+    coverage = 'y'
+    run_unit_tests()
 }
 
 def run_unit_tests () {
@@ -29,9 +32,20 @@ def run_unit_tests () {
         node ('k8s') {
             def docker_image_unit = "${env.DOCKER_IMAGE_UNIT}"
             deleteDir()
-            clone_k8s_repo()
-            gerritPatchsetCheckout{
-                credentialsId = "mcp-ci-gerrit"
+            if ( env.GERRIT_EVENT_TYPE ) {
+                clone_k8s_repo()
+                gerritPatchsetCheckout{
+                    credentialsId = "mcp-ci-gerrit"
+                }
+            } else {
+                def downstream_branch = "${env.DOWNSTREAM_BRANCH}"
+                def gerrit_host = "${env.GERRIT_HOST}"
+                gitSSHCheckout {
+                    credentialsId = "mcp-ci-gerrit"
+                    branch = "${downstream_branch}"
+                    host = "${gerrit_host}"
+                    project = "kubernetes/kubernetes"
+                }
             }
             sh "mkdir ${env.WORKSPACE}/${artifacts_dir}"
             withEnv(["COVERAGE=${coverage}",

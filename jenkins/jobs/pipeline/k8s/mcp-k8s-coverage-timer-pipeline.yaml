@@ -1,0 +1,28 @@
+- job-template:
+    name: mcp-k8s-coverage-timer-pipeline
+    description: |
+      Kubernetes coverage unit tests by timer
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: DOWNSTREAM_BRANCH
+          default: '1.4-mcp'
+          description: 'Kubernetes downstream branch'
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+          desription: 'Gerrit host'
+      - string:
+          name: MANUAL_EVENT_TYPE
+          default: 'coverage-by-timer'
+          description: 'Event type for job'
+      - string:
+          name: DOCKER_IMAGE_UNIT
+          default: '{k8s-tests-registry}/k8s-tests-images/k8s-tests-unit:latest'
+          desription: 'Docker image for k8s unit tests'
+
+    triggers:
+      - timed: '0 0 * * *'
+    dsl:
+      !include-raw-escape: mcp-k8s-test-pipeline.groovy

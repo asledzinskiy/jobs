@@ -31,6 +31,7 @@
       - mcp-prepare-env
       - mcp-k8s-merge-pipeline
       - mcp-k8s-test-pipeline
+      - mcp-k8s-coverage-timer-pipeline
 
 - project:
     name: calico-build-calico
