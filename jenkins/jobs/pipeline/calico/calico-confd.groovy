@@ -22,6 +22,16 @@ node('calico'){
       project = "projectcalico/calico-containers"
     }
 
+    // we need to use downstream libcalico, so let's check it out
+    gitSSHCheckout {
+      credentialsId = "mcp-ci-gerrit"
+      branch = "mcp"
+      host = HOST
+      withMerge = true
+      project = "projectcalico/libcalico"
+      targetDir = "calico_node/node_share/libcalico"
+    }
+
     dir("${WORKSPACE}/confd_repo"){
 
       def container_src_dir = "/usr/src/confd"

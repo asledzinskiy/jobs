@@ -37,6 +37,16 @@ node('calico'){
       }
     }
 
+    // we need to use downstream libcalico, so let's check it out
+    gitSSHCheckout {
+      credentialsId = "mcp-ci-gerrit"
+      branch = "mcp"
+      host = HOST
+      withMerge = true
+      project = "projectcalico/libcalico"
+      targetDir = "calico_node/node_share/libcalico"
+    }
+
     // Run unit tests
     stage ('Run unittest') { sh "make ut"  }
 

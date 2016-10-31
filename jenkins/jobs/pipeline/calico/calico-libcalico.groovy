@@ -24,7 +24,7 @@ node('calico'){
       project = "projectcalico/calico-containers"
     }
 
-    dir("${WORKSPACE}/tmp_libcalico"){
+    dir("${WORKSPACE}/calico_node/node_share/libcalico"){
 
       // Let's do all the stuff with calico/felix in tmp_calico-felix sub-dir
       def buildImg = "calico/build"
@@ -33,21 +33,23 @@ node('calico'){
       if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
         currentBuildId = env.GERRIT_CHANGE_NUMBER
 
-        stage ('Checkout calico-containers'){
+        stage ('Checkout libcalico'){
           gerritPatchsetCheckout {
             credentialsId = "mcp-ci-gerrit"
             withWipeOut = true
+            withMerge = true
           }
         }
       } else {
         currentBuildId = "mcp"
 
-        stage ('Checkout calico-containers'){
+        stage ('Checkout libcalico'){
           gitSSHCheckout {
             credentialsId = "mcp-ci-gerrit"
             branch = "mcp"
             host = HOST
             project = "projectcalico/libcalico"
+            withMerge = true
           }
         }
       } // else
