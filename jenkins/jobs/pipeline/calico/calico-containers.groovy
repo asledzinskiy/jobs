@@ -14,6 +14,8 @@ node('calico'){
     buildInfo.env.filter.addInclude("*")
     buildInfo.env.collect()
 
+    def HOST = env.GERRIT_HOST
+
     if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
       currentBuildId = env.GERRIT_CHANGE_NUMBER
 
@@ -27,7 +29,6 @@ node('calico'){
       currentBuildId = "mcp"
 
       stage ('Checkout calico-containers'){
-        def HOST = env.GERRIT_HOST
         gitSSHCheckout {
           credentialsId = "mcp-ci-gerrit"
           branch = "mcp"
