@@ -161,15 +161,12 @@ def build_publish_binaries () {
                 }
 
                 writeFile file: 'build.sh', text: '''#!/bin/bash -xe
-                        if [ -f ${WORKSPACE}/kubernetes/build/common.sh ]; then
-                          source "${WORKSPACE}/kubernetes/build/common.sh"
+                        if [ -f ${WORKSPACE}/kubernetes/build/run.sh ]; then
+                          ${WORKSPACE}/kubernetes/build/run.sh make WHAT=cmd/hyperkube
                         else
-                          source "${WORKSPACE}/kubernetes/build-tools/common.sh"
+                          ${WORKSPACE}/kubernetes/build-tools/run.sh make WHAT=cmd/hyperkube
                         fi
-                        kube::build::verify_prereqs
-                        kube::build::build_image
-                        kube::build::run_build_command hack/build-go.sh cmd/hyperkube
-                 '''.stripIndent()
+                '''.stripIndent()
 
                 dir("${k8s_repo_dir}") {
                     clone_k8s_repo()
