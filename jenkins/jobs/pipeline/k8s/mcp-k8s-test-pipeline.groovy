@@ -90,43 +90,114 @@ def run_integration_tests () {
 
     }, conformance: {
         stage('e2e-tests') {
-            node('k8s-e2e') {
+            node('k8s') {
 
                 def k8s_repo_dir = "${env.WORKSPACE}/kubernetes"
+                def WORKSPACE = "${env.WORKSPACE}"
+                def DEVOPS_DIR = WORKSPACE + "/utils/fuel-devops"
+                def CONF_PATH = DEVOPS_DIR + "/default.yaml"
+                def IMAGE_PATH = WORKSPACE + "/image.qcow2"
+                def ENV_NAME = "mcp-k8s-e2e-conformance.${env.BUILD_NUMBER}"
+                def VENV_DIR = "/home/jenkins/venv-fuel-devops-3.0"
+                def DEVOPS_DB_ENGINE = "django.db.backends.sqlite3"
+                def DEVOPS_DB_NAME = "/home/jenkins/venv-fuel-devops-3.0.sqlite3.db"
+                def SSHPASS = "vagrant"
 
                 deleteDir()
-                sh "mkdir ${env.WORKSPACE}/${artifacts_dir}"
+                def HOST = env.GERRIT_HOST
+                gitSSHCheckout {
+                  credentialsId = "mcp-ci-gerrit"
+                  branch = "master"
+                  host = HOST
+                  project = "mcp-ci/project-config"
+                }
                 dir("${k8s_repo_dir}") {
-                    clone_k8s_repo()
-                    gerritPatchsetCheckout {
-                        credentialsId = "mcp-ci-gerrit"
+                  clone_k8s_repo()
+                  gerritPatchsetCheckout {
+                      credentialsId = "mcp-ci-gerrit"
+                  }
+                }
+                sh "mkdir ${env.WORKSPACE}/${artifacts_dir}"
+                sh '''
+                  API_URL=$(curl https://artifactory.mcp.mirantis.net/artifactory/api/storage/vm-images/packer/?lastModified | awk '/uri/ {print $3}'|tr -d '",')
+                  IMAGE_URL=$(curl ${API_URL}| awk '/downloadUri/ {print $3}'|tr -d '",')
+                  curl ${IMAGE_URL} -o image.qcow2
+                '''
+                withEnv(["CONF_PATH=${CONF_PATH}",
+                         "IMAGE_PATH=${IMAGE_PATH}",
+                         "ENV_NAME=${ENV_NAME}",
+                         "DEVOPS_DIR=${DEVOPS_DIR}",
+                         "VENV_DIR=${VENV_DIR}",
+                         "DEVOPS_DB_ENGINE=${DEVOPS_DB_ENGINE}",
+                         "DEVOPS_DB_NAME=${DEVOPS_DB_NAME}",
+                         "SSHPASS=${SSHPASS}",
+                         "artifacts_dir=${artifacts_dir}" ]) {
+                  try {
+                    writeFile file: WORKSPACE + '/create_env.sh', text: '''\
+                      #!/bin/bash
+                      source ${VENV_DIR}/bin/activate
+                      python ${DEVOPS_DIR}/env_manage.py create_env && \
+                      python ${DEVOPS_DIR}/env_manage.py get_node_ip > env_node_ip
+                    '''.stripIndent()
+                    writeFile file: WORKSPACE + '/erase_env.sh', text: '''\
+                      #!/bin/bash
+                      source ${VENV_DIR}/bin/activate
+                      dos.py erase ${ENV_NAME}
+                    '''.stripIndent()
+                    sh '''
+                      chmod +x ${WORKSPACE}/create_env.sh
+                      chmod +x ${WORKSPACE}/erase_env.sh
+                      ${WORKSPACE}/create_env.sh
+                    '''
+                    writeFile file: WORKSPACE + '/run_tests_on_node.sh', text: '''\
+                      #!/bin/bash
+                      set -ex
+                      export GOPATH=/home/vagrant/_gopath
+                      export PATH=${PATH}:/usr/local/go/bin:/usr/local/bin:${GOPATH}/bin
+                      export ARTIFACTS=/home/vagrant/_artifacts
+                      export KUBERNETES_PROVIDER=dind
+                      export NUM_NODES=6
+                      export KUBE_MASTER_IP=localhost
+                      export KUBE_MASTER=localhost
+                      export KUBERNETES_CONFORMANCE_TEST=y
+                      export DOCKER_COMPOSE_URL=https://github.com/docker/compose/releases/download/1.8.0
+                      mkdir -p ${ARTIFACTS}
+                      sudo apt-get update
+                      sudo apt-get -y install build-essential
+                      wget https://storage.googleapis.com/golang/go1.6.3.linux-amd64.tar.gz
+                      sudo tar -xzf go*.tar.gz -C /usr/local/
+                      sudo chown -R vagrant.vagrant /usr/local/go
+                      go get -u github.com/jteeuwen/go-bindata/go-bindata
+                      cd kubernetes/
+                      git clone https://github.com/sttts/kubernetes-dind-cluster.git dind
+                      curl -L ${DOCKER_COMPOSE_URL}/docker-compose-$(uname -s)-$(uname -m) | sudo tee /usr/local/bin/docker-compose >/dev/null
+                      sudo chmod +x "/usr/local/bin/docker-compose"
+                      make WHAT="cmd/hyperkube cmd/kubectl vendor/github.com/onsi/ginkgo/ginkgo test/e2e/e2e.test"
+                      dind/dind-up-cluster.sh
+                      GINKGO_PARALLEL=y \
+                      go run hack/e2e.go --v --test -check_version_skew=false \
+                           --test_args="--ginkgo.focus=\\[Conformance\\] --ginkgo.skip=\\[Serial\\] --ginkgo.noColor --report-dir=${ARTIFACTS} \
+                           --host=https://localhost:6443"
+                      go run hack/e2e.go --v --test -check_version_skew=false \
+                           --test_args="--ginkgo.focus=\\[Serial\\].*\\[Conformance\\] --ginkgo.noColor --report-dir=${ARTIFACTS} \
+                           --host=https://localhost:6443"
+                    '''.stripIndent()
+                    sh '''
+                      sleep 1m
+                      export ENV_NODE_IP=$(cat env_node_ip)
+                      sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r kubernetes vagrant@${ENV_NODE_IP}:.
+                      sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no run_tests_on_node.sh vagrant@${ENV_NODE_IP}:.
+                      sshpass -e ssh -t -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no vagrant@${ENV_NODE_IP} "bash ./run_tests_on_node.sh"
+                      sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -rp vagrant@${ENV_NODE_IP}:~/${artifacts_dir} .
+                    '''
+                  } catch (InterruptedException x) {
+                    echo "The job was aborted"
+                  } finally {
+                    dir("${env.WORKSPACE}") {
+                      sh "./erase_env.sh"
+                      junit keepLongStdio: true, testResults: artifacts_dir + '/**.xml'
                     }
-                    withEnv(["PATH=${env.PATH}:/usr/local/go/bin",
-                             "ARTIFACTS=${env.WORKSPACE}/${artifacts_dir}",
-                             "GOPATH=${env.WORKSPACE}/_gopath",
-                             "KUBERNETES_VAGRANT_USE_NFS=true",
-                             "KUBERNETES_PROVIDER=vagrant",
-                             "NUM_NODES=2",
-                             "KUBERNETES_MEMORY=3072",
-                             "REPORT_DIR=${env.WORKSPACE}/${artifacts_dir}"]) {
-                        try {
-                            sh '''
-                           make clean
-                           ./cluster/kube-down.sh || true
-                           make release-skip-tests
-                           ./cluster/kube-up.sh
-                           go run hack/e2e.go -v --test --test_args="--report-dir=${REPORT_DIR} --ginkgo.focus=\\[Conformance\\]"
-                        '''
-                        } catch (InterruptedException x) {
-                            echo "The job was aborted"
-                        } finally {
-                            sh './cluster/kube-down.sh'
-                            sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
-                            dir("${env.WORKSPACE}") {
-                                junit keepLongStdio: true, testResults: '_artifacts/**.xml'
-                            }
-                        }
-                    }
+                  }
                 }
             }
         }
