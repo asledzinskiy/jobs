@@ -25,6 +25,12 @@ if ( event == 'patchset-created' ) {
 } else if ( event == 'coverage-by-timer' ) {
     coverage = 'y'
     run_unit_tests()
+} else if ( event == 'hyperkube-build-by-sha' ) {
+    if ( ! env.GIT_SHA ) {
+        error('You have to specify git sha for some commit')
+    }
+    git_sha = env.GIT_SHA
+    build_publish_binaries()
 }
 
 def run_unit_tests () {
@@ -265,11 +271,23 @@ def build_publish_binaries () {
                 '''.stripIndent()
 
                 dir("${k8s_repo_dir}") {
-                    clone_k8s_repo()
-                    gerritPatchsetCheckout {
-                        credentialsId = "mcp-ci-gerrit"
+                    if ( env.GERRIT_EVENT_TYPE ) {
+                        clone_k8s_repo()
+                        gerritPatchsetCheckout{
+                            credentialsId = "mcp-ci-gerrit"
+                        }
+                        git_commit_tag_id = generate_git_version()
+                    } else {
+                        def gerrit_host = "${env.GERRIT_HOST}"
+                        gitSSHCheckout {
+                            credentialsId = "mcp-ci-gerrit"
+                            branch = "master"
+                            host = "${gerrit_host}"
+                            project = "kubernetes/kubernetes"
+                        }
+                        git_commit_tag_id = git_sha
+                        sh "git checkout ${git_sha}"
                     }
-                    git_commit_tag_id = generate_git_version()
 
                     def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
                     def version = "${kube_docker_version}"
@@ -395,11 +413,23 @@ def build_publish_binaries () {
                     error('KUBE_DOCKER_CONFORMANCE_REPOSITORY must be set')
                 }
 
-                clone_k8s_repo()
-                gerritPatchsetCheckout {
-                    credentialsId = "mcp-ci-gerrit"
+                if ( env.GERRIT_EVENT_TYPE ) {
+                    clone_k8s_repo()
+                    gerritPatchsetCheckout{
+                        credentialsId = "mcp-ci-gerrit"
+                    }
+                    git_commit_tag_id = generate_git_version()
+                } else {
+                    def gerrit_host = "${env.GERRIT_HOST}"
+                    gitSSHCheckout {
+                        credentialsId = "mcp-ci-gerrit"
+                        branch = "master"
+                        host = "${gerrit_host}"
+                        project = "kubernetes/kubernetes"
+                    }
+                    git_commit_tag_id = git_sha
+                    sh "git checkout ${git_sha}"
                 }
-                def git_commit_tag_id = generate_git_version()
                 def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
                 def kube_build_version = sh(script: 'bash -c \'KUBE_ROOT=$(pwd) && . \
                                                      build/common.sh && kube::build::verify_prereqs >&2 && \
