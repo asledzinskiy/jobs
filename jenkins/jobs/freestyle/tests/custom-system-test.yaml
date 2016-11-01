@@ -3,7 +3,7 @@
     description: 'Run custom system test for "MCP" project'
     node: 'system-test'
     concurrent: true
-    timeout: '60'
+    timeout: '360'
     weight: '1'
     envname: "$JOB_NAME.$BUILD_NUMBER"
     netchecker-agent-dir: "$WORKSPACE/mcp-netchecker-agent"
