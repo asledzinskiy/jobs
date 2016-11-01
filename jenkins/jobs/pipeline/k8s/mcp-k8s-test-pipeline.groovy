@@ -225,17 +225,18 @@ def build_publish_binaries () {
                             }
 
                             sh '''
-                                cat <<EOF>> Dockerfile
+                                mkdir -p tmp
+                                cat <<EOF > tmp/Dockerfile
                                 FROM ${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}
                                 # Apply additional build metadata
                                 LABEL com.mirantis.image-specs.gerrit_change_url="${GERRIT_CHANGE_URL}" \
                                   com.mirantis.image-specs.changeid="${GERRIT_CHANGE_ID}" \
                                   com.mirantis.image-specs.version="${KUBE_DOCKER_VERSION}"
-                                '''
-                                sh '''
+                            '''
+                            sh '''
                                 chmod +x calico calico-ipam
                                 mkdir -p ${WORKSPACE}/kubernetes/artifacts
-                                docker build -t ${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION} .
+                                docker build -t ${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION} tmp
                                 docker run --name "${KUBE_CONTAINER_TMP}" -d -t "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
                                 docker exec -t "${KUBE_CONTAINER_TMP}" /bin/bash -c "/bin/mkdir -p ${CALICO_BINDIR}"
                                 docker cp calico "${KUBE_CONTAINER_TMP}":"${CALICO_BINDIR}/calico"
@@ -266,9 +267,10 @@ def build_publish_binaries () {
                             echo "The job was aborted"
                         } finally {
                             sh '''
-                            docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" || true
-                            docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" || true
-                        '''
+                                docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" || true
+                                docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" || true
+                                rm -rf tmp
+                            '''
                             sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
                         }
                     }
