@@ -138,6 +138,7 @@ def build_publish_binaries () {
     parallel hyperkube_image: {
         stage('hyperkube-build') {
             node('k8s') {
+                sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
                 deleteDir()
 
                 def calico_cni = env.CALICO_CNI
@@ -177,6 +178,17 @@ def build_publish_binaries () {
 
                     def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
                     def version = "${kube_docker_version}"
+                    def kube_build_version = sh(script: 'bash -c \'KUBE_ROOT=$(pwd) && \
+                                                         . build/common.sh && kube::build::verify_prereqs >&2 && \
+                                                         echo ${KUBE_DATA_CONTAINER_NAME}\'',
+                                                returnStdout: true).trim()
+                    def kube_build_image_version = sh(script: 'bash -c \'KUBE_ROOT=$(pwd) && \
+                                                               . build/common.sh && kube::build::verify_prereqs >&2 && \
+                                                               echo ${KUBE_BUILD_IMAGE}\'',
+                            returnStdout: true).trim()
+
+                    sh "docker rm -f ${kube_build_version} || true"
+                    sh "docker rmi -f ${kube_build_image_version} || true"
 
                     withEnv(["VERSION=${version}",
                              "KUBE_DOCKER_VERSION=${kube_docker_version}",
@@ -188,6 +200,8 @@ def build_publish_binaries () {
                              "BUILD_URL=${env.BUILD_URL}",
                              "KUBE_DOCKER_REPOSITORY=${kube_namespace}/${kube_docker_repo}",
                              "KUBE_DOCKER_OWNER=${kube_docker_owner}",
+                             "KUBE_BUILD_VERSION=${kube_build_version}",
+                             "KUBE_BUILD_IMAGE_VERSION=${kube_build_image_version}",
                              "ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory",
                              //"KUBE_DOCKER_REGISTRY=${kube_docker_registry}",
                              "KUBE_CONTAINER_TMP=hyperkube-tmp-${env.BUILD_NUMBER}",
@@ -223,20 +237,18 @@ def build_publish_binaries () {
                                 wget "${CALICO_CNI}" -O calico
                             '''
                             }
-
                             sh '''
-                                mkdir -p tmp
-                                cat <<EOF > tmp/Dockerfile
+                                cat <<EOF > Dockerfile.build
                                 FROM ${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}
                                 # Apply additional build metadata
                                 LABEL com.mirantis.image-specs.gerrit_change_url="${GERRIT_CHANGE_URL}" \
-                                  com.mirantis.image-specs.changeid="${GERRIT_CHANGE_ID}" \
-                                  com.mirantis.image-specs.version="${KUBE_DOCKER_VERSION}"
+                                com.mirantis.image-specs.changeid="${GERRIT_CHANGE_ID}" \
+                                com.mirantis.image-specs.version="${KUBE_DOCKER_VERSION}"
                             '''
                             sh '''
                                 chmod +x calico calico-ipam
                                 mkdir -p ${WORKSPACE}/kubernetes/artifacts
-                                docker build -t ${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION} tmp
+                                docker build -t ${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION} - < Dockerfile.build
                                 docker run --name "${KUBE_CONTAINER_TMP}" -d -t "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
                                 docker exec -t "${KUBE_CONTAINER_TMP}" /bin/bash -c "/bin/mkdir -p ${CALICO_BINDIR}"
                                 docker cp calico "${KUBE_CONTAINER_TMP}":"${CALICO_BINDIR}/calico"
@@ -269,7 +281,9 @@ def build_publish_binaries () {
                             sh '''
                                 docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" || true
                                 docker rmi -f "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}" || true
-                                rm -rf tmp
+                                docker rm -f "${KUBE_BUILD_VERSION}" || true
+                                docker rmi -f "${KUBE_BUILD_IMAGE_VERSION}" || true
+                                rm -f Dockerfile.build
                             '''
                             sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
                         }
@@ -280,6 +294,7 @@ def build_publish_binaries () {
     }, conformance_image: {
         stage('conformance-build') {
             node('k8s') {
+                sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
                 deleteDir()
 
                 def kube_docker_conformance_repository = 'k8s-conformance'
@@ -303,12 +318,26 @@ def build_publish_binaries () {
                 }
                 def git_commit_tag_id = generate_git_version()
                 def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
+                def kube_build_version = sh(script: 'bash -c \'KUBE_ROOT=$(pwd) && . \
+                                                     build/common.sh && kube::build::verify_prereqs >&2 && \
+                                                     echo ${KUBE_DATA_CONTAINER_NAME}\'',
+                        returnStdout: true).trim()
+                def kube_build_image_version = sh(script: 'bash -c \'KUBE_ROOT=$(pwd) && . \
+                                                           build/common.sh && kube::build::verify_prereqs >&2 && \
+                                                           echo ${KUBE_BUILD_IMAGE}\'',
+                        returnStdout: true).trim()
+
+                sh "docker rm -f ${kube_build_version} || true"
+                sh "docker rmi -f ${kube_build_image_version} || true"
+
 
                 withEnv(["WORKSPACE=${env.WORKSPACE}",
                          "KUBE_DOCKER_VERSION=${kube_docker_version}",
                          "REGISTRY=${registry}",
                          "KUBE_DOCKER_REPOSITORY=${kube_namespace}/${kube_docker_repo}",
                          "KUBE_DOCKER_OWNER=${kube_docker_owner}",
+                         "KUBE_BUILD_VERSION=${kube_build_version}",
+                         "KUBE_BUILD_IMAGE_VERSION=${kube_build_image_version}",
                          "ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory",
                          //"KUBE_DOCKER_REGISTRY=${registry}",
                          "KUBE_DOCKER_CONFORMANCE_TAG=${kube_docker_registry}/${kube_namespace}/${kube_docker_conformance_repository}:${kube_docker_version}",
@@ -401,7 +430,11 @@ def build_publish_binaries () {
                     } catch (InterruptedException x) {
                         echo "The job was aborted"
                     } finally {
-                        sh "docker rmi -f ${KUBE_DOCKER_CONFORMANCE_TAG} || true"
+                        sh '''
+                           docker rmi -f ${KUBE_DOCKER_CONFORMANCE_TAG} || true
+                           docker rm -f "${KUBE_BUILD_VERSION}" || true
+                           docker rmi -f "${KUBE_BUILD_IMAGE_VERSION}" || true
+                        '''
                         sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
                     }
                     buildDesc = "${buildDesc}conformance-image: ${kube_docker_registry}/${kube_namespace}/${conformance_docker_repo}:${kube_docker_version}"
