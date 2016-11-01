@@ -96,9 +96,6 @@
             NETCHECKER_SERVER_DIR={netchecker-server-dir}
             ARTIFACTORY_URL={artifactory-url}
 
-      - inject:
-          properties-content: $ADDITIONAL_PARAMETERS
-
       - shell: |
           #!/bin/bash -xe
           echo "=== [systest PRE-script] ==="

@@ -2,6 +2,8 @@
 
 set -axe
 
+source <(echo "${ADDITIONAL_PROPERTIES}")
+
 get_custom_refs () {
   PROJECT="$1"
   TARGET_DIR="$2"
