@@ -69,72 +69,17 @@ node('calico'){
       felixName="${dockerRepository}/${felixImg}:${felixImgTag}-${currentBuildId}-${gitCommit}"
 
       stage ('Run felix unittests'){
-        parallel (
-
-          UnitTest: {
-            // inject COMPARE_BRANCH variable for felix coverage test
-            env.COMPARE_BRANCH = compareBranch
-            sh '''#!/bin/bash
-
-                  set -ex
-
-                  prepare_pyenv () {
-                      PACKAGES=("tox" "coverage")
-                      VENV_PATH="${WORKSPACE}/python-venv-${JOB_NAME}-${BUILD_NUMBER}"
-                      virtualenv "${VENV_PATH}"
-                      source "${VENV_PATH}/bin/activate"
-                      pip install ${PACKAGES[@]}
-                  }
-
-                  clean_pyenv () {
-                    if [ -d "$VIRTUAL_ENV" ]; then
-                        VENV_PATH="$VIRTUAL_ENV"
-                        deactivate
-                        rm -rf "${VENV_PATH}"
-                    fi
-                  }
-
-                  prepare_pyenv
-
-                  if bash -x -c \'VIRTUAL_ENV="" ./run-unit-test.sh\'; then
-                      clean_pyenv
-                      echo "Tests passed!"
-                  else
-                      clean_pyenv
-                      echo "Tests failed!"
-                      exit 1
-                  fi
-            '''
-          },
-
-          PEP8Test: {
-            sh '''#!/bin/bash -ex
-                  if tox -l | grep -qw pep8; then
-                      tox -v -e pep8
-                  fi
-            '''
-          },
-
-          failFast: true
-        ) //parallel
-      } // stage
-
-      // TODO(skulanov): the below should be used if we need to customize building container name
-      // stage ('Build calico-pyi-build image') {
-      //   sh "docker build -t calico-pyi-build -f pyi/Dockerfile ."
-      // }
-
-      // // use build image from prev stage to build binary
-      // stage ('Build calico-felix binary') {
-      //   sh "docker run --user `id -u` --rm -v ${WORKSPACE}/tmp_calico-felix:/code calico-pyi-build /code/pyi/run-pyinstaller.sh"
-      // }
-      stage ('Build calico-felix binary'){
-        sh "./build-pyi-bundle.sh"
+        // inject COMPARE_BRANCH variable for felix coverage test
+        sh "make ut UT_COMPARE_BRANCH=${compareBranch}"
       }
 
-      // build calico/felix image which consumes bin from prev step
+      // GO binary is built as dependency for Docker image,
+      // there is no need to build it in a separate stage
       stage ('Build calico/felix image') {
-        sh "docker build -t ${felixName} ."
+        sh """
+              make felix-docker-image
+              docker tag "calico/felix" ${felixName}
+           """
       }
 
 
