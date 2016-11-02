@@ -232,12 +232,13 @@ def build_publish_binaries () {
                     calico_ipam = "https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam"
                 }
 
-                writeFile file: 'build.sh', text: '''#!/bin/bash -xe
-                        if [ -f ${WORKSPACE}/kubernetes/build/run.sh ]; then
-                          ${WORKSPACE}/kubernetes/build/run.sh make WHAT=cmd/hyperkube
-                        else
-                          ${WORKSPACE}/kubernetes/build-tools/run.sh make WHAT=cmd/hyperkube
-                        fi
+                writeFile file: 'build.sh', text: '''\
+                    #!/bin/bash -xe
+                    if [ -f ${WORKSPACE}/kubernetes/build/run.sh ]; then
+                        ${WORKSPACE}/kubernetes/build/run.sh make WHAT=cmd/hyperkube
+                    else
+                        ${WORKSPACE}/kubernetes/build-tools/run.sh make WHAT=cmd/hyperkube
+                    fi
                 '''.stripIndent()
 
                 dir("${k8s_repo_dir}") {
@@ -288,7 +289,6 @@ def build_publish_binaries () {
                             chmod +x ${WORKSPACE}/build.sh
                             sudo -E -s ${WORKSPACE}/build.sh
                             '''
-
 
                             sh "make -C cluster/images/hyperkube build"
                             echo "Calico injection will happen now..."
@@ -415,87 +415,90 @@ def build_publish_binaries () {
                          //"KUBE_DOCKER_REGISTRY=${registry}",
                          "KUBE_DOCKER_CONFORMANCE_TAG=${kube_docker_registry}/${kube_namespace}/${kube_docker_conformance_repository}:${kube_docker_version}",
                          "ARTIFACTORY_URL=${env.ARTIFACTORY_URL}",
+                         "GERRIT_PATCHSET_REVISION=${env.GERRIT_PATCHSET_REVISION}",
+                         "GERRIT_CHANGE_URL=${env.GERRIT_CHANGE_URL}",
+                         "BUILD_URL=${env.BUILD_URL}",
                          "KUBERNETES_PROVIDER=skeleton",
                          "KUBERNETES_CONFORMANCE_TEST=y",
                          "CALICO_VER=${env.CALICO_VER}"]) {
                     try {
-                        sh """
-                        make -C "${WORKSPACE}" release-skip-tests
-                        mkdir "${WORKSPACE}/_build_test_runner"
-                        mv "${WORKSPACE}/_output/release-tars/kubernetes-test.tar.gz" \
-                           "${WORKSPACE}/_output/release-tars/kubernetes.tar.gz" \
-                           "${WORKSPACE}/_build_test_runner"
-                    """
-                        writeFile file: workspace + '/_build_test_runner/Dockerfile', text: '''\
-                      FROM golang:1.6.3
+                        sh '''
+                            make -C "${WORKSPACE}" release-skip-tests
+                            mkdir "${WORKSPACE}/_build_test_runner"
+                            mv "${WORKSPACE}/_output/release-tars/kubernetes-test.tar.gz" \
+                               "${WORKSPACE}/_output/release-tars/kubernetes.tar.gz" \
+                               "${WORKSPACE}/_build_test_runner"
+                        '''
+                        writeFile file: workspace + '/_build_test_runner/Dockerfile', text: """\
+                            FROM golang:1.6.3
 
-                      RUN mkdir -p /go/src/k8s.io
-                      ADD kubernetes-test.tar.gz /go/src/k8s.io/
-                      ADD kubernetes.tar.gz /go/src/k8s.io/
-                      COPY entrypoint.sh /
-                      RUN chmod +x /entrypoint.sh
-                      WORKDIR /go/src/k8s.io/kubernetes
-                      CMD /entrypoint.sh
-                      LABEL com.mirantis.image-specs.gerrit_change_url="${GERRIT_CHANGE_URL}" \
-                            com.mirantis.image-specs.build_url="${BUILD_URL}" \
-                            com.mirantis.image-specs.patchset="${GERRIT_PATCHSET_REVISION}"
-                    '''.stripIndent()
+                            RUN mkdir -p /go/src/k8s.io
+                            ADD kubernetes-test.tar.gz /go/src/k8s.io/
+                            ADD kubernetes.tar.gz /go/src/k8s.io/
+                            COPY entrypoint.sh /
+                            RUN chmod +x /entrypoint.sh
+                            WORKDIR /go/src/k8s.io/kubernetes
+                            CMD /entrypoint.sh
+                            LABEL com.mirantis.image-specs.gerrit_change_url="${env.GERRIT_CHANGE_URL}" \
+                            com.mirantis.image-specs.build_url="${env.BUILD_URL}" \
+                            com.mirantis.image-specs.patchset="${env.GERRIT_PATCHSET_REVISION}"
+                        """.stripIndent()
 
                         writeFile file: workspace + '/_build_test_runner/entrypoint.sh', text: '''\
-                      #!/bin/bash
-                      set -u -e
+                            #!/bin/bash
+                            set -u -e
 
-                      function escape_test_name() {
-                          sed 's/[]\$*.^|()[]/\\&/g; s/\\s\\+/\\s+/g' <<< "\$1" | tr -d '\n'
-                      }
+                            function escape_test_name() {
+                                sed 's/[]\$*.^|()[]/\\&/g; s/\\s\\+/\\s+/g' <<< "\$1" | tr -d '\n'
+                            }
 
-                      TESTS_TO_SKIP=(
-                          '[k8s.io] Port forwarding [k8s.io] With a server that expects no client request should support a client that connects, sends no data, and disconnects [Conformance]'
-                          '[k8s.io] Port forwarding [k8s.io] With a server that expects a client request should support a client that connects, sends no data, and disconnects [Conformance]'
-                          '[k8s.io] Port forwarding [k8s.io] With a server that expects a client request should support a client that connects, sends data, and disconnects [Conformance]'
-                          '[k8s.io] Downward API volume should update annotations on modification [Conformance]'
-                          '[k8s.io] DNS should provide DNS for services [Conformance]'
-                          '[k8s.io] Kubectl client [k8s.io] Kubectl patch should add annotations for pods in rc [Conformance]'
-                      )
+                            TESTS_TO_SKIP=(
+                                '[k8s.io] Port forwarding [k8s.io] With a server that expects no client request should support a client that connects, sends no data, and disconnects [Conformance]'
+                                '[k8s.io] Port forwarding [k8s.io] With a server that expects a client request should support a client that connects, sends no data, and disconnects [Conformance]'
+                                '[k8s.io] Port forwarding [k8s.io] With a server that expects a client request should support a client that connects, sends data, and disconnects [Conformance]'
+                                '[k8s.io] Downward API volume should update annotations on modification [Conformance]'
+                                '[k8s.io] DNS should provide DNS for services [Conformance]'
+                                '[k8s.io] Kubectl client [k8s.io] Kubectl patch should add annotations for pods in rc [Conformance]'
+                            )
 
-                      function skipped_test_names () {
-                          local first=y
-                          for name in "${TESTS_TO_SKIP[@]}"; do
-                              if [ -z "$first" ]; then
-                                  echo -n "|"
-                              else
-                                  first=
-                              fi
-                              echo -n "$(escape_test_name "$name")\$"
-                          done
-                      }
+                            function skipped_test_names () {
+                                local first=y
+                                for name in "${TESTS_TO_SKIP[@]}"; do
+                                    if [ -z "$first" ]; then
+                                        echo -n "|"
+                                    else
+                                        first=
+                                    fi
+                                    echo -n "$(escape_test_name "$name")\$"
+                                done
+                            }
 
-                      FOCUS="${FOCUS:-}"
-                      API_SERVER="${API_SERVER:-}"
-                      if [ -z "$API_SERVER" ]; then
-                          echo "Must provide API_SERVER env var" 1>&2
-                          exit 1
-                      fi
+                            FOCUS="${FOCUS:-}"
+                            API_SERVER="${API_SERVER:-}"
+                            if [ -z "$API_SERVER" ]; then
+                                echo "Must provide API_SERVER env var" 1>&2
+                                exit 1
+                            fi
 
-                      # Configure kube config
-                      cluster/kubectl.sh config set-cluster local --server="$API_SERVER" --insecure-skip-tls-verify=true
-                      cluster/kubectl.sh config set-context local --cluster=local --user=local
-                      cluster/kubectl.sh config use-context local
+                            # Configure kube config
+                            cluster/kubectl.sh config set-cluster local --server="$API_SERVER" --insecure-skip-tls-verify=true
+                            cluster/kubectl.sh config set-context local --cluster=local --user=local
+                            cluster/kubectl.sh config use-context local
 
-                      if [ -z "$FOCUS" ]; then
-                          # non-serial tests can be run in parallel mode
-                          GINKGO_PARALLEL=y go run hack/e2e.go --v --test -check_version_skew=false \
-                            --check_node_count=false \
-                            --test_args="--ginkgo.focus=\\[Conformance\\] --ginkgo.skip=\\[Serial\\]|\\[Flaky\\]|\\[Feature:.+\\]|$(skipped_test_names)"
+                            if [ -z "$FOCUS" ]; then
+                                # non-serial tests can be run in parallel mode
+                                GINKGO_PARALLEL=y go run hack/e2e.go --v --test -check_version_skew=false \
+                                  --check_node_count=false \
+                                  --test_args="--ginkgo.focus=\\[Conformance\\] --ginkgo.skip=\\[Serial\\]|\\[Flaky\\]|\\[Feature:.+\\]|$(skipped_test_names)"
 
-                          # serial tests must be run without GINKGO_PARALLEL
-                          go run hack/e2e.go --v --test -check_version_skew=false --check_node_count=false \
-                            --test_args="--ginkgo.focus=\\[Serial\\].*\\[Conformance\\] --ginkgo.skip=$(skipped_test_names)"
-                      else
-                          go run hack/e2e.go --v --test -check_version_skew=false --check_node_count=false \
-                            --test_args="--ginkgo.focus=$(escape_test_name "$FOCUS")"
-                      fi
-                    '''.stripIndent()
+                                # serial tests must be run without GINKGO_PARALLEL
+                                go run hack/e2e.go --v --test -check_version_skew=false --check_node_count=false \
+                                  --test_args="--ginkgo.focus=\\[Serial\\].*\\[Conformance\\] --ginkgo.skip=$(skipped_test_names)"
+                            else
+                                go run hack/e2e.go --v --test -check_version_skew=false --check_node_count=false \
+                                  --test_args="--ginkgo.focus=$(escape_test_name "$FOCUS")"
+                            fi
+                        '''.stripIndent()
                         sh 'docker build -t "${KUBE_DOCKER_CONFORMANCE_TAG}" "${WORKSPACE}/_build_test_runner"'
                         stage('conformance-publish') {
                             upload_image_to_artifactory("${kube_docker_registry}", "${kube_namespace}/${conformance_docker_repo}", "${kube_docker_version}", "${docker_dev_repo}")
