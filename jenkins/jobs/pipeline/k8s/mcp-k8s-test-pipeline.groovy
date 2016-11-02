@@ -180,7 +180,8 @@ def build_publish_binaries () {
                     def version = "${kube_docker_version}"
                     def kube_build_version = sh(script: 'bash -c \'KUBE_ROOT=$(pwd) && \
                                                          . build/common.sh && kube::build::verify_prereqs >&2 && \
-                                                         echo ${KUBE_DATA_CONTAINER_NAME}\'',
+                                                         KUBE_DATA_CONTAINER_NAME=${KUBE_DATA_CONTAINER_NAME:-$KUBE_BUILD_DATA_CONTAINER_NAME} && \
+                                                         echo $KUBE_DATA_CONTAINER_NAME\'',
                                                 returnStdout: true).trim()
                     def kube_build_image_version = sh(script: 'bash -c \'KUBE_ROOT=$(pwd) && \
                                                                . build/common.sh && kube::build::verify_prereqs >&2 && \
@@ -320,7 +321,8 @@ def build_publish_binaries () {
                 def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
                 def kube_build_version = sh(script: 'bash -c \'KUBE_ROOT=$(pwd) && . \
                                                      build/common.sh && kube::build::verify_prereqs >&2 && \
-                                                     echo ${KUBE_DATA_CONTAINER_NAME}\'',
+                                                     KUBE_DATA_CONTAINER_NAME=${KUBE_DATA_CONTAINER_NAME:-$KUBE_BUILD_DATA_CONTAINER_NAME} && \
+                                                     echo $KUBE_DATA_CONTAINER_NAME\'',
                         returnStdout: true).trim()
                 def kube_build_image_version = sh(script: 'bash -c \'KUBE_ROOT=$(pwd) && . \
                                                            build/common.sh && kube::build::verify_prereqs >&2 && \
