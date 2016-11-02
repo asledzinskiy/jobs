@@ -1,5 +1,6 @@
 - job-template:
     name: mcp-k8s-hyperkube-test-all
+    disabled: true
     description: 'Run MCP system tests for "hyperkube" project'
     node: k8s
     concurrent: true

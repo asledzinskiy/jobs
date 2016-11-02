@@ -1,5 +1,6 @@
 - job-template:
     name: mcp-k8s-e2e-conformance
+    disabled: true
     description: |
       Kubernetes e2e conformance tests
     node: k8s-e2e

@@ -1,5 +1,6 @@
 - job-template:
     name: mcp-k8s-conformance-test-runner
+    disabled: true
     description: |
       Kubernetes Conformance Test Runner build job is invoked on merge events<br>
       Publishes Kubernetes Conformance images to the {mcp-k8s-registry} registry.

@@ -1,5 +1,6 @@
 - job-template:
     name: mcp-k8s-test-unit
+    disabled: true
     description: |
       Kubernetes unit test
     node: k8s

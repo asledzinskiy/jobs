@@ -1,5 +1,6 @@
 - job-template:
     name: mcp-k8s-hyperkube
+    disabled: true
     description: |
       Kubernetes Hyperkube build job is triggered on merge events.<br>
       Publishes stable Hyperkube images to the {mcp-k8s-registry} registry.

@@ -1,5 +1,6 @@
 - job-template:
     name: mcp-k8s-hyperkube-ci
+    disabled: true
     description: |
       Kubernetes Hyperkube build job is triggered on creating patchsets.<br>
       Publishes test Hyperkube images to the {mcp-k8s-ci-registry} registry.

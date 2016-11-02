@@ -1,5 +1,6 @@
 - job-template:
     name: mcp-k8s-test-integration
+    disabled: true
     description: |
       Kubernetes integration tests
     node: k8s
