@@ -2,7 +2,7 @@
 
 set -axe
 
-source <(echo "${ADDITIONAL_PROPERTIES}")
+source <(echo "${ADDITIONAL_PARAMETERS}")
 
 get_custom_refs () {
   PROJECT="$1"
