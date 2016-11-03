@@ -129,7 +129,7 @@ fi
 
 # run tests
 declare -a TEST_ARGS
-TEST_ARGS=("-s")
+TEST_ARGS=("-s -ra")
 
 if [[ -n "${TEST_PATH}" && "${TEST_PATH}" != "none" ]]; then
   TEST_ARGS+=("${TEST_PATH}")
