@@ -53,7 +53,7 @@ node('calico'){
       }
       // TODO(apanchenko): replace `sed` by Yaml.load() -> modify map -> Yaml.dump()
       sh """
-        sed -e '/^- name: .*\\/libcalico-go\$/{n;s/version:.*\$/repo: file:\\/\\/\\/go\\/src\\/github.com\\/projectcalico\\/libcalico-go\\n  vcs: git/;}' -i.bak glide.lock
+        sed -e '/^- name: .*\\/libcalico-go\$/a \\  repo: file:\\/\\/\\/go\\/src\\/github.com\\/projectcalico\\/libcalico-go\\n  vcs: git' -i.bak glide.lock
         grep -qP '.*repo:\\s+file:.*libcalico-go' glide.lock || { echo 1>&2 \'Repository (libcalico-go) path was not properly set in glide.lock!'; exit 1; }
         """
       sh "LIBCALICOGO_PATH=${LIBCALICOGO_PATH} make build-containerized"
