@@ -44,7 +44,7 @@ node('calico'){
         currentBuildId = env.GERRIT_CHANGE_NUMBER
         compareBranch = "gerrit/${env.GERRIT_BRANCH}"
 
-        stage ('Checkout calico-containers'){
+        stage ('Checkout felix'){
           gerritPatchsetCheckout {
             credentialsId = "mcp-ci-gerrit"
             withWipeOut = true
@@ -54,7 +54,7 @@ node('calico'){
         currentBuildId = "mcp"
         compareBranch = "origin/mcp"
 
-        stage ('Checkout calico-containers'){
+        stage ('Checkout felix'){
           gitSSHCheckout {
             credentialsId = "mcp-ci-gerrit"
             branch = "mcp"

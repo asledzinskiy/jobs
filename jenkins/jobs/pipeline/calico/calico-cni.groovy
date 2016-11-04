@@ -42,7 +42,7 @@ node('calico'){
 
 
     // TODO(skulanov) GO_CONTAINER_NAME should be defined some arti image
-    stage ('Build calico-cni') {
+    stage ('Build libcalico-go') {
       def LIBCALICOGO_PATH = "${WORKSPACE}/tmp_libcalico-go"
       gitSSHCheckout {
         credentialsId = "mcp-ci-gerrit"

@@ -37,7 +37,7 @@ node('calico'){
       if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
         currentBuildId = env.GERRIT_CHANGE_NUMBER
 
-        stage ('Checkout calico-containers'){
+        stage ('Checkout calico-bird'){
           gerritPatchsetCheckout {
             credentialsId = "mcp-ci-gerrit"
             withWipeOut = true
@@ -46,7 +46,7 @@ node('calico'){
       } else {
         currentBuildId = "mcp"
 
-        stage ('Checkout calico-containers'){
+        stage ('Checkout calico-bird'){
           gitSSHCheckout {
             credentialsId = "mcp-ci-gerrit"
             branch = "mcp"
