@@ -1,7 +1,10 @@
 def tools = new ci.mcp.Tools()
 def buildInfo = Artifactory.newBuildInfo()
-def properties = tools.getBinaryBuildProperties()
+def custom_properties = ['latest=true'] as ArrayList
+def properties = tools.getBinaryBuildProperties(custom_properties)
 def server = Artifactory.server('mcp-ci')
+def repo_target = 'vm-images/packer/'
+def artifactory_api_url = 'https://artifactory.mcp.mirantis.net/artifactory/api/storage/'
 
 node('builder') {
 
@@ -49,11 +52,17 @@ node('builder') {
 
   dir('output-images') {
     stage('Publish the qcow2 image') {
+      // set com.mirantis.latest to false on all related artifacts first
+      custom_properties = ['com.mirantis.latest':'false']
+      def artifact_url = artifactory_api_url + repo_target
+      tools.setProperties(artifact_url, custom_properties, true)
+
+      // the new artifact will have com.mirantis.latest set to true
       def uploadSpec = """{
         "files": [
                 {
                     "pattern": "*.qcow2",
-                    "target": "vm-images/packer/",
+                    "target": "${repo_target}",
                     "props": "${properties}"
                 }
             ]
