@@ -42,6 +42,11 @@
       - shell:
           !include-raw-escape:
             '../../builders/codesync.py'
+
+      - description-setter:
+          regexp: '^.*Change-Id: \s*(.*)'
+          description: '<a href="{gerrit-url}/#/q/change:\1">Change request</a>'
+
     triggers:
         - timed: '{timer}'
     node: '{sync-node}'
