@@ -77,8 +77,8 @@ node('calico'){
       // there is no need to build it in a separate stage
       stage ('Build calico/felix image') {
         sh """
-              make felix-docker-image
-              docker tag "calico/felix" ${felixName}
+              make calico/felix
+              docker tag calico/felix ${felixName}
            """
       }
 
