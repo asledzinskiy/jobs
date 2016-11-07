@@ -49,7 +49,7 @@ node('calico'){
     }
 
     // Run unit tests
-    stage ('Run unittest') { sh "make ut"  }
+    stage ('Run unittest') { sh "make test-containerized"  }
 
     // build calico-containers
     def calicoContainersArts = buildCalicoContainers {
