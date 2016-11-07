@@ -4,7 +4,8 @@
     - post-tasks:
       - matches:
         - log-text: 'Build timed out'
-          operator: AND
+          operator: OR
+        - log-text: 'Build was aborted'
         script: |
           #!/bin/bash
           set -ex
