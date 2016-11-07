@@ -6,6 +6,7 @@ node('calico'){
 
     def server = Artifactory.server("mcp-ci")
     def artifactoryUrl = "${env.ARTIFACTORY_URL}/projectcalico"
+    def dockerRepository = env.DOCKER_REGISTRY
 
     def buildInfo = Artifactory.newBuildInfo()
     buildInfo.env.capture = true
@@ -40,10 +41,9 @@ node('calico'){
     def gitCommit = tools.getGitCommit().take(7)
     def cniBuildId = "${currentBuildId}-${gitCommit}"
 
+    stage ('Switch do the downstream libcalico-go') {
+      def LIBCALICOGO_PATH = "${env.WORKSPACE}/tmp_libcalico-go"
 
-    // TODO(skulanov) GO_CONTAINER_NAME should be defined some arti image
-    stage ('Build calico-cni') {
-      def LIBCALICOGO_PATH = "${WORKSPACE}/tmp_libcalico-go"
       gitSSHCheckout {
         credentialsId = "mcp-ci-gerrit"
         branch = "mcp"
@@ -51,14 +51,31 @@ node('calico'){
         project = "projectcalico/libcalico-go"
         targetDir = "${LIBCALICOGO_PATH}"
       }
+
       // TODO(apanchenko): replace `sed` by Yaml.load() -> modify map -> Yaml.dump()
       sh """
         sed -e '/^- name: .*\\/libcalico-go\$/a \\  repo: file:\\/\\/\\/go\\/src\\/github.com\\/projectcalico\\/libcalico-go\\n  vcs: git' -i.bak glide.lock
         grep -qP '.*repo:\\s+file:.*libcalico-go' glide.lock || { echo 1>&2 \'Repository (libcalico-go) path was not properly set in glide.lock!'; exit 1; }
         """
-      sh "LIBCALICOGO_PATH=${LIBCALICOGO_PATH} make build-containerized"
+
+      sh "LIBCALICOGO_PATH=${LIBCALICOGO_PATH} make vendor"
     }
 
+    // TODO(apanchenko): GO_CONTAINER_NAME should be defined some arti image
+    stage ('Unit tests') {
+      // TODO(apanchenko): run 'static-checks' inside Docker container,
+      // TODO(apanchenko): see https://github.com/projectcalico/calico-cni/pull/207
+      sh "echo 'make test-containerized'"
+    }
+
+    // TODO(skulanov) GO_CONTAINER_NAME should be defined some arti image
+    stage ('Build calico-cni') {
+      sh "make docker-image"
+      CALICO_CNI_IMAGE_REPO="${dockerRepository}/projectcalico/calico-cni"
+      // TODO(apanchenko): use info from `git describe --tags` here
+      CALICO_CNI_IMAGE_TAG = cniBuildId
+      sh "docker tag calico/cni ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG}"
+    }
 
     stage('Publishing cni artifacts') {
       dir("artifacts"){
@@ -82,6 +99,8 @@ node('calico'){
                     calico_cni_checksum: ${CALICO_CNI_CHECKSUM}
                     calico_cni_ipam_download_url: ${CALICO_CNI_IPAM_DOWNLOAD_URL}
                     calico_cni_ipam_checksum: ${CALICO_CNI_IPAM_CHECKSUM}
+                    calico_cni_image_repo: ${CALICO_CNI_IMAGE_REPO}
+                    calico_cni_image_tag: ${CALICO_CNI_IMAGE_TAG}
                   """.stripIndent()
 
         def properties = tools.getBinaryBuildProperties()
@@ -99,6 +118,19 @@ node('calico'){
         // Upload to Artifactory.
         server.upload(uploadSpec, buildInfo)
       }
+
+      withCredentials([
+        [$class: 'UsernamePasswordMultiBinding',
+          credentialsId: 'artifactory',
+          passwordVariable: 'ARTIFACTORY_PASSWORD',
+          usernameVariable: 'ARTIFACTORY_LOGIN']
+      ]) {
+        sh """
+          echo 'Pushing images'
+          docker login -u ${ARTIFACTORY_LOGIN} -p ${ARTIFACTORY_PASSWORD} ${dockerRepository}
+          docker push ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG}
+        """
+      }
     } // publishing cni artifacts
 
     // publish buildInfo
@@ -112,6 +144,8 @@ node('calico'){
               [$class: 'StringParameterValue', name: 'CALICO_CNI_CHECKSUM', value: CALICO_CNI_CHECKSUM],
               [$class: 'StringParameterValue', name: 'CALICO_CNI_IPAM_DOWNLOAD_URL', value: CALICO_CNI_IPAM_DOWNLOAD_URL],
               [$class: 'StringParameterValue', name: 'CALICO_CNI_IPAM_CHECKSUM', value: CALICO_CNI_IPAM_CHECKSUM],
+              [$class: 'StringParameterValue', name: 'CALICO_CNI_IMAGE_REPO', value: CALICO_CNI_IMAGE_REPO],
+              [$class: 'StringParameterValue', name: 'CALICO_CNI_IMAGE_TAG', value: CALICO_CNI_IMAGE_TAG],
               [$class: 'StringParameterValue', name: 'OVERWRITE_HYPERKUBE_CNI', value: 'true'],
               [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
           ]
