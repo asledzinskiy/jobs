@@ -104,16 +104,18 @@ node('calico'){
     // publish buildInfo
     server.publishBuildInfo buildInfo
 
-    stage ("Run system tests") {
-       build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
-        [
-            [$class: 'StringParameterValue', name: 'CALICO_CNI_DOWNLOAD_URL', value: CALICO_CNI_DOWNLOAD_URL],
-            [$class: 'StringParameterValue', name: 'CALICO_CNI_CHECKSUM', value: CALICO_CNI_CHECKSUM],
-            [$class: 'StringParameterValue', name: 'CALICO_CNI_IPAM_DOWNLOAD_URL', value: CALICO_CNI_IPAM_DOWNLOAD_URL],
-            [$class: 'StringParameterValue', name: 'CALICO_CNI_IPAM_CHECKSUM', value: CALICO_CNI_IPAM_CHECKSUM],
-            [$class: 'StringParameterValue', name: 'OVERWRITE_HYPERKUBE_CNI', value: 'true'],
-            [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
-        ]
+    if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
+      stage ("Run system tests") {
+         build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
+          [
+              [$class: 'StringParameterValue', name: 'CALICO_CNI_DOWNLOAD_URL', value: CALICO_CNI_DOWNLOAD_URL],
+              [$class: 'StringParameterValue', name: 'CALICO_CNI_CHECKSUM', value: CALICO_CNI_CHECKSUM],
+              [$class: 'StringParameterValue', name: 'CALICO_CNI_IPAM_DOWNLOAD_URL', value: CALICO_CNI_IPAM_DOWNLOAD_URL],
+              [$class: 'StringParameterValue', name: 'CALICO_CNI_IPAM_CHECKSUM', value: CALICO_CNI_IPAM_CHECKSUM],
+              [$class: 'StringParameterValue', name: 'OVERWRITE_HYPERKUBE_CNI', value: 'true'],
+              [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
+          ]
+      }
     }
 
   }

@@ -152,14 +152,16 @@ node('calico'){
     // publish buildInfo
     server.publishBuildInfo buildInfo
 
-    stage ("Run system tests") {
-       build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
-        [
-            [$class: 'StringParameterValue', name: 'CALICO_NODE_IMAGE_REPO', value: calicoContainersArts["CALICO_NODE_IMAGE_REPO"]],
-            [$class: 'StringParameterValue', name: 'CALICOCTL_IMAGE_REPO', value: calicoContainersArts["CALICOCTL_IMAGE_REPO"]],
-            [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: calicoContainersArts["CALICO_VERSION"]],
-            [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
-        ]
+    if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
+      stage ("Run system tests") {
+         build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
+          [
+              [$class: 'StringParameterValue', name: 'CALICO_NODE_IMAGE_REPO', value: calicoContainersArts["CALICO_NODE_IMAGE_REPO"]],
+              [$class: 'StringParameterValue', name: 'CALICOCTL_IMAGE_REPO', value: calicoContainersArts["CALICOCTL_IMAGE_REPO"]],
+              [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: calicoContainersArts["CALICO_VERSION"]],
+              [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
+          ]
+      }
     }
 
   }
