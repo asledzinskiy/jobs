@@ -1,6 +1,7 @@
 - job-template:
-    name: 'k8s.system-test.{test-name}'
-    description: 'Run system test "{test-name}" for "k8s" project'
+    name: 'k8s.system-test.{test-expression}'
+    description: 'Run system test "{test-expression}" for "k8s" project'
+    test-expression: 'none'
     node: 'system-test'
     concurrent: true
     timeout: '60'
@@ -31,7 +32,7 @@
         default: 'no'
         description: 'If yes/true, then DO NOT ERASE existing environment'
     - systest-params:
-        test-expression: '{test-name}'
+        test-expression: '{test-expression}'
         mcp-k8s-ci-registry: '{mcp-k8s-ci-registry}'
         mcp-branch: 'mcp-0.1'
         image_link: '{image_link}'

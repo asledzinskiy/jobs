@@ -1,6 +1,7 @@
 - job-template:
     name: 'calico.system-test.{test-name}'
     description: 'Run system test "{test-name}" for "Calico" project'
+    test-expression: 'none'
     node: 'system-test'
     concurrent: true
     timeout: '60'
@@ -33,6 +34,7 @@
         default: 'no'
         description: 'If yes/true, then DO NOT ERASE existing environment'
     - systest-params:
+        test-expression: '{test-expression}'
         mcp-branch: 'mcp'
         image_link: '{image_link}'
         image_path: '{image_path}'

@@ -243,6 +243,6 @@
     description: 'k8s gate tests'
     weight: '1'
     jobs:
-     - 'k8s.system-test.{test-name}':
-         test-name: 'test_k8s_installed_custom'
+     - 'k8s.system-test.{test-expression}':
+         test-expression: 'test_k8s_installed_custom'
 

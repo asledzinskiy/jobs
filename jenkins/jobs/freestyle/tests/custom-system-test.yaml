@@ -1,6 +1,7 @@
 - job-template:
     name: 'mcp.system-test.custom'
     description: 'Run custom system test for "MCP" project'
+    test-expression: 'none'
     node: 'system-test'
     concurrent: true
     timeout: '360'
@@ -40,6 +41,7 @@
         default: 'master'
 
     - systest-params:
+        test-expression: '{test-expression}'
         mcp-branch: 'mcp'
         image_link: '{image_link}'
         image_path: '{image_path}'

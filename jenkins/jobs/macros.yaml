@@ -59,7 +59,7 @@
     parameters:
     - string:
         name: TEST_EXPRESSION
-        default: "none"
+        default: '{test-expression}'
         description: "Tests will be executed with '-k' option. Example: 'test_method or test other'"
     - string:
         name: HYPERKUBE_IMAGE_REPO
