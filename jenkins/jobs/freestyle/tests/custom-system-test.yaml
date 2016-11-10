@@ -41,6 +41,7 @@
         default: 'master'
 
     - systest-params:
+        docker-prod-virtual: '{docker-prod-virtual}'
         test-expression: '{test-expression}'
         mcp-branch: 'mcp'
         image_link: '{image_link}'

@@ -39,19 +39,37 @@ EOF
 }
 
 set_latest_k8s_artifacts () {
-    HYPERKUBE_IMAGES_DIR="mcp-k8s"
-    set +x
-    HYPERKUBE_LATEST=$(curl -s -u "${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD}" \
-    "${ARTIFACTORY_URL}/api/storage/${HYPERKUBE_IMAGES_DIR}/images-info/?lastModified")
-    HYPERKUBE_LATEST_LINK=$(echo "$HYPERKUBE_LATEST" | \
-    python -c 'import sys,json; print json.load(sys.stdin)["uri"]')
-    HYPERKUBE_LATEST_YAML=$(curl -s -u "${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD}" \
-    "${HYPERKUBE_LATEST_LINK}" |
-    python -c 'import sys,json; print json.load(sys.stdin)["downloadUri"]')
-    HYPERKUBE_LATEST_ARTIFACTS=$(curl -s -u "${ARTIFACTORY_LOGIN}:${ARTIFACTORY_PASSWORD}" \
-    "${HYPERKUBE_LATEST_YAML}" | sed "s/e2e_conformance/hyperkube/g")
-    set -x
-    export_params_from_yaml "${HYPERKUBE_LATEST_ARTIFACTS}" "hyperkube"
+    DOCKER_REGISTRY="${HYPERKUBE_IMAGE_REPO%%/*}"
+    DOCKER_IMAGE="${HYPERKUBE_IMAGE_REPO#*/}"
+
+    python2 <<EOF
+import requests, sys
+
+requests.packages.urllib3.disable_warnings()
+
+tags_link ='https://${DOCKER_REGISTRY}/v2/${DOCKER_IMAGE}/tags/list'
+digest_link = 'https://${DOCKER_REGISTRY}/v2/${DOCKER_IMAGE}/manifests/{tag}'
+
+def get_digest(tag):
+    return requests.get(digest_link.format(tag=tag),
+                        headers={
+                            'Accept': 'application/vnd.docker.distribution.manifest.v2+json'
+                            }
+                        ).headers['Docker-Content-Digest']
+
+latest_digest = get_digest('latest')
+same_digest_tags = set([])
+
+for tag in requests.get(tags_link).json()['tags']:
+    if tag == 'latest':
+        continue
+    if get_digest(tag) == latest_digest:
+        same_digest_tags.add(tag)
+
+sys.stderr.write("The following image tags point to the 'latest' "
+       "now: [{0}]\n".format(" ".join(same_digest_tags)))
+print same_digest_tags.pop() if same_digest_tags else 'latest'
+EOF
 }
 
 set_latest_calico_containers_artifacts () {
@@ -106,7 +124,11 @@ echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE
 # set version of downstream k8s artifacts
 if printenv &>/dev/null HYPERKUBE_IMAGE_TAG && \
    [[ -z "${HYPERKUBE_IMAGE_TAG}" || "${HYPERKUBE_IMAGE_TAG}" == "latest" ]]; then
-    set_latest_k8s_artifacts
+    if [ -n "${HYPERKUBE_IMAGE_REPO}" ]; then
+        HYPERKUBE_IMAGE_TAG=$(set_latest_k8s_artifacts)
+    else
+        echo "HYPERKUBE_IMAGE_REPO variable isn't set, can't inspect 'latest' image!"
+    fi
 fi
 
 # set version of downstream calico artifacts

@@ -32,6 +32,7 @@
         default: 'no'
         description: 'If yes/true, then DO NOT ERASE existing environment'
     - systest-params:
+        docker-prod-virtual: '{docker-prod-virtual}'
         test-expression: '{test-expression}'
         mcp-k8s-ci-registry: '{mcp-k8s-ci-registry}'
         mcp-branch: 'mcp'
