@@ -230,6 +230,18 @@
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
+
+- project:
+    name: mcp-ci-infra
+    jobs:
+    - '{project-name}-tox-{testenv}':
+        project-name: gitrepo
+        project-space: mcp-ci
+        testenv:
+          - py27
+          - py34
+          - pep8
+
 - project:
     name: download-mcp-systest-image
     jobs:
