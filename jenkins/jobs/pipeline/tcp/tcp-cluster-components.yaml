@@ -1,0 +1,37 @@
+- job-template:
+    name: build-docker-{component}
+    description: |
+      Build {component} docker image
+    project-type: workflow
+    concurrent: false
+    parameters:
+    - tcp-common-params:
+        gerrit-host: '{gerrit-host}'
+        gerrit-port: '{gerrit-port}'
+        artifactory-url: '{artifactory-url}'
+        out-repo: 'out-docker-{component}'
+        artifactory-docker: '{artifactory-docker}'
+        pipelines-lib: 'tcp/ccp-pipeline-libs'
+
+    triggers:
+      - pollscm:
+          cron: "H/5 * * * *"
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: ANT
+              project-pattern: 'tcp/ccp-docker-{component}'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+    workflow-scm:
+      scm:
+        basic-scm:
+          branch: 'master'
+          project: 'tcp/ccp-docker-{component}'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+      script-path: Jenkinsfile

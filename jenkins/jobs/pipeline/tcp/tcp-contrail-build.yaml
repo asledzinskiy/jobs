@@ -1,0 +1,58 @@
+- job-template:
+    name: build-opencontrail-oc30-debian-jessie
+    description: |
+      Build OpenContrail
+    project-type: workflow
+    concurrent: false
+    parameters:
+    - tcp-common-params:
+        gerrit-host: '{gerrit-host}'
+        gerrit-port: '{gerrit-port}'
+        artifactory-url: '{artifactory-url}'
+        out-repo: 'out-debian-jessie-oc30'
+        artifactory-docker: '{artifactory-docker}'
+        pipelines-lib: 'tcp/ccp-pipeline-libs'
+    - tcp-source-params:
+        source-gerrit-user: 'mcp-ci-gerrit'
+        source-gerrit-host: '{gerrit-host}'
+        source-gerrit-port: '{gerrit-port}'
+        project: 'tcp'
+        branch: 'R3.0.2.x'
+    - string:
+        name: OS
+        default: 'debian'
+    - string:
+        name: DIST
+        default: 'jessie'
+    - string:
+        name: ARCH
+        default: 'amd64'
+    - string:
+        name: BUILD_DPDK
+        default: 'false'
+    - string:
+        name: DPDK_VERSION
+        default: '2.1.0'
+
+    triggers:
+      - pollscm:
+          cron: "H/5 * * * *"
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: ANT
+              project-pattern: 'tcp/contrail-**'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: 'R3.0.2.x'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+    workflow-scm:
+      scm:
+        basic-scm:
+          branch: 'master'
+          project: 'tcp/ccp-contrail-pipeline'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+      script-path: Jenkinsfile

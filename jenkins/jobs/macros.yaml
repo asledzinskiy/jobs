@@ -156,6 +156,63 @@
           NAME1=VALUE1</br>
           NAME1=VALUE1
 
+- parameter:
+    name: tcp-openstack-params
+    parameters:
+    - string:
+        name: SOURCE_REQUIREMENTS_URL
+        default: 'ssh://{source-gerrit-user}@{source-gerrit-host}:{source-gerrit-port}/{requirements-project}'
+    - string:
+        name: SOURCE_REQUIREMENTS_BRANCH
+        default: '{branch}'
+
+- parameter:
+    name: tcp-source-params
+    parameters:
+    - string:
+        name: SOURCE_URL
+        default: 'ssh://{source-gerrit-user}@{source-gerrit-host}:{source-gerrit-port}/{project}'
+    - string:
+        name: SOURCE_BRANCH
+        default: '{branch}'
+    - string:
+        name: SOURCE_CREDENTIALS
+        default: 'mcp-ci-gerrit'
+
+- parameter:
+    name: tcp-common-params
+    parameters:
+    - string:
+        name: ARTIFACTORY_URL
+        default: '{artifactory-url}'
+    - string:
+        name: ARTIFACTORY_OUT_REPO
+        default: '{out-repo}'
+    - string:
+        name: DOCKER_REGISTRY_SERVER
+        default: '{artifactory-docker}'
+    - string:
+        name: DOCKER_REGISTRY_SSL
+        default: 'true'
+    - string:
+        name: FORCE_BUILD
+        default: 'false'
+    - string:
+        name: PROMOTE_ENV
+        default: 'stable'
+    - string:
+        name: KEEP_REPOS
+        default: 'false'
+    - string:
+        name: PIPELINE_LIBS_URL
+        default: 'ssh://mcp-ci-gerrit@{gerrit-host}:{gerrit-port}/{pipelines-lib}'
+    - string:
+        name: PIPELINE_LIBS_BRANCH
+        default: 'master'
+    - string:
+        name: PIPELINE_LIBS_CREDENTIALS_ID
+        default: 'mcp-ci-gerrit'
+
 - builder:
     name: get-systest-image
     builders:
@@ -182,3 +239,14 @@
             - job-discover
             - job-extended-read
             - job-read
+
+- scm:
+    name: basic-scm
+    scm:
+      - git:
+          branches:
+            - '{branch}'
+          remotes:
+            - gerrit:
+                url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/{project}'
+                credentials-id: 'mcp-ci-gerrit'

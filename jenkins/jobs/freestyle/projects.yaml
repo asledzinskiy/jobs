@@ -258,3 +258,26 @@
      - 'k8s.system-test.{test-mark}':
          test-mark: 'k8s_installed_custom'
 
+- project:
+    name: tcp-build
+    jobs:
+      - 'build-docker-openstack-{branch}-{os-project}'
+      - 'build-docker-openstack-{branch}-neutron'
+      - 'build-opencontrail-oc30-debian-jessie'
+      - 'build-docker-{component}'
+    os-project:
+      - cinder
+      - glance
+      - heat
+      - keystone
+      - nova
+    branch:
+      - mitaka
+      - newton
+    component:
+      - calico
+      - galera
+      - hyperkube
+      - libvirt
+      - memcached
+      - rabbitmq
