@@ -132,11 +132,12 @@ if printenv &>/dev/null HYPERKUBE_IMAGE_TAG && \
 fi
 
 # set version of downstream calico artifacts
-if printenv &>/dev/null CALICO_VERSION && \
-   [[ -z "${CALICO_VERSION}" || "${CALICO_VERSION}" == "latest" ]]; then
-    set_latest_calico_containers_artifacts
-    export CALICOCTL_IMAGE_TAG="${CALICO_VERSION}"
-    export CALICO_NODE_IMAGE_TAG="${CALICO_VERSION}"
+if printenv &>/dev/null CALICO_VERSION; then
+    if [[ -z "${CALICO_VERSION}" || "${CALICO_VERSION}" == "latest" ]]; then
+        set_latest_calico_containers_artifacts
+    fi
+    export CALICOCTL_IMAGE_TAG="${CALICOCTL_IMAGE_TAG:-${CALICO_VERSION}}"
+    export CALICO_NODE_IMAGE_TAG="${CALICO_NODE_IMAGE_TAG:-${CALICO_VERSION}}"
 fi
 if [[ "${OVERWRITE_HYPERKUBE_CNI}" == "true" ]]; then
     if printenv &>/dev/null CALICO_CNI_DOWNLOAD_URL && \
