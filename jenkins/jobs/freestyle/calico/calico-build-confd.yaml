@@ -1,5 +1,6 @@
 - job-template:
     name: calico-build-confd
+    disabled: true
     description: |
       Build artifacts<br>
       This is simple job without storing artifacts, only for first stage of

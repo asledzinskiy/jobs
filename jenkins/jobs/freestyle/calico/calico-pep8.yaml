@@ -1,5 +1,6 @@
 - job-template:
     name: calico-pep8-{project-name}
+    disabled: true
     description: |
       Run pep8 style check for calico
     node: calico

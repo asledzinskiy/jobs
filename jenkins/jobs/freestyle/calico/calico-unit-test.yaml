@@ -1,5 +1,6 @@
 - job-template:
     name: calico-unit-test
+    disabled: true
     project-name: calico
     description: |
       Run unit tests for Calico
