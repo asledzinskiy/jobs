@@ -161,6 +161,8 @@ if [[ -n "${TEST_PATH}" && "${TEST_PATH}" != "none" ]]; then
   TEST_ARGS+=("${TEST_PATH}")
 elif [[ -n "${TEST_EXPRESSION}" && "${TEST_EXPRESSION}" != "none" ]]; then
   TEST_ARGS+=("-k" "${TEST_EXPRESSION}")
+elif [[ -n "${TEST_MARK}" && "${TEST_MARK}" != "none" ]]; then
+  TEST_ARGS+=("-m" "${TEST_MARK}")
 fi
 
 if [[ "$VERBOSE" == 'true' ]]; then

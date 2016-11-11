@@ -1,7 +1,8 @@
 - job-template:
-    name: 'k8s.system-test.{test-expression}'
-    description: 'Run system test "{test-expression}" for "k8s" project'
+    name: 'k8s.system-test.{test-mark}'
+    description: 'Run system test "{test-mark}" for "k8s" project'
     test-expression: 'none'
+    test-mark: 'none'
     node: 'system-test'
     concurrent: true
     timeout: '60'
@@ -23,6 +24,10 @@
         name: TEST_PATH
         default: "none"
         description: "Path to the test module/class/function"
+    - string:
+        name: TEST_MARK
+        default: '{test-mark}'
+        description: "Pytest mark to be used as test identifier it will be passed with -m parameter"
     - string:
         name: KEEP_BEFORE
         default: 'no'
