@@ -84,7 +84,7 @@ node('calico'){
 
     }// dir
 
-    def artifactoryUrl = "https://artifactory.mcp.mirantis.net/artifactory/projectcalico"
+    def artifactoryUrl = "${env.ARTIFACTORY_URL}/projectcalico"
     def birdBuildId = "${artifactoryUrl}/${currentBuildId}/calico-bird/lastbuild".toURL().text.trim()
 
     // start building calico-containers

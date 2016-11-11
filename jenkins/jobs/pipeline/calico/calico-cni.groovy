@@ -5,7 +5,7 @@ node('calico'){
     def tools = new ci.mcp.Tools()
 
     def server = Artifactory.server("mcp-ci")
-    def artifactoryUrl = "https://artifactory.mcp.mirantis.net/artifactory/projectcalico"
+    def artifactoryUrl = "${env.ARTIFACTORY_URL}/projectcalico"
 
     def buildInfo = Artifactory.newBuildInfo()
     buildInfo.env.capture = true

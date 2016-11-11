@@ -58,6 +58,10 @@
       - string:
           name: DOCKER_REGISTRY
           default: '{mcp-k8s-ci-registry}'
+      - string:
+          name: ARTIFACTORY_URL
+          default: '{artifactory-url}'
+          desription: 'Custom Artifactory URL'
 
     triggers:
       - gerrit:
@@ -95,6 +99,10 @@
       - string:
           name: DOCKER_REGISTRY
           default: '{mcp-k8s-ci-registry}'
+      - string:
+          name: ARTIFACTORY_URL
+          default: '{artifactory-url}'
+          desription: 'Custom Artifactory URL'
 
     triggers:
       - gerrit:
@@ -206,6 +214,10 @@
       - string:
           name: DOCKER_REGISTRY
           default: '{mcp-k8s-ci-registry}'
+      - string:
+          name: ARTIFACTORY_URL
+          default: '{artifactory-url}'
+          desription: 'Custom Artifactory URL'
 
     triggers:
       - gerrit:
