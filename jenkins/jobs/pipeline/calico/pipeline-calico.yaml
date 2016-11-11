@@ -11,6 +11,9 @@
       - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{mcp-k8s-ci-registry}'
 
     triggers:
       - gerrit:
@@ -38,6 +41,9 @@
       - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{mcp-k8s-ci-registry}'
 
     triggers:
       - gerrit:
@@ -64,6 +70,9 @@
       - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{mcp-k8s-ci-registry}'
 
     triggers:
       - gerrit:
@@ -90,6 +99,9 @@
       - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{mcp-k8s-ci-registry}'
 
     triggers:
       - gerrit:
@@ -116,6 +128,9 @@
       - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{mcp-k8s-ci-registry}'
 
     triggers:
       - gerrit:
@@ -142,6 +157,9 @@
       - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{mcp-k8s-ci-registry}'
 
     triggers:
       - gerrit:
@@ -168,6 +186,9 @@
       - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{mcp-k8s-ci-registry}'
 
     triggers:
       - gerrit:

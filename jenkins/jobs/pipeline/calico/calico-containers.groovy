@@ -5,7 +5,7 @@ node('calico'){
     def tools = new ci.mcp.Tools()
 
     def server = Artifactory.server("mcp-ci")
-    def dockerRepository = "artifactory.mcp.mirantis.net:5001"
+    def dockerRepository = env.DOCKER_REGISTRY
 
     def currentBuildId = ""
 
