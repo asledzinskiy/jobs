@@ -224,3 +224,105 @@
   project: tcp/ccp-poc-salt-model
   description: CCP PoC Salt Model
   acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-build
+  description: Contrail Build
+  upstream: git://github.com/Juniper/contrail-build.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-ceilometer-plugin
+  description: Contrail Ceilometer plugin
+  upstream: git://github.com/Juniper/contrail-ceilometer-plugin.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-controller
+  description: Contrail Controller
+  upstream: git://github.com/Juniper/contrail-controller.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-generateds
+  description: Contrail generateDS
+  upstream: git://github.com/Juniper/contrail-generateDS.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-heat
+  description: Contrail heat
+  upstream: git://github.com/Juniper/contrail-heat.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-neutron-plugin
+  description: Contrail Neutron plugin
+  upstream: git://github.com/Juniper/contrail-neutron-plugin.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-nova-extensions
+  description: Contrail Nova extenstions
+  upstream: git://github.com/Juniper/contrail-nova-extensions.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-nova-vif-driver
+  description: Contrail Nova vif driver
+  upstream: git://github.com/Juniper/contrail-nova-vif-driver.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-packages
+  description: Contrail Packages
+  upstream: git://github.com/Juniper/contrail-packages.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-sandesh
+  description: Contrail Sandesh
+  upstream: git://github.com/Juniper/contrail-sandesh.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-third-party
+  description: Contrail third party
+  upstream: git://github.com/Juniper/contrail-third-party.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-vrouter
+  description: Contrail vrouter
+  upstream: git://github.com/Juniper/contrail-vrouter.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-web-controller
+  description: Contrail Web Controller
+  upstream: git://github.com/Juniper/contrail-web-controller.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-web-core
+  description: Contrail Web Core
+  upstream: git://github.com/Juniper/contrail-web-core.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-web-server-manager
+  description: Contrail Web Server manager
+  upstream: git://github.com/Juniper/contrail-web-server-manager.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-web-storage
+  description: Contrail Web storage
+  upstream: git://github.com/Juniper/contrail-web-storage.git
+  acl-config: acls/tcp/tcp.config
+
+-
+  project: tcp/contrail-webui-third-party
+  description: Contrail WebUI third patry
+  upstream: git://github.com/Juniper/contrail-webui-third-party.git
+  acl-config: acls/tcp/tcp.config
