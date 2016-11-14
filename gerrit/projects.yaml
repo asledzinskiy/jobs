@@ -83,139 +83,139 @@
 -
   project: tcp/ccp-contrail-pipeline
   description: Opencontrail CI/CD Pipelines
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-devops-portal
   description: DevOps Portal app
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-artifactory
   description: Artifactory Docker image builder
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-calico
   description: Calico Docker container
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-cassandra
   description: Cassandra Docker
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-ceilometer
   description: Ceilometer Docker
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-cinder
   description: Docker Cinder Images
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-galera
   description: Galera Docker image
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-gerrit
   description: Gerrit Docker image
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-glance
   description: Docker Glance Images
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-heat
   description: Docker Heat Images
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-horizon
   description: Horizon Docker
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-hyperkube
   description: Docker Hyperkube container
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-jenkins
   description: Official Jenkins Docker image
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-kafka
   description: Kafka Docker
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-keystone
   description: Docker keystone Images
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-libvirt
   description: Libvirt Docker image
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-memcached
   description: Memcached Docker image
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-mongodb
   description: MongoDB Docker
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-neutron
   description: Docker Neutron Images
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-nova
   description: Docker Nova Images
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-opencontrail
   description: OpenContrail Docker image
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-rabbitmq
   description: Rabbitmq Docker image
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-redis
   description: Redis Docker
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-swift
   description: Swift Docker
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-docker-zookeeper
   description: Zookeeper Docker
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-pipeline-libs
   description: Pipeline libs
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-poc-salt-model
   description: CCP PoC Salt Model
-  acl-config: acls/tcp/ccp.config
+  acl-config: acls/tcp/tcp.config
