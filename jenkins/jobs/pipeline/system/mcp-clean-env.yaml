@@ -3,7 +3,6 @@
     description: |
       Job helper which destroys running environment on a Jenkins slave
     project-type: workflow
-    concurrent: true
     parameters:
       - string:
           name: ACTION

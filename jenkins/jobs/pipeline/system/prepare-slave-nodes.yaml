@@ -4,7 +4,6 @@
       Job to deploy Jenkins slave configuration on a selected server
     node: tools
     project-type: workflow
-    concurrent: true
     parameters:
       - string:
           name: GERRIT_HOST

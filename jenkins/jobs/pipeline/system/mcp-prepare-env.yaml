@@ -1,7 +1,6 @@
 - job-template:
     dsl:
       !include-raw-escape: mcp-prepare-env.groovy
-    concurrent: true
     description: |
       Creates a python virtual environment for MCP deployment and system tests. Stores additional images.<br><br>
     project-type: workflow
