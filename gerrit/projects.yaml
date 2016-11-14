@@ -28,6 +28,11 @@
   acl-config: acls/mcp-ci/mcp-ci.pipeline-library.config
 
 -
+  project: mcp-ci/project-config
+  description: project-config for MCP-CICD POC project
+  acl-config: acls/mcp-ci/mcp-ci.project-config.config
+
+-
   project: mcp/mcp-installer
   description: MCP Installer project
   upstream: git://github.com/openstack/fuel-ccp-installer.git
