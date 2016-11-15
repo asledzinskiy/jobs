@@ -15,6 +15,7 @@
 #   [*dst-branch*] - Short name of destination branch (used for job naming)
 #   [*timer*] - Job schedule (cron syntax)
 #   [*fallback-branch*] - Source branch to sync code from if given upstream one doesn't exist
+#   [*gerrit-reviewers*] - String with gerrit users/groups list (separated by space/tab) to add
 #
 # Note, using SSH for accessing Gerrit requires to export credentials
 # via ssh-agent-credentials wrapper!!!
@@ -24,6 +25,7 @@
     name: 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
     gerrit-project-namespace: 'projectcalico'
     fallback-branch: 'master'
+    gerrit-reviewers: ''
     timer: ''
     wrappers:
       - ssh-agent-credentials:
@@ -39,6 +41,7 @@
             SYNC_UPSTREAM_BRANCH={upstream-branch}
             SYNC_FALLBACK_BRANCH={fallback-branch}
             SYNC_GERRIT_TOPIC={gerrit-topic}
+            REVIEWERS_LIST={gerrit-reviewers}
       - shell:
           !include-raw-escape:
             '../../builders/codesync.py'

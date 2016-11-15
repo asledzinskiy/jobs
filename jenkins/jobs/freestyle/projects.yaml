@@ -190,6 +190,7 @@
     gerrit-user: 'mcp-ci-mirroring'
     gerrit-creds: 'mcp-ci-mirroring'
     gerrit-topic: 'sync/{src-branch}/{dst-branch}'
+    gerrit-reviewers: 'calico-core'
 
     # List of projects to sync
     gerrit-project-name:
@@ -223,6 +224,7 @@
     gerrit-user: 'mcp-ci-mirroring'
     gerrit-creds: 'mcp-ci-mirroring'
     gerrit-topic: 'sync/{src-branch}/{dst-branch}'
+    gerrit-reviewers: 'calico-core'
 
     # List of projects to sync
     gerrit-project-name:

@@ -58,6 +58,16 @@ def _get_commit_id(repo, ref='HEAD'):
     ).splitlines()[0].split()[1]
 
 
+def _get_commit_change_id(repo, ref='HEAD'):
+    commit_msg = subprocess.check_output(
+        ['git', 'show', ref],
+        cwd=repo)
+    for line in commit_msg.splitlines():
+        if 'Change-Id:'.lower() in line.lower():
+            return line.split()[1]
+    raise RuntimeError("Failed to get commit's Change-Id!")
+
+
 def _get_merge_commit_message(repo, downstream_branch, upstream_branch,
                               change_id_seed):
     downstream = _get_commit_id(repo, downstream_branch)
@@ -204,7 +214,8 @@ def _branch_exists(repo, branch):
 
 
 def sync_project(gerrit_uri, downstream_branch, upstream_branch, topic=None,
-                 dry_run=False, fallback_branch=None, change_id_seed=''):
+                 dry_run=False, fallback_branch=None, change_id_seed='',
+                 reviewers=None):
     '''Merge the tip of the tracked upstream branch and upload it for review.
 
     Tries to clone (fetch, if path already exists) the git repo and do a
@@ -224,6 +235,7 @@ def sync_project(gerrit_uri, downstream_branch, upstream_branch, topic=None,
                     the branch locally
     :param change_id_seed: customize Gerrit Change ID by appending some custom
                            string to current downstream head SHA-1
+    :param reviewers: list of reviewers to add (optional)
 
     :returns merge commit id
 
@@ -244,10 +256,31 @@ def sync_project(gerrit_uri, downstream_branch, upstream_branch, topic=None,
             LOG.info('Dry run, do not attempt to upload the merge commit')
         elif commit:
             _upload_for_review(repo, commit, downstream_branch, topic=topic)
-
+            if reviewers:
+                _add_reviewers_ssh(gerrit_uri=gerrit_uri, repo=repo,
+                                   commit=commit,reviewers=reviewers)
         return commit
     finally:
         _cleanup(repo)
+
+
+def _add_reviewers_ssh(gerrit_uri, repo, commit, reviewers):
+    if 'ssh://' not in gerrit_uri:
+        LOG.warning("Can't add reviewers! Only SSH remotes are supported!")
+        return
+
+    ssh_host, ssh_port = gerrit_uri.split('ssh://')[1].split('/')[0].split(':')
+    change_id = _get_commit_change_id(repo, ref=commit)
+
+    gerrit_cmd = "gerrit set-reviewers -a {0} {1}".format(
+        ' -a '.join(reviewers), change_id)
+
+    subprocess.check_call(
+        ['ssh', '-p',  ssh_port, ssh_host, gerrit_cmd],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+
+    LOG.info('Reviewers are added.')
 
 
 def main():
@@ -311,6 +344,15 @@ def main():
               '(defaults to $JOB_NAME)'),
         default=os.getenv('JOB_NAME', '')
     )
+    parser.add_argument(
+        '-a',
+        '--add-reviewer',
+        action='append',
+        dest='reviewers',
+        help=('set users or/and groups as reviewers for created CR '
+              '(defaults to $REVIEWERS_LIST)'),
+        default=os.getenv('REVIEWERS_LIST', '').split()
+    )
 
     try:
         args = parser.parse_args()
@@ -319,14 +361,14 @@ def main():
                 not args.upstream_branch):
             parser.print_usage()
             raise ValueError('Required arguments not passed')
-
         commit = sync_project(gerrit_uri=args.gerrit_uri,
                               downstream_branch=args.downstream_branch,
                               upstream_branch=args.upstream_branch,
                               fallback_branch=args.fallback_branch,
                               topic=args.topic,
                               dry_run=args.dry_run,
-                              change_id_seed=args.change_id_seed)
+                              change_id_seed=args.change_id_seed,
+                              reviewers=args.reviewers)
         print(commit)
     except FailedToMerge:
         # special case - expected error - automatic merge is not possible
