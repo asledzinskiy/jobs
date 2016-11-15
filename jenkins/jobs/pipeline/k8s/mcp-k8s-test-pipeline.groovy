@@ -212,8 +212,8 @@ def build_publish_binaries () {
                 sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
                 deleteDir()
 
-                def calico_cni = env.CALICO_CNI
-                def calico_ipam = env.CALICO_IPAM
+                def calico_cni_image_repo = env.CALICO_CNI_IMAGE_REPO
+                def calico_cni_image_tag = env.CALICO_CNI_IMAGE_TAG
                 def k8s_repo_dir = "${env.WORKSPACE}/kubernetes"
 
                 def kube_docker_owner = 'jenkins'
@@ -225,11 +225,10 @@ def build_publish_binaries () {
                 if (!kube_docker_owner) {
                     error('KUBE_DOCKER_OWNER must be set')
                 }
-                if (!calico_cni) {
-                    calico_cni = "https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico"
-                }
-                if (!calico_ipam) {
-                    calico_ipam = "https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam"
+
+                if ("${env.CALICO_DOWNSTREAM}" == "true") {
+                    calico_cni_image_repo = "${env.CALICO_DOCKER_REGISTRY}/mirantis/projectcalico/calico/cni"
+                    calico_cni_image_tag = "latest"
                 }
 
                 writeFile file: 'build.sh', text: '''\
@@ -266,8 +265,8 @@ def build_publish_binaries () {
                     withEnv(["VERSION=${version}",
                              "KUBE_DOCKER_VERSION=${kube_docker_version}",
                              "REGISTRY=${registry}",
-                             "CALICO_CNI=${calico_cni}",
-                             "CALICO_IPAM=${calico_ipam}",
+                             "CALICO_CNI_IMAGE_REPO=${calico_cni_image_repo}",
+                             "CALICO_CNI_IMAGE_TAG=${calico_cni_image_tag}",
                              "GERRIT_PATCHSET_REVISION=${env.GERRIT_PATCHSET_REVISION}",
                              "GERRIT_CHANGE_URL=${env.GERRIT_CHANGE_URL}",
                              "BUILD_URL=${env.BUILD_URL}",
@@ -281,8 +280,7 @@ def build_publish_binaries () {
                              "CALICO_BINDIR=/opt/cni/bin",
                              // downstream options
                              "CALICO_DOWNSTREAM=${env.CALICO_DOWNSTREAM}",
-                             "ARTIFACTORY_URL=${env.ARTIFACTORY_URL}",
-                             "CALICO_VER=${env.CALICO_VER}"]) {
+                             "ARTIFACTORY_URL=${env.ARTIFACTORY_URL}"]) {
 
                         try {
                             sh '''
@@ -292,23 +290,12 @@ def build_publish_binaries () {
 
                             sh "make -C cluster/images/hyperkube build"
                             echo "Calico injection will happen now..."
-                            if ("${env.CALICO_DOWNSTREAM}" == "true") {
-                                sh '''#!/bin/bash
-                                TMPURL=${ARTIFACTORY_URL}/projectcalico/${CALICO_VER}/calico-cni
-                                lastbuild=\$(curl -s $TMPURL/lastbuild)
-                                wget ${TMPURL}/calico-${lastbuild} -O calico
-                                wget ${TMPURL}/calico-ipam-${lastbuild} -O calico-ipam
-                                calico_checksum=\$(sha1sum calico | awk '{ print $1 }')
-                                calico_ipam_checksum=\$(sha1sum calico-ipam | awk '{ print $1 }')
-                                [ "$calico_checksum" == "\$(curl -s ${TMPURL}/calico-${lastbuild}.sha1)" ]
-                                [ "$calico_ipam_checksum" == "\$(curl -s ${TMPURL}/calico-ipam-${lastbuild}.sha1)" ]
+                            sh '''
+                                docker run --rm -v $(pwd):/cnibindir ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG} sh -c 'cp -a /opt/cni/bin/* /cnibindir/'
+                                sudo chown jenkins:jenkins calico calico-ipam
+                                chmod +x calico calico-ipam
                             '''
-                            } else {
-                                sh '''
-                                wget "${CALICO_IPAM}" -O calico-ipam
-                                wget "${CALICO_CNI}" -O calico
-                            '''
-                            }
+
                             sh '''
                                 cat <<EOF > Dockerfile.build
                                 FROM ${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}
@@ -318,7 +305,6 @@ def build_publish_binaries () {
                                 com.mirantis.image-specs.version="${KUBE_DOCKER_VERSION}"
                             '''
                             sh '''
-                                chmod +x calico calico-ipam
                                 mkdir -p ${WORKSPACE}/kubernetes/artifacts
                                 docker build -t ${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION} - < Dockerfile.build
                                 docker run --name "${KUBE_CONTAINER_TMP}" -d -t "${KUBE_DOCKER_REGISTRY}/${KUBE_DOCKER_OWNER}/${KUBE_DOCKER_REPOSITORY}:${KUBE_DOCKER_VERSION}"
@@ -419,8 +405,7 @@ def build_publish_binaries () {
                          "GERRIT_CHANGE_URL=${env.GERRIT_CHANGE_URL}",
                          "BUILD_URL=${env.BUILD_URL}",
                          "KUBERNETES_PROVIDER=skeleton",
-                         "KUBERNETES_CONFORMANCE_TEST=y",
-                         "CALICO_VER=${env.CALICO_VER}"]) {
+                         "KUBERNETES_CONFORMANCE_TEST=y"]) {
                     try {
                         sh '''
                             make -C "${WORKSPACE}" release-skip-tests
