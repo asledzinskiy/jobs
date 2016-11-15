@@ -16,9 +16,9 @@ buildInfo = Artifactory.newBuildInfo()
 buildDesc = ''
 
 if ( event == 'patchset-created' ) {
+    build_publish_binaries()
     run_unit_tests()
     run_integration_tests()
-    build_publish_binaries()
     run_system_test()
 } else if ( event == 'change-merged' ) {
     promote_artifacts()
