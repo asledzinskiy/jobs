@@ -1,23 +1,31 @@
-node('calico'){
+// Add library functions from pipeline-library
+artifactory = new com.mirantis.mcp.MCPArtifactory()
+common = new com.mirantis.mcp.Common()
+docker = new com.mirantis.mcp.Docker()
+git = new com.mirantis.mcp.Git()
+// Artifactory server
+artifactoryServer = Artifactory.server("mcp-ci")
+buildInfo = Artifactory.newBuildInfo()
+dockerRepository = env.DOCKER_REGISTRY
 
-  try {
+projectNamespace = "mirantis/projectcalico"
+projectModule = "calico/cni"
+docker_dev_repo = "docker-dev-local"
+docker_prod_repo = "docker-prod-local"
 
-    def tools = new ci.mcp.Tools()
+if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
+    buildCalicoCNI()
+} else if ( env.GERRIT_EVENT_TYPE == 'change-merged' ) {
+    promote_artifacts()
+} else {
+  throw new RuntimeException("Job should be triggered only on patchset-created or change-merged events")
+}
 
-    def server = Artifactory.server("mcp-ci")
-    def artifactoryUrl = "${env.ARTIFACTORY_URL}/projectcalico"
-    def dockerRepository = env.DOCKER_REGISTRY
+def buildCalicoCNI(){
 
-    def buildInfo = Artifactory.newBuildInfo()
-    buildInfo.env.capture = true
-    buildInfo.env.filter.addInclude("*")
-    buildInfo.env.collect()
+  node('calico'){
 
-    def currentBuildId = ""
-    def HOST = env.GERRIT_HOST
-
-    if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
-      currentBuildId = env.GERRIT_CHANGE_NUMBER
+    try {
 
       stage ('Checkout calico-cni'){
         gerritPatchsetCheckout {
@@ -25,140 +33,113 @@ node('calico'){
           withWipeOut = true
         }
       }
-    } else {
-      currentBuildId = "mcp"
 
-      stage ('Checkout calico-cni'){
+      // define timestamp
+      def cniBuildId = git.getGitDescribe(true) + "-" + common.getDatetime()
+
+      stage ('Switch to the downstream libcalico-go') {
+        def LIBCALICOGO_PATH = "${env.WORKSPACE}/tmp_libcalico-go"
+        def HOST = env.GERRIT_HOST
         gitSSHCheckout {
           credentialsId = "mcp-ci-gerrit"
           branch = "mcp"
           host = HOST
-          project = "projectcalico/calico-cni"
+          project = "projectcalico/libcalico-go"
+          targetDir = "${LIBCALICOGO_PATH}"
         }
-      }
-    }
 
-    def gitCommit = tools.getGitCommit().take(7)
-    def cniBuildId = "${currentBuildId}-${gitCommit}"
-
-    stage ('Switch do the downstream libcalico-go') {
-      def LIBCALICOGO_PATH = "${env.WORKSPACE}/tmp_libcalico-go"
-
-      gitSSHCheckout {
-        credentialsId = "mcp-ci-gerrit"
-        branch = "mcp"
-        host = HOST
-        project = "projectcalico/libcalico-go"
-        targetDir = "${LIBCALICOGO_PATH}"
-      }
-
-      // TODO(apanchenko): replace `sed` by Yaml.load() -> modify map -> Yaml.dump()
-      sh """
-        sed -e '/^- name: .*\\/libcalico-go\$/a \\  repo: file:\\/\\/\\/go\\/src\\/github.com\\/projectcalico\\/libcalico-go\\n  vcs: git' -i.bak glide.lock
-        grep -qP '.*repo:\\s+file:.*libcalico-go' glide.lock || { echo 1>&2 \'Repository (libcalico-go) path was not properly set in glide.lock!'; exit 1; }
-        """
-
-      sh "LIBCALICOGO_PATH=${LIBCALICOGO_PATH} make vendor"
-    }
-
-    // TODO(apanchenko): GO_CONTAINER_NAME should be defined some arti image
-    stage ('Unit tests') {
-      // TODO(apanchenko): run 'static-checks' inside Docker container,
-      // TODO(apanchenko): see https://github.com/projectcalico/calico-cni/pull/207
-      sh "echo 'make test-containerized'"
-    }
-
-    // TODO(skulanov) GO_CONTAINER_NAME should be defined some arti image
-    stage ('Build calico-cni') {
-      sh "make docker-image"
-      CALICO_CNI_IMAGE_REPO="${dockerRepository}/projectcalico/calico-cni"
-      // TODO(apanchenko): use info from `git describe --tags` here
-      CALICO_CNI_IMAGE_TAG = cniBuildId
-      sh "docker tag calico/cni ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG}"
-    }
-
-    stage('Publishing cni artifacts') {
-      dir("artifacts"){
-
+        // TODO(apanchenko): replace `sed` by Yaml.load() -> modify map -> Yaml.dump()
         sh """
-          cp ${WORKSPACE}/dist/calico calico-${cniBuildId}
-          cp ${WORKSPACE}/dist/calico-ipam calico-ipam-${cniBuildId}
-        """
-
-        CALICO_CNI_DOWNLOAD_URL="${artifactoryUrl}/${currentBuildId}/calico-cni/calico-${cniBuildId}"
-        CALICO_CNI_CHECKSUM=sh(returnStdout: true, script: "sha256sum calico-${cniBuildId} | cut -d' ' -f1").trim()
-        CALICO_CNI_IPAM_DOWNLOAD_URL="${artifactoryUrl}/${currentBuildId}/calico-cni/calico-ipam-${cniBuildId}"
-        CALICO_CNI_IPAM_CHECKSUM=sh(returnStdout: true, script: "sha256sum calico-ipam-${cniBuildId} | cut -d' ' -f1").trim()
-
-        // Save Image name ID
-        writeFile file: "lastbuild", text: "${cniBuildId}"
-        // Create the upload spec.
-        writeFile file: "calico-cni-${cniBuildId}.yaml",
-                  text: """\
-                    calico_cni_download_url: ${CALICO_CNI_DOWNLOAD_URL}
-                    calico_cni_checksum: ${CALICO_CNI_CHECKSUM}
-                    calico_cni_ipam_download_url: ${CALICO_CNI_IPAM_DOWNLOAD_URL}
-                    calico_cni_ipam_checksum: ${CALICO_CNI_IPAM_CHECKSUM}
-                    calico_cni_image_repo: ${CALICO_CNI_IMAGE_REPO}
-                    calico_cni_image_tag: ${CALICO_CNI_IMAGE_TAG}
-                  """.stripIndent()
-
-        def properties = tools.getBinaryBuildProperties()
-
-        def uploadSpec = """{
-            "files": [
-                    {
-                        "pattern": "**",
-                        "target": "projectcalico/${currentBuildId}/calico-cni/",
-                        "props": "${properties}"
-                    }
-                ]
-            }"""
-
-        // Upload to Artifactory.
-        server.upload(uploadSpec, buildInfo)
+          sed -e '/^- name: .*\\/libcalico-go\$/a \\  repo: file:\\/\\/\\/go\\/src\\/github.com\\/projectcalico\\/libcalico-go\\n  vcs: git' -i.bak glide.lock
+          grep -qP '.*repo:\\s+file:.*libcalico-go' glide.lock || { echo 1>&2 \'Repository (libcalico-go) path was not properly set in glide.lock!'; exit 1; }
+          """
+        sh "LIBCALICOGO_PATH=${LIBCALICOGO_PATH} make vendor"
       }
 
-      withCredentials([
-        [$class: 'UsernamePasswordMultiBinding',
-          credentialsId: 'artifactory',
-          passwordVariable: 'ARTIFACTORY_PASSWORD',
-          usernameVariable: 'ARTIFACTORY_LOGIN']
-      ]) {
-        sh """
-          echo 'Pushing images'
-          docker login -u ${ARTIFACTORY_LOGIN} -p ${ARTIFACTORY_PASSWORD} ${dockerRepository}
-          docker push ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG}
-        """
+      // TODO(apanchenko): GO_CONTAINER_NAME should be defined some arti image
+      stage ('Unit tests') {
+        // TODO(apanchenko): run 'static-checks' inside Docker container,
+        // TODO(apanchenko): see https://github.com/projectcalico/calico-cni/pull/207
+        sh "echo 'make test-containerized'"
       }
-    } // publishing cni artifacts
 
-    // publish buildInfo
-    server.publishBuildInfo buildInfo
+      // TODO(skulanov) GO_CONTAINER_NAME should be defined some arti image
+      stage ('Build calico-cni') {
+        //add LABEL to docker file
+        docker.setDockerfileLabels()
+        sh "make docker-image"
+        CALICO_CNI_IMAGE_REPO="${dockerRepository}/${projectNamespace}/${projectModule}"
+        // TODO(apanchenko): use info from `git describe --tags` here
+        CALICO_CNI_IMAGE_TAG = cniBuildId
+        sh "docker tag calico/cni ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG}"
+      }
 
-    if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
+      stage('Publishing cni artifacts') {
+        artifactory.uploadImageToArtifactory(artifactoryServer,
+                                             dockerRepository,
+                                             "${projectNamespace}/${projectModule}",
+                                             CALICO_CNI_IMAGE_TAG,
+                                             docker_dev_repo,
+                                             buildInfo)
+      } // publishing cni artifacts
+
+      currentBuild.description = "image: ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG}<br>"
+
       stage ("Run system tests") {
          build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
           [
-              [$class: 'StringParameterValue', name: 'CALICO_CNI_DOWNLOAD_URL', value: CALICO_CNI_DOWNLOAD_URL],
-              [$class: 'StringParameterValue', name: 'CALICO_CNI_CHECKSUM', value: CALICO_CNI_CHECKSUM],
-              [$class: 'StringParameterValue', name: 'CALICO_CNI_IPAM_DOWNLOAD_URL', value: CALICO_CNI_IPAM_DOWNLOAD_URL],
-              [$class: 'StringParameterValue', name: 'CALICO_CNI_IPAM_CHECKSUM', value: CALICO_CNI_IPAM_CHECKSUM],
               [$class: 'StringParameterValue', name: 'CALICO_CNI_IMAGE_REPO', value: CALICO_CNI_IMAGE_REPO],
               [$class: 'StringParameterValue', name: 'CALICO_CNI_IMAGE_TAG', value: CALICO_CNI_IMAGE_TAG],
               [$class: 'StringParameterValue', name: 'OVERWRITE_HYPERKUBE_CNI', value: 'true'],
               [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
           ]
       }
-    }
 
+    }
+    catch(err) {
+      echo "Failed: ${err}"
+      currentBuild.result = 'FAILURE'
+    }
+    finally {
+      // fix workspace owners
+      sh "sudo chown -R jenkins:jenkins ${WORKSPACE}"
+    }
   }
-  catch(err) {
-    echo "Failed: ${err}"
-    currentBuild.result = 'FAILURE'
-  }
-  finally {
-    // fix workspace owners
-    sh "sudo chown -R jenkins:jenkins ${WORKSPACE}"
-  }
+
+}
+
+
+def promote_artifacts () {
+    node('calico') {
+        stage('promote') {
+
+          def properties = [
+            'com.mirantis.gerritChangeId': "${env.GERRIT_CHANGE_ID}",
+            'com.mirantis.gerritPatchsetNumber': "${env.GERRIT_PATCHSET_NUMBER}",
+            'com.mirantis.gerritChangeNumber' : "${env.GERRIT_CHANGE_NUMBER}"
+          ]
+          // Search for an artifact with required properties
+          def artifactURI = artifactory.uriByProperties(artifactoryServer.getUrl(), properties)
+            // Get build info: build id and job name
+            if ( artifactURI ) {
+                def buildProperties = artifactory.getPropertiesForArtifact(artifactURI)
+                //promote docker image
+                artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${projectNamespace}/${projectModule}",
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        true)
+                artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${projectNamespace}/${projectModule}",
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        'latest')
+            } else {
+                echo 'Artifacts were not found, nothing to promote'
+            }
+        }
+    }
 }
