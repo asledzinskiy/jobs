@@ -3,6 +3,7 @@ def docker_prod_repo = "docker-prod-local"
 def namespace = 'mirantis/base-images'
 def image_name = 'debian-base'
 def tools = new ci.mcp.Tools()
+def imageTag = tools.getDatetime()
 def docker_registry = env.DEBIAN_DOCKER_REGISTRY
 def gerrit_host = env.GERRIT_HOST
 def artifactory_url = env.ARTIFACTORY_URL
@@ -39,14 +40,23 @@ stage('build-debian-image') {
                  usernameVariable: 'ARTIFACTORY_LOGIN']
             ]) {
                 sh 'docker login -u ${ARTIFACTORY_LOGIN} -p ${ARTIFACTORY_PASSWORD} ${DEBIAN_DOCKER_REGISTRY}'
-                sh "docker tag mcp-ci-debian-base:latest ${docker_registry}/${docker_image}:latest"
-                sh "docker push ${docker_registry}/${docker_image}:latest"
+                sh "docker tag mcp-ci-debian-base:latest ${docker_registry}/${docker_image}:${imageTag}"
+                sh "docker push ${docker_registry}/${docker_image}:${imageTag}"
             }
+            // copy to docker_prod_repo with the same tag
             tools.promoteDockerArtifact(artifactory_url,
                                         docker_dev_repo,
                                         docker_prod_repo,
                                         docker_image,
-                                        'latest',
+                                        imageTag,
+                                        imageTag,
+                                        true)
+            // move to docker_prod_repo with the 'latest' tag
+            tools.promoteDockerArtifact(artifactory_url,
+                                        docker_dev_repo,
+                                        docker_prod_repo,
+                                        docker_image,
+                                        imageTag,
                                         'latest')
         }
     }
