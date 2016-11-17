@@ -38,9 +38,9 @@ EOF
     set +a
 }
 
-set_latest_k8s_artifacts () {
-    DOCKER_REGISTRY="${HYPERKUBE_IMAGE_REPO%%/*}"
-    DOCKER_IMAGE="${HYPERKUBE_IMAGE_REPO#*/}"
+latest_image_tag_lookup () {
+    local DOCKER_REGISTRY="${1}"
+    local DOCKER_IMAGE="${2}"
 
     python2 <<EOF
 import requests, sys
@@ -72,6 +72,12 @@ print same_digest_tags.pop() if same_digest_tags else 'latest'
 EOF
 }
 
+set_latest_k8s_artifacts () {
+    local DOCKER_REGISTRY="${HYPERKUBE_IMAGE_REPO%%/*}"
+    local DOCKER_IMAGE="${HYPERKUBE_IMAGE_REPO#*/}"
+    latest_image_tag_lookup "${DOCKER_REGISTRY}" "${DOCKER_IMAGE}"
+}
+
 set_latest_calico_containers_artifacts () {
     CALICO_ARTIFACTS_DIR="projectcalico/${MCP_BRANCH}/calico-containers"
     CALICO_ARTIFACTS_URL="${ARTIFACTORY_URL}/${CALICO_ARTIFACTS_DIR}/"
@@ -82,12 +88,9 @@ set_latest_calico_containers_artifacts () {
 }
 
 set_latest_calico_cni_artifacts () {
-    CALICOCNI_ARTIFACTS_DIR="projectcalico/${MCP_BRANCH}/calico-cni"
-    CALICOCNI_ARTIFACTS_URL="${ARTIFACTORY_URL}/${CALICOCNI_ARTIFACTS_DIR}/"
-    CALICOCNI_LATEST_VERSION=$(curl -s "${CALICOCNI_ARTIFACTS_URL}/lastbuild")
-    CALICOCNI_LATEST_YAML="${CALICOCNI_ARTIFACTS_URL}/calico-cni-${CALICOCNI_LATEST_VERSION}.yaml"
-    CALICOCNI_LATEST_ARTIFACTS=$(curl -s "${CALICOCNI_LATEST_YAML}")
-    export_params_from_yaml "${CALICOCNI_LATEST_ARTIFACTS}" "calico_cni"
+    local DOCKER_REGISTRY="${CALICO_CNI_IMAGE_REPO%%/*}"
+    local DOCKER_IMAGE="${CALICO_CNI_IMAGE_REPO#*/}"
+    latest_image_tag_lookup "${DOCKER_REGISTRY}" "${DOCKER_IMAGE}"
 }
 
 # get custom refs from gerrit
@@ -140,16 +143,14 @@ if printenv &>/dev/null CALICO_VERSION; then
     export CALICO_NODE_IMAGE_TAG="${CALICO_NODE_IMAGE_TAG:-${CALICO_VERSION}}"
 fi
 if [[ "${OVERWRITE_HYPERKUBE_CNI}" == "true" ]]; then
-    if printenv &>/dev/null CALICO_CNI_DOWNLOAD_URL && \
-       printenv &>/dev/null CALICO_CNI_IPAM_DOWNLOAD_URL && \
-       [[ -z "${CALICO_CNI_DOWNLOAD_URL}" || \
-          "${CALICO_CNI_DOWNLOAD_URL}" == "latest" || \
-          -z "${CALICO_CNI_IPAM_DOWNLOAD_URL}" || \
-          "${CALICO_CNI_IPAM_DOWNLOAD_URL}" == "latest" ]]; then
-        set_latest_calico_cni_artifacts
+    if printenv &>/dev/null CALICO_CNI_IMAGE_TAG && \
+       [[ -z "${CALICO_CNI_IMAGE_TAG}" || "${CALICO_CNI_IMAGE_TAG}" == "latest" ]]; then
+        if [ -n "${CALICO_CNI_IMAGE_REPO}" ]; then
+            CALICO_CNI_IMAGE_TAG=$(set_latest_calico_cni_artifacts)
+        else
+            echo "CALICO_CNI_IMAGE_REPO variable isn't set, can't inspect 'latest' image!"
+        fi
     fi
-else
-    unset CALICO_CNI_DOWNLOAD_URL CALICO_CNI_IPAM_DOWNLOAD_URL
 fi
 
 # run tests

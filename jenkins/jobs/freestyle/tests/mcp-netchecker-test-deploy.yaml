@@ -42,6 +42,7 @@
         artifactory-url: '{artifactory-url}'
         mcp-k8s-ci-registry: '{mcp-k8s-ci-registry}'
     - calico-systest-params:
+        docker-prod-virtual: {docker-prod-virtual}
         mcp-k8s-ci-registry: '{mcp-k8s-ci-registry}'
 
     properties:

@@ -18,20 +18,11 @@
     name: calico-systest-params
     parameters:
     - string:
-        name: CALICO_CNI_DOWNLOAD_URL
+        name: CALICO_CNI_IMAGE_REPO
+        default: '{docker-prod-virtual}/mirantis/projectcalico/calico/cni'
+    - string:
+        name: CALICO_CNI_IMAGE_TAG
         default: 'latest'
-
-    - string:
-        name: CALICO_CNI_CHECKSUM
-        default: ''
-
-    - string:
-        name: CALICO_CNI_IPAM_DOWNLOAD_URL
-        default: 'latest'
-
-    - string:
-        name: CALICO_CNI_IPAM_CHECKSUM
-        default: ''
 
     - bool:
         name: OVERWRITE_HYPERKUBE_CNI
