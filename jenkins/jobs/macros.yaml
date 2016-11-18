@@ -168,7 +168,7 @@
         default: '{branch}'
     - string:
         name: SOURCE_CREDENTIALS
-        default: 'mcp-ci-gerrit'
+        default: '{source-credentials}'
 
 - parameter:
     name: tcp-common-params

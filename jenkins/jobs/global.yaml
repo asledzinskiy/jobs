@@ -8,7 +8,7 @@
     gerrit-port: '29418'
     gerrit-url: https://review.fuel-infra.org
     artifactory-host: artifactory.mcp.mirantis.net
-    artifactory-url: https://artifactory.mcp.mirantis.net:443/artifactory
+    artifactory-url: https://artifactory.mcp.mirantis.net/artifactory
     artifactory-docker: docker.mcp.mirantis.net
 
     mcp-k8s-registry: artifactory.mcp.mirantis.net:5000

@@ -15,13 +15,14 @@
     - tcp-openstack-params:
         source-gerrit-host: 'review.fuel-infra.org'
         source-gerrit-port: '{gerrit-port}'
-        source-gerrit-user: 'mcp-ci-mirroring'
+        source-gerrit-user: 'mcp-openstack-reader'
         branch: 'stable/{branch}'
         requirements-project: 'openstack/requirements'
     - tcp-source-params:
         source-gerrit-host: 'review.fuel-infra.org'
         source-gerrit-port: '{gerrit-port}'
-        source-gerrit-user: 'mcp-ci-mirroring'
+        source-gerrit-user: 'mcp-openstack-reader'
+        source-credentials: 'mcp-openstack-reader'
         project: 'openstack/{os-project}'
         branch: 'stable/{branch}'
 
@@ -63,13 +64,14 @@
     - tcp-openstack-params:
         source-gerrit-host: 'review.fuel-infra.org'
         source-gerrit-port: '{gerrit-port}'
-        source-gerrit-user: 'mcp-ci-mirroring'
+        source-gerrit-user: 'mcp-openstack-reader'
         branch: 'stable/{branch}'
         requirements-project: 'openstack/requirements'
     - tcp-source-params:
         source-gerrit-host: 'review.fuel-infra.org'
         source-gerrit-port: '{gerrit-port}'
-        source-gerrit-user: 'mcp-ci-mirroring'
+        source-gerrit-user: 'mcp-openstack-reader'
+        source-credentials: 'mcp-openstack-reader'
         project: 'openstack/neutron'
         branch: 'stable/{branch}'
     - string:

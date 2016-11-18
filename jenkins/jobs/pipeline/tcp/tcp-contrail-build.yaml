@@ -16,6 +16,7 @@
         source-gerrit-user: 'mcp-ci-gerrit'
         source-gerrit-host: '{gerrit-host}'
         source-gerrit-port: '{gerrit-port}'
+        source-credentials: 'mcp-ci-gerrit'
         project: 'tcp'
         branch: 'R3.0.2.x'
     - string:
