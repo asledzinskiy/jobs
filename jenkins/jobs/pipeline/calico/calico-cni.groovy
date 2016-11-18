@@ -56,21 +56,18 @@ def buildCalicoCNI(){
         sh "LIBCALICOGO_PATH=${LIBCALICOGO_PATH} make vendor"
       }
 
-      // TODO(apanchenko): GO_CONTAINER_NAME should be defined some arti image
       stage ('Unit tests') {
         // TODO(apanchenko): run 'static-checks' inside Docker container,
         // TODO(apanchenko): see https://github.com/projectcalico/calico-cni/pull/207
         sh "echo 'make test-containerized'"
       }
 
-      // TODO(skulanov) GO_CONTAINER_NAME should be defined some arti image
       stage ('Build calico-cni') {
-        //add LABEL to docker file
-        docker.setDockerfileLabels()
-        sh "make docker-image"
         CALICO_CNI_IMAGE_REPO="${dockerRepository}/${projectNamespace}/${projectModule}"
-        // TODO(apanchenko): use info from `git describe --tags` here
         CALICO_CNI_IMAGE_TAG = cniBuildId
+        //add LABEL to docker file, also with custom one imgTag
+        docker.setDockerfileLabels("./Dockerfile", ["docker.imgTag=${CALICO_CNI_IMAGE_TAG}"])
+        sh "make docker-image"
         sh "docker tag calico/cni ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG}"
       }
 
