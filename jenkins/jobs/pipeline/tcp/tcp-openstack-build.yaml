@@ -1,5 +1,5 @@
 - job-template:
-    name: build-docker-openstack-{branch}-{os-project}
+    name: build-docker-openstack-{version}-{branch}-{os-project}
     description: |
       Build docker image for OpenStack projects
     project-type: workflow
@@ -24,7 +24,7 @@
         source-gerrit-user: 'mcp-openstack-reader'
         source-credentials: 'mcp-openstack-reader'
         project: 'openstack/{os-project}'
-        branch: 'stable/{branch}'
+        branch: '{version}/{branch}'
 
     triggers:
       - gerrit:
@@ -48,7 +48,7 @@
       script-path: Jenkinsfile
 
 - job-template:
-    name: build-docker-openstack-{branch}-neutron
+    name: build-docker-openstack-{version}-{branch}-neutron
     description: |
       Build docker image for OpenStack Neutron
     project-type: workflow
@@ -73,7 +73,7 @@
         source-gerrit-user: 'mcp-openstack-reader'
         source-credentials: 'mcp-openstack-reader'
         project: 'openstack/neutron'
-        branch: 'stable/{branch}'
+        branch: '{version}/{branch}'
     - string:
         name: CONTRAIL_PLUGIN_SOURCE_URL
         default: 'ssh://mcp-ci-gerrit@{gerrit-host}:{gerrit-port}/tcp/contrail-neutron-plugin'
