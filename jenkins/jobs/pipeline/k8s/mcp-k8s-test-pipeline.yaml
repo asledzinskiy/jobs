@@ -14,6 +14,10 @@
           default: '{docker-prod-virtual}'
           description: 'Docker registry for published Calico images'
       - string:
+          name: K8S_BASE_IMAGE
+          default: 'debian:jessie'
+          description: 'Base Docker image to build k8s'
+      - string:
           name: ARTIFACTORY_URL
           default: '{artifactory-url}'
           desription: 'Custom Artifactory URL'

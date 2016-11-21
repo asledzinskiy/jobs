@@ -212,6 +212,7 @@ def build_publish_binaries () {
                 sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
                 deleteDir()
 
+                def k8s_base_image = env.K8S_BASE_IMAGE
                 def calico_cni_image_repo = env.CALICO_CNI_IMAGE_REPO
                 def calico_cni_image_tag = env.CALICO_CNI_IMAGE_TAG
                 def k8s_repo_dir = "${env.WORKSPACE}/kubernetes"
@@ -219,6 +220,9 @@ def build_publish_binaries () {
                 def kube_docker_owner = 'jenkins'
                 def registry = "${kube_docker_registry}/${kube_docker_owner}/${kube_namespace}"
 
+                if (!k8s_base_image) {
+                    error('K8S_BASE_IMAGE must be set')
+                }
                 if (!kube_docker_registry) {
                     error('KUBE_DOCKER_REGISTRY must be set')
                 }
@@ -265,6 +269,7 @@ def build_publish_binaries () {
                     withEnv(["VERSION=${version}",
                              "KUBE_DOCKER_VERSION=${kube_docker_version}",
                              "REGISTRY=${registry}",
+                             "BASEIMAGE=${k8s_base_image}",
                              "CALICO_CNI_IMAGE_REPO=${calico_cni_image_repo}",
                              "CALICO_CNI_IMAGE_TAG=${calico_cni_image_tag}",
                              "GERRIT_PATCHSET_REVISION=${env.GERRIT_PATCHSET_REVISION}",
