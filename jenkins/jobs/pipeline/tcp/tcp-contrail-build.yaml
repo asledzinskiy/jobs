@@ -57,3 +57,49 @@
           gerrit-host: '{gerrit-host}'
           gerrit-port: '{gerrit-port}'
       script-path: Jenkinsfile
+
+- job-template:
+    name: build-docker-opencontrail-oc30
+    description: |
+      Build OpenContrail
+    project-type: workflow
+    concurrent: false
+    parameters:
+    - tcp-common-params:
+        gerrit-host: '{gerrit-host}'
+        gerrit-port: '{gerrit-port}'
+        artifactory-url: '{artifactory-url}'
+        out-repo: 'out-docker-glance'
+        artifactory-docker: '{artifactory-docker}'
+        pipelines-lib: 'tcp/ccp-pipeline-libs'
+    - string:
+        name: OC_VERSION
+        default: '3.0'
+
+    triggers:
+      - pollscm:
+          cron: "H/5 * * * *"
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: ANT
+              project-pattern: 'tcp/ccp-docker-opencontrail'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: 'master'
+            - project-compare-type: ANT
+              project-pattern: 'tcp/opencontrail'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+    workflow-scm:
+      scm:
+        basic-scm:
+          branch: 'master'
+          project: 'tcp/ccp-docker-opencontrail'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+      script-path: Jenkinsfile

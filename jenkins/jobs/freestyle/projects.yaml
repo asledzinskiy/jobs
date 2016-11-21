@@ -266,6 +266,7 @@
       - 'build-docker-openstack-{branch}-{os-project}'
       - 'build-docker-openstack-{branch}-neutron'
       - 'build-opencontrail-oc30-debian-jessie'
+      - 'build-docker-opencontrail-oc30'
       - 'build-docker-{component}'
     os-project:
       - cinder
