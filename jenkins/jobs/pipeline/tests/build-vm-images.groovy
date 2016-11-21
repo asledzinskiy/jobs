@@ -4,7 +4,7 @@ def custom_properties = ['latest=true'] as ArrayList
 def properties = tools.getBinaryBuildProperties(custom_properties)
 def server = Artifactory.server('mcp-ci')
 def repo_target = 'vm-images/packer/'
-def artifactory_api_url = 'https://artifactory.mcp.mirantis.net/artifactory/api/storage/'
+def artifactory_api_url = server.getUrl() + '/api/storage/'
 
 node('builder') {
 

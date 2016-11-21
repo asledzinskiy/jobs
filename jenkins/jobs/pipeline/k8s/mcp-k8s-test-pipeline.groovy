@@ -118,11 +118,17 @@ def run_integration_tests () {
                   }
                 }
                 sh "mkdir ${env.WORKSPACE}/${artifacts_dir}"
-                sh '''
-                  API_URL=$(curl https://artifactory.mcp.mirantis.net/artifactory/api/storage/vm-images/packer/?lastModified | awk '/uri/ {print $3}'|tr -d '",')
-                  IMAGE_URL=$(curl ${API_URL}| awk '/downloadUri/ {print $3}'|tr -d '",')
-                  curl ${IMAGE_URL} -o image.qcow2
-                '''
+                def downloadSpec = """{
+                    "files": [
+                    {
+                      "pattern": "vm-images/packer/ubuntu-16.04*.qcow2",
+                      "props": "com.mirantis.latest=true",
+                      "target": "downloaded/"
+                    }
+                    ]
+                }"""
+                server.download(downloadSpec)
+                sh "mv downloaded/packer/ubuntu-16.04*.qcow2 image.qcow2"
                 withEnv(["CONF_PATH=${CONF_PATH}",
                          "IMAGE_PATH=${IMAGE_PATH}",
                          "ENV_NAME=${ENV_NAME}",
