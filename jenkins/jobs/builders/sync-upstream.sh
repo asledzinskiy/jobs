@@ -205,9 +205,15 @@ source "${VENV}/bin/activate" || exit 1
 
 pip install .
 
-gitrepo sync "${PROJECTS_TO_SYNC}"
+if [ "${PUSH_FORCE}" == "true" ]; then
+  FORCE_FLAG="--force"
+else
+  FORCE_FLAG=""
+fi
+
+gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC}"
 # (skulanov) FIXME: remove this after complete switching to mcp gerrit
 # but for new we shouldn't run sync for review.fuel-infra.org
 if [ "${GERRIT_HOST}" != "review.fuel-infra.org" ]; then
-  gitrepo sync "${PROJECTS_TO_SYNC_CCP}"
+  gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_CCP}"
 fi

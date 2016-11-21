@@ -16,6 +16,10 @@
       - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
+      - string:
+          name: PUSH_FORCE
+          default: 'false'
+          description: "Force push during repo sync"
 
     scm:
       - git:
