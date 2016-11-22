@@ -3,7 +3,8 @@
 set -ex
 
 PROJECTS_TO_SYNC="${WORKSPACE}/project_to_sync.yaml"
-PROJECTS_TO_SYNC_CCP="${WORKSPACE}/project_to_sync_ccp.yaml"
+PROJECTS_TO_SYNC_TCP="${WORKSPACE}/project_to_sync_tcp.yaml"
+PROJECTS_TO_SYNC_FUEL-CCP="${WORKSPACE}/project_to_sync_fuel-ccp.yaml"
 
 cat << EOF > "${PROJECTS_TO_SYNC}"
 - project: kubernetes
@@ -55,7 +56,7 @@ cat << EOF > "${PROJECTS_TO_SYNC}"
     - "*"
 EOF
 
-cat << EOF > "${PROJECTS_TO_SYNC_CCP}"
+cat << EOF > "${PROJECTS_TO_SYNC_TCP}"
 - project: ccp-contrail-pipeline
   src-repo: git@github.com:Mirantis/ccp-contrail-pipeline.git
   dst-repo: ssh://${GERRIT_HOST}:29418/tcp/ccp-contrail-pipeline
@@ -198,6 +199,170 @@ cat << EOF > "${PROJECTS_TO_SYNC_CCP}"
     - "master"
 EOF
 
+cat << EOF > "${PROJECTS_TO_SYNC_FUEL-CCP}"
+- project: fuel-ccp
+  src-repo: git://git.openstack.org/openstack/fuel-ccp
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp
+  branches:
+    - "*"
+
+- project: fuel-ccp-ceph
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-ceph
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-ceph
+  branches:
+    - "*"
+
+- project: fuel-ccp-ci-config
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-ci-config
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-ci-config
+  branches:
+    - "*"
+
+- project: fuel-ccp-cinder
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-cinder
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-cinder
+  branches:
+    - "*"
+
+- project: fuel-ccp-debian-base
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-debian-base
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-debian-base
+  branches:
+    - "*"
+
+- project: fuel-ccp-entrypoint
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-entrypoint
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-entrypoint
+  branches:
+    - "*"
+
+- project: fuel-ccp-etcd
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-etcd
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-etcd
+  branches:
+    - "*"
+
+- project: fuel-ccp-galera
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-galera
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-galera
+  branches:
+    - "*"
+
+- project: fuel-ccp-glance
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-glance
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-glance
+  branches:
+    - "*"
+
+- project: fuel-ccp-heat
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-heat
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-heat
+  branches:
+    - "*"
+
+- project: fuel-ccp-horizon
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-horizon
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-horizon
+  branches:
+    - "*"
+
+- project: fuel-ccp-installer
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-installer
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-installer
+  branches:
+    - "*"
+
+- project: fuel-ccp-ironic
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-ironic
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-ironic
+  branches:
+    - "*"
+
+- project: fuel-ccp-keystone
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-keystone
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-keystone
+  branches:
+    - "*"
+
+- project: fuel-ccp-mariadb
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-mariadb
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-mariadb
+  branches:
+    - "*"
+
+- project: fuel-ccp-memcached
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-memcached
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-memcached
+  branches:
+    - "*"
+
+- project: fuel-ccp-murano
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-murano
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-murano
+  branches:
+    - "*"
+
+- project: fuel-ccp-neutron
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-neutron
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-neutron
+  branches:
+    - "*"
+
+- project: fuel-ccp-nova
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-nova
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-nova
+  branches:
+    - "*"
+
+- project: fuel-ccp-openstack-base
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-openstack-base
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-openstack-base
+  branches:
+    - "*"
+
+- project: fuel-ccp-rabbitmq
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-rabbitmq
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-rabbitmq
+  branches:
+    - "*"
+
+- project: fuel-ccp-sahara
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-sahara
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-sahara
+  branches:
+    - "*"
+
+- project: fuel-ccp-searchlight
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-searchlight
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-searchlight
+  branches:
+    - "*"
+
+- project: fuel-ccp-specs
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-specs
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-specs
+  branches:
+    - "*"
+
+- project: fuel-ccp-stacklight
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-stacklight
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-stacklight
+  branches:
+    - "*"
+
+- project: fuel-ccp-tests
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-tests
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-tests
+  branches:
+    - "*"
+
+- project: fuel-ccp-zmq
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-zmq
+  dst-repo: ssh://${GERRIT_HOST}:29418/ccp/fuel-ccp-zmq
+  branches:
+    - "*"
+EOF
+
 VENV="${WORKSPACE}_VENV"
 
 virtualenv "${VENV}"
@@ -215,5 +380,6 @@ gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC}"
 # (skulanov) FIXME: remove this after complete switching to mcp gerrit
 # but for new we shouldn't run sync for review.fuel-infra.org
 if [ "${GERRIT_HOST}" != "review.fuel-infra.org" ]; then
-  gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_CCP}"
+  gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_TCP}"
+  gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_FUEL-CCP}"
 fi
