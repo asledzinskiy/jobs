@@ -131,11 +131,11 @@
 
     - string:
         name: CALICO_NODE_IMAGE_REPO
-        default: '{mcp-k8s-ci-registry}/calico/node'
+        default: '{docker-prod-virtual}/mirantis/projectcalico/calico/node'
 
     - string:
         name: CALICOCTL_IMAGE_REPO
-        default: '{mcp-k8s-ci-registry}/calico/ctl'
+        default: '{docker-prod-virtual}/mirantis/projectcalico/calico/ctl'
 
     - string:
         name: CALICO_VERSION

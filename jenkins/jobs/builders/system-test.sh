@@ -72,25 +72,21 @@ print same_digest_tags.pop() if same_digest_tags else 'latest'
 EOF
 }
 
-set_latest_k8s_artifacts () {
-    local DOCKER_REGISTRY="${HYPERKUBE_IMAGE_REPO%%/*}"
-    local DOCKER_IMAGE="${HYPERKUBE_IMAGE_REPO#*/}"
-    latest_image_tag_lookup "${DOCKER_REGISTRY}" "${DOCKER_IMAGE}"
-}
+set_latest_artifacts () {
+    local DOCKER_IMAGE_REPO_VAR="$1"
+    local DOCKER_IMAGE_TAG_VAR="$2"
+    if printenv &>/dev/null "${DOCKER_IMAGE_TAG_VAR}" && \
+       [[ -z "${!DOCKER_IMAGE_TAG_VAR}" || "${!DOCKER_IMAGE_TAG_VAR}" == "latest" ]]; then
+        if [ -n "${!DOCKER_IMAGE_REPO_VAR}" ]; then
+            local DOCKER_REGISTRY="${!DOCKER_IMAGE_REPO_VAR%%/*}"
+            local DOCKER_IMAGE="${!DOCKER_IMAGE_REPO_VAR#*/}"
+            local DOCKER_IMAGE_LATEST_TAG=$(latest_image_tag_lookup "${DOCKER_REGISTRY}" "${DOCKER_IMAGE}")
+            eval ${DOCKER_IMAGE_TAG_VAR}="\${DOCKER_IMAGE_LATEST_TAG:-${!DOCKER_IMAGE_TAG_VAR}}"
 
-set_latest_calico_containers_artifacts () {
-    CALICO_ARTIFACTS_DIR="projectcalico/${MCP_BRANCH}/calico-containers"
-    CALICO_ARTIFACTS_URL="${ARTIFACTORY_URL}/${CALICO_ARTIFACTS_DIR}/"
-    CALICO_LATEST_VERSION=$(curl -s "${CALICO_ARTIFACTS_URL}/lastbuild")
-    CALICO_LATEST_YAML="${CALICO_ARTIFACTS_URL}/calico-containers-${CALICO_LATEST_VERSION}.yaml"
-    CALICO_LATEST_ARTIFACTS=$(curl -s "${CALICO_LATEST_YAML}")
-    export_params_from_yaml "${CALICO_LATEST_ARTIFACTS}" "calico"
-}
-
-set_latest_calico_cni_artifacts () {
-    local DOCKER_REGISTRY="${CALICO_CNI_IMAGE_REPO%%/*}"
-    local DOCKER_IMAGE="${CALICO_CNI_IMAGE_REPO#*/}"
-    latest_image_tag_lookup "${DOCKER_REGISTRY}" "${DOCKER_IMAGE}"
+        else
+            echo "${DOCKER_IMAGE_TAG_VAR} variable isn't set, can't inspect 'latest' image!"
+        fi
+    fi
 }
 
 # get custom refs from gerrit
@@ -125,33 +121,16 @@ fi
 echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
 # set version of downstream k8s artifacts
-if printenv &>/dev/null HYPERKUBE_IMAGE_TAG && \
-   [[ -z "${HYPERKUBE_IMAGE_TAG}" || "${HYPERKUBE_IMAGE_TAG}" == "latest" ]]; then
-    if [ -n "${HYPERKUBE_IMAGE_REPO}" ]; then
-        HYPERKUBE_IMAGE_TAG=$(set_latest_k8s_artifacts)
-    else
-        echo "HYPERKUBE_IMAGE_REPO variable isn't set, can't inspect 'latest' image!"
-    fi
-fi
+set_latest_artifacts "HYPERKUBE_IMAGE_REPO" "HYPERKUBE_IMAGE_TAG"
 
 # set version of downstream calico artifacts
 if printenv &>/dev/null CALICO_VERSION; then
-    if [[ -z "${CALICO_VERSION}" || "${CALICO_VERSION}" == "latest" ]]; then
-        set_latest_calico_containers_artifacts
-    fi
     export CALICOCTL_IMAGE_TAG="${CALICOCTL_IMAGE_TAG:-${CALICO_VERSION}}"
     export CALICO_NODE_IMAGE_TAG="${CALICO_NODE_IMAGE_TAG:-${CALICO_VERSION}}"
 fi
-if [[ "${OVERWRITE_HYPERKUBE_CNI}" == "true" ]]; then
-    if printenv &>/dev/null CALICO_CNI_IMAGE_TAG && \
-       [[ -z "${CALICO_CNI_IMAGE_TAG}" || "${CALICO_CNI_IMAGE_TAG}" == "latest" ]]; then
-        if [ -n "${CALICO_CNI_IMAGE_REPO}" ]; then
-            CALICO_CNI_IMAGE_TAG=$(set_latest_calico_cni_artifacts)
-        else
-            echo "CALICO_CNI_IMAGE_REPO variable isn't set, can't inspect 'latest' image!"
-        fi
-    fi
-fi
+set_latest_artifacts "CALICOCTL_IMAGE_REPO" "CALICOCTL_IMAGE_TAG"
+set_latest_artifacts "CALICO_NODE_IMAGE_REPO" "CALICO_NODE_IMAGE_TAG"
+set_latest_artifacts "CALICO_CNI_IMAGE_REPO" "CALICO_CNI_IMAGE_TAG"
 
 # run tests
 declare -a TEST_ARGS
