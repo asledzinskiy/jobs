@@ -1,4 +1,166 @@
 -
+  project: ccp/fuel-ccp
+  description: Fuel Containerized Control Plane (CCP) main project
+  upstream: git://git.openstack.org/openstack/fuel-ccp
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-ceph
+  description: Fuel CCP - Ceph deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-ceph
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-ci-config
+  description: Fuel CCP 3rd party CI config
+  upstream: git://git.openstack.org/openstack/fuel-ccp-ci-config
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-cinder
+  description: Fuel CCP - Cinder deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-cinder
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-debian-base
+  description: Fuel CCP - base Debian image
+  upstream: git://git.openstack.org/openstack/fuel-ccp-debian-base
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-entrypoint
+  description: Fuel CCP - container entrypoint script
+  upstream: git://git.openstack.org/openstack/fuel-ccp-entrypoint
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-etcd
+  description: Fuel CCP - Etcd deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-etcd
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-galera
+  description: Fuel CCP - Clustered database solution based on Galera
+  upstream: git://git.openstack.org/openstack/fuel-ccp-galera
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-glance
+  description: Fuel CCP - Glance deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-glance
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-heat
+  description: Fuel CCP - Heat deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-heat
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-horizon
+  description: Fuel CCP - Horizon deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-horizon
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-installer
+  description: Fuel CCP - Installer sub-project
+  upstream: git://git.openstack.org/openstack/fuel-ccp-installer
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-ironic
+  description: Fuel CCP - Ironic deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-ironic
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-keystone
+  description: Fuel CCP - Keystone deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-keystone
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-mariadb
+  description: Fuel CCP - Mariadb deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-mariadb
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-memcached
+  description: Fuel CCP - Memcached deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-memcached
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-murano
+  description: Fuel CCP - Murano deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-murano
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-neutron
+  description: Fuel CCP - Neutron deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-neutron
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-nova
+  description: Fuel CCP - Nova deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-nova
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-openstack-base
+  description: Fuel CCP - base OpenStack image
+  upstream: git://git.openstack.org/openstack/fuel-ccp-openstack-base
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-rabbitmq
+  description: Fuel CCP - Rabbitmq deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-rabbitmq
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-sahara
+  description: Fuel CCP - Sahara deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-sahara
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-searchlight
+  description: Fuel CCP - Searchlight deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-searchlight
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-specs
+  description: Fuel CCP Specs
+  upstream: git://git.openstack.org/openstack/fuel-ccp-specs
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-stacklight
+  description: Fuel CCP - Stacklight deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-stacklight
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-tests
+  description: Fuel CCP - Tests sub-project
+  upstream: git://git.openstack.org/openstack/fuel-ccp-tests
+  acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-zmq
+  description: Fuel CCP - ZeroMQ deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-zmq
+  acl-config: acls/ccp/ccp.config
+
+-
   project: kubernetes/kubernetes
   description: kubernetes main repository
   upstream: https://review.fuel-infra.org/kubernetes/kubernetes.git
