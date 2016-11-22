@@ -1,0 +1,12 @@
+- job:
+    name: db-backup
+    description: |
+      This job is used to execute MySQL dump with automysqlbackup
+      It is must be executed on tools container
+    node: tools
+    concurrent: false
+    builders:
+      - shell:
+          sudo /usr/sbin/automysqlbackup
+    triggers:
+      - timed: 'H 2 * * *'
