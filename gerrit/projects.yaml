@@ -178,10 +178,10 @@
   acl-config: acls/mcp-ci/mcp-ci.gitrepo.config
 
 -
-  project: mcp-ci/mcp-cicd-poc
+  project: mcp-ci/mcp-cicd-installer
   description: MCP CI/CD project
   upstream: https://review.fuel-infra.org/mcp-ci/mcp-cicd-poc.git
-  acl-config: acls/mcp-ci/mcp-cicd-poc.config
+  acl-config: acls/mcp-ci/mcp-cicd-installer.config
 
 -
   project: mcp-ci/pipeline-library
