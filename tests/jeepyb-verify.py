@@ -145,10 +145,31 @@ def _is_valid_project_name(name, file_path, line_number):
     return True
 
 
+def check_acls_config_path(file_path):
+    projects_items_list = yaml.safe_load(open(file_path))
+    valid = True
+
+    for item in projects_items_list:
+        acl_config_path = item.get('acl-config')
+        if not acl_config_path:
+            continue
+        config_path = os.path.join(os.path.abspath(os.curdir),
+                                   'gerrit',
+                                   acl_config_path)
+        if not os.path.isfile(config_path):
+            logging.error("Config file for project %s is not found at %s.",
+                          item.get('project'),
+                          config_path)
+            valid = False
+    if not valid:
+        exit(1)
+
+
 def run_checks(file_to_check):
     check_syntax(file_to_check)
     check_projects_sections(file_to_check)
     check_projects_names(file_to_check)
+    check_acls_config_path(file_to_check)
 
 
 REPOSITORIES_WHITELIST = {
