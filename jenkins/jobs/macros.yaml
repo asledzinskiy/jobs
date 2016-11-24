@@ -141,6 +141,11 @@
         name: CALICO_VERSION
         default: 'latest'
 
+    - string:
+        name: KARGO_COMMIT
+        #TODO(apanchenko): needs to be pinned to the tag > v2.0.0 when it's released
+        default: 'cc2f26b8e9db6472a508763d4124121194850d05'
+
     - text:
         name: ADDITIONAL_PARAMETERS
         description: |
