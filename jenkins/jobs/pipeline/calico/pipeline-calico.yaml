@@ -13,7 +13,7 @@
           default: '{gerrit-host}'
       - string:
           name: DOCKER_REGISTRY
-          default: '{mcp-k8s-ci-registry}'
+          default: '{docker-dev-virtual}'
 
     triggers:
       - gerrit:
@@ -43,11 +43,7 @@
           default: '{gerrit-host}'
       - string:
           name: DOCKER_REGISTRY
-          default: '{mcp-k8s-ci-registry}'
-      - string:
-          name: ARTIFACTORY_URL
-          default: '{artifactory-url}'
-          desription: 'Custom Artifactory URL'
+          default: '{docker-dev-virtual}'
 
     triggers:
       - gerrit:
@@ -76,11 +72,7 @@
           default: '{gerrit-host}'
       - string:
           name: DOCKER_REGISTRY
-          default: '{mcp-k8s-ci-registry}'
-      - string:
-          name: ARTIFACTORY_URL
-          default: '{artifactory-url}'
-          desription: 'Custom Artifactory URL'
+          default: '{docker-dev-virtual}'
 
     triggers:
       - gerrit:
@@ -109,7 +101,7 @@
           default: '{gerrit-host}'
       - string:
           name: DOCKER_REGISTRY
-          default: '{mcp-k8s-ci-registry}'
+          default: '{docker-dev-virtual}'
 
     triggers:
       - gerrit:
@@ -138,7 +130,7 @@
           default: '{gerrit-host}'
       - string:
           name: DOCKER_REGISTRY
-          default: '{mcp-k8s-ci-registry}'
+          default: '{docker-dev-virtual}'
 
     triggers:
       - gerrit:
@@ -196,7 +188,7 @@
           default: '{gerrit-host}'
       - string:
           name: DOCKER_REGISTRY
-          default: '{mcp-k8s-ci-registry}'
+          default: '{docker-dev-virtual}'
 
     triggers:
       - gerrit:

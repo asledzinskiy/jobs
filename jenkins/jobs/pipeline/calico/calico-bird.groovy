@@ -1,160 +1,226 @@
-node('calico'){
+// Add library functions from pipeline-library
+artifactory = new com.mirantis.mcp.MCPArtifactory()
+common = new com.mirantis.mcp.Common()
+docker = new com.mirantis.mcp.Docker()
+git = new com.mirantis.mcp.Git()
+// Artifactory server
+artifactoryServer = Artifactory.server("mcp-ci")
+buildInfo = Artifactory.newBuildInfo()
+dockerRepository = env.DOCKER_REGISTRY
 
-  try {
+projectNamespace = "mirantis/projectcalico"
+docker_dev_repo = "docker-dev-local"
+docker_prod_repo = "docker-prod-local"
+// Define binary repos
+binaryDevRepo = "binary-dev-local"
+binaryProdRepo = "binary-prod-local"
 
-    def tools = new ci.mcp.Tools()
+// tag for bird binary
+binaryTag = ""
 
-    def server = Artifactory.server("mcp-ci")
-    def dockerRepository = env.DOCKER_REGISTRY
+nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
+ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
 
-    def buildInfo = Artifactory.newBuildInfo()
-    buildInfo.env.capture = true
-    buildInfo.env.filter.addInclude("*")
-    buildInfo.env.collect()
+if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
+    buildBird()
+} else if ( env.GERRIT_EVENT_TYPE == 'change-merged' ) {
+    promote_artifacts()
+} else {
+  throw new RuntimeException("Job should be triggered only on patchset-created or change-merged events")
+}
 
-    def currentBuildId = ""
+def buildBird(){
 
-    def HOST = env.GERRIT_HOST
-    gitSSHCheckout {
-      credentialsId = "mcp-ci-gerrit"
-      branch = "mcp"
-      host = HOST
-      project = "projectcalico/calico-containers"
-    }
+  node('calico'){
 
-    dir("${WORKSPACE}/bird_repo"){
+    try {
 
-      if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
-        currentBuildId = env.GERRIT_CHANGE_NUMBER
+      def HOST = env.GERRIT_HOST
+      gitSSHCheckout {
+        credentialsId = "mcp-ci-gerrit"
+        branch = "mcp"
+        host = HOST
+        project = "projectcalico/calico-containers"
+      }
 
-        stage ('Checkout calico-bird'){
+      dir("${env.WORKSPACE}/tmp_bird"){
+
+        stage ('Checkout bird'){
           gerritPatchsetCheckout {
             credentialsId = "mcp-ci-gerrit"
             withWipeOut = true
           }
         }
-      } else {
-        currentBuildId = "mcp"
 
-        stage ('Checkout calico-bird'){
-          gitSSHCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            branch = "mcp"
-            host = HOST
-            project = "projectcalico/calico-bird"
-          }
+        stage ('Build bird binaries'){
+                sh "/bin/sh -x build.sh"
         }
-      } // else
 
-      stage ('Build bird binaries'){
-        sh "/bin/sh -x build.sh"
+        stage('Publishing bird artifacts') {
+
+          dir("artifacts"){
+            // define tag for bird
+            binaryTag = git.getGitDescribe(true) + "-" + common.getDatetime()
+            sh """
+              cp ${WORKSPACE}/tmp_bird/dist/bird bird-${binaryTag}
+              cp ${WORKSPACE}/tmp_bird/dist/bird6 bird6-${binaryTag}
+              cp ${WORKSPACE}/tmp_bird/dist/birdcl birdcl-${binaryTag}
+            """
+            writeFile file: "latest", text: "${binaryTag}"
+            // define mandatory properties for binary artifacts
+            // and some additional
+            def properties = artifactory.getBinaryBuildProperties([
+              "tag=${binaryTag}",
+              "project=bird"
+              ])
+
+            def uploadSpec = """{
+                "files": [
+                        {
+                            "pattern": "**",
+                            "target": "${binaryDevRepo}/${projectNamespace}/bird/",
+                            "props": "${properties}"
+                        }
+                    ]
+                }"""
+
+            // Upload to Artifactory.
+            artifactory.uploadBinariesToArtifactory(artifactoryServer, buildInfo, uploadSpec, true)
+          }// dir
+        } // publishing artifacts
+
+      }// dir
+
+      // we need to have separate valiable to correctly pass it to
+      // buildCalicoContainers() build step
+      def bird = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/bird-${binaryTag}"
+      def bird6 = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/bird6-${binaryTag}"
+      def birdcl = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/birdcl-${binaryTag}"
+      // start building calico-containers
+      def calicoContainersArts = buildCalicoContainers {
+        dockerRepo = dockerRepository
+        birdUrl = bird
+        bird6Url = bird6
+        birdclUrl = birdcl
+        nodeImage = nodeImg
+        ctlImage = ctlImg
       }
 
-      stage('Publishing bird artifacts'){
-        dir("artifacts"){
+      def calicoImgTag = calicoContainersArts["CALICO_VERSION"]
 
-          def gitCommit = tools.getGitCommit().take(7)
-          def BUILD_ID = "${currentBuildId}-${gitCommit}"
-          // Save the last build ID
-          writeFile file: "lastbuild", text: "${BUILD_ID}"
+      stage('Publishing containers artifacts') {
+        artifactory.uploadImageToArtifactory(artifactoryServer,
+                                             dockerRepository,
+                                             "${projectNamespace}/calico/node",
+                                             calicoImgTag,
+                                             docker_dev_repo)
+        artifactory.uploadImageToArtifactory(artifactoryServer,
+                                             dockerRepository,
+                                             "${projectNamespace}/calico/ctl",
+                                             calicoImgTag,
+                                             docker_dev_repo)
+      } // publishing artifacts
 
-          sh """
-            cp ${WORKSPACE}/bird_repo/dist/bird bird-${BUILD_ID}
-            cp ${WORKSPACE}/bird_repo/dist/bird6 bird6-${BUILD_ID}
-            cp ${WORKSPACE}/bird_repo/dist/birdcl birdcl-${BUILD_ID}
-          """
-
-          def properties = tools.getBinaryBuildProperties()
-
-          // Create the upload spec.
-          def uploadSpec = """{
-              "files": [
-                      {
-                          "pattern": "**",
-                          "target": "projectcalico/${currentBuildId}/calico-bird/",
-                          "props": "${properties}"
-                      }
-                  ]
-              }"""
-
-          // Upload to Artifactory.
-          server.upload(uploadSpec, buildInfo)
-        } // dir artifacts
-      } // stage publishing
-
-    }// dir
-
-    def artifactoryUrl = "${env.ARTIFACTORY_URL}/projectcalico"
-    def birdBuildId = "${artifactoryUrl}/${currentBuildId}/calico-bird/lastbuild".toURL().text.trim()
-
-    // start building calico-containers
-    def calicoContainersArts = buildCalicoContainers {
-      artifactoryURL = artifactoryUrl
-      dockerRepo = dockerRepository
-      containersBuildId = currentBuildId
-      birdUrl = "${artifactoryUrl}/${currentBuildId}/calico-bird/bird-${birdBuildId}"
-      bird6Url = "${artifactoryUrl}/${currentBuildId}/calico-bird/bird6-${birdBuildId}"
-      birdclUrl = "${artifactoryUrl}/${currentBuildId}/calico-bird/birdcl-${birdBuildId}"
-    }
-
-
-    stage('Publishing containers artifacts'){
-
-      withCredentials([
-        [$class: 'UsernamePasswordMultiBinding',
-          credentialsId: 'artifactory',
-          passwordVariable: 'ARTIFACTORY_PASSWORD',
-          usernameVariable: 'ARTIFACTORY_LOGIN']
-      ]) {
-        sh """
-          echo 'Pushing images'
-          docker login -u ${ARTIFACTORY_LOGIN} -p ${ARTIFACTORY_PASSWORD} ${dockerRepository}
-          docker push ${calicoContainersArts["CTL_CONTAINER_NAME"]}
-          docker push ${calicoContainersArts["NODE_CONTAINER_NAME"]}
+      currentBuild.description = """
+        <b>bird</b>: ${bird}<br>
+        <b>bird6</b>: ${bird6}<br>
+        <b>birdcl</b>: ${birdcl}<br>
+        <b>node</b>: ${nodeImg}:${calicoImgTag}<br>
+        <b>ctl</b>: ${ctlImg}:${calicoImgTag}<br>
         """
-      }
-
-      dir("artifacts"){
-        def properties = tools.getBinaryBuildProperties()
-        // Create the upload spec.
-        def uploadSpec = """{
-            "files": [
-                    {
-                        "pattern": "**",
-                        "target": "projectcalico/${currentBuildId}/calico-containers/",
-                        "props": "${properties}"
-                    }
-                ]
-            }"""
-
-        // Upload to Artifactory.
-        server.upload(uploadSpec, buildInfo)
-      } // dir artifacts
-    } //stage
-
-    // publish buildInfo
-    server.publishBuildInfo buildInfo
-
-    if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
       stage ("Run system tests") {
          build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
           [
               [$class: 'StringParameterValue', name: 'CALICO_NODE_IMAGE_REPO', value: calicoContainersArts["CALICO_NODE_IMAGE_REPO"]],
               [$class: 'StringParameterValue', name: 'CALICOCTL_IMAGE_REPO', value: calicoContainersArts["CALICOCTL_IMAGE_REPO"]],
-              [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: calicoContainersArts["CALICO_VERSION"]],
+              [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: calicoImgTag],
               [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
           ]
       }
+
     }
+    catch(err) {
+      echo "Failed: ${err}"
+      currentBuild.result = 'FAILURE'
+    }
+    finally {
+      // fix workspace owners
+      sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide"
+    }
+  }
 
-  }
-  catch(err) {
-    echo "Failed: ${err}"
-    currentBuild.result = 'FAILURE'
-  }
-  finally {
-    // fix workspace owners
-    sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide"
-  }
+}
 
+
+def promote_artifacts () {
+    node('calico') {
+        stage('promote') {
+
+          // Search bird artifacts and promote them first
+          def birdProperties = [
+            'com.mirantis.gerritChangeId': "${env.GERRIT_CHANGE_ID}",
+            'com.mirantis.gerritPatchsetNumber': "${env.GERRIT_PATCHSET_NUMBER}",
+            'com.mirantis.gerritChangeNumber' : "${env.GERRIT_CHANGE_NUMBER}",
+            'com.mirantis.project': "bird"
+          ]
+          def birdUri = artifactory.uriByProperties(artifactoryServer.getUrl(), birdProperties)
+          // Get build info: build id and job name
+          if ( birdUri ) {
+            def buildProperties = artifactory.getPropertiesForArtifact(birdUri)
+            def promotionConfig = [
+                    'buildName'  : buildProperties.get('com.mirantis.buildName').join(','), // value for each key property is an array
+                    'buildNumber': buildProperties.get('com.mirantis.buildNumber').join(','),
+                    'status'     : 'Released',
+                    'targetRepo' : binaryProdRepo.toString()]
+            artifactoryServer.promote(promotionConfig)
+          } else {
+              throw new RuntimeException("Artifacts were not found, nothing to promote")
+          }
+
+          // search calico-containers artifacts, since they have the same tags
+          // we will get correct images
+          def properties = [
+            'com.mirantis.gerritChangeId': "${env.GERRIT_CHANGE_ID}",
+            'com.mirantis.gerritPatchsetNumber': "${env.GERRIT_PATCHSET_NUMBER}",
+            'com.mirantis.gerritChangeNumber' : "${env.GERRIT_CHANGE_NUMBER}",
+            'com.mirantis.targetImg': "${projectNamespace}/calico/node"
+          ]
+          // Search for an artifact with required properties
+          def artifactURI = artifactory.uriByProperties(artifactoryServer.getUrl(), properties)
+          // Get build info: build id and job name
+          if ( artifactURI ) {
+              def buildProperties = artifactory.getPropertiesForArtifact(artifactURI)
+                //promote calico/ctl image
+                artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${projectNamespace}/calico/ctl",
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        true)
+                artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${projectNamespace}/calico/ctl",
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        'latest')
+                //promote calico/node image
+                artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${projectNamespace}/calico/node",
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        true)
+                artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${projectNamespace}/calico/node",
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        'latest')
+            } else {
+                throw new RuntimeException("Artifacts were not found, nothing to promote")
+            }
+        }
+    }
 }

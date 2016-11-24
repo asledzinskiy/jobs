@@ -1,23 +1,33 @@
-node('calico'){
+// Add library functions from pipeline-library
+artifactory = new com.mirantis.mcp.MCPArtifactory()
+common = new com.mirantis.mcp.Common()
+docker = new com.mirantis.mcp.Docker()
+git = new com.mirantis.mcp.Git()
+// Artifactory server
+artifactoryServer = Artifactory.server("mcp-ci")
+buildInfo = Artifactory.newBuildInfo()
+dockerRepository = env.DOCKER_REGISTRY
 
-  try {
+projectNamespace = "mirantis/projectcalico"
+nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
+ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
+docker_dev_repo = "docker-dev-local"
+docker_prod_repo = "docker-prod-local"
 
-    def tools = new ci.mcp.Tools()
 
-    def server = Artifactory.server("mcp-ci")
-    def dockerRepository = env.DOCKER_REGISTRY
+if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
+    buildCalicoContainers()
+} else if ( env.GERRIT_EVENT_TYPE == 'change-merged' ) {
+    promote_artifacts()
+} else {
+  throw new RuntimeException("Job should be triggered only on patchset-created or change-merged events")
+}
 
-    def currentBuildId = ""
+def buildCalicoContainers(){
 
-    def buildInfo = Artifactory.newBuildInfo()
-    buildInfo.env.capture = true
-    buildInfo.env.filter.addInclude("*")
-    buildInfo.env.collect()
+  node('calico'){
 
-    def HOST = env.GERRIT_HOST
-
-    if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
-      currentBuildId = env.GERRIT_CHANGE_NUMBER
+    try {
 
       stage ('Checkout calico-containers'){
         gerritPatchsetCheckout {
@@ -25,81 +35,105 @@ node('calico'){
           withWipeOut = true
         }
       }
-    } else {
-      currentBuildId = "mcp"
 
-      stage ('Checkout calico-containers'){
-        gitSSHCheckout {
-          credentialsId = "mcp-ci-gerrit"
-          branch = "mcp"
-          host = HOST
-          project = "projectcalico/calico-containers"
-        }
+      stage ('Run unittest') { sh "make test-containerized"  }
+
+      // start building calico-containers
+      def calicoContainersArts = buildCalicoContainers {
+        dockerRepo = dockerRepository
+        nodeImage = nodeImg
+        ctlImage = ctlImg
       }
-    }
 
-    // Run unit tests
-    stage ('Run unittest') { sh "make test-containerized"  }
+      def calicoImgTag = calicoContainersArts["CALICO_VERSION"]
 
-    // build calico-containers
-    def calicoContainersArts = buildCalicoContainers {
-      containersBuildId = currentBuildId
-    }
+      stage('Publishing containers artifacts') {
+        artifactory.uploadImageToArtifactory(artifactoryServer,
+                                             dockerRepository,
+                                             "${projectNamespace}/calico/node",
+                                             calicoImgTag,
+                                             docker_dev_repo)
+        artifactory.uploadImageToArtifactory(artifactoryServer,
+                                             dockerRepository,
+                                             "${projectNamespace}/calico/ctl",
+                                             calicoImgTag,
+                                             docker_dev_repo)
+      } // publishing artifacts
 
-    stage('Publishing containers artifacts'){
-
-      withCredentials([
-        [$class: 'UsernamePasswordMultiBinding',
-          credentialsId: 'artifactory',
-          passwordVariable: 'ARTIFACTORY_PASSWORD',
-          usernameVariable: 'ARTIFACTORY_LOGIN']
-      ]) {
-        sh """
-          echo 'Pushing images'
-          docker login -u ${ARTIFACTORY_LOGIN} -p ${ARTIFACTORY_PASSWORD} ${dockerRepository}
-          docker push ${calicoContainersArts["CTL_CONTAINER_NAME"]}
-          docker push ${calicoContainersArts["NODE_CONTAINER_NAME"]}
+      currentBuild.description = """
+        <b>node</b>: ${nodeImg}:${calicoImgTag}<br>
+        <b>ctl</b>: ${ctlImg}:${calicoImgTag}<br>
         """
-      }
-
-      dir("artifacts"){
-        def properties = tools.getBinaryBuildProperties()
-        // Create the upload spec.
-        def uploadSpec = """{
-            "files": [
-                    {
-                        "pattern": "**",
-                        "target": "projectcalico/${currentBuildId}/calico-containers/",
-                        "props": "${properties}"
-                    }
-                ]
-            }"""
-        // Upload to Artifactory.
-        server.upload(uploadSpec, buildInfo)
-        server.publishBuildInfo buildInfo
-      } // dir artifacts
-    } //stage
-
-
-    if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
       stage ("Run system tests") {
          build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
           [
               [$class: 'StringParameterValue', name: 'CALICO_NODE_IMAGE_REPO', value: calicoContainersArts["CALICO_NODE_IMAGE_REPO"]],
               [$class: 'StringParameterValue', name: 'CALICOCTL_IMAGE_REPO', value: calicoContainersArts["CALICOCTL_IMAGE_REPO"]],
-              [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: calicoContainersArts["CALICO_VERSION"]],
+              [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: calicoImgTag],
               [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
           ]
       }
-    }
 
+    }
+    catch(err) {
+      echo "Failed: ${err}"
+      currentBuild.result = 'FAILURE'
+    }
+    finally {
+      // fix workspace owners
+      sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide"
+    }
   }
-  catch(err) {
-    echo "Failed: ${err}"
-    currentBuild.result = 'FAILURE'
-  }
-  finally {
-    // fix workspace owners
-    sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide"
-  }
+
+}
+
+
+def promote_artifacts () {
+    node('calico') {
+        stage('promote') {
+
+          // search calico-containers artifacts
+          def calicoProperties = [
+            'com.mirantis.gerritChangeId': "${env.GERRIT_CHANGE_ID}",
+            'com.mirantis.gerritPatchsetNumber': "${env.GERRIT_PATCHSET_NUMBER}",
+            'com.mirantis.gerritChangeNumber' : "${env.GERRIT_CHANGE_NUMBER}"
+          ]
+          // Search for an artifact with required properties
+          def artifactURI = artifactory.uriByProperties(artifactoryServer.getUrl(), calicoProperties)
+          // Get build info: build id and job name
+          if ( artifactURI ) {
+              def buildProperties = artifactory.getPropertiesForArtifact(artifactURI)
+                //promote calico/ctl image
+                artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${projectNamespace}/calico/ctl",
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        true)
+                artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${projectNamespace}/calico/ctl",
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        'latest')
+                //promote calico/node image
+                artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${projectNamespace}/calico/node",
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        true)
+                artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
+                        docker_dev_repo,
+                        docker_prod_repo,
+                        "${projectNamespace}/calico/node",
+                        buildProperties.get('com.mirantis.targetTag').join(','),
+                        'latest')
+            } else {
+                throw new RuntimeException("Artifacts were not found, nothing to promote")
+            }
+        }
+    }
 }
