@@ -29,6 +29,11 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: ccp/fuel-ccp-docker
+  description: Fuel CCP - CCP image builder
+  acl-config: acls/ccp/ccp.config
+
+-
   project: ccp/fuel-ccp-entrypoint
   description: Fuel CCP - container entrypoint script
   upstream: git://git.openstack.org/openstack/fuel-ccp-entrypoint
