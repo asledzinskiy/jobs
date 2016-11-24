@@ -24,8 +24,8 @@ node('devops') {
     }
   }
 
-  stage('mcp-cicd-poc code checkout') {
-    dir('mcp-cicd-poc') {
+  stage('mcp-cicd-installer code checkout') {
+    dir('mcp-cicd-installer') {
       gerritPatchsetCheckout {
         credentialsId = "mcp-ci-gerrit"
       }
@@ -91,12 +91,12 @@ node('devops') {
         virtualenv
         "
         export ENV_DIR=~/.tox/mcp-ci
-        export WORKSPACE=~/mcp-cicd-poc
+        export WORKSPACE=~/mcp-cicd-installer
         export TEST_USER=vagrant
 
         sudo apt-get update
         sudo apt-get install -y ${PKGS}
-        cd mcp-cicd-poc/
+        cd mcp-cicd-installer/
         tox -e mcp-ci
         set -e
         ./tests/runtests.sh
@@ -105,7 +105,7 @@ node('devops') {
         sh '''
           sleep 1m
           export ENV_NODE_IP=$(cat env_node_ip)
-          sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r mcp-cicd-poc vagrant@${ENV_NODE_IP}:.
+          sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r mcp-cicd-installer vagrant@${ENV_NODE_IP}:.
           sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no run_tests_on_node.sh vagrant@${ENV_NODE_IP}:.
           sshpass -e ssh -t -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no vagrant@${ENV_NODE_IP} "bash ./run_tests_on_node.sh"
         '''

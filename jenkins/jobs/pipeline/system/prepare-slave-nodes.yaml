@@ -15,7 +15,7 @@
       - string:
           name: BRANCH_NAME
           default: 'master'
-          description: 'The branch name of mcp-cicd-poc repo to use'
+          description: 'The branch name of mcp-cicd-installer repo to use'
       - string:
           name: HOSTS_LIST
           default: localhost

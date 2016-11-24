@@ -22,7 +22,7 @@ stage('build-debian-image') {
             credentialsId = "mcp-ci-gerrit"
             branch = "master"
             host = "${gerrit_host}"
-            project = "mcp-ci/mcp-cicd-poc"
+            project = "mcp-ci/mcp-cicd-installer"
         }
         withEnv(["VENV_PATH=${env.WORKSPACE}/.tox/mcp-ci",
                  "DOCKER_NET=mcp-ci-net",

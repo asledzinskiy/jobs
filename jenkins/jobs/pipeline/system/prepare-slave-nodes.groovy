@@ -17,7 +17,7 @@ node('tools') {
         credentialsId = "mcp-ci-gerrit"
         branch = BRANCH
         host = HOST
-        project = "mcp-ci/mcp-cicd-poc"
+        project = "mcp-ci/mcp-cicd-installer"
       }
     }
 

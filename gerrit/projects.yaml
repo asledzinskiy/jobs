@@ -185,7 +185,7 @@
 -
   project: mcp-ci/mcp-cicd-installer
   description: MCP CI/CD project
-  upstream: https://review.fuel-infra.org/mcp-ci/mcp-cicd-poc.git
+  upstream: https://gerrit.mcp.mirantis.net/mcp-ci/mcp-cicd-installer.git
   acl-config: acls/mcp-ci/mcp-cicd-installer.config
 
 -

@@ -10,7 +10,7 @@
             - 'master'
           remotes:
             - gerrit:
-                url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mcp-ci/mcp-cicd-poc'
+                url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mcp-ci/mcp-cicd-installer'
                 credentials-id: 'mcp-ci-gerrit'
     builders:
       - inject:
