@@ -5,6 +5,7 @@ set -ex
 PROJECTS_TO_SYNC="${WORKSPACE}/project_to_sync.yaml"
 PROJECTS_TO_SYNC_TCP="${WORKSPACE}/project_to_sync_tcp.yaml"
 PROJECTS_TO_SYNC_FUEL_CCP="${WORKSPACE}/project_to_sync_fuel_ccp.yaml"
+PROJECTS_TO_SYNC_MK="${WORKSPACE}/project_to_sync_mk.yaml"
 
 cat << EOF > "${PROJECTS_TO_SYNC}"
 - project: kubernetes
@@ -363,6 +364,452 @@ cat << EOF > "${PROJECTS_TO_SYNC_FUEL_CCP}"
     - "*"
 EOF
 
+cat << EOF > "${PROJECTS_TO_SYNC_MK}"
+- project: openstack-salt
+  src-repo: git://github.com/openstack/openstack-salt.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/openstack-salt
+  branches:
+    - "*"
+
+- project: openstack-salt-specs
+  src-repo: git://github.com/openstack/openstack-salt-specs.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/openstack-salt-specs
+  branches:
+    - "*"
+
+- project: salt-formula-apache
+  src-repo: https://github.com/tcpcloud/salt-formula-apache.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-apache
+  branches:
+    - "*"
+
+- project: salt-formula-aptly
+  src-repo: https://github.com/tcpcloud/salt-formula-aptly.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-aptly
+  branches:
+    - "*"
+
+- project: salt-formula-backupninja
+  src-repo: https://github.com/tcpcloud/salt-formula-backupninja.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-backupninja
+  branches:
+    - "*"
+
+- project: salt-formula-billometer
+  src-repo: https://github.com/tcpcloud/salt-formula-billometer.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-billometer
+  branches:
+    - "*"
+
+- project: salt-formula-bind
+  src-repo: https://github.com/tcpcloud/salt-formula-bind.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-bind
+  branches:
+    - "*"
+
+- project: salt-formula-ceilometer
+  src-repo: git://git.openstack.org/openstack/salt-formula-ceilometer.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-ceilometer
+  branches:
+    - "*"
+
+- project: salt-formula-ceph
+  src-repo: https://github.com/tcpcloud/salt-formula-ceph.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-ceph
+  branches:
+    - "*"
+
+- project: salt-formula-cinder
+  src-repo: git://git.openstack.org/openstack/salt-formula-cinder.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-cinder
+  branches:
+    - "*"
+
+- project: salt-formula-collectd
+  src-repo: https://github.com/tcpcloud/salt-formula-collectd.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-collectd
+  branches:
+    - "*"
+
+- project: salt-formula-docker
+  src-repo: https://github.com/tcpcloud/salt-formula-docker.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-docker
+  branches:
+    - "*"
+
+- project: salt-formula-dovecot
+  src-repo: https://github.com/tcpcloud/salt-formula-dovecot.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-dovecot
+  branches:
+    - "*"
+
+- project: salt-formula-elasticsearch
+  src-repo: https://github.com/tcpcloud/salt-formula-elasticsearch.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-elasticsearch
+  branches:
+    - "*"
+
+- project: salt-formula-foreman
+  src-repo: https://github.com/tcpcloud/salt-formula-foreman.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-foreman
+  branches:
+    - "*"
+
+- project: salt-formula-freeipa
+  src-repo: https://github.com/tcpcloud/salt-formula-freeipa.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-freeipa
+  branches:
+    - "*"
+
+- project: salt-formula-galera
+  src-repo: https://github.com/tcpcloud/salt-formula-galera.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-galera
+  branches:
+    - "*"
+
+- project: salt-formula-git
+  src-repo: https://github.com/tcpcloud/salt-formula-git.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-git
+  branches:
+    - "*"
+
+- project: salt-formula-gitlab
+  src-repo: https://github.com/tcpcloud/salt-formula-gitlab.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-gitlab
+  branches:
+    - "*"
+
+- project: salt-formula-glance
+  src-repo: git://git.openstack.org/openstack/salt-formula-glance.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-glance
+  branches:
+    - "*"
+
+- project: salt-formula-glusterfs
+  src-repo: https://github.com/tcpcloud/salt-formula-glusterfs.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-glusterfs
+  branches:
+    - "*"
+
+- project: salt-formula-grafana
+  src-repo: https://github.com/tcpcloud/salt-formula-grafana.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-grafana
+  branches:
+    - "*"
+
+- project: salt-formula-graphite
+  src-repo: https://github.com/tcpcloud/salt-formula-graphite.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-graphite
+  branches:
+    - "*"
+
+- project: salt-formula-haproxy
+  src-repo: https://github.com/tcpcloud/salt-formula-haproxy.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-haproxy
+  branches:
+    - "*"
+
+- project: salt-formula-heat
+  src-repo: git://git.openstack.org/openstack/salt-formula-heat.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-heat
+  branches:
+    - "*"
+
+- project: salt-formula-heka
+  src-repo: https://github.com/tcpcloud/salt-formula-heka.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-heka
+  branches:
+    - "*"
+
+- project: salt-formula-horizon
+  src-repo: git://git.openstack.org/openstack/salt-formula-horizon.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-horizon
+  branches:
+    - "*"
+
+- project: salt-formula-iptables
+  src-repo: https://github.com/tcpcloud/salt-formula-iptables.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-iptables
+  branches:
+    - "*"
+
+- project: salt-formula-isc-dhcp
+  src-repo: https://github.com/tcpcloud/salt-formula-isc-dhcp.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-isc-dhcp
+  branches:
+    - "*"
+
+- project: salt-formula-java
+  src-repo: https://github.com/tcpcloud/salt-formula-java.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-java
+  branches:
+    - "*"
+
+- project: salt-formula-jenkins
+  src-repo: https://github.com/tcpcloud/salt-formula-jenkins.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-jenkins
+  branches:
+    - "*"
+
+- project: salt-formula-kedb
+  src-repo: https://github.com/tcpcloud/salt-formula-kedb.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-kedb
+  branches:
+    - "*"
+
+- project: salt-formula-keepalived
+  src-repo: https://github.com/tcpcloud/salt-formula-keepalived.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-keepalived
+  branches:
+    - "*"
+
+- project: salt-formula-keystone
+  src-repo: git://git.openstack.org/openstack/salt-formula-keystone.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-keystone
+  branches:
+    - "*"
+
+- project: salt-formula-kibana
+  src-repo: https://github.com/tcpcloud/salt-formula-kibana.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-kibana
+  branches:
+    - "*"
+
+- project: salt-formula-kubernetes
+  src-repo: git://git.openstack.org/openstack/salt-formula-kubernetes.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-kubernetes
+  branches:
+    - "*"
+
+- project: salt-formula-letsencrypt
+  src-repo: https://github.com/tcpcloud/salt-formula-letsencrypt.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-letsencrypt
+  branches:
+    - "*"
+
+- project: salt-formula-libvirt
+  src-repo: https://github.com/tcpcloud/salt-formula-libvirt.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-libvirt
+  branches:
+    - "*"
+
+- project: salt-formula-linux
+  src-repo: https://github.com/tcpcloud/salt-formula-linux.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-linux
+  branches:
+    - "*"
+
+- project: salt-formula-logrotate
+  src-repo: https://github.com/tcpcloud/salt-formula-logrotate.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-logrotate
+  branches:
+    - "*"
+
+- project: salt-formula-magnum
+  src-repo: https://github.com/tcpcloud/salt-formula-magnum.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-magnum
+  branches:
+    - "*"
+
+- project: salt-formula-memcached
+  src-repo: https://github.com/tcpcloud/salt-formula-memcached.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-memcached
+  branches:
+    - "*"
+
+- project: salt-formula-midonet
+  src-repo: git://git.openstack.org/openstack/salt-formula-midonet.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-midonet
+  branches:
+    - "*"
+
+- project: salt-formula-mongodb
+  src-repo: https://github.com/tcpcloud/salt-formula-mongodb.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-mongodb
+  branches:
+    - "*"
+
+- project: salt-formula-murano
+  src-repo: https://github.com/tcpcloud/salt-formula-murano.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-murano
+  branches:
+    - "*"
+
+- project: salt-formula-mysql
+  src-repo: https://github.com/tcpcloud/salt-formula-mysql.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-mysql
+  branches:
+    - "*"
+
+- project: salt-formula-neutron
+  src-repo: git://git.openstack.org/openstack/salt-formula-neutron.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-neutron
+  branches:
+    - "*"
+
+- project: salt-formula-nfs
+  src-repo: https://github.com/tcpcloud/salt-formula-nfs.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-nfs
+  branches:
+    - "*"
+
+- project: salt-formula-nginx
+  src-repo: https://github.com/tcpcloud/salt-formula-nginx.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-nginx
+  branches:
+    - "*"
+
+- project: salt-formula-nodejs
+  src-repo: https://github.com/tcpcloud/salt-formula-nodejs.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-nodejs
+  branches:
+    - "*"
+
+- project: salt-formula-nova
+  src-repo: git://git.openstack.org/openstack/salt-formula-nova.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-nova
+  branches:
+    - "*"
+
+- project: salt-formula-ntp
+  src-repo: https://github.com/tcpcloud/salt-formula-ntp.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-ntp
+  branches:
+    - "*"
+
+- project: salt-formula-opencontrail
+  src-repo: git://git.openstack.org/openstack/salt-formula-opencontrail.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-opencontrail
+  branches:
+    - "*"
+
+- project: salt-formula-openssh
+  src-repo: https://github.com/tcpcloud/salt-formula-openssh.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-openssh
+  branches:
+    - "*"
+
+- project: salt-formula-openvstorage
+  src-repo: https://github.com/tcpcloud/salt-formula-openvstorage.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-openvstorage
+  branches:
+    - "*"
+
+- project: salt-formula-owncloud
+  src-repo: https://github.com/tcpcloud/salt-formula-owncloud.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-owncloud
+  branches:
+    - "*"
+
+- project: salt-formula-postfix
+  src-repo: https://github.com/tcpcloud/salt-formula-postfix.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-postfix
+  branches:
+    - "*"
+
+- project: salt-formula-postgresql
+  src-repo: https://github.com/tcpcloud/salt-formula-postgresql.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-postgresql
+  branches:
+    - "*"
+
+- project: salt-formula-pritunl
+  src-repo: https://github.com/tcpcloud/salt-formula-pritunl.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-pritunl
+  branches:
+    - "*"
+
+- project: salt-formula-python
+  src-repo: https://github.com/tcpcloud/salt-formula-python.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-python
+  branches:
+    - "*"
+
+- project: salt-formula-rabbitmq
+  src-repo: https://github.com/tcpcloud/salt-formula-rabbitmq.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-rabbitmq
+  branches:
+    - "*"
+
+- project: salt-formula-reclass
+  src-repo: https://github.com/tcpcloud/salt-formula-reclass.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-reclass
+  branches:
+    - "*"
+
+- project: salt-formula-redis
+  src-repo: https://github.com/tcpcloud/salt-formula-redis.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-redis
+  branches:
+    - "*"
+
+- project: salt-formula-roundcube
+  src-repo: https://github.com/tcpcloud/salt-formula-roundcube.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-roundcube
+  branches:
+    - "*"
+
+- project: salt-formula-rsync
+  src-repo: https://github.com/tcpcloud/salt-formula-rsync.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-rsync
+  branches:
+    - "*"
+
+- project: salt-formula-rsyslog
+  src-repo: https://github.com/tcpcloud/salt-formula-rsyslog.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-rsyslog
+  branches:
+    - "*"
+
+- project: salt-formula-salt
+  src-repo: https://github.com/tcpcloud/salt-formula-salt.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-salt
+  branches:
+    - "*"
+
+- project: salt-formula-sensu
+  src-repo: https://github.com/tcpcloud/salt-formula-sensu.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-sensu
+  branches:
+    - "*"
+
+- project: salt-formula-sphinx
+  src-repo: https://github.com/tcpcloud/salt-formula-sphinx.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-sphinx
+  branches:
+    - "*"
+
+- project: salt-formula-statsd
+  src-repo: https://github.com/tcpcloud/salt-formula-statsd.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-statsd
+  branches:
+    - "*"
+
+- project: salt-formula-supervisor
+  src-repo: https://github.com/tcpcloud/salt-formula-supervisor.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-supervisor
+  branches:
+    - "*"
+
+- project: salt-formula-swift
+  src-repo: git://git.openstack.org/openstack/salt-formula-swift.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-swift
+  branches:
+    - "*"
+
+- project: salt-formula-taiga
+  src-repo: https://github.com/tcpcloud/salt-formula-taiga.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-taiga
+  branches:
+    - "*"
+
+- project: salt-formula-varnish
+  src-repo: https://github.com/tcpcloud/salt-formula-varnish.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/salt-formula-varnish
+  branches:
+    - "*"
+EOF
+
 VENV="${WORKSPACE}_VENV"
 
 virtualenv "${VENV}"
@@ -382,4 +829,5 @@ gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC}"
 if [ "${GERRIT_HOST}" != "review.fuel-infra.org" ]; then
   gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_TCP}"
   gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_FUEL_CCP}"
+  gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_MK}"
 fi
