@@ -1,4 +1,9 @@
 -
+  project: ccp/ccp-pipeline
+  description: CCP jenkins pipelines
+  acl-config: acls/ccp/ccp.config
+
+-
   project: ccp/fuel-ccp
   description: Fuel Containerized Control Plane (CCP) main project
   upstream: git://git.openstack.org/openstack/fuel-ccp
