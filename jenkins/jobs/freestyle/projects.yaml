@@ -123,7 +123,7 @@
 - project:
     name: system-tests
     # TODO(apanchenko): take the latest image from artifactory
-    image_link: 'http://jenkins-storage.ng.mirantis.net/images/images.lst'
+    image_link: 'http://share01-scc.ng.mirantis.net/images.lst'
     image_path: '/home/jenkins/images/ubuntu-1604-server.qcow2'
     jobs:
     - 'mcp-netchecker-{type}-test-all':
@@ -253,7 +253,7 @@
 
 - project:
     name: 'k8s-gate-tests'
-    image_link: 'http://jenkins-storage.ng.mirantis.net/images/images.lst'
+    image_link: 'http://share01-scc.ng.mirantis.net/images.lst'
     image_path: '/home/jenkins/images/ubuntu-1604-server.qcow2'
     timeout: 360
     description: 'k8s gate tests'
