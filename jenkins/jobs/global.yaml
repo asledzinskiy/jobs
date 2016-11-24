@@ -1,18 +1,18 @@
-# This file will be overwritten by Ansible
-
 - defaults:
     name: global
     project-type: freestyle
 
-    gerrit-host: review.fuel-infra.org
+    gerrit-host: "gerrit.mcp.mirantis.net"
     gerrit-port: '29418'
-    gerrit-url: https://review.fuel-infra.org
-    artifactory-host: artifactory.mcp.mirantis.net
-    artifactory-url: https://artifactory.mcp.mirantis.net/artifactory
-    artifactory-docker: docker.mcp.mirantis.net
+    gerrit-url: "https://gerrit.mcp.mirantis.net"
+    artifactory-host: "artifactory02.mcp.mirantis.net"
+    artifactory-url: "https://artifactory02.mcp.mirantis.net"
+    artifactory-docker: "docker02.mcp.mirantis.net"
 
-    mcp-k8s-registry: artifactory.mcp.mirantis.net:5000
-    mcp-k8s-ci-registry: artifactory.mcp.mirantis.net:5001
-    k8s-tests-registry: artifactory.mcp.mirantis.net:5005
-    docker-dev-virtual: artifactory.mcp.mirantis.net:5007
-    docker-prod-virtual: artifactory.mcp.mirantis.net:5008
+    mcp-k8s-local-registry: "artifactory02.mcp.mirantis.net:5002"
+    mcp-k8s-ci-registry: "artifactory02.mcp.mirantis.net:5001"
+    k8s-tests-registry: "artifactory02.mcp.mirantis.net:5003"
+    mcp-k8s-registry: "artifactory02.mcp.mirantis.net:5004"
+    docker-prod-virtual: "artifactory02.mcp.mirantis.net:5008"
+    docker-dev-virtual: "artifactory02.mcp.mirantis.net:5007"
+    mcp-k8s-registry: "artifactory02.mcp.mirantis.net:5000"
