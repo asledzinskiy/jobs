@@ -204,6 +204,20 @@
          test-mark: 'k8s_installed_custom'
 
 - project:
+    name: 'mcp-ccp-tests'
+    image_link: 'http://share01-scc.ng.mirantis.net/images.lst'
+    image_path: '/home/jenkins/images/ubuntu-1604-server.qcow2'
+    timeout: 360
+    description: 'fuel-ccp tests'
+    weight: '1'
+    jobs:
+     - 'mcp.ccp.{test-mark}':
+         test-mark:
+          - smoke
+          - system_few_os
+          - galera
+
+- project:
     name: tcp-build
     jobs:
       - 'build-docker-openstack-{version}-{branch}-{os-project}':
