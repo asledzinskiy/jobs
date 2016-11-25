@@ -1,5 +1,6 @@
 - job-template:
     name: mcp-k8s-test-unit-with-coverage
+    disabled: true
     description: |
       Kubernetes unit-with-coverage tests
     node: k8s
