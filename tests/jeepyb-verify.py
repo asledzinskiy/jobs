@@ -10,146 +10,112 @@ Those tests checks the following requirements for the `projects.yaml` file:
         * acl-config
         * upstream
       No other parts are possible.
-    - All the projects listed in the `projects.yaml`` file
+    - All the projects listed in the `projects.yaml` file
       must be sorted alphabetically.
 """
 
 import logging
 import os
 import sys
-import re
+
+import jsonschema
 import yaml
 
 
-# Only of lower case letters (a-z), digits (0-9), plus (+) and minus (-)
+# Only lower case letters (a-z), digits (0-9), plus (+) and minus (-)
 # and periods (.).
 # They must be at least two characters long and must start with an
 # alphanumeric character.
 # https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-Source
-# Actually we can't use those restictions at least now, because many projects
-# just do not follow them, for example: python-pyasn1_modules,
-# python-WSGIProxy2, SDL2...
-# By this reason we have whitelisted all the current ones in the
-# REPOSITORIES_WHITELIST variable, but forbided to create new invalid records.
 _PREFIX_PATTERN = '\A([a-z]([a-z]|\d|-)+/)*'
 _DEBIAN_NAMES_PATTERN = '([a-z]|\d)([a-z]|\d|[+-.])+\Z'
-PROJECT_NAMES_REGEX = re.compile(_PREFIX_PATTERN + _DEBIAN_NAMES_PATTERN)
+PROJECT_NAME_PATTERN = _PREFIX_PATTERN + _DEBIAN_NAMES_PATTERN
 
-VALID_PROJECT_PARTS = {'project', 'description', 'acl-config', 'upstream'}
+PROJECT_SCHEMA = {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "additionalProperties": False,
+        "properties": {
+            "project": {
+                "type": "string",
+                "pattern": PROJECT_NAME_PATTERN
+            },
+            "description": {
+                "type": "string"
+            },
+            "upstream": {
+                "type": "string"
+            },
+
+            "acl-config": {
+                "type": "string"
+            }
+        },
+        "required": ["project", "description"]
+    }
+}
 
 
-def check_syntax(file_path):
+def parse_yaml_file(file_path):
     try:
-        yaml.safe_load(open(file_path))
+        data = yaml.safe_load(open(file_path))
+        if data is None:
+            logging.error("File {0} is empty".format(file_path))
+            sys.exit(1)
+        return data
     except yaml.YAMLError as exc:
-        logging.error('The file %s could not be parsed: %s', file_path, exc)
-        exit(1)
+        msg = "File {0} could not be parsed: {1}".format(file_path, exc)
+        logging.error(msg)
+        sys.exit(1)
 
 
-def check_projects_names(file_path):
-    project_regex = re.compile('.*project: (.*)\n')
-    projects_items_list = yaml.safe_load(open(file_path))
-    projects_names = [item['project'] for item in projects_items_list]
-    sorted_names = sorted(projects_names)
-    line_number, index, valid = 1, 0, True
-
-    with open(file_path) as f:
-        for line in f:
-            name = project_regex.search(line)
-
-            if name:
-                name = name.groups()[0]
-                if name != sorted_names[index]:
-                    valid = False
-                    logging.error(
-                        'Project %s in file %s:%s is not '
-                        'alphabetically sorted.',
-                        name,
-                        file_path,
-                        line_number)
-
-                if not _is_valid_project_name(name, file_path, line_number):
-                    valid = False
-
-                if projects_names.count(name) > 1:
-                    valid = False
-                    logging.error(
-                        'Project %s in file %s:%s is duplicated.',
-                         name,
-                         file_path,
-                         line_number)
-                index += 1
-
-            line_number += 1
-
-    if not valid:
-        exit(1)
+def validate_data_by_schema(data, file_path):
+    try:
+        jsonschema.validate(data, PROJECT_SCHEMA)
+    except jsonschema.exceptions.ValidationError as exc:
+        raise ValueError(_make_error_message(exc, file_path))
 
 
-def check_projects_sections(file_path):
-    projects_items_list = yaml.safe_load(open(file_path))
+def _make_error_message(exc, file_path):
+    value_path = []
+
+    if exc.absolute_path:
+        value_path.extend(exc.absolute_path)
+
+    error_msg = "File '{0}', {1}".format(file_path, exc.message)
+
+    if value_path:
+        value_path = ' -> '.join(map(str, value_path))
+        error_msg = '{0}, value path {1}'.format(error_msg, value_path)
+
+    return error_msg
+
+
+def check_duplicate_projects(data):
+    projects_items = []
+    for item in data:
+        if item['project'] not in projects_items:
+            projects_items.append(item['project'])
+        else:
+            msg = "Project '{0}' is duplicated".format(item['project'])
+            raise ValueError(msg)
+
+
+def check_alphabetical_order(data):
+    for i in range(len(data) - 1):
+        if not data[i]['project'] < data[i + 1]['project']:
+            msg = ("Alphabetical order violation: project '{0}' must be "
+                   "placed after '{1}'".format(data[i]['project'],
+                                               data[i + 1]['project']))
+            raise ValueError(msg)
+
+
+def check_acls_config_path(data):
     valid = True
 
-    for item in projects_items_list:
-        keys = item.keys()
-        size = len(keys)
-
-        if 'project' not in keys:
-            logging.error(
-                'Project %s in file %s has missed project section',
-                item,
-                file_path)
-            valid = False
-
-        if 'description' not in keys:
-            logging.error(
-                'Project %s in file %s has missed description section',
-                item,
-                file_path)
-            valid = False
-
-        if size > 2:
-            if size != len(set(keys)):
-                logging.error(
-                    'Project %s in file %s has duplicated parts',
-                    item,
-                    file_path)
-
-                valid = False
-
-            if set(keys) - VALID_PROJECT_PARTS:
-                logging.warning(
-                    'Project %s in file %s has unspecified parts. '
-                    'The valid list is: %s',
-                    item,
-                    file_path,
-                    VALID_PROJECT_PARTS)
-
-                valid = False
-
-    if not valid:
-        exit(1)
-
-
-def _is_valid_project_name(name, file_path, line_number):
-    if (not PROJECT_NAMES_REGEX.match(name) and
-        name not in REPOSITORIES_WHITELIST
-    ):
-        logging.error(
-            'Project %s in file %s:%s has invalid name.',
-            name,
-            file_path,
-            line_number)
-        return False
-
-    return True
-
-
-def check_acls_config_path(file_path):
-    projects_items_list = yaml.safe_load(open(file_path))
-    valid = True
-
-    for item in projects_items_list:
+    for item in data:
         acl_config_path = item.get('acl-config')
         if not acl_config_path:
             continue
@@ -157,27 +123,24 @@ def check_acls_config_path(file_path):
                                    'gerrit',
                                    acl_config_path)
         if not os.path.isfile(config_path):
-            logging.error("Config file for project %s is not found at %s.",
-                          item.get('project'),
-                          config_path)
+            logging.error("Config file for project '{0}' is not found "
+                          "at {1}.".format(item.get('project'), config_path))
             valid = False
     if not valid:
-        exit(1)
+        sys.exit(1)
 
 
 def run_checks(file_to_check):
-    check_syntax(file_to_check)
-    check_projects_sections(file_to_check)
-    check_projects_names(file_to_check)
-    check_acls_config_path(file_to_check)
-
-
-REPOSITORIES_WHITELIST = {
-}
+    data = parse_yaml_file(file_to_check)
+    validate_data_by_schema(data, file_to_check)
+    check_duplicate_projects(data)
+    check_alphabetical_order(data)
+    check_acls_config_path(data)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) <2:
-        sys.stderr.write('Usage: %s path/to/projects.yaml\n' % sys.argv[0])
+    if len(sys.argv) < 2:
+        sys.stderr.write("Usage: {0} path/to/projects.yaml"
+                         "\n".format(sys.argv[0]))
         sys.exit(1)
     run_checks(sys.argv[1])
