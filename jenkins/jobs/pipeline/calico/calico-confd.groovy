@@ -173,6 +173,6 @@ node('calico'){
   }
   finally {
     // fix workspace owners
-    sh "sudo chown -R jenkins:jenkins ${WORKSPACE}"
+    sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide"
   }
 }
