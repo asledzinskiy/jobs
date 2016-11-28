@@ -413,6 +413,7 @@ def build_publish_binaries () {
                     error('KUBE_DOCKER_CONFORMANCE_REPOSITORY must be set')
                 }
 
+                def gerrit_host = "${env.GERRIT_HOST}"
                 if ( env.GERRIT_EVENT_TYPE ) {
                     clone_k8s_repo()
                     gerritPatchsetCheckout{
@@ -420,7 +421,6 @@ def build_publish_binaries () {
                     }
                     git_commit_tag_id = generate_git_version()
                 } else {
-                    def gerrit_host = "${env.GERRIT_HOST}"
                     gitSSHCheckout {
                         credentialsId = "mcp-ci-gerrit"
                         branch = "master"
@@ -430,6 +430,17 @@ def build_publish_binaries () {
                     git_commit_tag_id = git_sha
                     sh "git checkout ${git_sha}"
                 }
+
+                def projectRepoDir = "/tmp/project-config-${timestamp}"
+                def helpersDir = "${projectRepoDir}/jenkins/jobs/builders/groovy-builders"
+                gitSSHCheckout {
+                    credentialsId = "mcp-ci-gerrit"
+                    branch = "master"
+                    host = "${gerrit_host}"
+                    project = "mcp-ci/project-config"
+                    targetDir = projectRepoDir
+                }
+
                 def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
                 def kube_build_version = sh(script: 'bash -c \'KUBE_ROOT=$(pwd) && \
                                                      . build/common.sh || . build-tools/common.sh && kube::build::verify_prereqs >&2 && \
@@ -484,61 +495,7 @@ def build_publish_binaries () {
                             com.mirantis.image-specs.patchset="${env.GERRIT_PATCHSET_REVISION}"
                         """.stripIndent()
 
-                        writeFile file: workspace + '/_build_test_runner/entrypoint.sh', text: '''\
-                            #!/bin/bash
-                            set -u -e
-
-                            function escape_test_name() {
-                                sed 's/[]\$*.^|()[]/\\&/g; s/\\s\\+/\\s+/g' <<< "\$1" | tr -d '\n'
-                            }
-
-                            TESTS_TO_SKIP=(
-                                '[k8s.io] Port forwarding [k8s.io] With a server that expects no client request should support a client that connects, sends no data, and disconnects [Conformance]'
-                                '[k8s.io] Port forwarding [k8s.io] With a server that expects a client request should support a client that connects, sends no data, and disconnects [Conformance]'
-                                '[k8s.io] Port forwarding [k8s.io] With a server that expects a client request should support a client that connects, sends data, and disconnects [Conformance]'
-                                '[k8s.io] Downward API volume should update annotations on modification [Conformance]'
-                                '[k8s.io] DNS should provide DNS for services [Conformance]'
-                                '[k8s.io] Kubectl client [k8s.io] Kubectl patch should add annotations for pods in rc [Conformance]'
-                            )
-
-                            function skipped_test_names () {
-                                local first=y
-                                for name in "${TESTS_TO_SKIP[@]}"; do
-                                    if [ -z "$first" ]; then
-                                        echo -n "|"
-                                    else
-                                        first=
-                                    fi
-                                    echo -n "$(escape_test_name "$name")\$"
-                                done
-                            }
-
-                            FOCUS="${FOCUS:-}"
-                            API_SERVER="${API_SERVER:-}"
-                            if [ -z "$API_SERVER" ]; then
-                                echo "Must provide API_SERVER env var" 1>&2
-                                exit 1
-                            fi
-
-                            # Configure kube config
-                            cluster/kubectl.sh config set-cluster local --server="$API_SERVER" --insecure-skip-tls-verify=true
-                            cluster/kubectl.sh config set-context local --cluster=local --user=local
-                            cluster/kubectl.sh config use-context local
-
-                            if [ -z "$FOCUS" ]; then
-                                # non-serial tests can be run in parallel mode
-                                GINKGO_PARALLEL=y go run hack/e2e.go --v --test -check_version_skew=false \
-                                  --check_node_count=false \
-                                  --test_args="--ginkgo.focus=\\[Conformance\\] --ginkgo.skip=\\[Serial\\]|\\[Flaky\\]|\\[Feature:.+\\]|$(skipped_test_names)"
-
-                                # serial tests must be run without GINKGO_PARALLEL
-                                go run hack/e2e.go --v --test -check_version_skew=false --check_node_count=false \
-                                  --test_args="--ginkgo.focus=\\[Serial\\].*\\[Conformance\\] --ginkgo.skip=$(skipped_test_names)"
-                            else
-                                go run hack/e2e.go --v --test -check_version_skew=false --check_node_count=false \
-                                  --test_args="--ginkgo.focus=$(escape_test_name "$FOCUS")"
-                            fi
-                        '''.stripIndent()
+                        sh "cp ${helpersDir}/conformance-entrypoint.sh ${workspace}/_build_test_runner/entrypoint.sh"
                         sh 'docker build -t "${KUBE_DOCKER_CONFORMANCE_TAG}" "${WORKSPACE}/_build_test_runner"'
                         stage('conformance-publish') {
                             upload_image_to_artifactory("${kube_docker_registry}", "${kube_namespace}/${conformance_docker_repo}", "${kube_docker_version}", "${docker_dev_repo}")
