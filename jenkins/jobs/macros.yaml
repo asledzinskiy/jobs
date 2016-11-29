@@ -144,7 +144,7 @@
     - string:
         name: KARGO_COMMIT
         #TODO(apanchenko): needs to be pinned to the tag > v2.0.0 when it's released
-        default: 'cc2f26b8e9db6472a508763d4124121194850d05'
+        default: 'b6872a0be30c18adaa752aad4113ad7caef7a61b'
 
     - text:
         name: ADDITIONAL_PARAMETERS
