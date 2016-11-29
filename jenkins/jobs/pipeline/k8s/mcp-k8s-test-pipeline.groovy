@@ -12,6 +12,7 @@ docker_dev_repo = "docker-dev-local"
 docker_prod_repo = "docker-prod-local"
 binary_dev_repo = "binary-dev-local"
 binary_prod_repo = "binary-prod-local"
+server = Artifactory.server('mcp-ci')
 buildInfo = Artifactory.newBuildInfo()
 buildDesc = ''
 
