@@ -40,7 +40,6 @@ def buildCalicoContainers(){
       def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
       def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
       def calicoContainersArts = buildCalicoContainers {
-        dockerRepo = dockerRepository
         nodeImage = nodeImg
         ctlImage = ctlImg
       }

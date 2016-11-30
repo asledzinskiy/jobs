@@ -118,7 +118,6 @@ def buildConfd(){
       def confd = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/confd/confd-${binaryTag}"
       // start building calico-containers
       def calicoContainersArts = buildCalicoContainers {
-        dockerRepo = dockerRepository
         confdUrl = confd
         nodeImage = nodeImg
         ctlImage = ctlImg

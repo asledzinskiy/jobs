@@ -86,7 +86,6 @@ def buildFelix(){
       def felixContainerName = felixImg + ":" + felixImgTag
       // start building calico-containers
       def calicoContainersArts = buildCalicoContainers {
-        dockerRepo = dockerRepository
         felixImage = felixContainerName
         nodeImage = nodeImg
         ctlImage = ctlImg

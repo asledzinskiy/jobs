@@ -87,7 +87,6 @@ def buildCalicoBuildImg(){
       def buildContainerName = buildImg + ":" + buildImgTag
       // start building calico-containers
       def calicoContainersArts = buildCalicoContainers {
-        dockerRepo = dockerRepository
         buildImage = buildContainerName
         nodeImage = nodeImg
         ctlImage = ctlImg

@@ -98,7 +98,6 @@ def buildBird(){
       def birdcl = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/birdcl-${binaryTag}"
       // start building calico-containers
       def calicoContainersArts = buildCalicoContainers {
-        dockerRepo = dockerRepository
         birdUrl = bird
         bird6Url = bird6
         birdclUrl = birdcl
