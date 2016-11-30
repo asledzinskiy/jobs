@@ -57,9 +57,7 @@ def buildCalicoCNI(){
       }
 
       stage ('Unit tests') {
-        // TODO(apanchenko): run 'static-checks' inside Docker container,
-        // TODO(apanchenko): see https://github.com/projectcalico/calico-cni/pull/207
-        sh "echo 'make test-containerized'"
+        sh "make static-checks-containerized test-containerized"
       }
 
       stage ('Build calico-cni') {
