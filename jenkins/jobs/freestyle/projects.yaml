@@ -15,6 +15,8 @@
 - project:
     name: mcp
     jobs:
+      - mcp-build-base-slave-image-test-pipeline
+      - mcp-build-base-slave-image-merge-pipeline
       - mcp-build-debian-base
       - mcp-build-run-tests
       - mcp-k8s-e2e-conformance

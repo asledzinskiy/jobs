@@ -1,0 +1,36 @@
+- job-template:
+    name: mcp-build-base-slave-image-test-pipeline
+    description: |
+      Build Docker Swarm image for Jenkins Swarm slave
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for images'
+      - string:
+          name: JENKINS_SWARM_CLIENT_VERSION
+          default: '2.2'
+      - string:
+          name: FSROOT
+          default: '/home/jenkins'
+      - string:
+          name: CONTAINER_USER
+          default: 'jenkins'
+    dsl:
+      !include-raw-escape: base-slave-image.groovy
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: ANT
+              project-pattern: 'mcp-ci/mcp-base-slave-image'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'

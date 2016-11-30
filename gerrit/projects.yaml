@@ -183,6 +183,11 @@
   acl-config: acls/mcp-ci/mcp-ci.gitrepo.config
 
 -
+  project: mcp-ci/mcp-base-slave-image
+  description: Base Docker Swarm image for Jenkins Swarm slave
+  acl-config: acls/mcp-ci/mcp-ci.project-config.config
+
+-
   project: mcp-ci/mcp-cicd-installer
   description: MCP CI/CD project
   upstream: https://gerrit.mcp.mirantis.net/mcp-ci/mcp-cicd-installer.git
