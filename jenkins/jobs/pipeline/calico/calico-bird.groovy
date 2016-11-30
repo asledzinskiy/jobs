@@ -6,7 +6,6 @@ git = new com.mirantis.mcp.Git()
 // Artifactory server
 artifactoryServer = Artifactory.server("mcp-ci")
 buildInfo = Artifactory.newBuildInfo()
-dockerRepository = env.DOCKER_REGISTRY
 
 projectNamespace = "mirantis/projectcalico"
 docker_dev_repo = "docker-dev-local"
@@ -18,8 +17,6 @@ binaryProdRepo = "binary-prod-local"
 // tag for bird binary
 binaryTag = ""
 
-nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
-ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
 
 if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
     buildBird()
@@ -93,6 +90,9 @@ def buildBird(){
 
       // we need to have separate valiable to correctly pass it to
       // buildCalicoContainers() build step
+      def dockerRepository = env.DOCKER_REGISTRY
+      def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
+      def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
       def bird = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/bird-${binaryTag}"
       def bird6 = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/bird6-${binaryTag}"
       def birdcl = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/birdcl-${binaryTag}"

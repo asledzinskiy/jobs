@@ -6,7 +6,6 @@ git = new com.mirantis.mcp.Git()
 // Artifactory server
 artifactoryServer = Artifactory.server("mcp-ci")
 buildInfo = Artifactory.newBuildInfo()
-dockerRepository = env.DOCKER_REGISTRY
 
 projectNamespace = "mirantis/projectcalico"
 docker_dev_repo = "docker-dev-local"
@@ -18,8 +17,6 @@ binaryProdRepo = "binary-prod-local"
 // tag for confd binary
 binaryTag = ""
 
-nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
-ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
 
 if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
     buildConfd()
@@ -115,6 +112,9 @@ def buildConfd(){
 
       // we need to have separate valiable to correctly pass it to
       // buildCalicoContainers() build step
+      def dockerRepository = env.DOCKER_REGISTRY
+      def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
+      def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
       def confd = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/confd/confd-${binaryTag}"
       // start building calico-containers
       def calicoContainersArts = buildCalicoContainers {

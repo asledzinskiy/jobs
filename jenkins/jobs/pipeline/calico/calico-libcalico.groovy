@@ -6,20 +6,12 @@ git = new com.mirantis.mcp.Git()
 // Artifactory server
 artifactoryServer = Artifactory.server("mcp-ci")
 buildInfo = Artifactory.newBuildInfo()
-dockerRepository = env.DOCKER_REGISTRY
 
 projectNamespace = "mirantis/projectcalico"
 projectModule = "calico/build"
 docker_dev_repo = "docker-dev-local"
 docker_prod_repo = "docker-prod-local"
 
-// define global variables for images
-buildImg = "${dockerRepository}/${projectNamespace}/${projectModule}"
-// depends on git, so will be defined after checkout
-buildImgTag = ""
-
-nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
-ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
 
 if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
     buildCalicoBuildImg()
@@ -34,6 +26,13 @@ def buildCalicoBuildImg(){
   node('calico'){
 
     try {
+
+      def dockerRepository = env.DOCKER_REGISTRY
+      // define global variables for images
+      def buildImg = "${dockerRepository}/${projectNamespace}/${projectModule}"
+      // depends on git, so will be defined after checkout
+      def buildImgTag = ""
+
 
       def HOST = env.GERRIT_HOST
       gitSSHCheckout {
@@ -83,6 +82,8 @@ def buildCalicoBuildImg(){
 
       // we need to have separate valiable to correctly pass it to
       // buildCalicoContainers() build step
+      def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
+      def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
       def buildContainerName = buildImg + ":" + buildImgTag
       // start building calico-containers
       def calicoContainersArts = buildCalicoContainers {
