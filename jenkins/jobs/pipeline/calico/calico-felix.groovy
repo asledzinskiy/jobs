@@ -9,8 +9,8 @@ buildInfo = Artifactory.newBuildInfo()
 
 projectNamespace = "mirantis/projectcalico"
 projectModule = "calico/felix"
-docker_dev_repo = "docker-dev-local"
-docker_prod_repo = "docker-prod-local"
+docker_dev_repo = "docker-dev-virtual"
+docker_prod_repo = "docker-prod-virtual"
 
 
 if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
