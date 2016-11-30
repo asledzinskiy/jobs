@@ -21,8 +21,6 @@
             PUBLISH=true
       - shell:
           !include-raw-escape: ../../builders/mcp-netchecker-build.sh
-      - shell:
-          !include-raw-escape: ../../builders/calico-delete-artifact-for-patchset.sh
     scm:
       - git:
          remotes:
