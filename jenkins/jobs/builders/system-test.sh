@@ -89,6 +89,11 @@ set_latest_artifacts () {
     fi
 }
 
+# check that 'net.bridge.bridge-nf-call-iptables' is disabled
+if ! grep -q 0 /proc/sys/net/bridge/bridge-nf-call-iptables; then
+  error_exit "Kernel parameter 'net.bridge.bridge-nf-call-iptables' is enabled! Disable it to run the tests!"
+fi
+
 # get custom refs from gerrit
 if [[ -n "$FUEL_CCP_TESTS_REFS" && "$FUEL_CCP_TESTS_REFS" != "none" ]]; then
   get_custom_refs fuel-ccp-tests "${WORKSPACE}" $FUEL_CCP_TESTS_REFS
