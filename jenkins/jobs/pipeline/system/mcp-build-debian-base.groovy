@@ -2,8 +2,9 @@ def docker_dev_repo = "docker-dev-local"
 def docker_prod_repo = "docker-prod-local"
 def namespace = 'mirantis/base-images'
 def image_name = 'debian-base'
-def tools = new ci.mcp.Tools()
-def imageTag = tools.getDatetime()
+def artifactory = new com.mirantis.mcp.MCPArtifactory()
+def common = new com.mirantis.mcp.Common()
+def imageTag = common.getDatetime()
 def docker_registry = env.DEBIAN_DOCKER_REGISTRY
 def gerrit_host = env.GERRIT_HOST
 def artifactory_url = env.ARTIFACTORY_URL
@@ -44,7 +45,7 @@ stage('build-debian-image') {
                 sh "docker push ${docker_registry}/${docker_image}:${imageTag}"
             }
             // copy to docker_prod_repo with the same tag
-            tools.promoteDockerArtifact(artifactory_url,
+            artifactory.promoteDockerArtifact(artifactory_url,
                                         docker_dev_repo,
                                         docker_prod_repo,
                                         docker_image,
@@ -52,7 +53,7 @@ stage('build-debian-image') {
                                         imageTag,
                                         true)
             // move to docker_prod_repo with the 'latest' tag
-            tools.promoteDockerArtifact(artifactory_url,
+            artifactory.promoteDockerArtifact(artifactory_url,
                                         docker_dev_repo,
                                         docker_prod_repo,
                                         docker_image,

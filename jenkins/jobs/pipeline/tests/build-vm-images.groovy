@@ -1,7 +1,7 @@
-def tools = new ci.mcp.Tools()
+def artifactory = new com.mirantis.mcp.MCPArtifactory()
 def buildInfo = Artifactory.newBuildInfo()
 def custom_properties = ['latest=true'] as ArrayList
-def properties = tools.getBinaryBuildProperties(custom_properties)
+def properties = artifactory.getBinaryBuildProperties(custom_properties)
 def server = Artifactory.server('mcp-ci')
 def repo_target = 'vm-images/packer/'
 def artifactory_api_url = server.getUrl() + '/api/storage/'
@@ -55,7 +55,7 @@ node('builder') {
       // set com.mirantis.latest to false on all related artifacts first
       custom_properties = ['com.mirantis.latest':'false']
       def artifact_url = artifactory_api_url + repo_target
-      tools.setProperties(artifact_url, custom_properties, true)
+      artifactory.setProperties(artifact_url, custom_properties, true)
 
       // the new artifact will have com.mirantis.latest set to true
       def uploadSpec = """{
