@@ -200,6 +200,18 @@
   acl-config: acls/mcp-ci/mcp-ci.project-config.config
 
 -
+  project: mcp-netchecker/mcp-netchecker-agent
+  description: MCP network checker agent
+  upstream: https://review.fuel-infra.org/mcp-netchecker/mcp-netchecker-agent
+  acl-config: acls/mcp-netchecker/mcp-netchecker.config
+
+-
+  project: mcp-netchecker/mcp-netchecker-server
+  description: MCP network checker server
+  upstream: https://review.fuel-infra.org/mcp-netchecker/mcp-netchecker-server
+  acl-config: acls/mcp-netchecker/mcp-netchecker.config
+
+-
   project: mcp/mcp-installer
   description: MCP Installer project
   upstream: git://github.com/openstack/fuel-ccp-installer.git
