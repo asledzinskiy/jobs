@@ -10,8 +10,8 @@ dockerRepository = env.DOCKER_REGISTRY
 
 projectNamespace = "mirantis/projectcalico"
 projectModule = "calico/cni"
-docker_dev_repo = "docker-dev-virtual"
-docker_prod_repo = "docker-prod-virtual"
+docker_dev_repo = "docker-dev-local"
+docker_prod_repo = "docker-prod-local"
 
 if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
     buildCalicoCNI()
