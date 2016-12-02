@@ -101,7 +101,6 @@
     builders:
       - inject:
           properties-content: |
-            CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
             ENV_NAME={envname}
             NETCHECKER_AGENT_DIR={netchecker-agent-dir}
             NETCHECKER_SERVER_DIR={netchecker-server-dir}
