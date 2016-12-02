@@ -41,7 +41,14 @@ node('tools') {
       }
 
       stage ('Create initial config') {
-        sh "./mcp-ci.sh init-config"
+        writeFile file: "${WORKSPACE}/run.sh", text: '''\
+          #!/bin/bash -ex
+
+          source ${WORKSPACE}/tests/vars.sh
+          ${WORKSPACE}/mcp-ci.sh init-config
+        '''.stripIndent()
+        sh "chmod +x ${WORKSPACE}/run.sh"
+        sh "${WORKSPACE}/run.sh"
       }
 
       stage ('Execute prepare-slave-nodes playbook') {
