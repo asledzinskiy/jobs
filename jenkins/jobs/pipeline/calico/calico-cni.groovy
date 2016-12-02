@@ -133,7 +133,7 @@ def promote_artifacts () {
                         buildProperties.get('com.mirantis.targetTag').join(','),
                         'latest')
             } else {
-                echo 'Artifacts were not found, nothing to promote'
+                throw new RuntimeException("Artifacts were not found, nothing to promote")
             }
         }
     }
