@@ -44,8 +44,8 @@ node('tools') {
         writeFile file: "${env.WORKSPACE}/run.sh", text: '''\
           #!/bin/bash -ex
 
-          source ${env.WORKSPACE}/tests/vars.sh
-          ${env.WORKSPACE}/mcp-ci.sh init-config
+          source ${WORKSPACE}/tests/vars.sh
+          ${WORKSPACE}/mcp-ci.sh init-config
         '''.stripIndent()
         sh "chmod +x ${env.WORKSPACE}/run.sh"
         sh "${env.WORKSPACE}/run.sh"
