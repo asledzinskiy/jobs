@@ -41,14 +41,16 @@ node('tools') {
       }
 
       stage ('Create initial config') {
-        writeFile file: "${WORKSPACE}/run.sh", text: '''\
+        writeFile file: "${env.WORKSPACE}/run.sh", text: '''\
           #!/bin/bash -ex
 
-          source ${WORKSPACE}/tests/vars.sh
-          ${WORKSPACE}/mcp-ci.sh init-config
+          source ${env.WORKSPACE}/tests/vars.sh
+          ${env.WORKSPACE}/mcp-ci.sh init-config
         '''.stripIndent()
-        sh "chmod +x ${WORKSPACE}/run.sh"
-        sh "${WORKSPACE}/run.sh"
+        sh "chmod +x ${env.WORKSPACE}/run.sh"
+        sh "${env.WORKSPACE}/run.sh"
+        writeFile file: "${env.WORKSPACE}/conf/ssh/jenkins_admin.pub",
+                  text: "{env.JENKINS_MASTER_ID_RSA_PUB}"
       }
 
       stage ('Execute prepare-slave-nodes playbook') {

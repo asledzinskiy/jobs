@@ -20,6 +20,15 @@
           name: HOSTS_LIST
           default: localhost
           description: 'A space separated list of hosts to provision'
+      - string:
+          name: JENKINS_MASTER_ID_RSA_PUB
+          default: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsFm/qIB/GgJoOkYDKNNIgkoj0m3vYiN36NFxyhf\
+                    BFFCWFFop45Z8NIEDkjWELDHzhjQglVhBzfFHSGoDNzm6umQm9UskgwFJijKeiH/P/NRHWMUB63uM/\
+                    qCX9dpNMTb3S0g2d85xNcuBDOUX5SOOav/tvKA1hxboZ5f/LtjSlaOoMKbvIU6acgsihifNpIeSfQs\
+                    c9RiHGd6XhNrkiG1F7M5eMUAvGQl5LLDtwS4qdy+V0ExCj8gyut/sXIDD37QgIF47rUPLbnlUj3BkV\
+                    386orEYDZ6J450ZnVEdJ+ZatVMqdkE/Ede3vDKkeWE8+Ln6/QzJf0ogV4Nr9MBSTdH5T jenkins_admin"
+          description: 'Public key for jenkins master'
+
     dsl:
       !include-raw-escape: prepare-slave-nodes.groovy
     wrappers:
