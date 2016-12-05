@@ -1,6 +1,6 @@
 - job-template:
-    name: pipeline-calico-felix
-    project-name: pipeline-calico
+    name: calico-felix-pipeline
+    project-name: calico-pipeline
     description: |
       Pipeline for calico-felix project
     project-type: workflow
@@ -29,8 +29,8 @@
 
 
 - job-template:
-    name: pipeline-calico-confd
-    project-name: pipeline-calico
+    name: calico-confd-pipeline
+    project-name: calico-pipeline
     description: |
       Pipeline for calico-confd project
     project-type: workflow
@@ -58,10 +58,10 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: pipeline-calico-bird
-    project-name: pipeline-calico
+    name: calico-bird-pipeline
+    project-name: calico-pipeline
     description: |
-      Pipeline for calico-confd project
+      Pipeline for calico-bird project
     project-type: workflow
     dsl:
       !include-raw-escape: calico-bird.groovy
@@ -87,8 +87,8 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: pipeline-calico-libcalico
-    project-name: pipeline-calico
+    name: calico-libcalico-pipeline
+    project-name: calico-pipeline
     description: |
       Pipeline for libcalico project
     project-type: workflow
@@ -116,8 +116,8 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: pipeline-calico-libcalico-go
-    project-name: pipeline-calico
+    name: calico-libcalico-go-pipeline
+    project-name: calico-pipeline
     description: |
       Pipeline for libcalico-go project
     project-type: workflow
@@ -145,8 +145,8 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: pipeline-calico-cni
-    project-name: pipeline-calico
+    name: calico-cni-pipeline
+    project-name: calico-pipeline
     description: |
       Pipeline for calico-cni project
     project-type: workflow
@@ -174,8 +174,8 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: pipeline-calico-containers
-    project-name: pipeline-calico
+    name: calico-containers-pipeline
+    project-name: calico-pipeline
     description: |
       Pipeline for calico-containers project
     project-type: workflow

@@ -1,6 +1,6 @@
 - job-template:
-    name: pipeline-calico-felix-gate
-    project-name: pipeline-calico-gate
+    name: calico-felix-merge-pipeline
+    project-name: calico-merge-pipelines
     description: |
       Pipeline for calico-felix project
     properties:
@@ -25,8 +25,7 @@
       - gerrit:
           trigger-on:
             - change-merged-event
-            - comment-added-contains-event:
-                comment-contains-value: '(recheck|reverify)'
+
           projects:
             - project-compare-type: PLAIN
               project-pattern: projectcalico/felix
@@ -37,8 +36,8 @@
 
 
 - job-template:
-    name: pipeline-calico-confd-gate
-    project-name: pipeline-calico-gate
+    name: calico-confd-merge-pipeline
+    project-name: calico-merge-pipelines
     description: |
       Pipeline for calico-confd project
     properties:
@@ -63,8 +62,7 @@
       - gerrit:
           trigger-on:
             - change-merged-event
-            - comment-added-contains-event:
-                comment-contains-value: '(recheck|reverify)'
+
           projects:
             - project-compare-type: PLAIN
               project-pattern: projectcalico/confd
@@ -74,10 +72,10 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: pipeline-calico-bird-gate
-    project-name: pipeline-calico-gate
+    name: calico-bird-merge-pipeline
+    project-name: calico-merge-pipelines
     description: |
-      Pipeline for calico-confd project
+      Pipeline for calico-bird project
     properties:
       - throttle:
           categories:
@@ -100,8 +98,7 @@
       - gerrit:
           trigger-on:
             - change-merged-event
-            - comment-added-contains-event:
-                comment-contains-value: '(recheck|reverify)'
+
           projects:
             - project-compare-type: PLAIN
               project-pattern: projectcalico/calico-bird
@@ -111,8 +108,8 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: pipeline-calico-libcalico-gate
-    project-name: pipeline-calico-gate
+    name: calico-libcalico-merge-pipeline
+    project-name: calico-merge-pipelines
     description: |
       Pipeline for libcalico project
     properties:
@@ -137,8 +134,7 @@
       - gerrit:
           trigger-on:
             - change-merged-event
-            - comment-added-contains-event:
-                comment-contains-value: '(recheck|reverify)'
+
           projects:
             - project-compare-type: PLAIN
               project-pattern: projectcalico/libcalico
@@ -148,8 +144,8 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: pipeline-calico-libcalico-go-gate
-    project-name: pipeline-calico-gate
+    name: calico-libcalico-go-merge-pipeline
+    project-name: calico-merge-pipelines
     description: |
       Pipeline for libcalico-go project
     properties:
@@ -174,8 +170,7 @@
       - gerrit:
           trigger-on:
             - change-merged-event
-            - comment-added-contains-event:
-                comment-contains-value: '(recheck|reverify)'
+
           projects:
             - project-compare-type: PLAIN
               project-pattern: projectcalico/libcalico-go
@@ -185,8 +180,8 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: pipeline-calico-cni-gate
-    project-name: pipeline-calico-gate
+    name: calico-cni-merge-pipeline
+    project-name: calico-merge-pipelines
     description: |
       Pipeline for calico-cni project
     properties:
@@ -211,8 +206,7 @@
       - gerrit:
           trigger-on:
             - change-merged-event
-            - comment-added-contains-event:
-                comment-contains-value: '(recheck|reverify)'
+
           projects:
             - project-compare-type: PLAIN
               project-pattern: projectcalico/calico-cni
@@ -222,8 +216,8 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: pipeline-calico-containers-gate
-    project-name: pipeline-calico-gate
+    name: calico-containers-merge-pipeline
+    project-name: calico-merge-pipelines
     description: |
       Pipeline for calico-containers project
     properties:
@@ -248,8 +242,7 @@
       - gerrit:
           trigger-on:
             - change-merged-event
-            - comment-added-contains-event:
-                comment-contains-value: '(recheck|reverify)'
+
           projects:
             - project-compare-type: PLAIN
               project-pattern: projectcalico/calico-containers

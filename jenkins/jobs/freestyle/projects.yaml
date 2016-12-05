@@ -87,26 +87,26 @@
 
 
 - project:
-    name: pipeline-calico
+    name: calico-pipeline
     jobs:
-      - pipeline-calico-bird
-      - pipeline-calico-cni
-      - pipeline-calico-confd
-      - pipeline-calico-containers
-      - pipeline-calico-felix
-      - pipeline-calico-libcalico
-      - pipeline-calico-libcalico-go
+      - calico-bird-pipeline
+      - calico-cni-pipeline
+      - calico-confd-pipeline
+      - calico-containers-pipeline
+      - calico-felix-pipeline
+      - calico-libcalico-go-pipeline
+      - calico-libcalico-pipeline
 
 - project:
-    name: pipeline-calico-gate
+    name: calico-merge-pipelines
     jobs:
-      - pipeline-calico-bird-gate
-      - pipeline-calico-cni-gate
-      - pipeline-calico-confd-gate
-      - pipeline-calico-containers-gate
-      - pipeline-calico-felix-gate
-      - pipeline-calico-libcalico-gate
-      - pipeline-calico-libcalico-go-gate
+      - calico-bird-merge-pipeline
+      - calico-cni-merge-pipeline
+      - calico-confd-merge-pipeline
+      - calico-containers-merge-pipeline
+      - calico-felix-merge-pipeline
+      - calico-libcalico-go-merge-pipeline
+      - calico-libcalico-merge-pipeline
 
 - project:
     name: sync-upstream-repos
