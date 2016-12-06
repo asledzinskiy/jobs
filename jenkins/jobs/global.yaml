@@ -5,8 +5,8 @@
     gerrit-host: "gerrit.mcp.mirantis.net"
     gerrit-port: '29418'
     gerrit-url: "https://gerrit.mcp.mirantis.net"
-    artifactory-host: "artifactory02.mcp.mirantis.net"
-    artifactory-url: "https://artifactory02.mcp.mirantis.net"
+    artifactory-host: "artifactory.mcp.mirantis.net"
+    artifactory-url: "https://artifactory.mcp.mirantis.net"
     artifactory-docker: "docker.mirantis.net"
 
     mcp-k8s-local-registry: "mcp-k8s-local.docker.mirantis.net"
