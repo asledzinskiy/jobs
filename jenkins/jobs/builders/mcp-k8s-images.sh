@@ -20,9 +20,11 @@ set +x
 docker login -u "${ARTIFACTORY_LOGIN}" -p "${ARTIFACTORY_PASSWORD}" "${DOCKER_REGISTRY}"
 set -x
 
+export TEST_MODE=true
+./mcp-ci.sh init-config
+
 for image in base unit integration; do
   # copy test conf file as it's required but not used
-  cp tests/test_conf.yml conf/conf.yml
   ./mcp-ci.sh build k8s-tests-${image}
   docker tag k8s-tests-${image}:latest ${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/k8s-tests-${image}:latest
   docker push ${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/k8s-tests-${image}:latest
