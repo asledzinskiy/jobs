@@ -2,8 +2,8 @@
     name: db-backup
     description: |
       This job is used to execute MySQL dump with automysqlbackup
-      It is must be executed on tools container
-    node: tools
+      It is must be executed on tools container (infra-tools label)
+    node: infra-tools
     concurrent: false
     builders:
       - shell:

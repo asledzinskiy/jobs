@@ -1,4 +1,4 @@
-node('gerrit-update') {
+node('infra-tools') {
 
     stage('Code checkout') {
         def HOST = env.GERRIT_HOST
