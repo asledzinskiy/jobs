@@ -168,7 +168,7 @@
 -
   project: kubernetes/kubernetes
   description: kubernetes main repository
-  upstream: https://review.fuel-infra.org/kubernetes/kubernetes.git
+  upstream: https://gerrit.mcp.mirantis.net/kubernetes/kubernetes.git
   acl-config: acls/kubernetes/kubernetes.config
 
 -
@@ -179,7 +179,7 @@
 -
   project: mcp-ci/gitrepo
   description: Tool for git repo manipulation
-  upstream: https://review.fuel-infra.org/mcp-ci/gitrepo.git
+  upstream: https://gerrit.mcp.mirantis.net/mcp-ci/gitrepo.git
   acl-config: acls/mcp-ci/mcp-ci.gitrepo.config
 
 -
@@ -207,13 +207,13 @@
 -
   project: mcp-netchecker/mcp-netchecker-agent
   description: MCP network checker agent
-  upstream: https://review.fuel-infra.org/mcp-netchecker/mcp-netchecker-agent
+  upstream: https://gerrit.mcp.mirantis.net/mcp-netchecker/mcp-netchecker-agent
   acl-config: acls/mcp-netchecker/mcp-netchecker.config
 
 -
   project: mcp-netchecker/mcp-netchecker-server
   description: MCP network checker server
-  upstream: https://review.fuel-infra.org/mcp-netchecker/mcp-netchecker-server
+  upstream: https://gerrit.mcp.mirantis.net/mcp-netchecker/mcp-netchecker-server
   acl-config: acls/mcp-netchecker/mcp-netchecker.config
 
 -

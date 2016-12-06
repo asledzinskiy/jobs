@@ -824,10 +824,6 @@ else
 fi
 
 gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC}"
-# (skulanov) FIXME: remove this after complete switching to mcp gerrit
-# but for new we shouldn't run sync for review.fuel-infra.org
-if [ "${GERRIT_HOST}" != "review.fuel-infra.org" ]; then
-  gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_TCP}"
-  gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_FUEL_CCP}"
-  gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_MK}"
-fi
+gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_TCP}"
+gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_FUEL_CCP}"
+gitrepo sync ${FORCE_FLAG} "${PROJECTS_TO_SYNC_MK}"
