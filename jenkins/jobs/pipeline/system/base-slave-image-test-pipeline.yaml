@@ -3,7 +3,7 @@
     description: |
       Build Docker Swarm image for Jenkins Swarm slave
     project-type: workflow
-    concurrent: true
+    concurrent: false
     parameters:
       - string:
           name: DOCKER_REGISTRY

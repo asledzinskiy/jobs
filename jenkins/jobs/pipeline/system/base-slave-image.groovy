@@ -30,7 +30,7 @@ def build_artifacts () {
             def fsroot = "${env.FSROOT}"
             def jenkins_swarm_client_version = "${env.JENKINS_SWARM_CLIENT_VERSION}"
             def container_user = "${env.CONTAINER_USER}"
-            def imageTag = sh(returnStdout: true, script: 'git rev-list --count HEAD').trim()
+            def imageTag = common.getDatetime()
 
             for(img in image_names) {
                 // Build
@@ -43,18 +43,26 @@ def build_artifacts () {
                 sh "docker build --build-arg fsroot=${fsroot} \
                     --build-arg jenkins_swarm_client_version=${jenkins_swarm_client_version} \
                     --build-arg container_user=${container_user} \
-                    --build-arg artifactory_url=${artifactory_url} -t ${docker_image} ${img}"
+                    --build-arg artifactory_url=${artifactory_url} -t ${docker_image}:${imageTag} ${img}"
 
                 // Upload
-                sh "docker tag ${docker_image} ${dockerRepository}/${docker_image}:${imageTag}"
+                sh "docker tag ${docker_image}:${imageTag} ${dockerRepository}/${docker_image}:${imageTag}"
                 artifactory.uploadImageToArtifactory(artifactoryServer,
                                                      dockerRepository,
                                                      "${docker_image}",
                                                      "${imageTag}",
                                                      docker_dev_repo)
 
+                // Add custom properties
+                def release_imageTag = sh(returnStdout: true, script: 'git rev-list --count HEAD').trim()
+                def custom_properties = ['com.mirantis.baseImageVersion': "${base_image_version}",
+                                         'com.mirantis.releaseImageTag': "${release_imageTag}",
+                                         'com.mirantis.imageType': "${img}"]
+                def artifact_url = "${artifactory_url}/api/storage/${docker_dev_repo}/${docker_image}/${imageTag}"
+                artifactory.setProperties(artifact_url, custom_properties, true)
+
                 // Cleanup
-                sh "docker rmi ${docker_image} ${dockerRepository}/${docker_image}:${imageTag}"
+                sh "docker rmi ${docker_image}:${imageTag} ${dockerRepository}/${docker_image}:${imageTag}"
             }
             // buildInfo should be published only once
             artifactoryServer.publishBuildInfo(buildInfo)
@@ -68,19 +76,18 @@ def promote_artifacts () {
             def artifactory_url = artifactoryServer.getUrl()
 
             for (img in image_names) {
-                def base_image_version = sh(script: "cat ${img}/Dockerfile | grep -E '^FROM .*' | \
-                                                     awk -F ':' '{print \$NF}'",
-                        returnStdout: true).trim()
-                def docker_image = "${namespace}/${img}-${base_image_version}"
                 def properties = ['com.mirantis.gerritChangeId': "${env.GERRIT_CHANGE_ID}",
                     'com.mirantis.gerritPatchsetNumber': "${env.GERRIT_PATCHSET_NUMBER}",
-                    'com.mirantis.targetImg': "${docker_image}"]
+                    'com.mirantis.imageType': "${img}"]
 
                 // Search for an artifact with required properties
                 def artifact_url = artifactory.uriByProperties(artifactory_url, properties)
 
                 def img_properties = artifactory.getPropertiesForArtifact(artifact_url)
                 if ( artifact_url ) {
+                    def base_image_version = img_properties.get('com.mirantis.baseImageVersion').join(',')
+                    def docker_image = "${namespace}/${img}-${base_image_version}"
+
                     def promotionConfig = [
                         'buildName'  : img_properties.get('com.mirantis.buildName').join(','),
                         'buildNumber': img_properties.get('com.mirantis.buildNumber').join(','),
@@ -93,8 +100,8 @@ def promote_artifacts () {
                             docker_prod_repo,
                             "${docker_image}",
                             img_properties.get('com.mirantis.targetTag').join(','),
-                            img_properties.get('com.mirantis.targetTag').join(','),
-                                                      true)
+                            img_properties.get('com.mirantis.releaseImageTag').join(','),
+                            true)
                     // move to docker_prod_repo with the 'latest' tag
                     artifactory.promoteDockerArtifact(artifactory_url,
                             docker_dev_repo,
