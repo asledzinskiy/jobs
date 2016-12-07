@@ -20,6 +20,7 @@
       - mcp-build-debian-base
       - mcp-build-run-tests
       - mcp-k8s-images
+      - mcp-k8s-images-pipeline
       - mcp-lint-test
       - mcp-prepare-env
       - mcp-k8s-merge-pipeline
