@@ -11,13 +11,6 @@
 
     concurrent: true
     node: system-test
-    parameters:
-      - string:
-          name: HYPERKUBE_IMAGE_REPO
-          default: '{docker-prod-virtual}/mirantis/kubernetes/hyperkube-amd64'
-      - string:
-          name: HYPERKUBE_IMAGE_TAG
-          default: 'latest'
     builders:
       - multijob:
           name: MCP-CCP tests
