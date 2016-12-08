@@ -1,0 +1,15 @@
+- job:
+    name: ccp-docker-build
+    description: |
+      Fuel CCP - CCP image builder container
+    project-type: workflow
+    concurrent: false
+    workflow-scm:
+      scm:
+        basic-scm:
+          branch: 'master'
+          project: 'ccp/fuel-ccp-docker'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+      script-path: Jenkinsfile
+
