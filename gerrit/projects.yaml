@@ -233,6 +233,21 @@
   acl-config: acls/mcp/mcp-installer.config
 
 -
+  project: mk-ci
+  description: Parent project for mk-ci projects
+  acl-config: acls/mk-ci/mk-ci.config
+
+-
+  project: mk-ci/mk-ci-salt-model
+  description: project-config for Mk CI Reclass
+  acl-config: acls/mk-ci/mk-ci.config
+
+-
+  project: mk-ci/project-config
+  description: project-config for Mk CI project
+  acl-config: acls/mk-ci/mk-ci.config
+
+-
   project: mk/openstack-salt
   upstream: git://github.com/openstack/openstack-salt.git
   description: Salt formulas for deploying OpenStack
