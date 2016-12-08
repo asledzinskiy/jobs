@@ -159,6 +159,11 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: ccp/fuel-ccp-tempest-pipeline
+  description: Fuel CCP - Tempest against Openstack
+  acl-config: acls/ccp/ccp-dev.config
+
+-
   project: ccp/fuel-ccp-tests
   description: Fuel CCP - Tests sub-project
   upstream: git://git.openstack.org/openstack/fuel-ccp-tests
