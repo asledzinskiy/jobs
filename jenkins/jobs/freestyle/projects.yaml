@@ -177,6 +177,12 @@
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
 
 - project:
+    name: ccp
+    jobs:
+      - ccp-docker-build
+      - ccp-tempest-test
+
+- project:
     name: mcp-ci-infra
     jobs:
     - '{project-name}-tox-{testenv}':

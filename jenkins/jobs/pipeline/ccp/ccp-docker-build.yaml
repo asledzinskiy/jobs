@@ -1,4 +1,4 @@
-- job:
+- job-template:
     name: ccp-docker-build
     description: |
       Fuel CCP - CCP image builder container

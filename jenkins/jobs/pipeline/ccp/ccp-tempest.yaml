@@ -1,4 +1,4 @@
-- job:
+- job-template:
     name: ccp-tempest-test
     description: |
       Tempest tests to be run against Openstack
