@@ -2,6 +2,16 @@
     name: download-mcp-systest-image
     description: |
       Downloads prebuilt Ubuntu image for fuel-devops
+    parameters:
+      - string:
+          name: IMAGE_LINK
+          default: '{image_link}'
+          description: "Which image to use in tests"
+
+      - string:
+          name: IMAGE_PATH
+          default: '{image_path}'
+          description: "Local path to the image"
     builders:
       - get-systest-image
     concurrent: true

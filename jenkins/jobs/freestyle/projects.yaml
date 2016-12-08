@@ -189,6 +189,8 @@
 
 - project:
     name: download-mcp-systest-image
+    image_link: 'http://share01-scc.ng.mirantis.net/images.lst'
+    image_path: '/home/jenkins/images/ubuntu-1604-server.qcow2'
     jobs:
        - 'download-mcp-systest-image'
 
