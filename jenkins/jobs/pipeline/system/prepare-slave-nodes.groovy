@@ -70,6 +70,7 @@ node('tools') {
       }
     }
 
+    currentBuild.description = HOSTS
   }
   catch(err) {
     echo "Failed: ${err}"
