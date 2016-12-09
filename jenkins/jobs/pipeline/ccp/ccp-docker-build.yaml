@@ -3,7 +3,13 @@
     description: |
       Fuel CCP - CCP image builder container
     project-type: workflow
-    concurrent: false
+
+    parameters:
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for binaries and images'
+
     workflow-scm:
       scm:
         basic-scm:
