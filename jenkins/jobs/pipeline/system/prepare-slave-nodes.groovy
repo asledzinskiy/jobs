@@ -42,8 +42,14 @@ node('tools') {
 
       stage ('Create initial config') {
         // we need to create jenkins_admin key-pare before init process
-        // private key can be fake, but pub key is real
-        sh "touch ${env.WORKSPACE}/conf/ssh/jenkins_admin"
+        // private key can be fake,
+        writeFile file: "${env.WORKSPACE}/conf/ssh/jenkins_admin",
+        text: '''\
+        -----BEGIN RSA PRIVATE KEY-----
+        FAKE KEYS
+        -----END RSA PRIVATE KEY-----
+        '''.stripIndent()
+        // but pub key is real
         writeFile file: "${env.WORKSPACE}/conf/ssh/jenkins_admin.pub",
         text: "${env.JENKINS_MASTER_ID_RSA_PUB}"
 
