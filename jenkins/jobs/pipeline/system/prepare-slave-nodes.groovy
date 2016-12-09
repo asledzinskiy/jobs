@@ -41,6 +41,12 @@ node('tools') {
       }
 
       stage ('Create initial config') {
+        // we need to create jenkins_admin key-pare before init process
+        // private key can be fake, but pub key is real
+        sh "touch ${env.WORKSPACE}/conf/ssh/jenkins_admin"
+        writeFile file: "${env.WORKSPACE}/conf/ssh/jenkins_admin.pub",
+        text: "${env.JENKINS_MASTER_ID_RSA_PUB}"
+
         writeFile file: "${env.WORKSPACE}/run.sh", text: '''\
           #!/bin/bash -ex
 
@@ -49,8 +55,6 @@ node('tools') {
         '''.stripIndent()
         sh "chmod +x ${env.WORKSPACE}/run.sh"
         sh "${env.WORKSPACE}/run.sh"
-        writeFile file: "${env.WORKSPACE}/conf/ssh/jenkins_admin.pub",
-                  text: "${env.JENKINS_MASTER_ID_RSA_PUB}"
       }
 
       stage ('Execute prepare-slave-nodes playbook') {
