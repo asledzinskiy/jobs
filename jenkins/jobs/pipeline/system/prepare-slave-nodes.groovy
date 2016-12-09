@@ -50,7 +50,7 @@ node('tools') {
         sh "chmod +x ${env.WORKSPACE}/run.sh"
         sh "${env.WORKSPACE}/run.sh"
         writeFile file: "${env.WORKSPACE}/conf/ssh/jenkins_admin.pub",
-                  text: "{env.JENKINS_MASTER_ID_RSA_PUB}"
+                  text: "${env.JENKINS_MASTER_ID_RSA_PUB}"
       }
 
       stage ('Execute prepare-slave-nodes playbook') {
