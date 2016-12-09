@@ -11,7 +11,6 @@
 
     mcp-k8s-local-registry: "mcp-k8s-local.docker.mirantis.net"
     mcp-k8s-ci-registry: "mcp-k8s-ci.docker.mirantis.net"
-    k8s-tests-registry: "k8s-tests-images.docker.mirantis.net"
     mcp-k8s-registry: "mcp-k8s.docker.mirantis.net"
     docker-prod-virtual: "docker-prod-virtual.docker.mirantis.net"
     docker-dev-virtual: "docker-dev-virtual.docker.mirantis.net"

@@ -23,11 +23,11 @@
           desription: 'Custom Artifactory URL'
       - string:
           name: DOCKER_IMAGE_UNIT
-          default: '{k8s-tests-registry}/k8s-tests-images/k8s-tests-unit:latest'
+          default: '{docker-prod-virtual}/mirantis/k8s-tests-images/k8s-tests-unit:latest'
           desription: 'Docker image for k8s unit tests'
       - string:
           name: DOCKER_IMAGE_INTEGRATION
-          default: '{k8s-tests-registry}/k8s-tests-images/k8s-tests-integration:latest'
+          default: '{docker-prod-virtual}/mirantis/k8s-tests-images/k8s-tests-integration:latest'
           desription: 'Docker image for k8s integration tests'
       - string:
           name: CALICO_CNI_IMAGE_REPO
