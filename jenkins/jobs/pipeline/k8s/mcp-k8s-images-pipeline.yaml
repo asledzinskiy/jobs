@@ -7,12 +7,8 @@
     parameters:
       - string:
           name: DOCKER_REGISTRY
-          default: '{k8s-tests-registry}'
-          description: 'Docker registry for tests'
-      - string:
-          name: DOCKER_REPOSITORY
-          default: 'k8s-tests-images'
-          desription: 'Docker repository name'
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for test images'
       - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
