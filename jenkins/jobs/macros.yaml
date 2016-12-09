@@ -49,6 +49,11 @@
     name: systest-params
     parameters:
     - string:
+        name: CONF_PATH
+        default: '$WORKSPACE/fuel-ccp-tests/fuel_ccp_tests/templates/{conf-file-name}'
+        description: "Path to template for fuel-ccp-tests"
+
+    - string:
         name: TEST_EXPRESSION
         default: '{test-expression}'
         description: "Tests will be executed with '-k' option. Example: 'test_method or test other'"

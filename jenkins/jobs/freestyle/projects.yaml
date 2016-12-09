@@ -222,9 +222,11 @@
     jobs:
      - 'mcp.ccp.{test-mark}':
          test-mark:
-          - smoke
           - system_few_os
           - galera
+         conf-file-name: 'five_slaves.yaml'
+     - 'mcp.ccp.{test-mark}':
+         test-mark: smoke
 
 - project:
     name: tcp-build

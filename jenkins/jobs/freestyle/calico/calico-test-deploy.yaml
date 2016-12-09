@@ -2,6 +2,7 @@
     name: 'calico.system-test.{test-name}'
     description: 'Run system test "{test-name}" for "Calico" project'
     test-expression: 'none'
+    conf-file-name: 'default.yaml'
     node: 'system-test'
     concurrent: true
     timeout: '60'
@@ -34,6 +35,7 @@
         default: 'no'
         description: 'If yes/true, then DO NOT ERASE existing environment'
     - systest-params:
+        conf-file-name: '{conf-file-name}'
         docker-prod-virtual: '{docker-prod-virtual}'
         test-expression: '{test-expression}'
         mcp-branch: 'mcp'

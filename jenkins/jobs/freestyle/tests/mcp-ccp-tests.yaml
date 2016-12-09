@@ -3,6 +3,7 @@
     description: 'Run ccp test "{test-mark}"'
     test-expression: 'none'
     test-mark: 'none'
+    conf-file-name: 'default.yaml'
     node: 'system-test'
     concurrent: true
     timeout: '60'
@@ -35,6 +36,7 @@
         default: 'no'
         description: 'If yes/true, then DO NOT ERASE existing environment'
     - systest-params:
+        conf-file-name: '{conf-file-name}'
         docker-prod-virtual: '{docker-prod-virtual}'
         test-expression: '{test-expression}'
         mcp-k8s-ci-registry: '{mcp-k8s-ci-registry}'
