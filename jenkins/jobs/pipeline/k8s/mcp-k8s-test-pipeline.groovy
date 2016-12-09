@@ -191,7 +191,7 @@ def run_integration_tests () {
                       mkdir -p ${ARTIFACTS}
                       sudo apt-get update
                       sudo apt-get -y install build-essential
-                      wget https://storage.googleapis.com/golang/go1.6.3.linux-amd64.tar.gz
+                      wget https://storage.googleapis.com/golang/go1.7.4.linux-amd64.tar.gz
                       sudo tar -xzf go*.tar.gz -C /usr/local/
                       sudo chown -R vagrant.vagrant /usr/local/go
                       go get -u github.com/jteeuwen/go-bindata/go-bindata
@@ -482,7 +482,7 @@ def build_publish_binaries () {
                                "${WORKSPACE}/_build_test_runner"
                         '''
                         writeFile file: workspace + '/_build_test_runner/Dockerfile', text: """\
-                            FROM golang:1.6.3
+                            FROM golang:1.7.4
 
                             RUN mkdir -p /go/src/k8s.io
                             ADD kubernetes-test.tar.gz /go/src/k8s.io/
