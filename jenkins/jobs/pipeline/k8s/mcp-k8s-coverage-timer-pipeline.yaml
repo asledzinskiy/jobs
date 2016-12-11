@@ -7,7 +7,7 @@
     parameters:
       - string:
           name: DOWNSTREAM_BRANCH
-          default: '1.4-mcp'
+          default: '1.5-mcp'
           description: 'Kubernetes downstream branch'
       - string:
           name: GERRIT_HOST
