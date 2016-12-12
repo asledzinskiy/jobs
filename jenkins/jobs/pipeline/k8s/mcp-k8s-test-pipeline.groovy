@@ -18,6 +18,7 @@ artifactory_tools = new com.mirantis.mcp.MCPArtifactory()
 git_tools = new com.mirantis.mcp.Git()
 buildInfo = Artifactory.newBuildInfo()
 buildDesc = ''
+gitTools = new com.mirantis.mcp.Git()
 
 if ( event == 'patchset-created' ) {
     build_publish_binaries()
@@ -44,13 +45,13 @@ def run_unit_tests () {
             deleteDir()
             if ( env.GERRIT_EVENT_TYPE ) {
                 clone_k8s_repo()
-                gerritPatchsetCheckout{
+                gitTools.gerritPatchsetCheckout{
                     credentialsId = "mcp-ci-gerrit"
                 }
             } else {
                 def downstream_branch = "${env.DOWNSTREAM_BRANCH}"
                 def gerrit_host = "${env.GERRIT_HOST}"
-                gitSSHCheckout {
+                gitTools.gitSSHCheckout {
                     credentialsId = "mcp-ci-gerrit"
                     branch = "${downstream_branch}"
                     host = "${gerrit_host}"
@@ -87,7 +88,7 @@ def run_integration_tests () {
             node('k8s') {
                 deleteDir()
                 clone_k8s_repo()
-                gerritPatchsetCheckout {
+                gitTools.gerritPatchsetCheckout {
                     credentialsId = "mcp-ci-gerrit"
                 }
                 sh "mkdir ${env.WORKSPACE}/${artifacts_dir}"
@@ -129,7 +130,7 @@ def run_integration_tests () {
 
                 deleteDir()
                 def HOST = env.GERRIT_HOST
-                gitSSHCheckout {
+                gitTools.gitSSHCheckout {
                   credentialsId = "mcp-ci-gerrit"
                   branch = "master"
                   host = HOST
@@ -137,7 +138,7 @@ def run_integration_tests () {
                 }
                 dir("${k8s_repo_dir}") {
                   clone_k8s_repo()
-                  gerritPatchsetCheckout {
+                  gitTools.gerritPatchsetCheckout {
                       credentialsId = "mcp-ci-gerrit"
                   }
                 }
@@ -274,13 +275,13 @@ def build_publish_binaries () {
                 dir("${k8s_repo_dir}") {
                     if ( env.GERRIT_EVENT_TYPE ) {
                         clone_k8s_repo()
-                        gerritPatchsetCheckout{
+                        gitTools.gerritPatchsetCheckout{
                             credentialsId = "mcp-ci-gerrit"
                         }
                         git_commit_tag_id = git_tools.getGitDescribe(true)
                     } else {
                         def gerrit_host = "${env.GERRIT_HOST}"
-                        gitSSHCheckout {
+                        gitTools.gitSSHCheckout {
                             credentialsId = "mcp-ci-gerrit"
                             branch = "master"
                             host = "${gerrit_host}"
@@ -408,12 +409,12 @@ def build_publish_binaries () {
                 def gerrit_host = "${env.GERRIT_HOST}"
                 if ( env.GERRIT_EVENT_TYPE ) {
                     clone_k8s_repo()
-                    gerritPatchsetCheckout{
+                    gitTools.gerritPatchsetCheckout{
                         credentialsId = "mcp-ci-gerrit"
                     }
                     git_commit_tag_id = git_tools.getGitDescribe(true)
                 } else {
-                    gitSSHCheckout {
+                    gitTools.gitSSHCheckout {
                         credentialsId = "mcp-ci-gerrit"
                         branch = "master"
                         host = "${gerrit_host}"
@@ -425,7 +426,7 @@ def build_publish_binaries () {
 
                 def projectRepoDir = "/tmp/project-config-${timestamp}"
                 def helpersDir = "${projectRepoDir}/jenkins/jobs/builders/groovy-builders"
-                gitSSHCheckout {
+                gitTools.gitSSHCheckout {
                     credentialsId = "mcp-ci-gerrit"
                     branch = "master"
                     host = "${gerrit_host}"

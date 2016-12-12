@@ -1,10 +1,11 @@
+def gitTools = new com.mirantis.mcp.Git()
 node('verify-tests') {
 
   def RULES_EXCLUDE="ANSIBLE0010,ANSIBLE0012,E511"
   def RULES_PROJECT="https://github.com/tsukinowasha/ansible-lint-rules"
 
   stage('Code checkout') {
-    gerritPatchsetCheckout {
+    gitTools.gerritPatchsetCheckout {
       credentialsId = "mcp-ci-gerrit"
       withWipeOut = true
     }

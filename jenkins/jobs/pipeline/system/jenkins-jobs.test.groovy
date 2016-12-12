@@ -31,6 +31,8 @@ def diff_check(diff_data) {
     return output
 }
 
+def gitTools = new com.mirantis.mcp.Git()
+
 node('tools') {
 
     env.OUT_DIR = "${env.WORKSPACE}/output/jobs"
@@ -39,7 +41,7 @@ node('tools') {
     def diff_list = [:]
 
     stage('Code checkout') {
-        gerritPatchsetCheckout {
+        gitTools.gerritPatchsetCheckout {
             credentialsId = "mcp-ci-gerrit"
         }
     }

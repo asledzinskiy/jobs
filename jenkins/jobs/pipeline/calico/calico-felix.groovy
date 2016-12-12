@@ -1,5 +1,6 @@
 // Add library functions from pipeline-library
 artifactory = new com.mirantis.mcp.MCPArtifactory()
+calico = new com.mirantis.mcp.Calico()
 common = new com.mirantis.mcp.Common()
 docker = new com.mirantis.mcp.Docker()
 git = new com.mirantis.mcp.Git()
@@ -35,7 +36,7 @@ def buildFelix(){
       def felixImgTag = ""
 
       def HOST = env.GERRIT_HOST
-      gitSSHCheckout {
+      git.gitSSHCheckout {
         credentialsId = "mcp-ci-gerrit"
         branch = "mcp"
         host = HOST
@@ -45,7 +46,7 @@ def buildFelix(){
       dir("${env.WORKSPACE}/tmp_calico-felix"){
 
         stage ('Checkout felix'){
-          gerritPatchsetCheckout {
+          git.gerritPatchsetCheckout {
             credentialsId = "mcp-ci-gerrit"
             withWipeOut = true
           }
@@ -86,7 +87,7 @@ def buildFelix(){
       def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
       def felixContainerName = felixImg + ":" + felixImgTag
       // start building calico-containers
-      def calicoContainersArts = buildCalicoContainers {
+      def calicoContainersArts = calico.buildCalicoContainers {
         artifactoryURL = "${artifactoryUrl}/binary-prod-virtual"
         dockerRepo = dockerRepository
         felixImage = felixContainerName

@@ -1,3 +1,4 @@
+def gitTools = new com.mirantis.mcp.Git()
 node('tools') {
   try {
 
@@ -13,7 +14,7 @@ node('tools') {
 
     stage ('Code checkout') {
       def GERRIT_HOST = "${env.GERRIT_HOST}"
-      gitSSHCheckout {
+      gitTools.gitSSHCheckout {
         credentialsId = "mcp-ci-gerrit"
         branch = BRANCH
         host = GERRIT_HOST

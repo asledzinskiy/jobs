@@ -1,4 +1,5 @@
 def server = Artifactory.server("mcp-ci")
+def gitTools = new com.mirantis.mcp.Git()
 
 node('devops') {
 
@@ -16,7 +17,7 @@ node('devops') {
 
   stage('project-config code checkout') {
     def HOST = env.GERRIT_HOST
-    gitSSHCheckout {
+    gitTools.gitSSHCheckout {
       credentialsId = "mcp-ci-gerrit"
       branch = "master"
       host = HOST
@@ -26,7 +27,7 @@ node('devops') {
 
   stage('mcp-cicd-installer code checkout') {
     dir('mcp-cicd-installer') {
-      gerritPatchsetCheckout {
+      gitTools.gerritPatchsetCheckout {
         credentialsId = "mcp-ci-gerrit"
       }
     }

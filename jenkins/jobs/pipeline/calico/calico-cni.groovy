@@ -28,7 +28,7 @@ def buildCalicoCNI(){
     try {
 
       stage ('Checkout calico-cni'){
-        gerritPatchsetCheckout {
+        git.gerritPatchsetCheckout {
           credentialsId = "mcp-ci-gerrit"
           withWipeOut = true
         }
@@ -40,7 +40,7 @@ def buildCalicoCNI(){
       stage ('Switch to the downstream libcalico-go') {
         def LIBCALICOGO_PATH = "${env.WORKSPACE}/tmp_libcalico-go"
         def HOST = env.GERRIT_HOST
-        gitSSHCheckout {
+        git.gitSSHCheckout {
           credentialsId = "mcp-ci-gerrit"
           branch = "mcp"
           host = HOST

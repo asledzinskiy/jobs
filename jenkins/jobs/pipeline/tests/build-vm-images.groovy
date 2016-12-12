@@ -1,4 +1,5 @@
 def artifactory = new com.mirantis.mcp.MCPArtifactory()
+def gitTools = new com.mirantis.mcp.Git()
 def buildInfo = Artifactory.newBuildInfo()
 def custom_properties = ['latest=true'] as ArrayList
 def properties = artifactory.getBinaryBuildProperties(custom_properties)
@@ -15,7 +16,7 @@ node('builder') {
   def headless = true
 
   stage('Code checkout') {
-    gerritPatchsetCheckout {
+    gitTools.gerritPatchsetCheckout {
       credentialsId = "mcp-ci-gerrit"
       withWipeOut = true
     }

@@ -1,4 +1,5 @@
 def artifactory = new com.mirantis.mcp.MCPArtifactory()
+def gitTools = new com.mirantis.mcp.Git()
 def server = Artifactory.server('mcp-ci')
 
 if (!env.DOCKER_REGISTRY) {
@@ -14,7 +15,7 @@ node('k8s') {
     def dockerRegistry = env.DOCKER_REGISTRY
     def artifactoryUrl = server.getUrl()
     stage('prepare mcp-cicd-installer') {
-        gitSSHCheckout {
+        gitTools.gitSSHCheckout {
             credentialsId = 'mcp-ci-gerrit'
             host = gerritHost
             branch = 'master'

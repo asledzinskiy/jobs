@@ -1,3 +1,4 @@
+def gitTools = new com.mirantis.mcp.Git()
 node('calico'){
 
   try {
@@ -6,12 +7,12 @@ node('calico'){
 
     stage ('Checkout libcalico-go'){
       if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
-          gerritPatchsetCheckout {
+          gitTools.gerritPatchsetCheckout {
             credentialsId = "mcp-ci-gerrit"
             withWipeOut = true
           }
       } else {
-          gitSSHCheckout {
+          gitTools.gitSSHCheckout {
             credentialsId = "mcp-ci-gerrit"
             branch = "mcp"
             host = HOST

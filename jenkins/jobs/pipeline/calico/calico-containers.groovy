@@ -1,5 +1,6 @@
 // Add library functions from pipeline-library
 artifactory = new com.mirantis.mcp.MCPArtifactory()
+calico = new com.mirantis.mcp.Calico()
 common = new com.mirantis.mcp.Common()
 docker = new com.mirantis.mcp.Docker()
 git = new com.mirantis.mcp.Git()
@@ -27,7 +28,7 @@ def buildCalicoContainers(){
     try {
 
       stage ('Checkout calico-containers'){
-        gerritPatchsetCheckout {
+        git.gerritPatchsetCheckout {
           credentialsId = "mcp-ci-gerrit"
           withWipeOut = true
         }
@@ -40,7 +41,7 @@ def buildCalicoContainers(){
       def dockerRepository = env.DOCKER_REGISTRY
       def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
       def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
-      def calicoContainersArts = buildCalicoContainers {
+      def calicoContainersArts = calico.buildCalicoContainers {
         artifactoryURL = "${artifactoryUrl}/binary-prod-virtual"
         dockerRepo = dockerRepository
         nodeImage = nodeImg

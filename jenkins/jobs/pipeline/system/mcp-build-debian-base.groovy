@@ -4,6 +4,7 @@ def namespace = 'mirantis/base-images'
 def image_name = 'debian-base'
 def artifactory = new com.mirantis.mcp.MCPArtifactory()
 def common = new com.mirantis.mcp.Common()
+def gitTools = new com.mirantis.mcp.Git()
 def imageTag = common.getDatetime()
 def docker_registry = env.DEBIAN_DOCKER_REGISTRY
 def gerrit_host = env.GERRIT_HOST
@@ -17,7 +18,7 @@ stage('build-debian-image') {
         }
         def docker_image = "${namespace}/${image_name}"
         deleteDir()
-        gitSSHCheckout {
+        gitTools.gitSSHCheckout {
             credentialsId = "mcp-ci-gerrit"
             branch = "master"
             host = "${gerrit_host}"

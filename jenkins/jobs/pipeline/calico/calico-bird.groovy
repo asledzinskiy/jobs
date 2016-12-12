@@ -1,5 +1,6 @@
 // Add library functions from pipeline-library
 artifactory = new com.mirantis.mcp.MCPArtifactory()
+calico = new com.mirantis.mcp.Calico()
 common = new com.mirantis.mcp.Common()
 docker = new com.mirantis.mcp.Docker()
 git = new com.mirantis.mcp.Git()
@@ -33,7 +34,7 @@ def buildBird(){
     try {
 
       def HOST = env.GERRIT_HOST
-      gitSSHCheckout {
+      git.gitSSHCheckout {
         credentialsId = "mcp-ci-gerrit"
         branch = "mcp"
         host = HOST
@@ -43,7 +44,7 @@ def buildBird(){
       dir("${env.WORKSPACE}/tmp_bird"){
 
         stage ('Checkout bird'){
-          gerritPatchsetCheckout {
+          git.gerritPatchsetCheckout {
             credentialsId = "mcp-ci-gerrit"
             withWipeOut = true
           }
@@ -98,7 +99,7 @@ def buildBird(){
       def bird6 = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/bird6-${binaryTag}"
       def birdcl = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/birdcl-${binaryTag}"
       // start building calico-containers
-      def calicoContainersArts = buildCalicoContainers {
+      def calicoContainersArts = calico.buildCalicoContainers {
         artifactoryURL = "${artifactoryUrl}/binary-prod-virtual"
         dockerRepo = dockerRepository
         birdUrl = bird

@@ -9,6 +9,7 @@ image_names = [ "debian-slave", "ubuntu-slave" ]
 artifactory = new com.mirantis.mcp.MCPArtifactory()
 artifactoryServer = Artifactory.server("mcp-ci")
 common = new com.mirantis.mcp.Common()
+gitTools = new com.mirantis.mcp.Git()
 buildInfo = Artifactory.newBuildInfo()
 docker_registry = env.DOCKER_REGISTRY
 
@@ -25,7 +26,7 @@ def build_artifacts () {
         node('docker') {
             // Run build only on commit
             deleteDir()
-            gerritPatchsetCheckout{
+            gitTools.gerritPatchsetCheckout{
                 credentialsId = "mcp-ci-gerrit"
             }
             def dockerRepository = "${env.DOCKER_REGISTRY}"
