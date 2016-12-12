@@ -8,6 +8,7 @@ artifactory = new com.mirantis.mcp.MCPArtifactory()
 artifactoryServer = Artifactory.server("mcp-ci")
 common = new com.mirantis.mcp.Common()
 buildInfo = Artifactory.newBuildInfo()
+docker_registry = env.DOCKER_REGISTRY
 
 if ( env.GERRIT_EVENT_TYPE ) {
     if ( "${env.GERRIT_EVENT_TYPE}" == "change-merged" ) {
@@ -37,7 +38,12 @@ def build_artifacts () {
                 def base_image_version = sh(script: "cat ${img}/Dockerfile | grep -E '^FROM .*' | \
                                                      awk -F ':' '{print \$NF}'",
                         returnStdout: true).trim()
+                def old_registry = sh(script: "cat ${img}/Dockerfile | \
+                                           sed -rn 's/^FROM +([^\\/]+)\\/.*\$/\\1/p'",
+                        returnStdout: true).trim()
                 def docker_image = "${namespace}/${img}-${base_image_version}"
+                // Build from local registry
+                sh "sed -i 's/${old_registry}/${docker_registry}/g' ${img}/Dockerfile"
                 // Remove old one if exists
                 sh "docker rmi -f ${docker_image} || true"
                 sh "docker build --build-arg fsroot=${fsroot} \
