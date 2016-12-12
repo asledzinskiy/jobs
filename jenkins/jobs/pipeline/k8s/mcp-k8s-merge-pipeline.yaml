@@ -10,10 +10,6 @@
           default: '{docker-prod-virtual}'
           description: 'Docker registry for binaries and images'
       - string:
-          name: ARTIFACTORY_URL
-          default: '{artifactory-url}'
-          desription: 'Custom Artifactory URL'
-      - string:
           name: CALICO_CNI
           default: ''
           description: 'Custom Calico CNI url'

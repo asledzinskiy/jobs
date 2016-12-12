@@ -25,10 +25,6 @@
           default: 'debian:jessie'
           description: 'Base Docker image to build k8s'
       - string:
-          name: ARTIFACTORY_URL
-          default: '{artifactory-url}'
-          desription: 'Custom Artifactory URL'
-      - string:
           name: CALICO_CNI
           default: ''
           description: 'Custom Calico CNI url'

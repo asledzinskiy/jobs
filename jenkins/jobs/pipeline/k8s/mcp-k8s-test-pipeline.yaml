@@ -18,10 +18,6 @@
           default: 'debian:jessie'
           description: 'Base Docker image to build k8s'
       - string:
-          name: ARTIFACTORY_URL
-          default: '{artifactory-url}'
-          desription: 'Custom Artifactory URL'
-      - string:
           name: DOCKER_IMAGE_UNIT
           default: '{docker-prod-virtual}/mirantis/k8s-tests-images/k8s-tests-unit:latest'
           desription: 'Docker image for k8s unit tests'

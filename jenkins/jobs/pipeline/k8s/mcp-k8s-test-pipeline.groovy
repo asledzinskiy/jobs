@@ -13,6 +13,7 @@ docker_prod_repo = "docker-prod-local"
 binary_dev_repo = "binary-dev-local"
 binary_prod_repo = "binary-prod-local"
 server = Artifactory.server('mcp-ci')
+artifactoryUrl = server.getUrl()
 artifactory_tools = new com.mirantis.mcp.MCPArtifactory()
 git_tools = new com.mirantis.mcp.Git()
 buildInfo = Artifactory.newBuildInfo()
@@ -323,7 +324,7 @@ def build_publish_binaries () {
                              "CALICO_BINDIR=/opt/cni/bin",
                              // downstream options
                              "CALICO_DOWNSTREAM=${env.CALICO_DOWNSTREAM}",
-                             "ARTIFACTORY_URL=${env.ARTIFACTORY_URL}"]) {
+                             "ARTIFACTORY_URL=${artifactoryUrl}"]) {
 
                         try {
                             sh '''
@@ -375,7 +376,7 @@ def build_publish_binaries () {
                                                                "${kube_namespace}/${kube_docker_repo}",
                                                                "${kube_docker_version}", "${docker_dev_repo}")
                                 buildDesc = "hyperkube-image: ${kube_docker_registry}/${kube_namespace}/${kube_docker_repo}:${kube_docker_version}<br>\
-                                             hyperkube-binary: ${env.ARTIFACTORY_URL}/${binary_dev_repo}/${kube_namespace}/hyperkube-binaries/hyperkube_${kube_docker_version}<br>"
+                                             hyperkube-binary: ${artifactoryUrl}/${binary_dev_repo}/${kube_namespace}/hyperkube-binaries/hyperkube_${kube_docker_version}<br>"
                                 currentBuild.description = buildDesc
                             }
                         } catch (InterruptedException x) {
@@ -457,7 +458,7 @@ def build_publish_binaries () {
                          "ARTIFACTORY_USER_EMAIL=jenkins@mcp-ci-artifactory",
                          //"KUBE_DOCKER_REGISTRY=${registry}",
                          "KUBE_DOCKER_CONFORMANCE_TAG=${kube_docker_registry}/${kube_namespace}/${kube_docker_conformance_repository}:${kube_docker_version}",
-                         "ARTIFACTORY_URL=${env.ARTIFACTORY_URL}",
+                         "ARTIFACTORY_URL=${artifactoryUrl}",
                          "GERRIT_PATCHSET_REVISION=${env.GERRIT_PATCHSET_REVISION}",
                          "GERRIT_CHANGE_URL=${env.GERRIT_CHANGE_URL}",
                          "BUILD_URL=${env.BUILD_URL}",

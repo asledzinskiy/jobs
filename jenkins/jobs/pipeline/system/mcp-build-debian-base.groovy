@@ -7,15 +7,13 @@ def common = new com.mirantis.mcp.Common()
 def imageTag = common.getDatetime()
 def docker_registry = env.DEBIAN_DOCKER_REGISTRY
 def gerrit_host = env.GERRIT_HOST
-def artifactory_url = env.ARTIFACTORY_URL
+def artifactoryServer = Artifactory.server('mcp-ci')
+def artifactory_url = artifactoryServer.getUrl()
 
 stage('build-debian-image') {
     node('k8s') {
         if ( ! docker_registry ) {
             error('DEBIAN_DOCKER_REGISTRY must be set')
-        }
-        if ( ! artifactory_url ) {
-            error('ARTIFACTORY_URL must be set')
         }
         def docker_image = "${namespace}/${image_name}"
         deleteDir()
