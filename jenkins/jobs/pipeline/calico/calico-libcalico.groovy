@@ -27,6 +27,7 @@ def buildCalicoBuildImg(){
 
     try {
 
+      def artifactoryUrl = artifactoryServer.getUrl()
       def dockerRepository = env.DOCKER_REGISTRY
       // define global variables for images
       def buildImg = "${dockerRepository}/${projectNamespace}/${projectModule}"
@@ -87,6 +88,8 @@ def buildCalicoBuildImg(){
       def buildContainerName = buildImg + ":" + buildImgTag
       // start building calico-containers
       def calicoContainersArts = buildCalicoContainers {
+        artifactoryURL = "${artifactoryUrl}/binary-prod-virtual"
+        dockerRepo = dockerRepository
         buildImage = buildContainerName
         nodeImage = nodeImg
         ctlImage = ctlImg

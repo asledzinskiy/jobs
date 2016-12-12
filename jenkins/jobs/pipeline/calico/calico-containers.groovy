@@ -36,10 +36,13 @@ def buildCalicoContainers(){
       stage ('Run unittest') { sh "make test-containerized"  }
 
       // start building calico-containers
+      def artifactoryUrl = artifactoryServer.getUrl()
       def dockerRepository = env.DOCKER_REGISTRY
       def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
       def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
       def calicoContainersArts = buildCalicoContainers {
+        artifactoryURL = "${artifactoryUrl}/binary-prod-virtual"
+        dockerRepo = dockerRepository
         nodeImage = nodeImg
         ctlImage = ctlImg
       }

@@ -27,6 +27,7 @@ def buildFelix(){
 
     try {
 
+      def artifactoryUrl = artifactoryServer.getUrl()
       def dockerRepository = env.DOCKER_REGISTRY
       // define global variables for images
       def felixImg = "${dockerRepository}/${projectNamespace}/${projectModule}"
@@ -86,6 +87,8 @@ def buildFelix(){
       def felixContainerName = felixImg + ":" + felixImgTag
       // start building calico-containers
       def calicoContainersArts = buildCalicoContainers {
+        artifactoryURL = "${artifactoryUrl}/binary-prod-virtual"
+        dockerRepo = dockerRepository
         felixImage = felixContainerName
         nodeImage = nodeImg
         ctlImage = ctlImg

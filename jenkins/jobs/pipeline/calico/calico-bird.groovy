@@ -90,6 +90,7 @@ def buildBird(){
 
       // we need to have separate valiable to correctly pass it to
       // buildCalicoContainers() build step
+      def artifactoryUrl = artifactoryServer.getUrl()
       def dockerRepository = env.DOCKER_REGISTRY
       def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
       def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
@@ -98,6 +99,8 @@ def buildBird(){
       def birdcl = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/birdcl-${binaryTag}"
       // start building calico-containers
       def calicoContainersArts = buildCalicoContainers {
+        artifactoryURL = "${artifactoryUrl}/binary-prod-virtual"
+        dockerRepo = dockerRepository
         birdUrl = bird
         bird6Url = bird6
         birdclUrl = birdcl
