@@ -10,6 +10,18 @@
           default: '{docker-dev-virtual}'
           description: 'Docker registry for binaries and images'
 
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: REG_EXP
+              project-pattern: '^ccp/fuel-ccp($|\-(?!docker|ci-config))'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
     workflow-scm:
       scm:
         basic-scm:
