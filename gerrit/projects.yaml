@@ -34,6 +34,11 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: ccp/fuel-ccp-deploy
+  description: Fuel CCP - CCP deployment
+  acl-config: acls/ccp/ccp-dev.config
+
+-
   project: ccp/fuel-ccp-docker
   description: Fuel CCP - CCP image builder
   acl-config: acls/ccp/ccp-dev.config

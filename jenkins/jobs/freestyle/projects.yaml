@@ -181,6 +181,7 @@
     jobs:
       - ccp-docker-build
       - ccp-tempest-test
+      - ccp-docker-deploy
 
 - project:
     name: mcp-ci-infra
