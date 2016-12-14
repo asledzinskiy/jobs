@@ -1,4 +1,9 @@
 -
+  project: ccp-ci/ccp-slave-image
+  description: Jenkins Swarm slave images for CCP projects
+  acl-config: acls/ccp-ci/ccp-ci.project-config.config
+
+-
   project: ccp/ccp-pipeline
   description: CCP jenkins pipelines
   acl-config: acls/ccp/ccp.config
@@ -228,6 +233,11 @@
   acl-config: acls/mcp-ci/mcp-ci.project-config.config
 
 -
+  project: kubernetes-ci/kubernetes-slave-image
+  description: Jenkins Swarm slave image for Kubernetes projects
+  acl-config: acls/kubernetes-ci/kubernetes-ci.project-config.config
+
+-
   project: kubernetes/kargo
   description: kubernetes cluster installator
   upstream: git://github.com/kubernetes-incubator/kargo.git
@@ -258,6 +268,11 @@
 -
   project: mcp-ci/mcp-base-slave-image
   description: Base Docker Swarm image for Jenkins Swarm slave
+  acl-config: acls/mcp-ci/mcp-ci.project-config.config
+
+-
+  project: mcp-ci/mcp-ci-slave-image
+  description: Jenkins Swarm slave image for MCP CI projects
   acl-config: acls/mcp-ci/mcp-ci.project-config.config
 
 -
@@ -774,6 +789,11 @@
   project: projectcalico
   description: Parent project for projectcalico
   acl-config: acls/projectcalico/calico.config
+
+-
+  project: projectcalico-ci/projectcalico-slave-image
+  description: Jenkins Swarm slave image for Calico projects
+  acl-config: acls/projectcalico-ci/projectcalico-ci.project-config.config
 
 -
   project: projectcalico/bird
