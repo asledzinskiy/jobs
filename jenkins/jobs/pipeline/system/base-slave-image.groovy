@@ -1,3 +1,5 @@
+import java.net.URI
+
 docker_dev_repo = "docker-dev-local"
 docker_prod_repo = "docker-prod-local"
 namespace = 'mirantis/jenkins-slave-images'
@@ -28,6 +30,8 @@ def build_artifacts () {
             }
             def dockerRepository = "${env.DOCKER_REGISTRY}"
             def artifactory_url = artifactoryServer.getUrl()
+            def uri = new URI(artifactory_url);
+            def artifactory_host = uri.getHost();
             def fsroot = "${env.FSROOT}"
             def jenkins_swarm_client_version = "${env.JENKINS_SWARM_CLIENT_VERSION}"
             def container_user = "${env.CONTAINER_USER}"
@@ -49,7 +53,7 @@ def build_artifacts () {
                 sh "docker build --build-arg fsroot=${fsroot} \
                     --build-arg jenkins_swarm_client_version=${jenkins_swarm_client_version} \
                     --build-arg container_user=${container_user} \
-                    --build-arg artifactory_url=${artifactory_url} -t ${docker_image}:${imageTag} ${img}"
+                    --build-arg artifactory_host=${artifactory_host} -t ${docker_image}:${imageTag} ${img}"
 
                 // Upload
                 sh "docker tag ${docker_image}:${imageTag} ${dockerRepository}/${docker_image}:${imageTag}"
