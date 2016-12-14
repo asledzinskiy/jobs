@@ -1,0 +1,70 @@
+- job-template:
+    name: mcp-build-base-slave-image-test-pipeline
+    description: |
+      Build Docker Swarm image for Jenkins Swarm slave
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for images'
+    dsl:
+      !include-raw-escape: base-slave-image.groovy
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: ANT
+              project-pattern: 'mcp-ci/mcp-base-slave-image'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
+    name: mcp-build-{mcp-project}-slave-image-test-pipeline
+    description: |
+      Build Docker Swarm image for Jenkins Swarm slave for {mcp-project} project
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for images'
+      - string:
+          name: BASE_SLAVE_IMAGE
+          default: 'ubuntu-slave-16.04'
+          description: 'Name of base slave image'
+      - string:
+          name: BASE_SLAVE_IMAGE_VERSION
+          default: 'latest'
+          description: 'Version of base swarm slave image'
+      - string:
+          name: MCP_PROJECT
+          default: '{mcp-project}'
+          description: 'Slave image is designed for this project'
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+          description: 'Gerrit host'
+    dsl:
+      !include-raw-escape: slave-image.groovy
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: ANT
+              project-pattern: '{mcp-project}-ci/{mcp-project}-slave-image'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'

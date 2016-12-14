@@ -17,6 +17,8 @@
     jobs:
       - mcp-build-base-slave-image-test-pipeline
       - mcp-build-base-slave-image-merge-pipeline
+      - mcp-build-{mcp-project}-slave-image-test-pipeline
+      - mcp-build-{mcp-project}-slave-image-merge-pipeline
       - mcp-build-debian-base
       - mcp-build-run-tests
       - mcp-k8s-images-pipeline
@@ -27,6 +29,11 @@
       - mcp-k8s-coverage-timer-pipeline
       - mcp-k8s-hyperkube-custom
       - mcp-qa-pipeline
+    mcp-project:
+      - projectcalico
+      - ccp
+      - k8s
+      - mcp-ci
 
 - project:
     name: mcp-netchecker-build

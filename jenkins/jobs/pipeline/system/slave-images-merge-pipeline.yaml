@@ -1,0 +1,40 @@
+- job-template:
+    name: mcp-build-base-slave-image-merge-pipeline
+    description: |
+      Promote Docker Swarm image for Jenkins Swarm slave
+    project-type: workflow
+    concurrent: true
+    dsl:
+      !include-raw-escape: base-slave-image.groovy
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: ANT
+              project-pattern: 'mcp-ci/mcp-base-slave-image'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
+    name: mcp-build-{mcp-project}-slave-image-merge-pipeline
+    description: |
+      Promote Docker Swarm image for Jenkins Swarm slave for {mcp-project} project
+    project-type: workflow
+    concurrent: true
+    dsl:
+      !include-raw-escape: slave-image.groovy
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: ANT
+              project-pattern: '{mcp-project}-ci/{mcp-project}-slave-image'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
