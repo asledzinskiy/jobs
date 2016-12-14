@@ -22,7 +22,7 @@
           description: 'Docker registry for binaries and images'
       - string:
           name: K8S_BASE_IMAGE
-          default: '{docker-prod-virtual}/mirantis/base-images/debian-base:20161207171734'
+          default: 'debian:jessie'
           description: 'Base Docker image to build k8s'
       - string:
           name: ARTIFACTORY_URL
