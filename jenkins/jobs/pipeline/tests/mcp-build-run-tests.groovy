@@ -107,7 +107,8 @@ node('devops') {
         }
         function logs {
         mkdir -p logs/{artifactory,gerrit,jenkins}
-        sudo cp /var/lib/docker/containers/*/*-json.log logs/
+        sudo chmod -R +rx /var/lib/docker/
+        sudo cp /var/lib/docker/containers/*/*-json.log logs/ || true
         sudo cp -aR /srv/mcp-data/artifactory/logs/ logs/artifactory/
         sudo cp -aR /srv/mcp-data/gerrit/logs/ logs/gerrit/
         sudo cp -aR /srv/mcp-data/jenkins/logs/ logs/jenkins/
