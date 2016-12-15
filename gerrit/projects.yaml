@@ -134,6 +134,11 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: ccp/fuel-ccp-prometheus
+  description: Fuel CCP - Prometheus deployment
+  acl-config: acls/ccp/ccp.config
+
+-
   project: ccp/fuel-ccp-rabbitmq
   description: Fuel CCP - Rabbitmq deployment
   upstream: git://git.openstack.org/openstack/fuel-ccp-rabbitmq
