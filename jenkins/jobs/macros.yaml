@@ -50,7 +50,7 @@
     parameters:
     - string:
         name: CONF_PATH
-        default: '$WORKSPACE/fuel-ccp-tests/fuel_ccp_tests/templates/{conf-file-name}'
+        default: '$WORKSPACE/fuel_ccp_tests/templates/{conf-file-name}'
         description: "Path to template for fuel-ccp-tests"
 
     - string:
