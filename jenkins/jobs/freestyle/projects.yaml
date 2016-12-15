@@ -28,24 +28,6 @@
       - mcp-k8s-hyperkube-custom
 
 - project:
-    name: mcp-netchecker-unit-tests
-    jobs:
-    - '{project-name}-tox-{testenv}':
-        project-name: mcp-netchecker-agent
-        project-space: mcp-netchecker
-        testenv:
-          - pep8
-          - shellcheck
-    - '{project-name}-tox-{testenv}':
-        project-name: mcp-netchecker-server
-        project-space: mcp-netchecker
-        testenv:
-          - py27
-          - py34
-          - py35
-          - pep8
-
-- project:
     name: mcp-netchecker-build
     jobs:
     - 'mcp-netchecker-{type}-build':
@@ -60,6 +42,14 @@
         type:
           - server
           - agent
+
+- project:
+    name: mcp-netchecker-pipeline
+    jobs:
+      - mcp-netchecker-agent-pipeline
+      - mcp-netchecker-agent-merge-pipeline
+      - mcp-netchecker-server-pipeline
+      - mcp-netchecker-server-merge-pipeline
 
 - project:
     name: system-tests

@@ -67,7 +67,7 @@
           basedir: 'fuel-ccp-installer'
 
       - git:
-           url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/{project-space}/{project-to-clone}'
+           url: 'ssh://{gerrit-host}:29418/{project-space}/{project-to-clone}'
            credentials-id: 'mcp-ci-gerrit'
            branches:
             - 'master'
@@ -76,7 +76,7 @@
       - git:
            remotes:
              - gerrit:
-                 url: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/{project-space}/{project-name}'
+                 url: 'ssh://{gerrit-host}:29418/{project-space}/{project-name}'
                  refspec: '$GERRIT_REFSPEC'
                  credentials-id: 'mcp-ci-gerrit'
            branches:

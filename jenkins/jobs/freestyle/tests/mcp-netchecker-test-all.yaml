@@ -1,5 +1,6 @@
 - job-template:
     name: mcp-netchecker-{type}-test-all
+    disabled: true
     description: |
       Build artifacts<br>
     node: calico

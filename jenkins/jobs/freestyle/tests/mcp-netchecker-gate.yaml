@@ -1,5 +1,6 @@
 - job-template:
     name: mcp-netchecker-{type}-gate
+    disabled: true
     description: |
       Build artifacts<br>
     node: calico

@@ -1,0 +1,107 @@
+- job-template:
+    name: mcp-netchecker-agent-pipeline
+    project-name: mcp-netchecker-pipeline
+    description: |
+      Pipeline for mcp-netchecker-agent project
+    project-type: workflow
+    dsl:
+      !include-raw-escape: mcp-netchecker-agent.groovy
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-netchecker/mcp-netchecker-agent
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
+    name: mcp-netchecker-server-pipeline
+    project-name: mcp-netchecker-pipeline
+    description: |
+      Pipeline for mcp-netchecker-server project
+    project-type: workflow
+    dsl:
+      !include-raw-escape: mcp-netchecker-server.groovy
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-netchecker/mcp-netchecker-server
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
+    name: mcp-netchecker-agent-merge-pipeline
+    project-name: mcp-netchecker-pipeline
+    description: |
+      Merge pipeline for mcp-netchecker-agent project
+    project-type: workflow
+    dsl:
+      !include-raw-escape: mcp-netchecker-agent.groovy
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-prod-virtual}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-netchecker/mcp-netchecker-agent
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
+    name: mcp-netchecker-server-merge-pipeline
+    project-name: mcp-netchecker-pipeline
+    description: |
+       Merge pipeline for mcp-netchecker-server project
+    project-type: workflow
+    dsl:
+      !include-raw-escape: mcp-netchecker-server.groovy
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-prod-virtual}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-netchecker/mcp-netchecker-server
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
