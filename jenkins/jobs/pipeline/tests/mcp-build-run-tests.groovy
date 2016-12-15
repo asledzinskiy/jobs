@@ -64,6 +64,10 @@ node('devops') {
       '''.stripIndent()
       writeFile file: WORKSPACE + '/erase_env.sh', text: '''\
         #!/bin/bash
+        # Before we erase env we should collect the logs
+        export ENV_NODE_IP=$(cat env_node_ip)
+        sshpass -e ssh -t -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no vagrant@${ENV_NODE_IP} "bash ./run_tests.sh logs"
+        sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r vagrant@${ENV_NODE_IP}:~/logs/ .
         source ${VENV_DIR}/bin/activate
         dos.py erase ${ENV_NAME}
       '''.stripIndent()
@@ -74,10 +78,10 @@ node('devops') {
           ${WORKSPACE}/create_env.sh
         '''
       }
-
-      writeFile file: WORKSPACE + '/run_tests_on_node.sh', text: '''\
+      writeFile file: WORKSPACE + '/run_tests.sh', text: '''\
         #!/bin/bash
 
+        function tests {
         export PKGS="
         haveged
         mariadb-client
@@ -100,20 +104,30 @@ node('devops') {
         tox -e mcp-ci
         set -e
         ./tests/runtests.sh
+        }
+        function logs {
+        mkdir -p logs/{artifactory,gerrit,jenkins}
+        sudo cp /var/lib/docker/containers/*/*-json.log logs/
+        sudo cp -aR /srv/mcp-data/artifactory/logs/ logs/artifactory/
+        sudo cp -aR /srv/mcp-data/gerrit/logs/ logs/gerrit/
+        sudo cp -aR /srv/mcp-data/jenkins/logs/ logs/jenkins/
+        }
+        $@
       '''.stripIndent()
       stage('Execute test in env') {
         sh '''
           sleep 1m
           export ENV_NODE_IP=$(cat env_node_ip)
           sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r mcp-cicd-installer vagrant@${ENV_NODE_IP}:.
-          sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no run_tests_on_node.sh vagrant@${ENV_NODE_IP}:.
-          sshpass -e ssh -t -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no vagrant@${ENV_NODE_IP} "bash ./run_tests_on_node.sh"
+          sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no run_tests.sh vagrant@${ENV_NODE_IP}:.
+          sshpass -e ssh -t -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no vagrant@${ENV_NODE_IP} "bash ./run_tests.sh tests"
         '''
       }
     } catch (InterruptedException x) {
       echo "The job was aborted"
     } finally {
       sh "${WORKSPACE}/erase_env.sh"
+      archiveArtifacts allowEmptyArchive: true, artifacts: 'logs/*', excludes: null
     }
   }
 }
