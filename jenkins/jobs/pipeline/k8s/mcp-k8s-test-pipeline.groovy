@@ -471,16 +471,19 @@ def build_publish_binaries () {
                             mkdir "${WORKSPACE}/_build_test_runner"
                             mv "${WORKSPACE}/_output/release-tars/kubernetes-test.tar.gz" \
                                "${WORKSPACE}/_output/release-tars/kubernetes.tar.gz" \
+                               "${WORKSPACE}/_output/release-tars/kubernetes-client-linux-amd64.tar.gz" \
                                "${WORKSPACE}/_build_test_runner"
                         '''
                         writeFile file: workspace + '/_build_test_runner/Dockerfile', text: """\
                             FROM golang:1.7.4
 
-                            RUN mkdir -p /go/src/k8s.io
+                            RUN mkdir -p /go/src/k8s.io/kubernetes/_output/bin
                             ADD kubernetes-test.tar.gz /go/src/k8s.io/
                             ADD kubernetes.tar.gz /go/src/k8s.io/
+                            ADD kubernetes-client-linux-amd64.tar.gz /go/src/k8s.io/
                             COPY entrypoint.sh /
-                            RUN chmod +x /entrypoint.sh
+                            RUN chmod +x /entrypoint.sh && \
+                                mv /go/src/k8s.io/kubernetes/client/bin/kubectl /go/src/k8s.io/kubernetes/_output/bin/kubectl
                             WORKDIR /go/src/k8s.io/kubernetes
                             CMD /entrypoint.sh
                             LABEL com.mirantis.image-specs.gerrit_change_url="${env.GERRIT_CHANGE_URL}" \

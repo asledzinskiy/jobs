@@ -44,7 +44,6 @@ cluster/kubectl.sh config use-context local
 if [ -z "$FOCUS" ]; then
     # non-serial tests can be run in parallel mode
     GINKGO_PARALLEL=y go run hack/e2e.go --v --test -check_version_skew=false \
-      --check_node_count=false \
       --test_args="--ginkgo.focus=\[Conformance\] --ginkgo.skip=\[Serial\]|\[Flaky\]|\[Feature:.+\]|$(skipped_test_names)"
 
     # serial tests must be run without GINKGO_PARALLEL
