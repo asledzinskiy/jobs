@@ -57,6 +57,12 @@ node('devops') {
            "SSHPASS=${SSHPASS}" ]) {
 
     try {
+      writeFile file: WORKSPACE + '/ssh-config', text: '''\
+        StrictHostKeyChecking no
+        UserKnownHostsFile /dev/null
+        ForwardAgent yes
+        User vagrant
+      '''.stripIndent()
       writeFile file: WORKSPACE + '/create_env.sh', text: '''\
         #!/bin/bash
         source ${VENV_DIR}/bin/activate
@@ -67,8 +73,11 @@ node('devops') {
         #!/bin/bash
         # Before we erase env we should collect the logs
         export ENV_NODE_IP=$(cat env_node_ip)
-        sshpass -e ssh -t -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no vagrant@${ENV_NODE_IP} "bash ./run_tests.sh logs"
-        sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r vagrant@${ENV_NODE_IP}:~/logs/ .
+        sshpass -e ssh -qF ${WORKSPACE}/ssh-config ${ENV_NODE_IP} "bash ./run_tests.sh logs"
+        sshpass -e scp -r -qF ${WORKSPACE}/ssh-config ${ENV_NODE_IP}:~/logs/ .
+        # Compress the logs
+        gzip -r ${WORKSPACE}/logs/
+        # Destroy the Env (fuel-devops VM)
         source ${VENV_DIR}/bin/activate
         dos.py erase ${ENV_NAME}
       '''.stripIndent()
@@ -81,6 +90,7 @@ node('devops') {
       }
       writeFile file: WORKSPACE + '/run_tests.sh', text: '''\
         #!/bin/bash
+        set +x
 
         function tests {
         export PKGS="
@@ -109,7 +119,7 @@ node('devops') {
         function logs {
         mkdir -p logs/{artifactory,gerrit,jenkins}
         sudo chmod -R +rx /var/lib/docker/
-        sudo cp /var/lib/docker/containers/*/*-json.log logs/ || true
+        sudo cp /var/lib/docker/containers/*/*-json.log logs/
         sudo cp -aR /srv/mcp-data/artifactory/logs/ logs/artifactory/
         sudo cp -aR /srv/mcp-data/gerrit/logs/ logs/gerrit/
         sudo cp -aR /srv/mcp-data/jenkins/logs/ logs/jenkins/
@@ -120,9 +130,8 @@ node('devops') {
         sh '''
           sleep 1m
           export ENV_NODE_IP=$(cat env_node_ip)
-          sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r mcp-cicd-installer vagrant@${ENV_NODE_IP}:.
-          sshpass -e scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no run_tests.sh vagrant@${ENV_NODE_IP}:.
-          sshpass -e ssh -t -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no vagrant@${ENV_NODE_IP} "bash ./run_tests.sh tests"
+          sshpass -e scp -r -qF ${WORKSPACE}/ssh-config mcp-cicd-installer run_tests.sh ${ENV_NODE_IP}:.
+          sshpass -e ssh -qF ${WORKSPACE}/ssh-config ${ENV_NODE_IP} "bash ./run_tests.sh tests"
         '''
       }
     } catch (InterruptedException x) {
