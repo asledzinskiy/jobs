@@ -1,4 +1,4 @@
-def gitTools = com.mirantis.mcp.Git()
+def gitTools = new com.mirantis.mcp.Git()
 node('infra-tools') {
 
     stage('Code checkout') {
