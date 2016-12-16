@@ -169,6 +169,11 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: ccp/fuel-ccp-telegraf
+  description: Fuel CCP - Telegraf deployment
+  acl-config: acls/ccp/ccp.config
+
+-
   project: ccp/fuel-ccp-tempest-pipeline
   description: Fuel CCP - Tempest against Openstack
   acl-config: acls/ccp/ccp-dev.config
