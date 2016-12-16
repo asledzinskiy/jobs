@@ -1,0 +1,78 @@
+
+- parameter:
+    name: heat-template-params
+    parameters:
+    - string:
+        name: HEAT_TEMPLATE_URL
+        default: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mk/mk-lab-salt-model'
+    - string:
+        name: HEAT_TEMPLATE_CREDENTIALS
+        default: 'mcp-ci-gerrit'
+    - string:
+        name: HEAT_TEMPLATE_BRANCH
+        default: 'master'
+
+- parameter:
+    name: salt-master-params
+    parameters:
+    - string:
+        name: SALT_MASTER_CREDENTIALS
+        default: 'salt-qa-credentials'
+
+- parameter:
+    name: openstack-api-params
+    parameters:
+    - string:
+        name: OPENSTACK_API_URL
+        default: 'https://vpc.tcpisek.cz:5000/v2.0'
+    - string:
+        name: OPENSTACK_API_CREDENTIALS
+        default: 'openstack-qa-credentials' #mirantis-mk20-qa:QaMirantisMk.20
+    - string:
+        name: OPENSTACK_API_PROJECT
+        default: 'mirantis_mk20_qa'
+    - string:
+        name: OPENSTACK_API_CLIENT
+        default: 'liberty'
+    - string:
+        name: OPENSTACK_API_VERSION
+        default: '2'
+
+- parameter:
+    name: heat-stack-params
+    parameters:
+    - string:
+        name: HEAT_STACK_NAME
+    - string:
+        name: HEAT_STACK_TEMPLATE
+        default: 'mcp_fuel_aio'
+    - string:
+        name: HEAT_STACK_ENVIRONMENT
+        default: 'tcpisek'
+    - string:
+        name: HEAT_STACK_ZONE
+        default: 'mirantis-zone-qa'
+    - string:
+        name: HEAT_STACK_PUBLIC_NET
+        default: 'inet'
+
+- job-template:
+    name: mk-kubernetes-deploy-pipeline
+    description: |
+      MK Kubernetes deployment
+    project-type: workflow
+    concurrent: false
+    parameters:
+    - heat-template-params:
+        HEAT_TEMPLATE_URL: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mk/mcp-lab-heat-templates.git'
+        gerrit-host: '{gerrit-host}'
+    - salt-master-params
+    - openstack-api-params
+    - heat-stack-params:
+        HEAT_STACK_TEMPLATE: 'mcp_openstack_cluster'
+        HEAT_STACK_ENVIRONMENT: 'tcpisek'
+        HEAT_STACK_ZONE: 'mirantis-zone-qa'
+        HEAT_STACK_PUBLIC_NET: 'inet' #inet/inet2
+    dsl:
+      !include-raw-escape:
+        - mk-kubernetes-deploy-pipeline.groovy

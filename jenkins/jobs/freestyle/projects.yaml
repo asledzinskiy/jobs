@@ -273,3 +273,8 @@
       - libvirt
       - memcached
       - rabbitmq
+
+- project:
+    name: 'mk-kubernetes-deploy-pipeline'
+    jobs:
+     - 'mk-kubernetes-deploy-pipeline'
