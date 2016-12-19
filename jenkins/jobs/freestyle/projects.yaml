@@ -189,6 +189,8 @@
     name: decapod
     jobs:
       - decapod-backend-test-pipeline
+      - decapod-images-merge-pipeline
+      - decapod-images-test-pipeline
       - whale-checks-pipeline
 
 - project:

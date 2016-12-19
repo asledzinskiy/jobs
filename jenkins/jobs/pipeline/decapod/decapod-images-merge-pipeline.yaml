@@ -1,0 +1,23 @@
+- job-template:
+    name: decapod-images-merge-pipeline
+    description: Promote images for Decapod
+    project-type: workflow
+    concurrent: false
+    parameters:
+      - string:
+          name: DOCKER_REGISTRY
+          default: "{docker-dev-virtual}"
+          description: Docker registry for test images
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: ceph/decapod
+              branches:
+                - branch-compare-type: REG_EXP
+                  branch-pattern: 'master|stable-.*?'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    dsl:
+      !include-raw-escape: decapod-images-merge-pipeline.groovy

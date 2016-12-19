@@ -1,0 +1,25 @@
+- job-template:
+    name: decapod-images-test-pipeline
+    description: Decapod build images on test patchset
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: DOCKER_REGISTRY
+          default: "{docker-dev-virtual}"
+          description: Docker registry for test images
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: "(recheck|retest|reverify)"
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: ceph/decapod
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: "**"
+          custom-url: "* $JOB_NAME $BUILD_URL"
+    dsl:
+      !include-raw-escape: decapod-images-test-pipeline.groovy
