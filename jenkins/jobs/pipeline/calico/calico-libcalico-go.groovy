@@ -22,7 +22,9 @@ node('calico'){
     }
 
     stage ('Running libcalico-go unittests') {
-      sh "make test-containerized"
+      wrap([$class: 'AnsiColorBuildWrapper']) {
+        sh "make test-containerized"
+      }
     }
 
   }

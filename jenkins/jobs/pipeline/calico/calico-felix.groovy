@@ -56,7 +56,9 @@ def buildFelix(){
 
         stage ('Run felix unittests'){
           // inject COMPARE_BRANCH variable for felix coverage test
-          sh "make ut UT_COMPARE_BRANCH=gerrit/${env.GERRIT_BRANCH}"
+          wrap([$class: 'AnsiColorBuildWrapper']) {
+            sh "make ut UT_COMPARE_BRANCH=gerrit/${env.GERRIT_BRANCH}"
+          }
         }
 
         stage ('Build calico/felix image') {

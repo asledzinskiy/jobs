@@ -34,7 +34,11 @@ def buildCalicoContainers(){
         }
       }
 
-      stage ('Run unittest') { sh "make test-containerized"  }
+      stage ('Run unittest') {
+        wrap([$class: 'AnsiColorBuildWrapper']) {
+          sh "make test-containerized"
+        }
+      }
 
       // start building calico-containers
       def artifactoryUrl = artifactoryServer.getUrl()
