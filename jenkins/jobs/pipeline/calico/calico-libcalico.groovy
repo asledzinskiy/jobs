@@ -41,7 +41,7 @@ def buildCalicoBuildImg(){
         credentialsId = "mcp-ci-gerrit"
         branch = "mcp"
         host = HOST
-        project = "projectcalico/calico-containers"
+        project = "projectcalico/calicoctl"
       }
 
       dir("${env.WORKSPACE}/tmp_libcalico"){
@@ -89,7 +89,7 @@ def buildCalicoBuildImg(){
       def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
       def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
       def buildContainerName = buildImg + ":" + buildImgTag
-      // start building calico-containers
+      // start building calicoctl
       def calicoContainersArts = calico.buildCalicoContainers {
         artifactoryURL = "${artifactoryUrl}/binary-prod-virtual"
         dockerRepo = dockerRepository
@@ -175,7 +175,7 @@ def promote_artifacts () {
               throw new RuntimeException("Artifacts were not found, nothing to promote")
           }
 
-          // search calico-containers artifacts, since they have the same tags
+          // search calicoctl artifacts, since they have the same tags
           // we will get correct images
           def calicoProperties = [
             'com.mirantis.gerritChangeId': "${env.GERRIT_CHANGE_ID}",

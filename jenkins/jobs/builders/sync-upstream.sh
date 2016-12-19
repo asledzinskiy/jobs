@@ -32,9 +32,9 @@ cat << EOF > "${PROJECTS_TO_SYNC}"
   branches:
     - "*"
 
-- project: calico-containers
-  src-repo: https://github.com/projectcalico/calico-containers
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/calico-containers
+- project: calicoctl
+  src-repo: https://github.com/projectcalico/calicoctl
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/calicoctl
   branches:
     - "*"
 

@@ -730,9 +730,9 @@
   acl-config: acls/projectcalico/calico.config
 
 -
-  project: projectcalico/calico-containers
-  description: Calico for containers
-  upstream: git://github.com/projectcalico/calico-containers.git
+  project: projectcalico/calicoctl
+  description: Calico CLI tool and calico/node container
+  upstream: git://github.com/projectcalico/calicoctl.git
   acl-config: acls/projectcalico/calico.config
 
 -

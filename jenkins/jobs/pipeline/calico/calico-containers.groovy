@@ -27,7 +27,7 @@ def buildCalicoContainers(){
 
     try {
 
-      stage ('Checkout calico-containers'){
+      stage ('Checkout calicoctl'){
         git.gerritPatchsetCheckout {
           credentialsId = "mcp-ci-gerrit"
           withWipeOut = true
@@ -40,7 +40,7 @@ def buildCalicoContainers(){
         }
       }
 
-      // start building calico-containers
+      // start building calicoctl
       def artifactoryUrl = artifactoryServer.getUrl()
       def dockerRepository = env.DOCKER_REGISTRY
       def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
@@ -99,7 +99,7 @@ def promote_artifacts () {
     node('calico') {
         stage('promote') {
 
-          // search calico-containers artifacts
+          // search calicoctl artifacts
           def calicoProperties = [
             'com.mirantis.gerritChangeId': "${env.GERRIT_CHANGE_ID}",
             'com.mirantis.gerritPatchsetNumber': "${env.GERRIT_PATCHSET_NUMBER}",

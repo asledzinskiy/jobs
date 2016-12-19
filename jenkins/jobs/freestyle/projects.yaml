@@ -96,6 +96,7 @@
       - calico-felix-pipeline
       - calico-libcalico-go-pipeline
       - calico-libcalico-pipeline
+      - calicoctl-pipeline
 
 - project:
     name: calico-merge-pipelines
@@ -107,6 +108,7 @@
       - calico-felix-merge-pipeline
       - calico-libcalico-go-merge-pipeline
       - calico-libcalico-merge-pipeline
+      - calicoctl-merge-pipeline
 
 - project:
     name: sync-upstream-repos
@@ -138,7 +140,7 @@
     # List of projects to sync
     gerrit-project-name:
     - 'calico-cni'
-    - 'calico-containers'
+    - 'calicoctl'
     - 'confd'
     - 'felix'
     - 'libcalico'
