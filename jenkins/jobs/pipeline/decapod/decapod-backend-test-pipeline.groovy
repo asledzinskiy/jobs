@@ -3,67 +3,55 @@ def ciTools = new com.mirantis.mcp.Common()
 
 ARTIFACTORY_SERVER = Artifactory.server("mcp-ci")
 ARTIFACTORY_URL = ARTIFACTORY_SERVER.getUrl()
-ARTIFACTORY_PYPI_URL = "${ARTIFACTORY_URL}/pypi-virtual"
-GERRIT_CREDENTIALS = "mcp-ci-gerrit"
-PROJECT = "ceph/decapod"
-GERRIT_HOST = env.GERRIT_HOST
+ARTIFACTORY_PYPI_URL = "${ARTIFACTORY_URL}/api/pypi/pypi-virtual/simple/"
 
 
 node("decapod") {
     stage("Checkout SCM") {
         if (env.GERRIT_EVENT_TYPE) {
             gitTools.gerritPatchsetCheckout {
-                credentialsId = GERRIT_CREDENTIALS
+                credentialsId = "mcp-ci-gerrit"
             }
         } else {
+            def gerritHost = env.GERRIT_HOST
             gitTools.gitSSHCheckout {
-                credentialsId = GERRIT_CREDENTIALS
+                credentialsId = "mcp-ci-gerrit"
                 branch="master"
-                host = GERRIT_HOST
-                project = PROJECT
+                host = gerritHost
+                project = "ceph/decapod"
             }
         }
     }
 
-    stage("Run tests") {
-        withEnv(["PIP_INDEX_URL=${ARTIFACTORY_PYPI_URL}"]) {
+    withEnv(["PIP_INDEX_URL=${ARTIFACTORY_PYPI_URL}"]) {
+        stage("Run tests") {
             try {
                 ciTools.runTox "jenkins-test"
             } catch (InterruptedException exc) {
                 echo "The job was aborted"
             } finally {
                 archiveArtifacts artifacts: 'htmlcov/**', excludes: null
-                junit keepLongStdio: true, test_results: "${env.WORKSPACE}/test-results.xml"
+                junit keepLongStdio: true, testResults: 'test-results.xml'
             }
         }
-    }
 
-    stage("Run linters") {
-        withEnv(["PIP_INDEX_URL=${ARTIFACTORY_PYPI_URL}"]) {
+        stage("Run linters") {
             ciTools.runTox "jenkins-static"
         }
-    }
 
-    stage("Run code complexity validation") {
-        withEnv(["PIP_INDEX_URL=${ARTIFACTORY_PYPI_URL}"]) {
+        stage("Run code complexity validation") {
             ciTools.runTox "metrics"
         }
-    }
 
-    stage("Run Ansible linters") {
-        withEnv(["PIP_INDEX_URL=${ARTIFACTORY_PYPI_URL}"]) {
+        stage("Run Ansible linters") {
             ciTools.runTox "devenv-lint"
         }
-    }
 
-    stage("Run dead code validation (optional)") {
-        withEnv(["PIP_INDEX_URL=${ARTIFACTORY_PYPI_URL}"]) {
+        stage("Run dead code validation (optional)") {
             ciTools.runTox "deadcode"
         }
-    }
 
-    stage("Run Bandit (optional)") {
-        withEnv(["PIP_INDEX_URL=${ARTIFACTORY_PYPI_URL}"]) {
+        stage("Run Bandit (optional)") {
             ciTools.runTox "bandit"
         }
     }
