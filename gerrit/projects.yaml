@@ -160,6 +160,11 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: ccp/fuel-ccp-rally
+  description: Fuel CCP - Rally deployment
+  acl-config: acls/ccp/ccp.config
+
+-
   project: ccp/fuel-ccp-sahara
   description: Fuel CCP - Sahara deployment
   upstream: git://git.openstack.org/openstack/fuel-ccp-sahara
