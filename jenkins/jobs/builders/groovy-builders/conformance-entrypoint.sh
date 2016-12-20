@@ -5,6 +5,8 @@ function escape_test_name() {
     sed 's/[]\$*.^|()[]/\\&/g; s/\s\+/\\s+/g' <<< "$1" | tr -d '\n'
 }
 
+export PATH="/go/src/k8s.io/kubernetes/_output/bin:${PATH}"
+
 TESTS_TO_SKIP=(
     '[k8s.io] Port forwarding [k8s.io] With a server that expects no client request should support a client that connects, sends no data, and disconnects [Conformance]'
     '[k8s.io] Port forwarding [k8s.io] With a server that expects a client request should support a client that connects, sends no data, and disconnects [Conformance]'
