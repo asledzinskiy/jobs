@@ -269,6 +269,12 @@
   acl-config: acls/mk-ci/mk-ci.config
 
 -
+  project: mk/mk-lab-salt-model
+  upstream: git://github.com/Mirantis/mk-lab-salt-model.git
+  description: OpenStack Reclass models for Mk-based cloud
+  acl-config: acls/mk/mk.config
+
+-
   project: mk/openstack-salt
   upstream: git://github.com/openstack/openstack-salt.git
   description: Salt formulas for deploying OpenStack
