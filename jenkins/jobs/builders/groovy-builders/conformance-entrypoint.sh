@@ -49,9 +49,9 @@ if [ -z "$FOCUS" ]; then
       --test_args="--ginkgo.focus=\[Conformance\] --ginkgo.skip=\[Serial\]|\[Flaky\]|\[Feature:.+\]|$(skipped_test_names)"
 
     # serial tests must be run without GINKGO_PARALLEL
-    go run hack/e2e.go --v --test -check_version_skew=false --check_node_count=false \
+    go run hack/e2e.go --v --test -check_version_skew=false \
       --test_args="--ginkgo.focus=\[Serial\].*\[Conformance\] --ginkgo.skip=$(skipped_test_names)"
 else
-    go run hack/e2e.go --v --test -check_version_skew=false --check_node_count=false \
+    go run hack/e2e.go --v --test -check_version_skew=false \
       --test_args="--ginkgo.focus=$(escape_test_name "$FOCUS")"
 fi
