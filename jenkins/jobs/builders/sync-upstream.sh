@@ -365,6 +365,12 @@ cat << EOF > "${PROJECTS_TO_SYNC_FUEL_CCP}"
 EOF
 
 cat << EOF > "${PROJECTS_TO_SYNC_MK}"
+- project: mk-lab-salt-model
+  src-repo: git://github.com/Mirantis/mk-lab-salt-model.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/mk-lab-salt-model
+  branches:
+    - "*"
+
 - project: openstack-salt
   src-repo: git://github.com/openstack/openstack-salt.git
   dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/openstack-salt
