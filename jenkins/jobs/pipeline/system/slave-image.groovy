@@ -29,16 +29,16 @@ def build_artifacts (Boolean manual = false) {
             def gerrit_host = env.GERRIT_HOST
             deleteDir()
             if ( manual ) {
-                gitSSHCheckout {
-                    credentialsId = "mcp-ci-gerrit"
-                    branch = "master"
-                    host = "${gerrit_host}"
-                    project = "${mcp_project}-ci/${mcp_project}-slave-image"
-                }
+                gitSSHCheckout ([
+                    credentialsId : "mcp-ci-gerrit",
+                    branch : "master",
+                    host : "${gerrit_host}",
+                    project : "${mcp_project}-ci/${mcp_project}-slave-image"
+                ])
             } else {
-                gerritPatchsetCheckout{
-                    credentialsId = "mcp-ci-gerrit"
-                }
+                gerritPatchsetCheckout ([
+                    credentialsId : "mcp-ci-gerrit"
+                ])
             }
             def imageTag = common.getDatetime()
 

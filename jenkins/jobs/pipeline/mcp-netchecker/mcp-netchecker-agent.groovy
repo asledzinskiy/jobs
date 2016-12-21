@@ -22,10 +22,10 @@ def buildNetcheckerAgent(){
     try {
 
       stage ('Checkout mcp-netchecker-agent'){
-        git.gerritPatchsetCheckout {
-          credentialsId = "mcp-ci-gerrit"
-          withWipeOut = true
-        }
+        git.gerritPatchsetCheckout ([
+          credentialsId : "mcp-ci-gerrit",
+          withWipeOut : true
+        ])
       }
 
       def dockerRepository = env.DOCKER_REGISTRY

@@ -16,10 +16,10 @@ node('builder') {
   def headless = true
 
   stage('Code checkout') {
-    gitTools.gerritPatchsetCheckout {
-      credentialsId = "mcp-ci-gerrit"
-      withWipeOut = true
-    }
+    gitTools.gerritPatchsetCheckout ([
+      credentialsId : "mcp-ci-gerrit",
+      withWipeOut : true
+    ])
   }
   dir('utils/packer') {
     stage('Prepare packer') {

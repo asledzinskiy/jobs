@@ -28,10 +28,10 @@ def buildCalicoContainers(){
     try {
 
       stage ('Checkout calicoctl'){
-        git.gerritPatchsetCheckout {
-          credentialsId = "mcp-ci-gerrit"
-          withWipeOut = true
-        }
+        git.gerritPatchsetCheckout ([
+          credentialsId : "mcp-ci-gerrit",
+          withWipeOut : true
+        ])
       }
 
       stage ('Run unittest') { sh "make test-containerized"  }

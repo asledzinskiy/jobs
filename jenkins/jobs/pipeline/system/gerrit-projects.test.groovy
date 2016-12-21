@@ -4,9 +4,9 @@ def commonTools = new com.mirantis.mcp.Common()
 node('verify-tests') {
 
     stage('Code checkout') {
-        gitTools.gerritPatchsetCheckout {
-            credentialsId = "mcp-ci-gerrit"
-        }
+        gitTools.gerritPatchsetCheckout ([
+            credentialsId : "mcp-ci-gerrit"
+        ])
     }
 
     stage('Jeepyb Verify') {

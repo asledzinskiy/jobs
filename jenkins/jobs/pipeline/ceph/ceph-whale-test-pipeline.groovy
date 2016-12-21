@@ -18,19 +18,19 @@ node("decapod") {
         def whaleBranch = WHALE_BRANCH
         def decapodBranch = DECAPOD_BRANCH
 
-        gitTools.gitSSHCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            branch = whaleBranch
-            host = gerritHost
-            project = "ceph/whale"
-        }
-        gitTools.gitSSHCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            branch = decapodBranch
-            host = gerritHost
-            project = "ceph/decapod"
-            targetDir = "./decapod"
-        }
+        gitTools.gitSSHCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            branch : whaleBranch,
+            host : gerritHost,
+            project : "ceph/whale"
+        ])
+        gitTools.gitSSHCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            branch : decapodBranch,
+            host : gerritHost,
+            project : "ceph/decapod",
+            targetDir : "./decapod"
+        ])
     }
 
     stage("Create Decapod virtualenv") {

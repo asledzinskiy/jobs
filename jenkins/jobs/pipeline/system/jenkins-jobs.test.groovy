@@ -41,9 +41,9 @@ node('tools') {
     def diff_list = [:]
 
     stage('Code checkout') {
-        gitTools.gerritPatchsetCheckout {
-            credentialsId = "mcp-ci-gerrit"
-        }
+        gitTools.gerritPatchsetCheckout ([
+            credentialsId : "mcp-ci-gerrit"
+        ])
     }
 
     stage('JJB verify') {

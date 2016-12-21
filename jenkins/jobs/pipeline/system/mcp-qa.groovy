@@ -5,10 +5,10 @@ node('calico'){
     try {
 
       stage ('Checkout mcp-qa'){
-        git.gerritPatchsetCheckout {
-          credentialsId = "mcp-ci-gerrit"
+        git.gerritPatchsetCheckout ([
+          credentialsId : "mcp-ci-gerrit",
           withWipeOut = true
-        }
+        ])
       }
 
       stage ('Run syntax tests') { ciTools.runTox("pep8") }

@@ -12,9 +12,9 @@ node("decapod") {
     deleteDir()
 
     stage("Checkout SCM") {
-        gitTools.gerritPatchsetCheckout {
-            credentialsId = "mcp-ci-gerrit"
-        }
+        gitTools.gerritPatchsetCheckout ([
+            credentialsId : "mcp-ci-gerrit"
+        ])
     }
 
     try {

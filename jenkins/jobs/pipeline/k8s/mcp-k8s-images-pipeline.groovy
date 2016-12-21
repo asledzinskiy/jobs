@@ -15,12 +15,12 @@ node('k8s') {
     def dockerRegistry = env.DOCKER_REGISTRY
     def artifactoryUrl = server.getUrl()
     stage('prepare mcp-cicd-installer') {
-        gitTools.gitSSHCheckout {
-            credentialsId = 'mcp-ci-gerrit'
-            host = gerritHost
-            branch = 'master'
-            project = 'mcp-ci/mcp-cicd-installer'
-        }
+        gitTools.gitSSHCheckout ([
+            credentialsId : 'mcp-ci-gerrit',
+            host : gerritHost,
+            branch : 'master',
+            project : 'mcp-ci/mcp-cicd-installer'
+        ])
     }
 
     withEnv(["VENV_PATH=${env.WORKSPACE}/.tox/mcp-ci",

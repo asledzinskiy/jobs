@@ -30,12 +30,12 @@ node("${SLAVE_NODE_LABEL}") {
 
   stage('project-config code checkout') {
     def HOST = env.GERRIT_HOST
-    gitTools.gitSSHCheckout {
-      credentialsId = "mcp-ci-gerrit"
-      branch = "master"
-      host = HOST
-      project = "mcp-ci/project-config"
-    }
+    gitTools.gitSSHCheckout ([
+      credentialsId : "mcp-ci-gerrit",
+      branch : "master",
+      host : HOST,
+      project : "mcp-ci/project-config"
+    ])
   }
 
   stage('Fetch the VM image') {

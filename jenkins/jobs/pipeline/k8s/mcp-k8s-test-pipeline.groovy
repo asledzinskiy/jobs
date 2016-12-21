@@ -45,18 +45,18 @@ def run_unit_tests () {
             deleteDir()
             if ( env.GERRIT_EVENT_TYPE ) {
                 clone_k8s_repo()
-                gitTools.gerritPatchsetCheckout{
-                    credentialsId = "mcp-ci-gerrit"
-                }
+                gitTools.gerritPatchsetCheckout([
+                    credentialsId : "mcp-ci-gerrit"
+                ])
             } else {
                 def downstream_branch = "${env.DOWNSTREAM_BRANCH}"
                 def gerrit_host = "${env.GERRIT_HOST}"
-                gitTools.gitSSHCheckout {
-                    credentialsId = "mcp-ci-gerrit"
-                    branch = "${downstream_branch}"
-                    host = "${gerrit_host}"
-                    project = "kubernetes/kubernetes"
-                }
+                gitTools.gitSSHCheckout ([
+                    credentialsId : "mcp-ci-gerrit",
+                    branch : "${downstream_branch}",
+                    host : "${gerrit_host}",
+                    project : "kubernetes/kubernetes"
+                ])
             }
             sh "mkdir ${env.WORKSPACE}/${artifacts_dir}"
             withEnv(["COVERAGE=${coverage}",
@@ -88,9 +88,9 @@ def run_integration_tests () {
             node('k8s') {
                 deleteDir()
                 clone_k8s_repo()
-                gitTools.gerritPatchsetCheckout {
-                    credentialsId = "mcp-ci-gerrit"
-                }
+                gitTools.gerritPatchsetCheckout ([
+                    credentialsId : "mcp-ci-gerrit"
+                ])
                 sh "mkdir ${env.WORKSPACE}/${artifacts_dir}"
                 try {
                     withEnv(["COVERAGE=${coverage}",
@@ -130,17 +130,17 @@ def run_integration_tests () {
 
                 deleteDir()
                 def HOST = env.GERRIT_HOST
-                gitTools.gitSSHCheckout {
-                  credentialsId = "mcp-ci-gerrit"
-                  branch = "master"
-                  host = HOST
-                  project = "mcp-ci/project-config"
-                }
+                gitTools.gitSSHCheckout ([
+                  credentialsId : "mcp-ci-gerrit",
+                  branch : "master",
+                  host : HOST,
+                  project : "mcp-ci/project-config"
+                ])
                 dir("${k8s_repo_dir}") {
                   clone_k8s_repo()
-                  gitTools.gerritPatchsetCheckout {
-                      credentialsId = "mcp-ci-gerrit"
-                  }
+                  gitTools.gerritPatchsetCheckout ([
+                      credentialsId : "mcp-ci-gerrit"
+                  ])
                 }
                 sh "mkdir ${env.WORKSPACE}/${artifacts_dir}"
                 def downloadSpec = """{
@@ -277,18 +277,18 @@ def build_publish_binaries () {
                 dir("${k8s_repo_dir}") {
                     if ( env.GERRIT_EVENT_TYPE ) {
                         clone_k8s_repo()
-                        gitTools.gerritPatchsetCheckout{
-                            credentialsId = "mcp-ci-gerrit"
-                        }
+                        gitTools.gerritPatchsetCheckout([
+                            credentialsId : "mcp-ci-gerrit"
+                        ])
                         git_commit_tag_id = git_tools.getGitDescribe(true)
                     } else {
                         def gerrit_host = "${env.GERRIT_HOST}"
-                        gitTools.gitSSHCheckout {
-                            credentialsId = "mcp-ci-gerrit"
-                            branch = "master"
-                            host = "${gerrit_host}"
-                            project = "kubernetes/kubernetes"
-                        }
+                        gitTools.gitSSHCheckout ([
+                            credentialsId : "mcp-ci-gerrit",
+                            branch : "master",
+                            host : "${gerrit_host}",
+                            project : "kubernetes/kubernetes"
+                        ])
                         git_commit_tag_id = git_sha
                         sh "git checkout ${git_sha}"
                     }
@@ -411,30 +411,30 @@ def build_publish_binaries () {
                 def gerrit_host = "${env.GERRIT_HOST}"
                 if ( env.GERRIT_EVENT_TYPE ) {
                     clone_k8s_repo()
-                    gitTools.gerritPatchsetCheckout{
-                        credentialsId = "mcp-ci-gerrit"
-                    }
+                    gitTools.gerritPatchsetCheckout([
+                        credentialsId : "mcp-ci-gerrit"
+                    ])
                     git_commit_tag_id = git_tools.getGitDescribe(true)
                 } else {
-                    gitTools.gitSSHCheckout {
-                        credentialsId = "mcp-ci-gerrit"
-                        branch = "master"
-                        host = "${gerrit_host}"
-                        project = "kubernetes/kubernetes"
-                    }
+                    gitTools.gitSSHCheckout ([
+                        credentialsId : "mcp-ci-gerrit",
+                        branch : "master",
+                        host : "${gerrit_host}",
+                        project : "kubernetes/kubernetes"
+                    ])
                     git_commit_tag_id = git_sha
                     sh "git checkout ${git_sha}"
                 }
 
                 def projectRepoDir = "/tmp/project-config-${timestamp}"
                 def helpersDir = "${projectRepoDir}/jenkins/jobs/builders/groovy-builders"
-                gitTools.gitSSHCheckout {
-                    credentialsId = "mcp-ci-gerrit"
-                    branch = "master"
-                    host = "${gerrit_host}"
-                    project = "mcp-ci/project-config"
-                    targetDir = projectRepoDir
-                }
+                gitTools.gitSSHCheckout ([
+                    credentialsId : "mcp-ci-gerrit",
+                    branch : "master",
+                    host : "${gerrit_host}",
+                    project : "mcp-ci/project-config",
+                    targetDir : projectRepoDir
+                ])
 
                 def kube_docker_version = "${git_commit_tag_id}_${timestamp}"
                 def kube_build_version = sh(script: 'bash -c \'KUBE_ROOT=$(pwd) && \

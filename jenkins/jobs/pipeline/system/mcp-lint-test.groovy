@@ -5,10 +5,10 @@ node('verify-tests') {
   def RULES_PROJECT="https://github.com/tsukinowasha/ansible-lint-rules"
 
   stage('Code checkout') {
-    gitTools.gerritPatchsetCheckout {
-      credentialsId = "mcp-ci-gerrit"
-      withWipeOut = true
-    }
+    gitTools.gerritPatchsetCheckout([
+      credentialsId : "mcp-ci-gerrit",
+      withWipeOut : true
+    ])
   }
 
   stage('Run tests') {

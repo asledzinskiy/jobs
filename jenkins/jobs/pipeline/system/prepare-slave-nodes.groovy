@@ -14,12 +14,12 @@ node('tools') {
 
     stage ('Code checkout') {
       def GERRIT_HOST = "${env.GERRIT_HOST}"
-      gitTools.gitSSHCheckout {
-        credentialsId = "mcp-ci-gerrit"
-        branch = BRANCH
-        host = GERRIT_HOST
-        project = "mcp-ci/mcp-cicd-installer"
-      }
+      gitTools.gitSSHCheckout ([
+        credentialsId : "mcp-ci-gerrit",
+        branch : BRANCH,
+        host : GERRIT_HOST,
+        project : "mcp-ci/mcp-cicd-installer"
+      ])
     }
 
     stage('Construct the inventory') {

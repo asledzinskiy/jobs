@@ -18,9 +18,9 @@ if (!env.DOCKER_REGISTRY) {
 
 node("decapod") {
     stage("Checkout SCM") {
-        gitTools.gerritPatchsetCheckout {
-            credentialsId = "mcp-ci-gerrit"
-        }
+        gitTools.gerritPatchsetCheckout ([
+            credentialsId : "mcp-ci-gerrit"
+        ])
     }
 
     def tagVersion = 'latest'

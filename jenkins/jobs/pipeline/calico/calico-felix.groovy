@@ -36,20 +36,20 @@ def buildFelix(){
       def felixImgTag = ""
 
       def HOST = env.GERRIT_HOST
-      git.gitSSHCheckout {
-        credentialsId = "mcp-ci-gerrit"
-        branch = "mcp"
-        host = HOST
-        project = "projectcalico/calicoctl"
-      }
+      git.gitSSHCheckout ([
+        credentialsId : "mcp-ci-gerrit",
+        branch : "mcp",
+        host : HOST,
+        project : "projectcalico/calicoctl"
+      ])
 
       dir("${env.WORKSPACE}/tmp_calico-felix"){
 
         stage ('Checkout felix'){
-          git.gerritPatchsetCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            withWipeOut = true
-          }
+          git.gerritPatchsetCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            withWipeOut : true
+          ])
         }
         // define tag
         felixImgTag = git.getGitDescribe(true) + "-" + common.getDatetime()

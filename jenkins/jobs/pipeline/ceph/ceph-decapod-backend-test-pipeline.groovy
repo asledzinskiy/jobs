@@ -9,17 +9,17 @@ ARTIFACTORY_PYPI_URL = "${ARTIFACTORY_URL}/api/pypi/pypi-virtual/simple/"
 node("decapod") {
     stage("Checkout SCM") {
         if (env.GERRIT_EVENT_TYPE) {
-            gitTools.gerritPatchsetCheckout {
-                credentialsId = "mcp-ci-gerrit"
-            }
+            gitTools.gerritPatchsetCheckout([
+                credentialsId : "mcp-ci-gerrit"
+            ])
         } else {
             def gerritHost = env.GERRIT_HOST
-            gitTools.gitSSHCheckout {
-                credentialsId = "mcp-ci-gerrit"
-                branch="master"
-                host = gerritHost
-                project = "ceph/decapod"
-            }
+            gitTools.gitSSHCheckout ([
+                credentialsId : "mcp-ci-gerrit",
+                branch : "master",
+                host : gerritHost,
+                project : "ceph/decapod"
+            ])
         }
     }
 

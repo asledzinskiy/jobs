@@ -7,17 +7,17 @@ node('calico'){
 
     stage ('Checkout libcalico-go'){
       if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
-          gitTools.gerritPatchsetCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            withWipeOut = true
-          }
+          gitTools.gerritPatchsetCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            withWipeOut : true
+          ])
       } else {
-          gitTools.gitSSHCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            branch = "mcp"
-            host = HOST
-            project = "projectcalico/libcalico-go"
-          }
+          gitTools.gitSSHCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            branch : "mcp",
+            host : HOST,
+            project : "projectcalico/libcalico-go"
+          ])
       } // else
     }
 

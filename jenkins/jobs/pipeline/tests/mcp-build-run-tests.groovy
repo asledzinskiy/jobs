@@ -17,19 +17,19 @@ node('devops') {
 
   stage('project-config code checkout') {
     def HOST = env.GERRIT_HOST
-    gitTools.gitSSHCheckout {
-      credentialsId = "mcp-ci-gerrit"
-      branch = "master"
-      host = HOST
-      project = "mcp-ci/project-config"
-    }
+    gitTools.gitSSHCheckout ([
+      credentialsId : "mcp-ci-gerrit",
+      branch : "master",
+      host : HOST,
+      project : "mcp-ci/project-config"
+    ])
   }
 
   stage('mcp-cicd-installer code checkout') {
     dir('mcp-cicd-installer') {
-      gitTools.gerritPatchsetCheckout {
-        credentialsId = "mcp-ci-gerrit"
-      }
+      gitTools.gerritPatchsetCheckout ([
+        credentialsId : "mcp-ci-gerrit"
+      ])
     }
   }
 

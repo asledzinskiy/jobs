@@ -18,12 +18,12 @@ stage('build-debian-image') {
         }
         def docker_image = "${namespace}/${image_name}"
         deleteDir()
-        gitTools.gitSSHCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            branch = "master"
-            host = "${gerrit_host}"
-            project = "mcp-ci/mcp-cicd-installer"
-        }
+        gitTools.gitSSHCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            branch : "master",
+            host : "${gerrit_host}",
+            project : "mcp-ci/mcp-cicd-installer"
+        ])
         withEnv(["VENV_PATH=${env.WORKSPACE}/.tox/mcp-ci",
                  "DOCKER_NET=mcp-ci-net",
                  "TEST_MODE=true"]) {

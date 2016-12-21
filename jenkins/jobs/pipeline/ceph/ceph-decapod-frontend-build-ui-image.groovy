@@ -14,12 +14,12 @@ PROD_REPOSITORY = "docker-prod-local"
 node("decapod") {
     stage("Checkout SCM") {
         def gerritHost = env.GERRIT_HOST
-        gitTools.gitSSHCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            branch = "master"
-            host = gerritHost
-            project = "ceph/decapod"
-        }
+        gitTools.gitSSHCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            branch : "master",
+            host : gerritHost,
+            project : "ceph/decapod"
+        ])
     }
 
     stage("Build image") {

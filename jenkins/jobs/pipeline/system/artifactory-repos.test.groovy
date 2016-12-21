@@ -4,9 +4,9 @@ def gitTools = new com.mirantis.mcp.Git()
 node('tools') {
 
     stage('Code checkout') {
-        gitTools.gerritPatchsetCheckout {
-            credentialsId = "mcp-ci-gerrit"
-        }
+        gitTools.gerritPatchsetCheckout ([
+            credentialsId : "mcp-ci-gerrit"
+        ])
     }
 
     withEnv(["VENV_PATH=${env.WORKSPACE}/.tox/artifactory-repos"]) {

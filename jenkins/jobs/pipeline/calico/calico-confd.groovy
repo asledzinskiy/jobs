@@ -34,12 +34,12 @@ def buildConfd(){
     try {
 
       def HOST = env.GERRIT_HOST
-      git.gitSSHCheckout {
-        credentialsId = "mcp-ci-gerrit"
-        branch = "mcp"
-        host = HOST
-        project = "projectcalico/calicoctl"
-      }
+      git.gitSSHCheckout ([
+        credentialsId : "mcp-ci-gerrit",
+        branch : "mcp",
+        host : HOST,
+        project : "projectcalico/calicoctl"
+      ])
 
       dir("${env.WORKSPACE}/tmp_confd"){
 
@@ -49,10 +49,10 @@ def buildConfd(){
         def container_gopath = "${container_src_dir}/vendor:${container_src_dir}"
 
         stage ('Checkout confd'){
-          git.gerritPatchsetCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            withWipeOut = true
-          }
+          git.gerritPatchsetCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            withWipeOut : true
+          ])
         }
 
         stage ('Run unittest for confd'){

@@ -28,10 +28,10 @@ def buildCalicoCNI(){
     try {
 
       stage ('Checkout calico-cni'){
-        git.gerritPatchsetCheckout {
-          credentialsId = "mcp-ci-gerrit"
-          withWipeOut = true
-        }
+        git.gerritPatchsetCheckout ([
+          credentialsId : "mcp-ci-gerrit",
+          withWipeOut : true
+        ])
       }
 
       // define timestamp
@@ -40,13 +40,13 @@ def buildCalicoCNI(){
       stage ('Switch to the downstream libcalico-go') {
         def LIBCALICOGO_PATH = "${env.WORKSPACE}/tmp_libcalico-go"
         def HOST = env.GERRIT_HOST
-        git.gitSSHCheckout {
-          credentialsId = "mcp-ci-gerrit"
-          branch = "mcp"
-          host = HOST
-          project = "projectcalico/libcalico-go"
-          targetDir = "${LIBCALICOGO_PATH}"
-        }
+        git.gitSSHCheckout ([
+          credentialsId : "mcp-ci-gerrit",
+          branch : "mcp",
+          host : HOST,
+          project : "projectcalico/libcalico-go",
+          targetDir : "${LIBCALICOGO_PATH}"
+        ])
         // Let's add teardown procedure for cni-plugin
         sh "make stop-etcd stop-k8s-apiserver stop-kubernetes-master"
 

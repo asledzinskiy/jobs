@@ -37,20 +37,20 @@ def buildCalicoBuildImg(){
 
 
       def HOST = env.GERRIT_HOST
-      git.gitSSHCheckout {
-        credentialsId = "mcp-ci-gerrit"
-        branch = "mcp"
-        host = HOST
-        project = "projectcalico/calicoctl"
-      }
+      git.gitSSHCheckout ([
+        credentialsId : "mcp-ci-gerrit",
+        branch : "mcp",
+        host : HOST,
+        project : "projectcalico/calicoctl"
+      ])
 
       dir("${env.WORKSPACE}/tmp_libcalico"){
 
         stage ('Checkout libcalico'){
-          git.gerritPatchsetCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            withWipeOut = true
-          }
+          git.gerritPatchsetCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            withWipeOut : true
+          ])
         }
         // define tag
         buildImgTag = git.getGitDescribe(true) + "-" + common.getDatetime()

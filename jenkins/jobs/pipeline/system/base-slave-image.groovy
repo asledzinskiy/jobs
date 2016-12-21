@@ -26,9 +26,9 @@ def build_artifacts () {
         node('docker') {
             // Run build only on commit
             deleteDir()
-            gitTools.gerritPatchsetCheckout{
-                credentialsId = "mcp-ci-gerrit"
-            }
+            gitTools.gerritPatchsetCheckout([
+                credentialsId : "mcp-ci-gerrit"
+            ])
             def dockerRepository = "${env.DOCKER_REGISTRY}"
             def artifactory_url = artifactoryServer.getUrl()
             def uri = new URI(artifactory_url);

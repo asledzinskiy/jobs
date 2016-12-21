@@ -55,37 +55,37 @@ node("${SLAVE_NODE_LABEL}") {
     }
 
     stage("Checkout source code") {
-        gitTools.gitSSHCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            branch = "master"
-            host = "${GERRIT_HOST}"
-            project = "${KARGO_REPO}"
-            targetDir = "kargo"
-        }
+        gitTools.gitSSHCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            branch : "master",
+            host : "${GERRIT_HOST}",
+            project : "${KARGO_REPO}",
+            targetDir : "kargo"
+        ])
 
-        gitTools.gitSSHCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            branch = "master"
-            host = "${GERRIT_HOST}"
-            project = "${FUEL_CCP_INSTALLER_REPO}"
-            targetDir = "fuel-ccp-installer"
-        }
+        gitTools.gitSSHCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            branch : "master",
+            host : "${GERRIT_HOST}",
+            project : "${FUEL_CCP_INSTALLER_REPO}",
+            targetDir : "fuel-ccp-installer",
+        ])
 
-        gitTools.gitSSHCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            branch = "master"
-            host = "${GERRIT_HOST}"
-            project = "${ANSIBLE_K8S_BASE_REPO}"
-            targetDir = 'ansible-base-os'
-        }
+        gitTools.gitSSHCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            branch : "master",
+            host : "${GERRIT_HOST}",
+            project : "${ANSIBLE_K8S_BASE_REPO}",
+            targetDir : 'ansible-base-os'
+        ])
 
-        gitTools.gitSSHCheckout {
-            credentialsId = "mcp-ci-gerrit"
-            branch = "master"
-            host = "${GERRIT_HOST}"
-            project = "clusters/kubernetes/${CLUSTER_NAME}"
-            targetDir = 'inventory'
-        }
+        gitTools.gitSSHCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            branch : "master",
+            host : "${GERRIT_HOST}",
+            project : "clusters/kubernetes/${CLUSTER_NAME}",
+            targetDir : 'inventory'
+        ])
     }
 
     stage('Update configs') {
