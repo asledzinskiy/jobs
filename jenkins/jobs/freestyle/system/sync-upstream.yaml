@@ -79,6 +79,5 @@
       - ssh-agent-credentials:
           users:
             - 'mcp-ci-mirroring'
-    # FIXME(skulanov) Let's disable before manual tests
-    # triggers:
-    #   - timed: '*/15 * * * *'
+    triggers:
+      - timed: '*/20 * * * *'
