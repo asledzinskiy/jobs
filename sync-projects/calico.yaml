@@ -1,0 +1,41 @@
+- project: bird
+  src-repo: https://github.com/projectcalico/bird
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/bird
+  branches:
+    - "*"
+
+- project: calicoctl
+  src-repo: https://github.com/projectcalico/calicoctl
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/calicoctl
+  branches:
+    - "*"
+
+- project: confd
+  src-repo: https://github.com/projectcalico/confd
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/confd
+  branches:
+    - "*"
+
+- project: cni-plugin
+  src-repo: https://github.com/projectcalico/cni-plugin
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/cni-plugin
+  branches:
+    - "*"
+
+- project: felix
+  src-repo: https://github.com/projectcalico/felix
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/felix
+  branches:
+    - "*"
+
+- project: libcalico
+  src-repo: https://github.com/projectcalico/libcalico
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/libcalico
+  branches:
+    - "*"
+
+- project: libcalico-go
+  src-repo: https://github.com/projectcalico/libcalico-go
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/libcalico-go
+  branches:
+    - "*"

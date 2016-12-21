@@ -112,8 +112,15 @@
 
 - project:
     name: sync-upstream-repos
+    project-namespace:
+      - 'calico'
+      - 'fuel-ccp'
+      - 'kubernetes'
+      - 'mk'
+      - 'tcp'
     jobs:
-       - 'sync-upstream'
+      - 'sync-{project-namespace}-upstream'
+      - 'sync-upstream'
 
 - project:
     name: 'calico-sync-mcp'

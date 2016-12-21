@@ -1,5 +1,6 @@
 - job-template:
     name: sync-upstream
+    disabled: true
     description: |
       Sync upstream repos to downstream
     node: sync-code
@@ -34,3 +35,50 @@
             - 'mcp-ci-mirroring'
     triggers:
       - timed: '*/15 * * * *'
+
+- job-template:
+    name: sync-{project-namespace}-upstream
+    description: |
+      Sync upstream repos to downstream
+    node: sync-code
+    builders:
+      - shell:
+          VENV="${{WORKSPACE}}_VENV"
+
+          virtualenv "${{VENV}}"
+          source "${{VENV}}/bin/activate" || exit 1
+
+          pip install .
+
+          gitrepo sync ${{WORKSPACE}}/project-config/sync-projects/{project-namespace}.yaml
+    concurrent: false
+
+    parameters:
+      - string:
+          name: GIT_PUSH_USERNAME
+          default: "mcp-ci-mirroring"
+          description: "Pushing username"
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+
+    scm:
+      - git:
+         url: '{gerrit-url}/mcp-ci/gitrepo'
+         branches:
+          - 'master'
+
+      - git:
+          url: '{gerrit-url}/mcp-ci/project-config'
+          branches:
+           - 'master'
+          basedir: 'project-config'
+
+    wrappers:
+      - workspace-cleanup
+      - ssh-agent-credentials:
+          users:
+            - 'mcp-ci-mirroring'
+    # FIXME(skulanov) Let's disable before manual tests
+    # triggers:
+    #   - timed: '*/15 * * * *'
