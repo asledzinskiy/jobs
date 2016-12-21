@@ -1,0 +1,35 @@
+- job-template:
+    name: whale-test-pipeline
+    description: Test pipeline for Decapod using Whale
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: WHALE_BRANCH
+          default: master
+          description: Whale branch to checkout
+      - string:
+          name: DECAPOD_BRANCH
+          default: master
+          description: Decapod branch to checkout
+      - string:
+          name: DECAPOD_DOCKER_TAG
+          default: latest
+          description: Decapod docker images tag to use
+      - string:
+          name: DOCKER_REGISTRY
+          default: "{docker-prod-virtual}"
+          description: Docker registry for test images
+      - string:
+          name: OS_AUTH_URL
+          default: "https://horizon.mcp.mirantis.net:5000/v2.0"
+          description: Authentication URL for CI/CD OpenStack installation
+      - string:
+          name: OS_TENANT_NAME
+          default: "jenkins-ci"
+          description: Tenant name for CI/CD OpenStack installation
+    dsl:
+      !include-raw-escape: whale-test-pipeline.groovy

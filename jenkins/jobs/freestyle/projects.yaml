@@ -192,6 +192,7 @@
       - decapod-images-merge-pipeline
       - decapod-images-test-pipeline
       - whale-checks-pipeline
+      - whale-test-pipeline
 
 - project:
     name: ccp
