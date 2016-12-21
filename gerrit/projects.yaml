@@ -270,7 +270,6 @@
 
 -
   project: mk/mk-lab-salt-model
-  upstream: git://github.com/Mirantis/mk-lab-salt-model.git
   description: OpenStack Reclass models for Mk-based cloud
   acl-config: acls/mk/mk.config
 
