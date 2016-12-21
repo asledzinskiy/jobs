@@ -51,14 +51,13 @@
 
           pip install .
 
+          #FIXME(skulanov) remove after implementing support in gitrepo
+          sed -i 's/${{GERRIT_HOST}}/{gerrit-host}/g' ${{WORKSPACE}}/project-config/sync-projects/{project-namespace}.yaml
+
           gitrepo sync ${{WORKSPACE}}/project-config/sync-projects/{project-namespace}.yaml
     concurrent: false
 
     parameters:
-      - string:
-          name: GIT_PUSH_USERNAME
-          default: "mcp-ci-mirroring"
-          description: "Pushing username"
       - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'

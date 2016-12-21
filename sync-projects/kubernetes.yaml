@@ -1,5 +1,5 @@
 - project: kubernetes
   src-repo: https://github.com/kubernetes/kubernetes
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/kubernetes/kubernetes
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/kubernetes/kubernetes
   branches:
     - "*"

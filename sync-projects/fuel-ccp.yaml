@@ -1,161 +1,161 @@
 - project: fuel-ccp
   src-repo: git://git.openstack.org/openstack/fuel-ccp
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp
   branches:
     - "*"
 
 - project: fuel-ccp-ceph
   src-repo: git://git.openstack.org/openstack/fuel-ccp-ceph
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-ceph
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-ceph
   branches:
     - "*"
 
 - project: fuel-ccp-ci-config
   src-repo: git://git.openstack.org/openstack/fuel-ccp-ci-config
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-ci-config
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-ci-config
   branches:
     - "*"
 
 - project: fuel-ccp-cinder
   src-repo: git://git.openstack.org/openstack/fuel-ccp-cinder
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-cinder
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-cinder
   branches:
     - "*"
 
 - project: fuel-ccp-debian-base
   src-repo: git://git.openstack.org/openstack/fuel-ccp-debian-base
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-debian-base
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-debian-base
   branches:
     - "*"
 
 - project: fuel-ccp-entrypoint
   src-repo: git://git.openstack.org/openstack/fuel-ccp-entrypoint
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-entrypoint
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-entrypoint
   branches:
     - "*"
 
 - project: fuel-ccp-etcd
   src-repo: git://git.openstack.org/openstack/fuel-ccp-etcd
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-etcd
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-etcd
   branches:
     - "*"
 
 - project: fuel-ccp-galera
   src-repo: git://git.openstack.org/openstack/fuel-ccp-galera
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-galera
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-galera
   branches:
     - "*"
 
 - project: fuel-ccp-glance
   src-repo: git://git.openstack.org/openstack/fuel-ccp-glance
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-glance
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-glance
   branches:
     - "*"
 
 - project: fuel-ccp-heat
   src-repo: git://git.openstack.org/openstack/fuel-ccp-heat
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-heat
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-heat
   branches:
     - "*"
 
 - project: fuel-ccp-horizon
   src-repo: git://git.openstack.org/openstack/fuel-ccp-horizon
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-horizon
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-horizon
   branches:
     - "*"
 
 - project: fuel-ccp-installer
   src-repo: git://git.openstack.org/openstack/fuel-ccp-installer
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-installer
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-installer
   branches:
     - "*"
 
 - project: fuel-ccp-ironic
   src-repo: git://git.openstack.org/openstack/fuel-ccp-ironic
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-ironic
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-ironic
   branches:
     - "*"
 
 - project: fuel-ccp-keystone
   src-repo: git://git.openstack.org/openstack/fuel-ccp-keystone
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-keystone
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-keystone
   branches:
     - "*"
 
 - project: fuel-ccp-mariadb
   src-repo: git://git.openstack.org/openstack/fuel-ccp-mariadb
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-mariadb
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-mariadb
   branches:
     - "*"
 
 - project: fuel-ccp-memcached
   src-repo: git://git.openstack.org/openstack/fuel-ccp-memcached
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-memcached
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-memcached
   branches:
     - "*"
 
 - project: fuel-ccp-murano
   src-repo: git://git.openstack.org/openstack/fuel-ccp-murano
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-murano
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-murano
   branches:
     - "*"
 
 - project: fuel-ccp-neutron
   src-repo: git://git.openstack.org/openstack/fuel-ccp-neutron
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-neutron
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-neutron
   branches:
     - "*"
 
 - project: fuel-ccp-nova
   src-repo: git://git.openstack.org/openstack/fuel-ccp-nova
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-nova
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-nova
   branches:
     - "*"
 
 - project: fuel-ccp-openstack-base
   src-repo: git://git.openstack.org/openstack/fuel-ccp-openstack-base
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-openstack-base
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-openstack-base
   branches:
     - "*"
 
 - project: fuel-ccp-rabbitmq
   src-repo: git://git.openstack.org/openstack/fuel-ccp-rabbitmq
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-rabbitmq
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-rabbitmq
   branches:
     - "*"
 
 - project: fuel-ccp-sahara
   src-repo: git://git.openstack.org/openstack/fuel-ccp-sahara
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-sahara
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-sahara
   branches:
     - "*"
 
 - project: fuel-ccp-searchlight
   src-repo: git://git.openstack.org/openstack/fuel-ccp-searchlight
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-searchlight
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-searchlight
   branches:
     - "*"
 
 - project: fuel-ccp-specs
   src-repo: git://git.openstack.org/openstack/fuel-ccp-specs
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-specs
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-specs
   branches:
     - "*"
 
 - project: fuel-ccp-stacklight
   src-repo: git://git.openstack.org/openstack/fuel-ccp-stacklight
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-stacklight
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-stacklight
   branches:
     - "*"
 
 - project: fuel-ccp-tests
   src-repo: git://git.openstack.org/openstack/fuel-ccp-tests
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-tests
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-tests
   branches:
     - "*"
 
 - project: fuel-ccp-zmq
   src-repo: git://git.openstack.org/openstack/fuel-ccp-zmq
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/ccp/fuel-ccp-zmq
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-zmq
   branches:
     - "*"
