@@ -119,7 +119,7 @@
       - 'mk'
       - 'tcp'
     jobs:
-      - 'sync-{project-namespace}-upstream'
+      - 'sync-upstream-{project-namespace}'
       - 'sync-upstream'
 
 - project:

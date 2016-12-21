@@ -37,12 +37,13 @@
       - timed: '*/15 * * * *'
 
 - job-template:
-    name: sync-{project-namespace}-upstream
+    name: sync-upstream-{project-namespace}
     description: |
       Sync upstream repos to downstream
     node: sync-code
     builders:
-      - shell:
+      - shell: |
+          #!/bin/bash -xe
           VENV="${{WORKSPACE}}_VENV"
 
           virtualenv "${{VENV}}"
