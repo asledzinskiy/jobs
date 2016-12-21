@@ -365,6 +365,12 @@ cat << EOF > "${PROJECTS_TO_SYNC_FUEL_CCP}"
 EOF
 
 cat << EOF > "${PROJECTS_TO_SYNC_MK}"
+- project: mcp-lab-heat-templates
+  src-repo: git://github.com/Mirantis/mcp-lab-heat-templates.git
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/mcp-lab-heat-templates
+  branches:
+    - "*"
+
 - project: mk-lab-salt-model
   src-repo: git://github.com/Mirantis/mk-lab-salt-model.git
   dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/mk-lab-salt-model

@@ -269,6 +269,11 @@
   acl-config: acls/mk-ci/mk-ci.config
 
 -
+  project: mk/mcp-lab-heat-templates
+  description: OpenStack Heat templates for MCP infrastructures
+  acl-config: acls/mk/mk.config
+
+-
   project: mk/mk-lab-salt-model
   description: OpenStack Reclass models for Mk-based cloud
   acl-config: acls/mk/mk.config
