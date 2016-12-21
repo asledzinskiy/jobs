@@ -728,21 +728,21 @@
   acl-config: acls/projectcalico/calico.config
 
 -
-  project: projectcalico/calico-bird
+  project: projectcalico/bird
   description: Routing daemon for UNIX-like systems
-  upstream: git://github.com/projectcalico/calico-bird.git
-  acl-config: acls/projectcalico/calico.config
-
--
-  project: projectcalico/calico-cni
-  description: Calico networking for CNI
-  upstream: git://github.com/projectcalico/calico-cni.git
+  upstream: git://github.com/projectcalico/bird.git
   acl-config: acls/projectcalico/calico.config
 
 -
   project: projectcalico/calicoctl
   description: Calico CLI tool and calico/node container
   upstream: git://github.com/projectcalico/calicoctl.git
+  acl-config: acls/projectcalico/calico.config
+
+-
+  project: projectcalico/cni-plugin
+  description: Calico CNI plugin
+  upstream: git://github.com/projectcalico/cni-plugin.git
   acl-config: acls/projectcalico/calico.config
 
 -

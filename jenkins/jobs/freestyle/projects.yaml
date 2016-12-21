@@ -139,7 +139,7 @@
 
     # List of projects to sync
     gerrit-project-name:
-    - 'calico-cni'
+    - 'cni-plugin'
     - 'calicoctl'
     - 'confd'
     - 'felix'
@@ -173,7 +173,7 @@
 
     # List of projects to sync
     gerrit-project-name:
-    - 'calico-bird'
+    - 'bird'
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'

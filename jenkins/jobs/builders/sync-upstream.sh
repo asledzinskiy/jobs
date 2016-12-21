@@ -20,15 +20,15 @@ cat << EOF > "${PROJECTS_TO_SYNC}"
   branches:
     - "*"
 
-- project: calico-bird
-  src-repo: https://github.com/projectcalico/calico-bird
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/calico-bird
+- project: bird
+  src-repo: https://github.com/projectcalico/bird
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/bird
   branches:
     - "*"
 
-- project: calico-cni
-  src-repo: https://github.com/projectcalico/calico-cni
-  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/calico-cni
+- project: cni-plugin
+  src-repo: https://github.com/projectcalico/cni-plugin
+  dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/projectcalico/cni-plugin
   branches:
     - "*"
 

@@ -80,7 +80,7 @@
             - patchset-created-event
           projects:
             - project-compare-type: PLAIN
-              project-pattern: projectcalico/calico-bird
+              project-pattern: projectcalico/bird
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'mcp'
@@ -167,7 +167,7 @@
             - patchset-created-event
           projects:
             - project-compare-type: PLAIN
-              project-pattern: projectcalico/calico-cni
+              project-pattern: projectcalico/cni-plugin
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'mcp'
