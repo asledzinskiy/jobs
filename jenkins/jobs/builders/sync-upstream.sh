@@ -366,7 +366,7 @@ EOF
 
 cat << EOF > "${PROJECTS_TO_SYNC_MK}"
 - project: mcp-lab-heat-templates
-  src-repo: git://github.com/Mirantis/mcp-lab-heat-templates.git
+  src-repo: git://github.com:Mirantis/mcp-lab-heat-templates.git
   dst-repo: ssh://${GIT_PUSH_USERNAME}@${GERRIT_HOST}:29418/mk/mcp-lab-heat-templates
   branches:
     - "*"
