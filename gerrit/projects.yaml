@@ -197,6 +197,12 @@
   acl-config: acls/ceph/decapod.config
 
 -
+  project: ceph/whale
+  description: Whale testing tool for Decapod
+  upstream: https://github.com/Mirantis/whale
+  acl-config: acls/ceph/whale.config
+
+-
   project: kubernetes/kubernetes
   description: kubernetes main repository
   upstream: https://gerrit.mcp.mirantis.net/kubernetes/kubernetes.git

@@ -189,6 +189,7 @@
     name: decapod
     jobs:
       - decapod-backend-test-pipeline
+      - whale-checks-pipeline
 
 - project:
     name: ccp

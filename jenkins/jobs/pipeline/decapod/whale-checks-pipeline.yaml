@@ -1,0 +1,24 @@
+- job-template:
+    name: whale-checks-pipeline
+    description: Codestyle checkers for Whale
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: "(recheck|retest|reverify)"
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: ceph/whale
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: "**"
+          custom-url: "* $JOB_NAME $BUILD_URL"
+    dsl:
+      !include-raw-escape: whale-checks-pipeline.groovy
