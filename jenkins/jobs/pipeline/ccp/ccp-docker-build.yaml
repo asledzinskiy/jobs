@@ -4,6 +4,8 @@
       Fuel CCP - CCP image builder container
     project-type: workflow
 
+    timer: ''
+
     parameters:
       - string:
           name: DOCKER_REGISTRY
@@ -11,16 +13,7 @@
           description: 'Docker registry for binaries and images'
 
     triggers:
-      - gerrit:
-          trigger-on:
-            - change-merged-event
-          projects:
-            - project-compare-type: REG_EXP
-              project-pattern: '^ccp/fuel-ccp($|\-(?!docker|ci-config))'
-              branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-          custom-url: '* $JOB_NAME $BUILD_URL'
+      - timed: '{timer}'
 
     workflow-scm:
       scm:

@@ -199,7 +199,8 @@
 - project:
     name: ccp
     jobs:
-      - ccp-docker-build
+      - ccp-docker-build:
+          timer: '@midnight'
       - ccp-tempest-test
       - ccp-docker-deploy
 
