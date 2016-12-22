@@ -73,6 +73,11 @@
         HEAT_STACK_ENVIRONMENT: 'tcpisek'
         HEAT_STACK_ZONE: 'mirantis-zone-qa'
         HEAT_STACK_PUBLIC_NET: 'inet' #inet/inet2
-    dsl:
-      !include-raw-escape:
-        - mk-kubernetes-deploy-pipeline.groovy
+    workflow-scm:
+      scm:
+        basic-scm:
+          branch: 'master'
+          project: 'mk/mk-pipelines'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+      script-path: mk-kubernetes-deploy-pipeline.groovy
