@@ -57,9 +57,7 @@ def buildCalicoBuildImg(){
 
         stage ('Run libcalico unittests'){
           // inject COMPARE_BRANCH variable for felix coverage test
-          wrap([$class: 'AnsiColorBuildWrapper']) {
-            sh "make ut"
-          }
+          sh "make ut"
         }
 
         stage ('Build calico/build image') {
