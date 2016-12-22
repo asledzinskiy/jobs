@@ -59,9 +59,7 @@ def buildCalicoCNI(){
       }
 
       stage ('Unit tests') {
-        wrap([$class: 'AnsiColorBuildWrapper']) {
-          sh "make static-checks-containerized test-containerized"
-        }
+        sh "make static-checks-containerized test-containerized"
       }
 
       stage ('Build calico-cni') {
