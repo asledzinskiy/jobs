@@ -280,6 +280,11 @@
   acl-config: acls/mk/mk.config
 
 -
+  project: mk/mk-pipelines
+  description: Jenkins pipelines for MK deployment jobs
+  acl-config: acls/mk/mk.config
+
+-
   project: mk/openstack-salt
   upstream: git://github.com/openstack/openstack-salt.git
   description: Salt formulas for deploying OpenStack
