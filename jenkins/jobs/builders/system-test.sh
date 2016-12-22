@@ -116,6 +116,9 @@ fi
 
 source "${VENV_PATH}/bin/activate"
 
+# update python virtual environment if needed
+pip install --upgrade --upgrade-strategy=only-if-needed -r fuel_ccp_tests/requirements.txt
+
 if [ ! -r "${WORKSPACE}/fuel-ccp-installer/${DEPLOY_SCRIPT_REL_PATH}" ]; then
   error_exit "Deploy script \"${DEPLOY_SCRIPT_REL_PATH}\" not found in" \
     "\"${WORKSPACE}/fuel-ccp-installer/\"!"
