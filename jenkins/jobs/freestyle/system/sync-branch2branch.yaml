@@ -22,7 +22,7 @@
 #
 
 - job-template:
-    name: 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
+    name: 'sync-downstream-{gerrit-project-name}-{src-branch}-{dst-branch}'
     gerrit-project-namespace: 'projectcalico'
     fallback-branch: 'master'
     gerrit-reviewers: ''

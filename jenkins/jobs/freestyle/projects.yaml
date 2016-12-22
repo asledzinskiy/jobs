@@ -154,7 +154,7 @@
     - 'libcalico-go'
 
     jobs:
-    - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
+    - 'sync-downstream-{gerrit-project-name}-{src-branch}-{dst-branch}'
 
 - project:
     name: 'calico-bird-sync-mcp'
@@ -183,7 +183,7 @@
     - 'bird'
 
     jobs:
-    - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
+    - 'sync-downstream-{gerrit-project-name}-{src-branch}-{dst-branch}'
 
 - project:
     name: decapod
