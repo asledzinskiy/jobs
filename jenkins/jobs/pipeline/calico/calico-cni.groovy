@@ -47,6 +47,8 @@ def buildCalicoCNI(){
           project = "projectcalico/libcalico-go"
           targetDir = "${LIBCALICOGO_PATH}"
         }
+        // Let's add teardown procedure for cni-plugin
+        sh "make stop-etcd stop-k8s-apiserver stop-kubernetes-master"
 
         // TODO(apanchenko): replace `sed` by Yaml.load() -> modify map -> Yaml.dump()
         sh """
@@ -99,7 +101,8 @@ def buildCalicoCNI(){
     }
     finally {
       // fix workspace owners
-      sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide"
+      sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide || true"
+      sh "make stop-etcd stop-k8s-apiserver stop-kubernetes-master"
     }
   }
 
