@@ -119,8 +119,8 @@
       - 'mk'
       - 'tcp'
     jobs:
+      - 'sync-upstream-MANUAL'
       - 'sync-upstream-{project-namespace}'
-      - 'sync-upstream'
 
 - project:
     name: 'calico-sync-mcp'
