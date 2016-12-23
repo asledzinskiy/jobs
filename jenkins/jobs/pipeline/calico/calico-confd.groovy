@@ -164,7 +164,7 @@ def buildConfd(){
     }
     finally {
       // fix workspace owners
-      sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide"
+      sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide || true"
     }
   }
 
