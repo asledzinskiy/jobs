@@ -77,6 +77,8 @@ node(NODE) {
       sh "chmod 755 ${WORKSPACE}/install_devops.sh"
       sh(returnStdout: true, script: WORKSPACE + "/install_devops.sh").trim()
     }
+
+    currentBuild.description = NODE
   }
 
 }
