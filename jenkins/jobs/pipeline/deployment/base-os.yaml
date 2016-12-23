@@ -1,0 +1,17 @@
+- job-template:
+    name: '{cluster}-configure-system'
+    description: |
+      Configure base OS
+    project-type: workflow
+
+    parameters:
+      - string:
+          name: CLUSTER_NAME
+          default: '{cluster}'
+          description: 'Cluster name'
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+          description: 'Gerrit host'
+    dsl:
+      !include-raw-escape: base-os.groovy

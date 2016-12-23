@@ -203,6 +203,17 @@
   acl-config: acls/ceph/whale.config
 
 -
+  project: clusters/kubernetes/env-01
+  description: Configuration for env-01 k8s cluster for MCP CI
+  acl-config: acls/mcp-ci/mcp-ci.project-config.config
+
+-
+  project: kubernetes/kargo
+  description: kubernetes cluster installator
+  upstream: git://github.com/kubernetes-incubator/kargo.git
+  acl-config: acls/kubernetes/kargo.config
+
+-
   project: kubernetes/kubernetes
   description: kubernetes main repository
   upstream: https://gerrit.mcp.mirantis.net/kubernetes/kubernetes.git
@@ -212,6 +223,11 @@
   project: mcp-ci
   description: Parent project for mcp-ci projects
   acl-config: acls/mcp-ci/mcp-ci.config
+
+-
+  project: mcp-ci/ansible-k8s-base
+  description: Ansible playbooks for basic configuration of operating system before k8s deployment
+  acl-config: acls/mcp-ci/mcp-ci.project-config.config
 
 -
   project: mcp-ci/gitrepo

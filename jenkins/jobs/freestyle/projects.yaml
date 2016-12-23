@@ -285,3 +285,11 @@
     name: 'mk-kubernetes-deploy-pipeline'
     jobs:
      - 'mk-kubernetes-deploy-pipeline'
+
+- project:
+    name: clusters
+    jobs:
+      - "{cluster}-configure-system"
+      - "{cluster}-deploy-k8s"
+    cluster:
+      - env-01
