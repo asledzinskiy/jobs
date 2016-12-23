@@ -22,6 +22,7 @@ node('calico'){
     }
 
     stage ('Running libcalico-go unittests') {
+      sh "make stop-etcd stop-kubernetes-master"
       sh "make test-containerized"
     }
 
@@ -33,5 +34,6 @@ node('calico'){
   finally {
     // fix workspace owners
     sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide || true"
+    sh "make stop-etcd stop-kubernetes-master"
   }
 }
