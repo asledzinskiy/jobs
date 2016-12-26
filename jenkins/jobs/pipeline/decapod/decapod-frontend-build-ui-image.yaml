@@ -1,0 +1,15 @@
+- job-template:
+    name: decapod-frontend-build-ui-image
+    description: Build image for UI tests of Decapod
+    project-type: workflow
+    concurrent: false
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for test images'
+    dsl:
+      !include-raw-escape: decapod-frontend-build-ui-image.groovy
