@@ -254,12 +254,6 @@
   acl-config: acls/mcp-netchecker/mcp-netchecker.config
 
 -
-  project: mcp/mcp-installer
-  description: MCP Installer project
-  upstream: git://github.com/openstack/fuel-ccp-installer.git
-  acl-config: acls/mcp/mcp-installer.config
-
--
   project: mk-ci
   description: Parent project for mk-ci projects
   acl-config: acls/mk-ci/mk-ci.config
