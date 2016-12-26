@@ -16,7 +16,7 @@
           #FIXME(skulanov) remove after implementing support in gitrepo
           sed -i 's/${{GERRIT_HOST}}/{gerrit-host}/g' ${{WORKSPACE}}/project-config/sync-projects/{project-namespace}.yaml
 
-          gitrepo sync ${{WORKSPACE}}/project-config/sync-projects/{project-namespace}.yaml
+          gitrepo sync ${{WORKSPACE}}/project-config/sync-projects/{project-namespace}.yaml --junit-xml result.xml
     concurrent: false
 
     parameters:
@@ -43,6 +43,12 @@
             - 'mcp-ci-mirroring'
     triggers:
       - timed: '*/20 * * * *'
+
+    publishers:
+    - junit:
+        keep-long-stdio: false
+        allow-empty-results: true
+        results: 'result.xml'
 
 - job-template:
     name: sync-upstream-MANUAL
