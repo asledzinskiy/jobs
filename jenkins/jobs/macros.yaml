@@ -241,6 +241,22 @@
             - job-extended-read
             - job-read
 
+- property:
+    name: authorization-allow-k8s-group
+    properties:
+      - authorization:
+          anonymous:
+            - job-discover
+            - job-extended-read
+            - job-read
+          mcp-k8s:
+            - job-build
+            - job-cancel
+            - job-discover
+            - job-extended-read
+            - job-read
+
+
 - scm:
     name: basic-scm
     scm:

@@ -22,6 +22,9 @@
           default: '{docker-prod-virtual}/mirantis/k8s-tests-images/k8s-tests-unit:latest'
           desription: 'Docker image for k8s unit tests'
 
+    properties:
+      - authorization-allow-k8s-group
+
     triggers:
       - timed: '0 0 * * *'
     dsl:

@@ -40,5 +40,9 @@
           name: CALICO_VER
           default: 'mcp'
           description: 'Custom Calico version'
+
+    properties:
+      - authorization-allow-k8s-group
+
     dsl:
       !include-raw-escape: mcp-k8s-test-pipeline.groovy

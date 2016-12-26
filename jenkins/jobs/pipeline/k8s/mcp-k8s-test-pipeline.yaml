@@ -54,5 +54,9 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
+
+    properties:
+      - authorization-allow-k8s-group
+
     dsl:
       !include-raw-escape: mcp-k8s-test-pipeline.groovy
