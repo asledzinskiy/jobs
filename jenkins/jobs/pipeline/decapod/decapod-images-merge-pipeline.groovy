@@ -26,7 +26,7 @@ node("decapod") {
             if ( artifact_uri ) {
                 def buildInfo = artifactory.getPropertiesForArtifact(artifact_uri)
                 // promote docker image
-                artifactory_tools.promoteDockerArtifact(
+                artifactory.promoteDockerArtifact(
                     ARTIFACTORY_URL,
                     DEV_REPOSITORY,
                     PROD_REPOSITORY,
