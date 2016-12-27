@@ -13,3 +13,5 @@
           description: 'Docker registry for test images'
     dsl:
       !include-raw-escape: decapod-frontend-build-ui-image.groovy
+    properties:
+      - authorization-allow-ceph-core-group
