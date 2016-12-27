@@ -201,6 +201,8 @@ def run_integration_tests () {
                       go get -u github.com/jteeuwen/go-bindata/go-bindata
                       cd kubernetes/
                       git clone https://github.com/sttts/kubernetes-dind-cluster.git dind
+                      # newer kubernetes-dind-cluster is broken for stable kubernetes
+                      (cd dind && git checkout 885a308d6334e91e28189e31e7fc72e5bed7063c)
                       curl -L ${DOCKER_COMPOSE_URL}/docker-compose-$(uname -s)-$(uname -m) | sudo tee /usr/local/bin/docker-compose >/dev/null
                       sudo chmod +x "/usr/local/bin/docker-compose"
                       make WHAT="cmd/hyperkube cmd/kubectl vendor/github.com/onsi/ginkgo/ginkgo test/e2e/e2e.test"
