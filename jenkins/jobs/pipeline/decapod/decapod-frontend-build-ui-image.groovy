@@ -38,14 +38,14 @@ node("decapod") {
     stage("Upload image") {
         def imageRegistryName = "${IMAGE_NAMESPACE}/${IMAGE_NAME}"
 
-        sh "docker tag ${IMAGE_NAME}:latest ${imageRegistryName}:latest"
+        sh "docker tag ${IMAGE_NAME}:latest ${env.DOCKER_REGISTRY}/${imageRegistryName}:latest"
         artifactory.uploadImageToArtifactory(
             ARTIFACTORY_SERVER,
             env.DOCKER_REGISTRY,
             imageRegistryName,
             'latest',
             DEV_REPOSITORY)
-        sh "docker rmi -f ${imageRegistryName}:latest || true"
+        sh "docker rmi -f ${env.DOCKER_REGISTRY}/${imageRegistryName}:latest || true"
         sh "docker rmi -f ${IMAGE_NAME}:latest || true"
     }
 }
