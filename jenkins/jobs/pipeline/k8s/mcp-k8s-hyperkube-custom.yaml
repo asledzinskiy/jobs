@@ -22,7 +22,7 @@
           description: 'Docker registry for binaries and images'
       - string:
           name: K8S_BASE_IMAGE
-          default: 'debian:jessie'
+          default: '{docker-prod-virtual}/mirantis/base-images/debian-base:20161223134732'
           description: 'Base Docker image to build k8s'
       - string:
           name: CALICO_CNI
