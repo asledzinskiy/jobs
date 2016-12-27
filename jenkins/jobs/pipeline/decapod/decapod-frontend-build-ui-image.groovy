@@ -41,7 +41,7 @@ node("decapod") {
         sh "docker tag ${IMAGE_NAME}:latest ${imageRegistryName}:latest"
         artifactory.uploadImageToArtifactory(
             ARTIFACTORY_SERVER,
-            env.DOCKER_REGISTRY
+            env.DOCKER_REGISTRY,
             imageRegistryName,
             'latest',
             DEV_REPOSITORY)
