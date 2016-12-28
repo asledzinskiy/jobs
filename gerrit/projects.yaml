@@ -4,6 +4,11 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: ccp/fuel-artifactory
+  description: Fuel CCP - Artifcatory deployment
+  acl-config: acls/mcp-ci/mcp-cicd-installer.config
+
+-
   project: ccp/fuel-ccp
   description: Fuel Containerized Control Plane (CCP) main project
   upstream: git://git.openstack.org/openstack/fuel-ccp
@@ -62,6 +67,11 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: ccp/fuel-ccp-gerrit
+  description: Fuel CCP - Gerrit deployment
+  acl-config: acls/mcp-ci/mcp-cicd-installer.config
+
+-
   project: ccp/fuel-ccp-glance
   description: Fuel CCP - Glance deployment
   upstream: git://git.openstack.org/openstack/fuel-ccp-glance
@@ -90,6 +100,11 @@
   description: Fuel CCP - Ironic deployment
   upstream: git://git.openstack.org/openstack/fuel-ccp-ironic
   acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-jenkins
+  description: Fuel CCP - Jenkins deployment
+  acl-config: acls/mcp-ci/mcp-cicd-installer.config
 
 -
   project: ccp/fuel-ccp-keystone
