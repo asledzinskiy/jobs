@@ -49,8 +49,10 @@
       - heavy-job:
           weight: '{weight}'
       - throttle:
+          categories:
+            - ccp-tests
           max-per-node: 1
-          option: project
+          option: category
 
     scm:
       - git:
