@@ -4,7 +4,8 @@ def ciTools = new com.mirantis.mcp.Common()
 ARTIFACTORY_SERVER = Artifactory.server("mcp-ci")
 ARTIFACTORY_URL = ARTIFACTORY_SERVER.getUrl()
 ARTIFACTORY_NPM_REGISTRY_URL = ""
-TEST_IMAGE = "${env.DOCKER_REGISTRY}/mirantis/ceph/decapod/ui-tests"
+LOCAL_IMAGE = 'decapod/ui-tests'
+TEST_IMAGE = "${env.DOCKER_REGISTRY}/mirantis/ceph/${LOCAL_IMAGE}"
 
 
 node("decapod") {
@@ -17,6 +18,7 @@ node("decapod") {
     try {
         stage("Pull latest UI image for tests") {
             sh "docker pull ${TEST_IMAGE}:latest"
+            sh "docker tag ${TEST_IMAGE}:latest ${LOCAL_IMAGE}:latest"
         }
 
         stage("Run tests") {
@@ -29,6 +31,7 @@ node("decapod") {
         currentBuild.result = 'FAILURE'
     } finally {
         sh "docker rmi -f ${TEST_IMAGE} || true"
+        sh "docker rmi -f ${LOCAL_IMAGE} || true"
     }
 
 }
