@@ -25,6 +25,9 @@
             - name: 'mcp.ccp.system_few_os'
               kill-phase-on: NEVER
               current-parameters: true
+            - name: 'mcp.ccp.rabbitmq'
+              kill-phase-on: NEVER
+              current-parameters: true
 
     triggers:
       - timed: '0 22 * * *'

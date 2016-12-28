@@ -235,6 +235,7 @@
          test-mark:
           - system_few_os
           - galera
+          - rabbitmq
          conf-file-name: 'five_slaves.yaml'
      - 'mcp.ccp.{test-mark}':
          test-mark: smoke
