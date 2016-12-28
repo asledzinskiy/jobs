@@ -42,7 +42,8 @@
           description: 'Custom Calico version'
 
     properties:
-      - authorization-allow-k8s-group
+      - authorization-allow-group:
+          group_name: 'mcp-k8s'
 
     dsl:
       !include-raw-escape: mcp-k8s-test-pipeline.groovy

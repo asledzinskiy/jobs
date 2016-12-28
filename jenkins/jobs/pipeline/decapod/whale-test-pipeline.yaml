@@ -34,4 +34,5 @@
     dsl:
       !include-raw-escape: whale-test-pipeline.groovy
     properties:
-      - authorization-allow-ceph-whale-group
+      - authorization-allow-group:
+          group_name: 'ceph-whale'

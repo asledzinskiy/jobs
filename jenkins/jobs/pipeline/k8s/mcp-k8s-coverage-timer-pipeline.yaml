@@ -23,7 +23,8 @@
           desription: 'Docker image for k8s unit tests'
 
     properties:
-      - authorization-allow-k8s-group
+      - authorization-allow-group:
+          group_name: 'mcp-k8s'
 
     triggers:
       - timed: '0 0 * * *'

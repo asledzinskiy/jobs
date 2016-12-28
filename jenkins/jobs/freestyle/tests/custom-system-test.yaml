@@ -60,7 +60,8 @@
       - throttle:
           max-per-node: 1
           option: project
-      - authorization-allow-qa-group
+      - authorization-allow-group:
+          group_name: 'qa-eng'
 
     scm:
       - git:

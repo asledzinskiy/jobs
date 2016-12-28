@@ -227,59 +227,14 @@
           !include-raw: builders/system-test.sh
 
 - property:
-    name: authorization-allow-qa-group
+    name: authorization-allow-group
     properties:
       - authorization:
           anonymous:
             - job-discover
             - job-extended-read
             - job-read
-          qa-eng:
-            - job-build
-            - job-cancel
-            - job-discover
-            - job-extended-read
-            - job-read
-
-- property:
-    name: authorization-allow-k8s-group
-    properties:
-      - authorization:
-          anonymous:
-            - job-discover
-            - job-extended-read
-            - job-read
-          mcp-k8s:
-            - job-build
-            - job-cancel
-            - job-discover
-            - job-extended-read
-            - job-read
-
-- property:
-    name: authorization-allow-ceph-core-group
-    properties:
-      - authorization:
-          anonymous:
-            - job-discover
-            - job-extended-read
-            - job-read
-          ceph-core:
-            - job-build
-            - job-cancel
-            - job-discover
-            - job-extended-read
-            - job-read
-
-- property:
-    name: authorization-allow-ceph-whale-group
-    properties:
-      - authorization:
-          anonymous:
-            - job-discover
-            - job-extended-read
-            - job-read
-          ceph-whale:
+          '{group_name}':
             - job-build
             - job-cancel
             - job-discover

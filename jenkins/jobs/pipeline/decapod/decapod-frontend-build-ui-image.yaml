@@ -14,4 +14,5 @@
     dsl:
       !include-raw-escape: decapod-frontend-build-ui-image.groovy
     properties:
-      - authorization-allow-ceph-core-group
+      - authorization-allow-group:
+          group_name: 'ceph-core'
