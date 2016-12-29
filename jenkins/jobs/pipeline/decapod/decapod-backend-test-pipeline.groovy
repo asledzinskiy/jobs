@@ -27,8 +27,9 @@ node("decapod") {
         stage("Run tests") {
             try {
                 ciTools.runTox "jenkins-test"
-            } catch (InterruptedException exc) {
-                echo "The job was aborted"
+            } catch (err) {
+                echo "Error during test execution."
+                currentBuild.result = 'FAILURE'
             } finally {
                 archiveArtifacts artifacts: 'htmlcov/**', excludes: null
                 junit keepLongStdio: true, testResults: 'test-results.xml'

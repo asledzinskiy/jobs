@@ -32,6 +32,8 @@ node("decapod") {
     } finally {
         sh "docker rmi -f ${TEST_IMAGE} || true"
         sh "docker rmi -f ${LOCAL_IMAGE} || true"
+        archiveArtifacts artifacts: 'ui/coverage/**', excludes: null
+        junit keepLongStdio: true, testResults: 'ui/test-results.xml'
     }
 
 }
