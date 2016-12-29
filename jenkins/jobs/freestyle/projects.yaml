@@ -286,5 +286,6 @@
     jobs:
       - "{cluster}-configure-system"
       - "{cluster}-deploy-k8s"
+      - "mcp-test-deploy-k8s-cluster-{cluster}"
     cluster:
       - env-01

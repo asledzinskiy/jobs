@@ -1,0 +1,95 @@
+---
+aliases:
+
+  dynamic_addresses_pool:
+    - &pool_default !os_env POOL_DEFAULT, 10.100.0.0/16:24
+
+  default_interface_model:
+    - &interface_model !os_env INTERFACE_MODEL, e1000
+
+template:
+  devops_settings:
+    env_name: !os_env ENV_NAME
+
+    address_pools:
+
+      private-pool01:
+        net: *pool_default
+        params:
+          ip_reserved:
+            gateway: +1
+            l2_network_device: +1
+            default_slave0: &slave0_ip !os_env SLAVE0_IP_LEASE, +100
+            default_slave1: &slave1_ip !os_env SLAVE1_IP_LEASE, +101
+            default_slave2: &slave2_ip !os_env SLAVE2_IP_LEASE, +102
+          ip_ranges:
+            dhcp: [+90, -10]
+
+      public-pool01:
+        net: *pool_default
+
+    groups:
+      - name: default
+        driver:
+          name: devops.driver.libvirt
+          params:
+            connection_string: !os_env CONNECTION_STRING, qemu:///system
+            storage_pool_name: !os_env STORAGE_POOL_NAME, default
+            stp: False
+            hpet: False
+            use_host_cpu: !os_env DRIVER_USE_HOST_CPU, true
+            enable_acpi: True
+
+        network_pools:
+          private: private-pool01
+          public: public-pool01
+
+        l2_network_devices:
+          private:
+            address_pool: private-pool01
+            dhcp: true
+            forward:
+              mode: nat
+
+          public:
+            address_pool: public-pool01
+            dhcp: false
+
+        nodes:
+          - name: slave0
+            role: k8s
+            params: &rack-01-generic-node-params
+              vcpu: !os_env SLAVE_NODE_CPU, 2
+              memory: !os_env SLAVE_NODE_MEMORY, 4096
+              boot:
+                - network
+                - hd
+              volumes:
+                - name: system
+                  capacity: !os_env NODE_VOLUME_SIZE, 150
+                  source_image: !os_env IMAGE_PATH
+                  format: qcow2
+
+              # List of node interfaces
+              interfaces:
+                - label: iface0
+                  l2_network_device: private
+                  interface_model: *interface_model
+                - label: iface1
+                  l2_network_device: public
+                  interface_model: *interface_model
+              network_config:
+                iface0:
+                  networks:
+                    - private
+                iface1:
+                  networks:
+                   - public
+
+          - name: slave1
+            role: k8s
+            params: *rack-01-generic-node-params
+
+          - name: slave2
+            role: k8s
+            params: *rack-01-generic-node-params

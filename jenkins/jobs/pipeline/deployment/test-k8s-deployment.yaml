@@ -1,0 +1,21 @@
+- job-template:
+    name: 'mcp-test-deploy-k8s-cluster-{cluster}'
+    description: |
+      Test deployment of Kubernetes Cluster using Kargo
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: CLUSTER_NAME
+          default: '{cluster}'
+      - bool:
+          name: ERASE_ENV
+          default: true
+          description: 'Erase env after deployment'
+    dsl:
+      !include-raw-escape: test-k8s-deployment.groovy
+    triggers:
+      - timed: '@midnight'

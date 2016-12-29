@@ -5,6 +5,17 @@
     project-type: workflow
 
     parameters:
+      - bool:
+          name: TEST_MODE
+          default: true
+      - string:
+          name: SLAVE_NODE_LABEL
+          default: 'deployment'
+          description: 'Specify label to run job on specific slave'
+      - string:
+          name: CREDENTIALS
+          default: deployments-key
+          description: 'Ssh credentials for nodes access. Should exist in Jenkins. Used when TEST_MODE is false'
       - string:
           name: CLUSTER_NAME
           default: '{cluster}'
@@ -13,5 +24,30 @@
           name: GERRIT_HOST
           default: '{gerrit-host}'
           description: 'Gerrit host'
+      - string:
+          name: NODE_IPS
+          default: ''
+          description: 'List of Node IPs separated by space. 3 IPs must be set'
+      - string:
+          name: DNS
+          default: '172.18.224.6'
+          description: 'Internal nameserver'
+      - string:
+          name: UPSTREAM_DNS
+          default: '172.18.224.6'
+          description: 'Upstream nameserver'
+      - string:
+          name: HYPERKUBE_IMAGE_TAG
+          default: 'v1.5.0-beta.3-2_1482235542492'
+      - string:
+          name: CALICO_VERSION
+          default: 'v1.0.0-rc2-5-20161209154847'
+      - string:
+          name: CALICO_CNI_VERSION
+          default: 'v1.5.3-6-20161209093256'
+      - string:
+          name: CALICOCTL_IMAGE_TAG
+          default: 'v1.0.0-rc2-5-20161209154847'
+
     dsl:
       !include-raw-escape: deploy-k8s.groovy
