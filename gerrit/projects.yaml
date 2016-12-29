@@ -290,6 +290,12 @@
   acl-config: acls/mcp-netchecker/mcp-netchecker.config
 
 -
+  project: mcp/mcp-qa
+  description: MCP Tests
+  upstream: https://gerrit.mcp.mirantis.net/ccp/fuel-ccp-tests
+  acl-config: acls/mcp/mcp-qa.config
+
+-
   project: mk-ci
   description: Parent project for mk-ci projects
   acl-config: acls/mk-ci/mk-ci.config
