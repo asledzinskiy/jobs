@@ -113,6 +113,12 @@
       - calicoctl-merge-pipeline
 
 - project:
+    name: calico-release
+    jobs:
+      - calicoctl-release-pipeline
+      - calico-cni-release-pipeline
+
+- project:
     name: sync-upstream-repos
     project-namespace:
       - 'calico'
