@@ -1,16 +1,13 @@
 - job-template:
-    name: decapod-frontend-test-pipeline
-    description: Decapod UI tests pipeline
+    name: ceph-decapod-images-test-pipeline
+    description: Decapod build images on test patchset
     project-type: workflow
-    concurrent: true
+    concurrent: false
     parameters:
       - string:
-          name: GERRIT_HOST
-          default: '{gerrit-host}'
-      - string:
           name: DOCKER_REGISTRY
-          default: '{docker-dev-virtual}'
-          description: 'Docker registry for test images'
+          default: "{docker-dev-virtual}"
+          description: Docker registry for test images
     triggers:
       - gerrit:
           trigger-on:
@@ -25,4 +22,4 @@
                   branch-pattern: "**"
           custom-url: "* $JOB_NAME $BUILD_URL"
     dsl:
-      !include-raw-escape: decapod-frontend-test-pipeline.groovy
+      !include-raw-escape: ceph-decapod-images-test-pipeline.groovy

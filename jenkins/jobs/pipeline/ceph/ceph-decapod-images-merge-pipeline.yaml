@@ -1,5 +1,5 @@
 - job-template:
-    name: decapod-images-merge-pipeline
+    name: ceph-decapod-images-merge-pipeline
     description: Promote images for Decapod
     project-type: workflow
     concurrent: false
@@ -20,4 +20,4 @@
                   branch-pattern: 'master|stable-.*?'
           custom-url: '* $JOB_NAME $BUILD_URL'
     dsl:
-      !include-raw-escape: decapod-images-merge-pipeline.groovy
+      !include-raw-escape: ceph-decapod-images-merge-pipeline.groovy

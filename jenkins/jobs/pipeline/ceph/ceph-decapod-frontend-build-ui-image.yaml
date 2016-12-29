@@ -1,5 +1,5 @@
 - job-template:
-    name: decapod-frontend-build-ui-image
+    name: ceph-decapod-frontend-build-ui-image
     description: Build image for UI tests of Decapod
     project-type: workflow
     concurrent: false
@@ -12,7 +12,7 @@
           default: '{docker-dev-virtual}'
           description: 'Docker registry for test images'
     dsl:
-      !include-raw-escape: decapod-frontend-build-ui-image.groovy
+      !include-raw-escape: ceph-decapod-frontend-build-ui-image.groovy
     properties:
       - authorization-allow-group:
           group_name: 'ceph-core'

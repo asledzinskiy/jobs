@@ -1,6 +1,6 @@
 - job-template:
-    name: decapod-backend-test-pipeline
-    description: Decapod backend tests pipeline
+    name: ceph-whale-checks-pipeline
+    description: Codestyle checkers for Whale
     project-type: workflow
     concurrent: true
     parameters:
@@ -15,10 +15,10 @@
                 comment-contains-value: "(recheck|retest|reverify)"
           projects:
             - project-compare-type: PLAIN
-              project-pattern: ceph/decapod
+              project-pattern: ceph/whale
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: "**"
           custom-url: "* $JOB_NAME $BUILD_URL"
     dsl:
-      !include-raw-escape: decapod-backend-test-pipeline.groovy
+      !include-raw-escape: ceph-whale-checks-pipeline.groovy

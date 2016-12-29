@@ -176,15 +176,15 @@
     - 'sync-downstream-{gerrit-project-name}-{src-branch}-{dst-branch}'
 
 - project:
-    name: decapod
+    name: ceph-decapod
     jobs:
-      - decapod-backend-test-pipeline
-      - decapod-frontend-build-ui-image
-      - decapod-frontend-test-pipeline
-      - decapod-images-merge-pipeline
-      - decapod-images-test-pipeline
-      - whale-checks-pipeline
-      - whale-test-pipeline
+      - ceph-decapod-backend-test-pipeline
+      - ceph-decapod-frontend-build-ui-image
+      - ceph-decapod-frontend-test-pipeline
+      - ceph-decapod-images-merge-pipeline
+      - ceph-decapod-images-test-pipeline
+      - ceph-whale-checks-pipeline
+      - ceph-whale-test-pipeline
 
 - project:
     name: ccp

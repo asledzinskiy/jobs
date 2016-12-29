@@ -1,8 +1,8 @@
 - job-template:
-    name: whale-test-pipeline
+    name: ceph-whale-test-pipeline
     description: Test pipeline for Decapod using Whale
     project-type: workflow
-    concurrent: true
+    concurrent: false
     parameters:
       - string:
           name: GERRIT_HOST
@@ -32,7 +32,7 @@
           default: "jenkins-ci"
           description: Tenant name for CI/CD OpenStack installation
     dsl:
-      !include-raw-escape: whale-test-pipeline.groovy
+      !include-raw-escape: ceph-whale-test-pipeline.groovy
     properties:
       - authorization-allow-group:
           group_name: 'ceph-whale'
