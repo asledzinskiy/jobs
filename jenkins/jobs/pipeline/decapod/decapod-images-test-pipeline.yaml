@@ -2,7 +2,7 @@
     name: decapod-images-test-pipeline
     description: Decapod build images on test patchset
     project-type: workflow
-    concurrent: true
+    concurrent: false
     parameters:
       - string:
           name: DOCKER_REGISTRY
