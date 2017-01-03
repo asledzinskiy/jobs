@@ -1,0 +1,23 @@
+- job-template:
+    name: mcp-qa-pipeline
+    project-name: mcp-qa-pipeline
+    description: |
+      Pipeline for mcp-qa project
+    project-type: workflow
+    dsl:
+      !include-raw-escape: mcp-qa.groovy
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp/mcp-qa
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'

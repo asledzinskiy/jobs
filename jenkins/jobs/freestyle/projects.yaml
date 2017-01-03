@@ -26,6 +26,7 @@
       - mcp-k8s-test-pipeline
       - mcp-k8s-coverage-timer-pipeline
       - mcp-k8s-hyperkube-custom
+      - mcp-qa-pipeline
 
 - project:
     name: mcp-netchecker-build
