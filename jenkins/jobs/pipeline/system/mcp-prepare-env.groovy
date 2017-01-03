@@ -8,6 +8,7 @@ node(NODE) {
   def DEVOPS_DB_ENGINE = "django.db.backends.sqlite3"
   def DEVOPS_DB_NAME = "/home/jenkins/venv-fuel-devops-3.0.sqlite3.db"
   def VENV_REQUIREMENTS = "${env.VENV_REQUIREMENTS}"
+  def TESTS_REPO = "${env.TESTS_REPO}"
   def BRANCH = "${env.BRANCH}"
   def WORKSPACE = "${env.WORKSPACE}"
 
@@ -42,7 +43,7 @@ node(NODE) {
     }
 
     stage('Code checkout'){
-      sh "git clone https://github.com/openstack/fuel-ccp-tests.git ."
+      sh "git clone ${TESTS_REPO} ."
       sh "git checkout ${BRANCH}"
     }
 

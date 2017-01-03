@@ -17,9 +17,13 @@
           allowed-multiselect: false
           ignore-offline-nodes: true
       - string:
+          name: TESTS_REPO
+          default: '{gerrit-url}/mcp/mcp-qa'
+          description: 'Git repository (mcp-qa)'
+      - string:
           name: BRANCH
           default: 'master'
-          description: 'Branch name used during fuel-ccp-tests repo cloning'
+          description: 'Branch name used during mcp-qa repo cloning'
       - text:
           name: VENV_REQUIREMENTS
           default: ''

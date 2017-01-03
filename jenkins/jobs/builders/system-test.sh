@@ -7,7 +7,11 @@ source <(echo "${ADDITIONAL_PARAMETERS}")
 get_custom_refs () {
   PROJECT="$1"
   TARGET_DIR="$2"
-  REMOTE="https://review.openstack.org/openstack/${PROJECT}"
+  case "${PROJECT}" in
+    *fuel-ccp* ) REMOTE="https://review.openstack.org/openstack/${PROJECT}";;
+    *mcp* ) REMOTE="https://gerrit.mcp.mirantis.net/mcp/${PROJECT}";;
+  esac
+
   shift 2
   pushd "$TARGET_DIR"
   for commit in "${@}" ; do
@@ -101,8 +105,8 @@ if ! grep -q 0 /proc/sys/net/bridge/bridge-nf-call-iptables; then
 fi
 
 # get custom refs from gerrit
-if [[ -n "$FUEL_CCP_TESTS_REFS" && "$FUEL_CCP_TESTS_REFS" != "none" ]]; then
-  get_custom_refs fuel-ccp-tests "${WORKSPACE}" $FUEL_CCP_TESTS_REFS
+if [[ -n "$MCP_QA_REFS" && "$MCP_QA_REFS" != "none" ]]; then
+  get_custom_refs mcp-qa "${WORKSPACE}" $MCP_QA_REFS
 fi
 
 if [[ -n "$FUEL_CCP_INSTALLER_REFS" && "$FUEL_CCP_INSTALLER_REFS" != "none" ]]; then

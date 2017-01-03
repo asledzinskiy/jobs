@@ -51,7 +51,7 @@
     - string:
         name: CONF_PATH
         default: '$WORKSPACE/fuel_ccp_tests/templates/{conf-file-name}'
-        description: "Path to template for fuel-ccp-tests"
+        description: "Path to template for mcp-qa"
 
     - string:
         name: TEST_EXPRESSION
@@ -91,14 +91,14 @@
         default: "true"
 
     - string:
-        name: FUEL_CCP_TESTS_COMMIT
+        name: MCP_QA_COMMIT
         default: 'master'
-        description: "fuel-ccp-tests commit"
+        description: "mcp-qa commit"
 
     - string:
-        name: FUEL_CCP_TESTS_REFS
+        name: MCP_QA_REFS
         default: 'none'
-        description: 'Refspecs for commits in fuel-ccp-tests gerrit separated by spaces. For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
+        description: 'Refspecs for commits in mcp-qa gerrit separated by spaces. For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
 
     - string:
         name: FUEL_CCP_INSTALLER_COMMIT
@@ -118,7 +118,7 @@
     - string:
         name: VENV_PATH
         default: '/home/jenkins/venv-fuel-devops-3.0/'
-        description: "Path to the python virtual environment for fuel-ccp-tests"
+        description: "Path to the python virtual environment for mcp-qa"
 
     - string:
         name: DEVOPS_DB_NAME

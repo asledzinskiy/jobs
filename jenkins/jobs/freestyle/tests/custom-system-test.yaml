@@ -65,9 +65,9 @@
 
     scm:
       - git:
-          url: 'https://github.com/openstack/fuel-ccp-tests'
+          url: '{gerrit-url}/mcp/mcp-qa'
           branches:
-           - "$FUEL_CCP_TESTS_COMMIT"
+           - "$MCP_QA_COMMIT"
 
       - git:
           url: 'https://github.com/openstack/fuel-ccp-installer'
