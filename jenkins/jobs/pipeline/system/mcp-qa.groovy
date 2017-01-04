@@ -1,3 +1,4 @@
+ciTools = new com.mirantis.mcp.Common()
 git = new com.mirantis.mcp.Git()
 
 node('calico'){
@@ -10,7 +11,11 @@ node('calico'){
         }
       }
 
-      stage ('Run syntax tests') { sh "tox -v"  }
+      stage ('Run syntax tests') { ciTools.runTox("pep8") }
+
+      stage ('Run unit tests (py27)') { ciTools.runTox("py27") }
+
+      stage ('Run unit tests (py35)') { ciTools.runTox("py35") }
 
     }
     catch(err) {
