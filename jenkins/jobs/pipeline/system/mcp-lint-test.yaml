@@ -18,4 +18,9 @@
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'
+            - project-compare-type: PLAIN
+              project-pattern: mcp-ci/ansible-k8s-base
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'

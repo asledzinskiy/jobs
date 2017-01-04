@@ -15,7 +15,7 @@ node('verify-tests') {
     withEnv(["RULES_EXCLUDE=${RULES_EXCLUDE}",
              "RULES_PROJECT=${RULES_PROJECT}", ]) {
       sh '''
-        if git diff HEAD~1 --name-only --diff-filter=AM | grep "^ansible/.*yml$"; then
+        if git diff HEAD~1 --name-only --diff-filter=AM | grep ".*yml$"; then
           tox -e ansible-lint
         else
           echo "No playbooks were changed - skipping the ansible-lint"
