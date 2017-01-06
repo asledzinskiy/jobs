@@ -1,9 +1,3 @@
-- project: mcp-lab-heat-templates
-  src-repo: git@github.com:Mirantis/mcp-lab-heat-templates.git
-  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/mk/mcp-lab-heat-templates
-  branches:
-    - "*"
-
 - project: mk-lab-salt-model
   src-repo: git://github.com/Mirantis/mk-lab-salt-model.git
   dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/mk/mk-lab-salt-model
