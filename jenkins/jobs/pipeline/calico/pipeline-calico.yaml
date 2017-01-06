@@ -233,3 +233,37 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: 'mcp'
           custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
+    name: calicoctl-pipeline-k8s
+    project-name: calico-pipeline
+    description: |
+      Pipeline for calicoctl project with dynamic slaves from k8s
+    project-type: workflow
+    dsl:
+      !include-raw-escape: calicoctl.groovy
+
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: projectcalico/calicoctl
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'mcp'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
