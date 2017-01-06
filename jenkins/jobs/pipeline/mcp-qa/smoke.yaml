@@ -1,0 +1,69 @@
+- job-template:
+    name: 'mcp.ccp.smoke-pipeline'
+    description: 'Run ccp test '
+    project-type: workflow
+    dsl:
+      !include-raw-escape: smoke.groovy
+    test-expression: 'none'
+    conf-file-name: 'default.yaml'
+    concurrent: true
+    timeout: '480'
+    weight: '1'
+    post-script: |
+        source "$VENV_PATH/bin/activate"
+        dos.py destroy "$ENV_NAME" || true
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+
+    parameters:
+    - string:
+        name: GERRIT_HOST
+        default: '{gerrit-host}'
+        description: 'Gerrit host'
+    - string:
+        name: KEEP_BEFORE
+        default: 'no'
+        description: 'If yes/true, then DO NOT ERASE existing environment'
+    - string:
+        name: KEEP_AFTER
+        default: 'no'
+        description: 'If yes/true, then DO NOT ERASE existing environment'
+    - string:
+        name: ENV_NAME
+        default: "$JOB_NAME.$BUILD_NUMBER"
+    - systest-params:
+        conf-file-name: '{conf-file-name}'
+        docker-prod-virtual: '{docker-prod-virtual}'
+        test-expression: '{test-expression}'
+        mcp-k8s-ci-registry: '{mcp-k8s-ci-registry}'
+        mcp-branch: 'mcp'
+        image_link: '{image_link}'
+        image_path: '{image_path}'
+        artifactory-url: '{artifactory-url}'
+
+    properties:
+      - heavy-job:
+          weight: '{weight}'
+      - throttle:
+          categories:
+            - ccp-tests
+          max-per-node: 1
+          option: category
+
+    wrappers:
+    - credentials-binding:
+      - username-password-separated:
+          credential-id: 'artifactory'
+          username: ARTIFACTORY_LOGIN
+          password: ARTIFACTORY_PASSWORD
+    - timeout:
+        fail: true
+        timeout: '{timeout}'
+        write-description: false
+    - ansicolor:
+        colormap: xterm
+    triggers:
+      - timed: 'H 8,12,16 * * *'

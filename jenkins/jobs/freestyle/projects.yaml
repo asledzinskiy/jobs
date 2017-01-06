@@ -37,6 +37,7 @@
       - kubernetes
       - mcp
 
+
 - project:
     name: mcp-netchecker-build
     jobs:
@@ -84,7 +85,6 @@
     - 'calico.system-test.{test-name}':
         test-name: 'deploy'
     - 'mcp.system-test.custom'
-
 
 - project:
     name: calico-pipeline
@@ -256,6 +256,13 @@
          conf-file-name: 'five_slaves.yaml'
      - 'mcp.ccp.{test-mark}':
          test-mark: smoke
+
+- project:
+    name: mcp-qa-pipeline-tests
+    image_link: 'http://share01-scc.ng.mirantis.net/images.lst'
+    image_path: '/home/jenkins/images/ubuntu-1604-server.qcow2'
+    jobs:
+      - mcp.ccp.smoke-pipeline
 
 - project:
     name: tcp-build
