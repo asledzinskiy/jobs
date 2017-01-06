@@ -54,7 +54,7 @@ node("${SLAVE_NODE_LABEL}") {
     if ( "${NODE_IPS}x" == "x") {
         fail('NODE_IPS must be set')
     }
-    def ArrayList NODE_IPS_ARRAY = NODE_IPS.split()
+    def ArrayList NODE_IPS_ARRAY = new ArrayList(Arrays.asList(NODE_IPS.split()))
     if ( NODE_IPS_ARRAY.size() != 3) {
         // FIXME: Remove this once config template become universal
         fail('Count of NODE_IPS should be equal to 3')

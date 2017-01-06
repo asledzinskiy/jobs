@@ -39,12 +39,12 @@ node("${SLAVE_NODE_LABEL}") {
       {
         "pattern": "vm-images/packer/ubuntu-16.04*.qcow2",
         "props": "com.mirantis.latest=true",
-        "target": "downloaded/"
+        "target": "/home/jenkins/images/"
       }
      ]
     }"""
     server.download(downloadSpec)
-    sh "mv downloaded/packer/ubuntu-16.04*.qcow2 image.qcow2"
+    sh "ln -sf /home/jenkins/images/packer/ubuntu-16.04*.qcow2 image.qcow2"
   }
 
   stage('Install and configure DevOps') {
