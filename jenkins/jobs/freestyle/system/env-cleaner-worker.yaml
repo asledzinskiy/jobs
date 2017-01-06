@@ -11,3 +11,6 @@
     builders:
       - shell:
           !include-raw: '../../builders/env-cleaner-worker.sh'
+
+      - description-setter:
+          description: '$NODE_NAME'
