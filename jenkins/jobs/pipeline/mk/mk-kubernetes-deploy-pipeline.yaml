@@ -81,3 +81,29 @@
           gerrit-host: '{gerrit-host}'
           gerrit-port: '{gerrit-port}'
       script-path: mk-kubernetes-deploy-pipeline.groovy
+
+- job-template:
+    name: mk-maas-deploy-pipeline
+    description: |
+      MK MAAS deployment
+    project-type: workflow
+    concurrent: false
+    parameters:
+    - heat-template-params:
+        HEAT_TEMPLATE_URL: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mk/mcp-lab-heat-templates.git'
+        gerrit-host: '{gerrit-host}'
+    - salt-master-params
+    - openstack-api-params
+    - heat-stack-params:
+        HEAT_STACK_TEMPLATE: 'mk_maas_single'
+        HEAT_STACK_ENVIRONMENT: 'tcpisek'
+        HEAT_STACK_ZONE: 'mirantis-zone-qa'
+        HEAT_STACK_PUBLIC_NET: 'inet2' #inet/inet2
+    workflow-scm:
+      scm:
+        basic-scm:
+          branch: 'master'
+          project: 'mk/mk-pipelines'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+      script-path: mk-maas-deploy-pipeline.groovy
