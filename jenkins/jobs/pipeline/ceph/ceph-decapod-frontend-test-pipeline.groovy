@@ -9,6 +9,8 @@ TEST_IMAGE = "${env.DOCKER_REGISTRY}/mirantis/ceph/${LOCAL_IMAGE}"
 
 
 node("decapod") {
+    deleteDir()
+
     stage("Checkout SCM") {
         gitTools.gerritPatchsetCheckout {
             credentialsId = "mcp-ci-gerrit"
@@ -32,6 +34,7 @@ node("decapod") {
     } finally {
         sh "docker rmi -f ${TEST_IMAGE} || true"
         sh "docker rmi -f ${LOCAL_IMAGE} || true"
+        sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
         archiveArtifacts artifacts: 'ui/coverage/**', excludes: null
         junit keepLongStdio: true, testResults: 'ui/test-results.xml'
     }
