@@ -35,7 +35,7 @@ node("decapod") {
         sh "docker rmi -f ${TEST_IMAGE} || true"
         sh "docker rmi -f ${LOCAL_IMAGE} || true"
         sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE}"
-        archiveArtifacts artifacts: 'ui/coverage/**', excludes: null
+        archiveArtifacts artifacts: 'ui/test-coverage.txt', excludes: null
         junit keepLongStdio: true, testResults: 'ui/test-results.xml'
     }
 
