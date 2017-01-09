@@ -1,4 +1,3 @@
-
 - parameter:
     name: heat-template-params
     parameters:
@@ -107,3 +106,29 @@
           gerrit-host: '{gerrit-host}'
           gerrit-port: '{gerrit-port}'
       script-path: mk-maas-deploy-pipeline.groovy
+
+- job-template:
+    name: 'mk-k8s-{type}-deploy'
+    description: |
+      MK k8s {type} deployment
+    project-type: workflow
+    concurrent: false
+    parameters:
+    - heat-template-params:
+        HEAT_TEMPLATE_URL: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mk/mcp-lab-heat-templates.git'
+        gerrit-host: '{gerrit-host}'
+    - salt-master-params
+    - openstack-api-params
+    - heat-stack-params:
+        HEAT_STACK_TEMPLATE: 'mcp_fuel_aio'
+        HEAT_STACK_ENVIRONMENT: 'tcpisek'
+        HEAT_STACK_ZONE: 'mirantis-zone-qa'
+        HEAT_STACK_PUBLIC_NET: 'mirantis-private'
+    workflow-scm:
+      scm:
+        basic-scm:
+          branch: 'master'
+          project: 'mk/mk-pipelines'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+      script-path: mk-k8s-{type}-deploy-pipeline.groovy
