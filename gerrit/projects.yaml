@@ -4,15 +4,15 @@
   acl-config: acls/ccp/ccp.config
 
 -
-  project: ccp/fuel-artifactory
-  description: Fuel CCP - Artifcatory deployment
-  acl-config: acls/mcp-ci/mcp-cicd-installer.config
-
--
   project: ccp/fuel-ccp
   description: Fuel Containerized Control Plane (CCP) main project
   upstream: git://git.openstack.org/openstack/fuel-ccp
   acl-config: acls/ccp/ccp.config
+
+-
+  project: ccp/fuel-ccp-artifactory
+  description: Fuel CCP - Artifcatory deployment
+  acl-config: acls/mcp-ci/mcp-cicd-installer.config
 
 -
   project: ccp/fuel-ccp-ceph
