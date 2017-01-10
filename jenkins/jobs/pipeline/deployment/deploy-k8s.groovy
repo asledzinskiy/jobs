@@ -86,12 +86,34 @@ node("${SLAVE_NODE_LABEL}") {
         }
     }
     stage('Update configs') {
-        sh '''
-         python -c "import jinja2;from jinja2 import Template;templateLoader=jinja2.FileSystemLoader(searchpath=\"/\");templateEnv=jinja2.Environment(loader=templateLoader);TEMPLATE_FILE=\"/home/ubuntu/inv.cfg\";template=templateEnv.get_template(TEMPLATE_FILE);templateVars={\"nodes\":[{\"node1\":\"null\",\"name\":\"node1\",\"ip\":\"127.0.1.1\",\"kube_master\":True},{\"node2\":\"null\",\"name\":\"node2\",\"ip\":\"127.0.1.2\",\"kube_master\":False},{\"node3\":\"null\",\"name\":\"node3\",\"ip\":\"127.0.1.3\",\"kube_master\":False}]}; outputText=template.render(templateVars);Template(outputText).stream().dump('inventory/inventory.cfg')"
-        '''
-        sh '''
-          python -c "import jinja2;from jinja2 import Template;templateLoader=jinja2.FileSystemLoader(searchpath=\"/\");templateEnv=jinja2.Environment(loader=templateLoader);TEMPLATE_FILE=\"/home/ubuntu/template.j2\";template=templateEnv.get_template(TEMPLATE_FILE);templateVars={\"CALICO_CNI_VERSION\":\"${CALICO_CNI_VERSION}\",\"CALICOCTL_IMAGE_TAG\":\"${CALICOCTL_IMAGE_TAG}\",\"CALICO_VERSION\":\"${CALICO_VERSION}\",\"DNS\":\"${DNS}\",\"HYPERKUBE_IMAGE_TAG\":\"${HYPERKUBE_IMAGE_TAG}\",\"UPSTREAM_DNS\":\"${UPSTREAM_DNS}\"}; outputText=template.render(templateVars);Template(outputText).stream().dump('inventory/kargo/custom.yaml')"
-        '''
+        String templateStr = "{'nodes':" +
+                "[{'node1':'null','name':'node1','ip':'${NODE_IPS_ARRAY.getAt(0)}','kube_master':True}," +
+                "{'node2':'null','name':'node2','ip':'${NODE_IPS_ARRAY.getAt(1)}','kube_master':True}," +
+                "{'node3':'null','name':'node3','ip':'${NODE_IPS_ARRAY.getAt(2)}','kube_master':False}]}"
+        sh """
+            python -c "import jinja2
+from jinja2 import Template
+templateLoader=jinja2.FileSystemLoader(searchpath='/')
+templateEnv=jinja2.Environment(loader=templateLoader)
+TEMPLATE_FILE='${WORKSPACE}/inventory/inventory.cfg'
+template=templateEnv.get_template(TEMPLATE_FILE)
+templateVars=${templateStr}
+outputText=template.render(templateVars)
+Template(outputText).stream().dump('${WORKSPACE}/inventory/inventory.cfg')"
+        """
+        templateStr = "{'CALICO_CNI_VERSION':'${CALICO_CNI_VERSION}','CALICOCTL_IMAGE_TAG':'${CALICOCTL_IMAGE_TAG}','CALICO_VERSION':'${CALICO_VERSION}'," +
+                "'DNS':'${DNS}','HYPERKUBE_IMAGE_TAG':'${HYPERKUBE_IMAGE_TAG}','UPSTREAM_DNS':'${UPSTREAM_DNS}'}"
+        sh """
+          python -c "import jinja2
+from jinja2 import Template
+templateLoader=jinja2.FileSystemLoader(searchpath='/')
+templateEnv=jinja2.Environment(loader=templateLoader)
+TEMPLATE_FILE='${WORKSPACE}/inventory/kargo/custom.yaml'
+template=templateEnv.get_template(TEMPLATE_FILE)
+templateVars=${templateStr}
+outputText=template.render(templateVars)
+Template(outputText).stream().dump('${WORKSPACE}/inventory/kargo/custom.yaml')"
+        """
     }
 
     stage("Deploying k8s cluster") {

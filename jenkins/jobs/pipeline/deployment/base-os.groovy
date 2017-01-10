@@ -14,14 +14,7 @@ def String SLAVE_NODE_LABEL = env.SLAVE_NODE_LABEL ?: 'deployment'
 
 def execAnsiblePlaybook(String playbookPath,
                         String extra = '') {
-    def String CCP_KARGO = 'fuel-ccp-installer/utils/kargo'
-
-    def String extras = "-e @kargo/inventory/group_vars/all.yml " +
-            "-e @$CCP_KARGO/kargo_default_common.yaml " +
-            "-e @$CCP_KARGO/kargo_default_ubuntu.yaml " +
-            "-e @inventory/kargo/custom.yaml " +
-            "-e host_key_checking=False " +
-            extra
+   def String extras = "-e host_key_checking=False ${extra}"
 
     if ( TEST_MODE ) {
         def username = "vagrant"
@@ -91,11 +84,21 @@ node("${SLAVE_NODE_LABEL}") {
     }
 
     stage('Update configs') {
-        // FIXME: Rewrite to jinja
-        for( int i = 0; i < NODE_IPS_ARRAY.size(); i++) {
-            ip = NODE_IPS_ARRAY.get(i)
-            sh "sed -i 's/SLAVE${i}_IP/${ip}/g' inventory/inventory.cfg"
-        }
+        String templateStr = "{'nodes':" +
+                "[{'node1':'null','name':'node1','ip':'${NODE_IPS_ARRAY.getAt(0)}','kube_master':True}," +
+                "{'node2':'null','name':'node2','ip':'${NODE_IPS_ARRAY.getAt(1)}','kube_master':True}," +
+                "{'node3':'null','name':'node3','ip':'${NODE_IPS_ARRAY.getAt(2)}','kube_master':False}]}"
+        sh """
+            python -c "import jinja2
+from jinja2 import Template
+templateLoader=jinja2.FileSystemLoader(searchpath='/')
+templateEnv=jinja2.Environment(loader=templateLoader)
+TEMPLATE_FILE='${WORKSPACE}/inventory/inventory.cfg'
+template=templateEnv.get_template(TEMPLATE_FILE)
+templateVars=${templateStr}
+outputText=template.render(templateVars)
+Template(outputText).stream().dump('${WORKSPACE}/inventory/inventory.cfg')"
+        """
     }
 
     stage("Prepare Operating System") {
