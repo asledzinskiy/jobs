@@ -9,15 +9,6 @@
           name: DOCKER_REGISTRY
           default: '{docker-dev-virtual}'
           description: 'Docker registry for images'
-      - string:
-          name: JENKINS_SWARM_CLIENT_VERSION
-          default: '2.2'
-      - string:
-          name: FSROOT
-          default: '/home/jenkins'
-      - string:
-          name: CONTAINER_USER
-          default: 'jenkins'
     dsl:
       !include-raw-escape: base-slave-image.groovy
 
