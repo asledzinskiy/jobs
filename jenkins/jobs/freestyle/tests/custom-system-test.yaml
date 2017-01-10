@@ -40,6 +40,10 @@
     - string:
         name: NETCHECKER_AGENT_COMMIT
         default: 'master'
+    - string:
+        name: REGISTRY
+        default: "{docker-dev-virtual}"
+        description: 'Registry with CCP component images'
 
     - systest-params:
         conf-file-name: '{conf-file-name}'

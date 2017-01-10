@@ -35,6 +35,10 @@
         name: KEEP_AFTER
         default: 'no'
         description: 'If yes/true, then DO NOT ERASE existing environment'
+    - string:
+        name: REGISTRY
+        default: "{docker-dev-virtual}"
+        description: 'Registry with CCP component images'
     - systest-params:
         conf-file-name: '{conf-file-name}'
         docker-prod-virtual: '{docker-prod-virtual}'
