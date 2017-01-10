@@ -1,0 +1,28 @@
+- job-template:
+    name: artifactory-repos.update
+    description: |
+      Update Artifactory repositories after the merge event
+
+    project-type: workflow
+    dsl:
+      !include-raw-escape: artifactory-repos.update.groovy
+
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'mcp-ci/project-config'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+              file-paths:
+                - compare-type: ANT
+                  pattern: '**/artifactory/repositories/**'
+          custom-url: '* $JOB_NAME $BUILD_URL'

@@ -1,0 +1,5 @@
+{
+ "title": "remote",
+ "type": "object",
+ "required": ["rclass", "url", "packageType"]
+}

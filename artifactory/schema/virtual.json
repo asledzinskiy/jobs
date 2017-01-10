@@ -1,0 +1,5 @@
+{
+ "title": "virtual",
+ "type" : "object",
+ "required": ["rclass", "packageType"]
+}

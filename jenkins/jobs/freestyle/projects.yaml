@@ -9,6 +9,8 @@
       - jenkins-jobs.update
       - jenkins-jobs.test
       - prepare-slave-nodes
+      - artifactory-repos.test
+      - artifactory-repos.update
     distro:
       - ubuntu
 

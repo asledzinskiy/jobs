@@ -1,0 +1,73 @@
+{
+    "enableCookieManagement": false,
+    "blockMismatchingMimeTypes": true,
+    "assumedOfflinePeriodSecs": 300,
+    "retrievalCachePeriodSecs": 600,
+    "unusedArtifactsCleanupPeriodHours": 0,
+    "xrayIndex": false,
+    "contentSynchronisation": {
+        "source": {
+            "originAbsenceDetection": false
+        },
+        "statistics": {
+            "enabled": false
+        },
+        "enabled": false,
+        "properties": {
+            "enabled": false
+        }
+    },
+    "maxUniqueSnapshots": 0,
+    "handleReleases": true,
+    "enableDistRepoSupport": false,
+    "xrayMinimumBlockedSeverity": "",
+    "enableDebianSupport": true,
+    "localAddress": "",
+    "enableBowerSupport": false,
+    "debianTrivialLayout": false,
+    "enableTokenAuthentication": true,
+    "repoLayoutRef": "maven-2-default",
+    "enableVagrantSupport": false,
+    "handleSnapshots": true,
+    "enableNpmSupport": false,
+    "enablePypiSupport": false,
+    "socketTimeoutMillis": 15000,
+    "propertySets": [
+        "artifactory"
+    ],
+    "enableCocoaPodsSupport": false,
+    "packageType": "debian",
+    "enableDockerSupport": false,
+    "offline": false,
+    "hardFail": false,
+    "username": "",
+    "fetchSourcesEagerly": false,
+    "description": "",
+    "missedRetrievalCachePeriodSecs": 1800,
+    "enableGemsSupport": false,
+    "forceNugetAuthentication": false,
+    "listRemoteFolderItems": true,
+    "propagateQueryParams": false,
+    "suppressPomConsistencyChecks": true,
+    "remoteRepoChecksumPolicyType": "",
+    "enableGitLfsSupport": false,
+    "shareConfiguration": false,
+    "key": "in-debian-galera",
+    "blackedOut": false,
+    "rclass": "remote",
+    "blockXrayUnscannedArtifacts": false,
+    "password": "",
+    "storeArtifactsLocally": true,
+    "dockerApiVersion": "V2",
+    "maxUniqueTags": 0,
+    "url": "http://releases.galeracluster.com",
+    "synchronizeProperties": false,
+    "notes": "",
+    "fetchJarsEagerly": false,
+    "archiveBrowsingEnabled": false,
+    "excludesPattern": "",
+    "allowAnyHostAuth": false,
+    "rejectInvalidJars": false,
+    "includesPattern": "**/*",
+    "enableNuGetSupport": false
+}
