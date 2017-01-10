@@ -28,7 +28,7 @@ import yaml
 # alphanumeric character.
 # https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-Source
 _PREFIX_PATTERN = '\A([a-z]([a-z]|\d|-)+/)*'
-_DEBIAN_NAMES_PATTERN = '([a-z]|\d)([a-z]|\d|[+-.])+\Z'
+_DEBIAN_NAMES_PATTERN = '([a-zA-Z]|\d)([a-zA-Z]|\d|[+-.])+\Z'
 PROJECT_NAME_PATTERN = _PREFIX_PATTERN + _DEBIAN_NAMES_PATTERN
 
 PROJECT_SCHEMA = {
