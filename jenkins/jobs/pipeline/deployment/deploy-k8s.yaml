@@ -25,9 +25,9 @@
           default: '{gerrit-host}'
           description: 'Gerrit host'
       - string:
-          name: NODE_IPS
+          name: NODE_JSON
           default: ''
-          description: 'List of Node IPs separated by space. 3 IPs must be set'
+          description: 'List of Nodes specified in a JSON format'
       - string:
           name: DNS
           default: '172.18.224.6'
