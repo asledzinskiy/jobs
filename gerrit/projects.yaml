@@ -391,15 +391,15 @@
   acl-config: acls/mcp-ci/mcp-ci.project-config.config
 
 -
-  project: mcp-ci/mcp-ci-slave-image
-  description: Jenkins Swarm slave image for MCP CI projects
-  acl-config: acls/mcp-ci/mcp-ci.project-config.config
-
--
   project: mcp-ci/mcp-cicd-installer
   description: MCP CI/CD project
   upstream: https://gerrit.mcp.mirantis.net/mcp-ci/mcp-cicd-installer.git
   acl-config: acls/mcp-ci/mcp-cicd-installer.config
+
+-
+  project: mcp-ci/mcp-slave-image
+  description: Jenkins Swarm slave image for MCP CI projects
+  acl-config: acls/mcp-ci/mcp-ci.project-config.config
 
 -
   project: mcp-ci/pipeline-library

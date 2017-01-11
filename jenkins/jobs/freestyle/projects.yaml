@@ -32,8 +32,8 @@
     mcp-project:
       - projectcalico
       - ccp
-      - k8s
-      - mcp-ci
+      - kubernetes
+      - mcp
 
 - project:
     name: mcp-netchecker-build
