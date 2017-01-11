@@ -474,438 +474,6 @@
   acl-config: acls/mk/mk.config
 
 -
-  project: mk/salt-formula-apache
-  upstream: https://github.com/tcpcloud/salt-formula-apache.git
-  description: Salt-formulas for salt-formula-apache project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-aptly
-  upstream: https://github.com/tcpcloud/salt-formula-aptly.git
-  description: Salt-formulas for salt-formula-aptly project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-backupninja
-  upstream: https://github.com/tcpcloud/salt-formula-backupninja.git
-  description: Salt-formulas for salt-formula-backupninja project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-billometer
-  upstream: https://github.com/tcpcloud/salt-formula-billometer.git
-  description: Salt-formulas for salt-formula-billometer project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-bind
-  upstream: https://github.com/tcpcloud/salt-formula-bind.git
-  description: Salt-formulas for salt-formula-bind project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-ceilometer
-  upstream: git://git.openstack.org/openstack/salt-formula-ceilometer.git
-  description: Salt-formula for salt-formula-ceilometer project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-ceph
-  upstream: https://github.com/tcpcloud/salt-formula-ceph.git
-  description: Salt-formulas for salt-formula-ceph project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-cinder
-  upstream: git://git.openstack.org/openstack/salt-formula-cinder.git
-  description: Salt-formula for salt-formula-cinder project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-collectd
-  upstream: https://github.com/tcpcloud/salt-formula-collectd.git
-  description: Salt-formulas for salt-formula-collectd project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-docker
-  upstream: https://github.com/tcpcloud/salt-formula-docker.git
-  description: Salt-formulas for salt-formula-docker project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-dovecot
-  upstream: https://github.com/tcpcloud/salt-formula-dovecot.git
-  description: Salt-formulas for salt-formula-dovecot project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-elasticsearch
-  upstream: https://github.com/tcpcloud/salt-formula-elasticsearch.git
-  description: Salt-formulas for salt-formula-elasticsearch project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-foreman
-  upstream: https://github.com/tcpcloud/salt-formula-foreman.git
-  description: Salt-formulas for salt-formula-foreman project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-freeipa
-  upstream: https://github.com/tcpcloud/salt-formula-freeipa.git
-  description: Salt-formulas for salt-formula-freeipa project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-galera
-  upstream: https://github.com/tcpcloud/salt-formula-galera.git
-  description: Salt-formulas for salt-formula-galera project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-git
-  upstream: https://github.com/tcpcloud/salt-formula-git.git
-  description: Salt-formulas for salt-formula-git project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-gitlab
-  upstream: https://github.com/tcpcloud/salt-formula-gitlab.git
-  description: Salt-formulas for salt-formula-gitlab project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-glance
-  upstream: git://git.openstack.org/openstack/salt-formula-glance.git
-  description: Salt-formula for salt-formula-glance project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-glusterfs
-  upstream: https://github.com/tcpcloud/salt-formula-glusterfs.git
-  description: Salt-formulas for salt-formula-glusterfs project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-grafana
-  upstream: https://github.com/tcpcloud/salt-formula-grafana.git
-  description: Salt-formulas for salt-formula-grafana project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-graphite
-  upstream: https://github.com/tcpcloud/salt-formula-graphite.git
-  description: Salt-formulas for salt-formula-graphite project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-haproxy
-  upstream: https://github.com/tcpcloud/salt-formula-haproxy.git
-  description: Salt-formulas for salt-formula-haproxy project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-heat
-  upstream: git://git.openstack.org/openstack/salt-formula-heat.git
-  description: Salt-formula for salt-formula-heat project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-heka
-  upstream: https://github.com/tcpcloud/salt-formula-heka.git
-  description: Salt-formulas for salt-formula-heka project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-horizon
-  upstream: git://git.openstack.org/openstack/salt-formula-horizon.git
-  description: Salt-formula for salt-formula-horizon project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-iptables
-  upstream: https://github.com/tcpcloud/salt-formula-iptables.git
-  description: Salt-formulas for salt-formula-iptables project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-isc-dhcp
-  upstream: https://github.com/tcpcloud/salt-formula-isc-dhcp.git
-  description: Salt-formulas for salt-formula-isc-dhcp project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-java
-  upstream: https://github.com/tcpcloud/salt-formula-java.git
-  description: Salt-formulas for salt-formula-java project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-jenkins
-  upstream: https://github.com/tcpcloud/salt-formula-jenkins.git
-  description: Salt-formulas for salt-formula-jenkins project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-kedb
-  upstream: https://github.com/tcpcloud/salt-formula-kedb.git
-  description: Salt-formulas for salt-formula-kedb project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-keepalived
-  upstream: https://github.com/tcpcloud/salt-formula-keepalived.git
-  description: Salt-formulas for salt-formula-keepalived project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-keystone
-  upstream: git://git.openstack.org/openstack/salt-formula-keystone.git
-  description: Salt-formula for salt-formula-keystone project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-kibana
-  upstream: https://github.com/tcpcloud/salt-formula-kibana.git
-  description: Salt-formulas for salt-formula-kibana project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-kubernetes
-  upstream: git://git.openstack.org/openstack/salt-formula-kubernetes.git
-  description: Salt-formula for salt-formula-kubernetes project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-letsencrypt
-  upstream: https://github.com/tcpcloud/salt-formula-letsencrypt.git
-  description: Salt-formulas for salt-formula-letsencrypt project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-libvirt
-  upstream: https://github.com/tcpcloud/salt-formula-libvirt.git
-  description: Salt-formulas for salt-formula-libvirt project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-linux
-  upstream: https://github.com/tcpcloud/salt-formula-linux.git
-  description: Salt-formulas for salt-formula-linux project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-logrotate
-  upstream: https://github.com/tcpcloud/salt-formula-logrotate.git
-  description: Salt-formulas for salt-formula-logrotate project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-magnum
-  upstream: https://github.com/tcpcloud/salt-formula-magnum.git
-  description: Salt-formulas for salt-formula-magnum project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-memcached
-  upstream: https://github.com/tcpcloud/salt-formula-memcached.git
-  description: Salt-formulas for salt-formula-memcached project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-midonet
-  upstream: git://git.openstack.org/openstack/salt-formula-midonet.git
-  description: Salt-formula for salt-formula-midonet project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-mongodb
-  upstream: https://github.com/tcpcloud/salt-formula-mongodb.git
-  description: Salt-formulas for salt-formula-mongodb project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-murano
-  upstream: https://github.com/tcpcloud/salt-formula-murano.git
-  description: Salt-formulas for salt-formula-murano project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-mysql
-  upstream: https://github.com/tcpcloud/salt-formula-mysql.git
-  description: Salt-formulas for salt-formula-mysql project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-neutron
-  upstream: git://git.openstack.org/openstack/salt-formula-neutron.git
-  description: Salt-formula for salt-formula-neutron project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-nfs
-  upstream: https://github.com/tcpcloud/salt-formula-nfs.git
-  description: Salt-formulas for salt-formula-nfs project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-nginx
-  upstream: https://github.com/tcpcloud/salt-formula-nginx.git
-  description: Salt-formulas for salt-formula-nginx project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-nodejs
-  upstream: https://github.com/tcpcloud/salt-formula-nodejs.git
-  description: Salt-formulas for salt-formula-nodejs project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-nova
-  upstream: git://git.openstack.org/openstack/salt-formula-nova.git
-  description: Salt-formula for salt-formula-nova project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-ntp
-  upstream: https://github.com/tcpcloud/salt-formula-ntp.git
-  description: Salt-formulas for salt-formula-ntp project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-opencontrail
-  upstream: git://git.openstack.org/openstack/salt-formula-opencontrail.git
-  description: Salt-formula for salt-formula-opencontrail project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-openssh
-  upstream: https://github.com/tcpcloud/salt-formula-openssh.git
-  description: Salt-formulas for salt-formula-openssh project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-openvstorage
-  upstream: https://github.com/tcpcloud/salt-formula-openvstorage.git
-  description: Salt-formulas for salt-formula-openvstorage project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-owncloud
-  upstream: https://github.com/tcpcloud/salt-formula-owncloud.git
-  description: Salt-formulas for salt-formula-owncloud project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-postfix
-  upstream: https://github.com/tcpcloud/salt-formula-postfix.git
-  description: Salt-formulas for salt-formula-postfix project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-postgresql
-  upstream: https://github.com/tcpcloud/salt-formula-postgresql.git
-  description: Salt-formulas for salt-formula-postgresql project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-pritunl
-  upstream: https://github.com/tcpcloud/salt-formula-pritunl.git
-  description: Salt-formulas for salt-formula-pritunl project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-python
-  upstream: https://github.com/tcpcloud/salt-formula-python.git
-  description: Salt-formulas for salt-formula-python project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-rabbitmq
-  upstream: https://github.com/tcpcloud/salt-formula-rabbitmq.git
-  description: Salt-formulas for salt-formula-rabbitmq project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-reclass
-  upstream: https://github.com/tcpcloud/salt-formula-reclass.git
-  description: Salt-formulas for salt-formula-reclass project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-redis
-  upstream: https://github.com/tcpcloud/salt-formula-redis.git
-  description: Salt-formulas for salt-formula-redis project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-roundcube
-  upstream: https://github.com/tcpcloud/salt-formula-roundcube.git
-  description: Salt-formulas for salt-formula-roundcube project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-rsync
-  upstream: https://github.com/tcpcloud/salt-formula-rsync.git
-  description: Salt-formulas for salt-formula-rsync project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-rsyslog
-  upstream: https://github.com/tcpcloud/salt-formula-rsyslog.git
-  description: Salt-formulas for salt-formula-rsyslog project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-salt
-  upstream: https://github.com/tcpcloud/salt-formula-salt.git
-  description: Salt-formulas for salt-formula-salt project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-sensu
-  upstream: https://github.com/tcpcloud/salt-formula-sensu.git
-  description: Salt-formulas for salt-formula-sensu project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-sphinx
-  upstream: https://github.com/tcpcloud/salt-formula-sphinx.git
-  description: Salt-formulas for salt-formula-sphinx project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-statsd
-  upstream: https://github.com/tcpcloud/salt-formula-statsd.git
-  description: Salt-formulas for salt-formula-statsd project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-supervisor
-  upstream: https://github.com/tcpcloud/salt-formula-supervisor.git
-  description: Salt-formulas for salt-formula-supervisor project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-swift
-  upstream: git://git.openstack.org/openstack/salt-formula-swift.git
-  description: Salt-formula for salt-formula-swift project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-taiga
-  upstream: https://github.com/tcpcloud/salt-formula-taiga.git
-  description: Salt-formulas for salt-formula-taiga project
-  acl-config: acls/mk/mk.config
-
--
-  project: mk/salt-formula-varnish
-  upstream: https://github.com/tcpcloud/salt-formula-varnish.git
-  description: Salt-formulas for salt-formula-varnish project
-  acl-config: acls/mk/mk.config
-
--
   project: projectcalico
   description: Parent project for projectcalico
   acl-config: acls/projectcalico/calico.config
@@ -956,6 +524,540 @@
   description: Golang Calico library functions
   upstream: git://github.com/projectcalico/libcalico-go.git
   acl-config: acls/projectcalico/calico.config
+
+-
+  project: salt-formulas/aodh
+  description: aodh formula
+  upstream: git://github.com/tcpcloud/salt-formula-aodh.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/apache
+  description: apache formula
+  upstream: git://github.com/tcpcloud/salt-formula-apache.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/aptly
+  description: aptly formula
+  upstream: git://github.com/tcpcloud/salt-formula-aptly.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/artifactory
+  description: artifactory formula
+  upstream: git://github.com/tcpcloud/salt-formula-artifactory.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/backupninja
+  description: backupninja formula
+  upstream: git://github.com/tcpcloud/salt-formula-backupninja.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/billometer
+  description: billometer formula
+  upstream: git://github.com/tcpcloud/salt-formula-billometer.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/bind
+  description: bind formula
+  upstream: git://github.com/tcpcloud/salt-formula-bind.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/bird
+  description: bird formula
+  upstream: git://github.com/tcpcloud/salt-formula-bird.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/cadf
+  description: cadf formula
+  upstream: git://github.com/tcpcloud/salt-formula-cadf.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/calico
+  description: calico formula
+  upstream: git://github.com/tcpcloud/salt-formula-calico.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/cassandra
+  description: cassandra formula
+  upstream: git://github.com/tcpcloud/salt-formula-cassandra.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/ccp
+  description: ccp formula
+  upstream: git://github.com/tcpcloud/salt-formula-ccp.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/ceilometer
+  description: ceilometer formula
+  upstream: git://github.com/openstack/salt-formula-ceilometer.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/ceph
+  description: ceph formula
+  upstream: git://github.com/tcpcloud/salt-formula-ceph.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/chrony
+  description: chrony formula
+  upstream: git://github.com/tcpcloud/salt-formula-chrony.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/cinder
+  description: cinder formula
+  upstream: git://github.com/openstack/salt-formula-cinder.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/collectd
+  description: collectd formula
+  upstream: git://github.com/tcpcloud/salt-formula-collectd.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/docker
+  description: docker formula
+  upstream: git://github.com/tcpcloud/salt-formula-docker.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/dovecot
+  description: dovecot formula
+  upstream: git://github.com/tcpcloud/salt-formula-dovecot.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/elasticsearch
+  description: elasticsearch formula
+  upstream: git://github.com/tcpcloud/salt-formula-elasticsearch.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/etcd
+  description: etcd formula
+  upstream: git://github.com/tcpcloud/salt-formula-etcd.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/foreman
+  description: foreman formula
+  upstream: git://github.com/tcpcloud/salt-formula-foreman.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/freeipa
+  description: freeipa formula
+  upstream: git://github.com/tcpcloud/salt-formula-freeipa.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/galera
+  description: galera formula
+  upstream: git://github.com/tcpcloud/salt-formula-galera.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/gerrit
+  description: gerrit formula
+  upstream: git://github.com/tcpcloud/salt-formula-gerrit.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/git
+  description: git formula
+  upstream: git://github.com/tcpcloud/salt-formula-git.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/gitlab
+  description: gitlab formula
+  upstream: git://github.com/tcpcloud/salt-formula-gitlab.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/glance
+  description: glance formula
+  upstream: git://github.com/openstack/salt-formula-glance.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/glusterfs
+  description: glusterfs formula
+  upstream: git://github.com/tcpcloud/salt-formula-glusterfs.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/grafana
+  description: grafana formula
+  upstream: git://github.com/tcpcloud/salt-formula-grafana.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/graphite
+  description: graphite formula
+  upstream: git://github.com/tcpcloud/salt-formula-graphite.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/haproxy
+  description: haproxy formula
+  upstream: git://github.com/tcpcloud/salt-formula-haproxy.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/heat
+  description: heat formula
+  upstream: git://github.com/openstack/salt-formula-heat.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/heka
+  description: heka formula
+  upstream: git://github.com/tcpcloud/salt-formula-heka.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/horizon
+  description: horizon formula
+  upstream: git://github.com/openstack/salt-formula-horizon.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/influxdb
+  description: influxdb formula
+  upstream: git://github.com/tcpcloud/salt-formula-influxdb.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/iptables
+  description: iptables formula
+  upstream: git://github.com/tcpcloud/salt-formula-iptables.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/isc-dhcp
+  description: isc-dhcp formula
+  upstream: git://github.com/tcpcloud/salt-formula-isc-dhcp.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/java
+  description: java formula
+  upstream: git://github.com/tcpcloud/salt-formula-java.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/jenkins
+  description: jenkins formula
+  upstream: git://github.com/tcpcloud/salt-formula-jenkins.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/kedb
+  description: kedb formula
+  upstream: git://github.com/tcpcloud/salt-formula-kedb.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/keepalived
+  description: keepalived formula
+  upstream: git://github.com/tcpcloud/salt-formula-keepalived.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/keystone
+  description: keystone formula
+  upstream: git://github.com/openstack/salt-formula-keystone.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/kibana
+  description: kibana formula
+  upstream: git://github.com/tcpcloud/salt-formula-kibana.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/kubernetes
+  description: kubernetes formula
+  upstream: git://github.com/openstack/salt-formula-kubernetes.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/letsencrypt
+  description: letsencrypt formula
+  upstream: git://github.com/tcpcloud/salt-formula-letsencrypt.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/libvirt
+  description: libvirt formula
+  upstream: git://github.com/tcpcloud/salt-formula-libvirt.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/linux
+  description: linux formula
+  upstream: git://github.com/tcpcloud/salt-formula-linux.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/logrotate
+  description: logrotate formula
+  upstream: git://github.com/tcpcloud/salt-formula-logrotate.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/maas
+  description: maas formula
+  upstream: git://github.com/tcpcloud/salt-formula-maas.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/magnum
+  description: magnum formula
+  upstream: git://github.com/tcpcloud/salt-formula-magnum.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/memcached
+  description: memcached formula
+  upstream: git://github.com/tcpcloud/salt-formula-memcached.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/midonet
+  description: midonet formula
+  upstream: git://github.com/openstack/salt-formula-midonet.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/mongodb
+  description: mongodb formula
+  upstream: git://github.com/tcpcloud/salt-formula-mongodb.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/murano
+  description: murano formula
+  upstream: git://github.com/tcpcloud/salt-formula-murano.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/mysql
+  description: mysql formula
+  upstream: git://github.com/tcpcloud/salt-formula-mysql.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/nagios
+  description: nagios formula
+  upstream: git://github.com/tcpcloud/salt-formula-nagios.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/network
+  description: network formula
+  upstream: git://github.com/tcpcloud/salt-formula-network.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/neutron
+  description: neutron formula
+  upstream: git://github.com/openstack/salt-formula-neutron.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/nfs
+  description: nfs formula
+  upstream: git://github.com/tcpcloud/salt-formula-nfs.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/nginx
+  description: nginx formula
+  upstream: git://github.com/tcpcloud/salt-formula-nginx.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/nodejs
+  description: nodejs formula
+  upstream: git://github.com/tcpcloud/salt-formula-nodejs.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/nova
+  description: nova formula
+  upstream: git://github.com/openstack/salt-formula-nova.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/ntp
+  description: ntp formula
+  upstream: git://github.com/tcpcloud/salt-formula-ntp.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/opencontrail
+  description: opencontrail formula
+  upstream: git://github.com/openstack/salt-formula-opencontrail.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/openssh
+  description: openssh formula
+  upstream: git://github.com/tcpcloud/salt-formula-openssh.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/openvpn
+  description: openvpn formula
+  upstream: git://github.com/tcpcloud/salt-formula-openvpn.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/openvstorage
+  description: openvstorage formula
+  upstream: git://github.com/tcpcloud/salt-formula-openvstorage.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/owncloud
+  description: owncloud formula
+  upstream: git://github.com/tcpcloud/salt-formula-owncloud.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/postfix
+  description: postfix formula
+  upstream: git://github.com/tcpcloud/salt-formula-postfix.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/postgresql
+  description: postgresql formula
+  upstream: git://github.com/tcpcloud/salt-formula-postgresql.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/pritunl
+  description: pritunl formula
+  upstream: git://github.com/tcpcloud/salt-formula-pritunl.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/python
+  description: python formula
+  upstream: git://github.com/tcpcloud/salt-formula-python.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/rabbitmq
+  description: rabbitmq formula
+  upstream: git://github.com/tcpcloud/salt-formula-rabbitmq.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/reclass
+  description: reclass formula
+  upstream: git://github.com/tcpcloud/salt-formula-reclass.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/redis
+  description: redis formula
+  upstream: git://github.com/tcpcloud/salt-formula-redis.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/roundcube
+  description: roundcube formula
+  upstream: git://github.com/tcpcloud/salt-formula-roundcube.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/rsync
+  description: rsync formula
+  upstream: git://github.com/tcpcloud/salt-formula-rsync.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/rsyslog
+  description: rsyslog formula
+  upstream: git://github.com/tcpcloud/salt-formula-rsyslog.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/sahara
+  description: sahara formula
+  upstream: git://github.com/tcpcloud/salt-formula-sahara.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/salt
+  description: salt formula
+  upstream: git://github.com/tcpcloud/salt-formula-salt.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/sensu
+  description: sensu formula
+  upstream: git://github.com/tcpcloud/salt-formula-sensu.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/sphinx
+  description: sphinx formula
+  upstream: git://github.com/tcpcloud/salt-formula-sphinx.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/statsd
+  description: statsd formula
+  upstream: git://github.com/tcpcloud/salt-formula-statsd.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/supervisor
+  description: supervisor formula
+  upstream: git://github.com/tcpcloud/salt-formula-supervisor.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/swift
+  description: swift formula
+  upstream: git://github.com/openstack/salt-formula-swift.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/taiga
+  description: taiga formula
+  upstream: git://github.com/tcpcloud/salt-formula-taiga.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/varnish
+  description: varnish formula
+  upstream: git://github.com/tcpcloud/salt-formula-varnish.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/zookeeper
+  description: zookeeper formula
+  upstream: git://github.com/tcpcloud/salt-formula-zookeeper.git
+  acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: tcp/ccp-contrail-pipeline
