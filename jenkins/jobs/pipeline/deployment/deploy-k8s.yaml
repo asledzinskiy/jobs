@@ -5,9 +5,6 @@
     project-type: workflow
 
     parameters:
-      - bool:
-          name: TEST_MODE
-          default: true
       - string:
           name: SLAVE_NODE_LABEL
           default: 'deployment'

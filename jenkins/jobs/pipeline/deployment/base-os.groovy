@@ -1,7 +1,7 @@
 gitTools = new com.mirantis.mcp.Git()
 ssl = new com.mirantis.mk.ssl()
 common = new com.mirantis.mk.common()
-sshCredentialsId = 'deployments-key'
+sshCredentialsId = env.CREDENTIALS ?: 'deployments-key'
 def Boolean TEST_MODE = Boolean.parseBoolean(env.TEST_MODE)
 def String KARGO_REPO = 'kubernetes/kargo'
 def String FUEL_CCP_INSTALLER_REPO = 'ccp/fuel-ccp-installer'
@@ -16,21 +16,28 @@ NODE_JSON=NODE_JSON.replaceAll('"', '\'')
 
 def execAnsiblePlaybook(String playbookPath,
                         String extra = '') {
-   def String extras = "-e host_key_checking=False ${extra}"
+
+    def String extras = "-e host_key_checking=False ${extra}"
+
+    ssl.prepareSshAgentKey(sshCredentialsId)
+    def username = common.getSshCredentials(sshCredentialsId).username
 
     if ( TEST_MODE ) {
-        def username = "vagrant"
-        def password = "vagrant"
+        // then let's create deployment user
+        writeFile file: 'deployment_user.yaml', text: """\
+          k8s_deployment_user: ${username}
+          k8s_deployment_user_pkey_path: /home/jenkins/.ssh/id_rsa_${sshCredentialsId}
+        """.stripIndent()
+
         withEnv(["ANSIBLE_CONFIG=kargo/ansible.cfg"]) {
             sh """
                 ansible-playbook --become --become-method=sudo \
-                --become-user=root --extra-vars 'ansible_ssh_pass=${password}' \
-                -u ${username} ${extras} -i inventory/inventory.cfg ${playbookPath}
+                --become-user=root --extra-vars 'ansible_ssh_pass=vagrant' \
+                -u vagrant ${extras} -e @deployment_user.yaml \
+                -i inventory/inventory.cfg ${playbookPath}
             """
         }
     } else {
-        ssl.prepareSshAgentKey(sshCredentialsId)
-        def username = common.getSshCredentials(sshCredentialsId).username
         withEnv(["ANSIBLE_CONFIG=kargo/ansible.cfg"]) {
             sh """
                 ansible-playbook --private-key=~/.ssh/id_rsa_${sshCredentialsId} \

@@ -2,7 +2,6 @@ gitTools = new com.mirantis.mcp.Git()
 ssl = new com.mirantis.mk.ssl()
 common = new com.mirantis.mk.common()
 sshCredentialsId = env.CREDENTIALS ?: 'deployments-key'
-def Boolean TEST_MODE = Boolean.parseBoolean(env.TEST_MODE)
 def String KARGO_REPO = 'kubernetes/kargo'
 def String CLUSTER_NAME=env.CLUSTER_NAME
 def String GERRIT_HOST=env.GERRIT_HOST
@@ -30,26 +29,14 @@ def execAnsiblePlaybook(String playbookPath,
             "-e host_key_checking=False " +
             extra
 
-    if ( TEST_MODE ) {
-        def username = "vagrant"
-        def password = "vagrant"
-        withEnv(["ANSIBLE_CONFIG=kargo/ansible.cfg"]) {
-            sh """
-                ansible-playbook --become --become-method=sudo \
-                --become-user=root --extra-vars 'ansible_ssh_pass=${password}' \
-                -u ${username} ${extras} -i inventory/inventory.cfg ${playbookPath}
-            """
-        }
-    } else {
-        ssl.prepareSshAgentKey(sshCredentialsId)
-        def username = common.getSshCredentials(sshCredentialsId).username
-        withEnv(["ANSIBLE_CONFIG=kargo/ansible.cfg"]) {
-            sh """
-                ansible-playbook --private-key=~/.ssh/id_rsa_${sshCredentialsId} \
-                --become --become-method=sudo --become-user=root -u ${username} \
-                ${extras} -i inventory/inventory.cfg ${playbookPath}
-            """
-        }
+    ssl.prepareSshAgentKey(sshCredentialsId)
+    def username = common.getSshCredentials(sshCredentialsId).username
+    withEnv(["ANSIBLE_CONFIG=kargo/ansible.cfg"]) {
+        sh """
+            ansible-playbook --private-key=~/.ssh/id_rsa_${sshCredentialsId} \
+            --become --become-method=sudo --become-user=root -u ${username} \
+            ${extras} -i inventory/inventory.cfg ${playbookPath}
+        """
     }
 }
 
