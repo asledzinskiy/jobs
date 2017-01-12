@@ -1,0 +1,445 @@
+- project: salt-formula-aodh
+  src-repo: git://github.com/tcpcloud/salt-formula-aodh
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/aodh
+  branches:
+    - "*"
+- project: salt-formula-apache
+  src-repo: git://github.com/tcpcloud/salt-formula-apache
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/apache
+  branches:
+    - "*"
+- project: salt-formula-aptly
+  src-repo: git://github.com/tcpcloud/salt-formula-aptly
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/aptly
+  branches:
+    - "*"
+- project: salt-formula-artifactory
+  src-repo: git://github.com/tcpcloud/salt-formula-artifactory
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/artifactory
+  branches:
+    - "*"
+- project: salt-formula-backupninja
+  src-repo: git://github.com/tcpcloud/salt-formula-backupninja
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/backupninja
+  branches:
+    - "*"
+- project: salt-formula-billometer
+  src-repo: git://github.com/tcpcloud/salt-formula-billometer
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/billometer
+  branches:
+    - "*"
+- project: salt-formula-bind
+  src-repo: git://github.com/tcpcloud/salt-formula-bind
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/bind
+  branches:
+    - "*"
+- project: salt-formula-bird
+  src-repo: git://github.com/tcpcloud/salt-formula-bird
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/bird
+  branches:
+    - "*"
+- project: salt-formula-cadf
+  src-repo: git://github.com/tcpcloud/salt-formula-cadf
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/cadf
+  branches:
+    - "*"
+- project: salt-formula-calico
+  src-repo: git://github.com/tcpcloud/salt-formula-calico
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/calico
+  branches:
+    - "*"
+- project: salt-formula-cassandra
+  src-repo: git://github.com/tcpcloud/salt-formula-cassandra
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/cassandra
+  branches:
+    - "*"
+- project: salt-formula-ccp
+  src-repo: git://github.com/tcpcloud/salt-formula-ccp
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/ccp
+  branches:
+    - "*"
+- project: salt-formula-ceilometer
+  src-repo: git://github.com/openstack/salt-formula-ceilometer
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/ceilometer
+  branches:
+    - "*"
+- project: salt-formula-ceph
+  src-repo: git://github.com/tcpcloud/salt-formula-ceph
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/ceph
+  branches:
+    - "*"
+- project: salt-formula-chrony
+  src-repo: git://github.com/tcpcloud/salt-formula-chrony
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/chrony
+  branches:
+    - "*"
+- project: salt-formula-cinder
+  src-repo: git://github.com/openstack/salt-formula-cinder
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/cinder
+  branches:
+    - "*"
+- project: salt-formula-collectd
+  src-repo: git://github.com/tcpcloud/salt-formula-collectd
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/collectd
+  branches:
+    - "*"
+- project: salt-formula-docker
+  src-repo: git://github.com/tcpcloud/salt-formula-docker
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/docker
+  branches:
+    - "*"
+- project: salt-formula-dovecot
+  src-repo: git://github.com/tcpcloud/salt-formula-dovecot
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/dovecot
+  branches:
+    - "*"
+- project: salt-formula-elasticsearch
+  src-repo: git://github.com/tcpcloud/salt-formula-elasticsearch
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/elasticsearch
+  branches:
+    - "*"
+- project: salt-formula-etcd
+  src-repo: git://github.com/tcpcloud/salt-formula-etcd
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/etcd
+  branches:
+    - "*"
+- project: salt-formula-foreman
+  src-repo: git://github.com/tcpcloud/salt-formula-foreman
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/foreman
+  branches:
+    - "*"
+- project: salt-formula-freeipa
+  src-repo: git://github.com/tcpcloud/salt-formula-freeipa
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/freeipa
+  branches:
+    - "*"
+- project: salt-formula-galera
+  src-repo: git://github.com/tcpcloud/salt-formula-galera
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/galera
+  branches:
+    - "*"
+- project: salt-formula-gerrit
+  src-repo: git://github.com/tcpcloud/salt-formula-gerrit
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/gerrit
+  branches:
+    - "*"
+- project: salt-formula-git
+  src-repo: git://github.com/tcpcloud/salt-formula-git
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/git
+  branches:
+    - "*"
+- project: salt-formula-gitlab
+  src-repo: git://github.com/tcpcloud/salt-formula-gitlab
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/gitlab
+  branches:
+    - "*"
+- project: salt-formula-glance
+  src-repo: git://github.com/openstack/salt-formula-glance
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/glance
+  branches:
+    - "*"
+- project: salt-formula-glusterfs
+  src-repo: git://github.com/tcpcloud/salt-formula-glusterfs
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/glusterfs
+  branches:
+    - "*"
+- project: salt-formula-grafana
+  src-repo: git://github.com/tcpcloud/salt-formula-grafana
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/grafana
+  branches:
+    - "*"
+- project: salt-formula-graphite
+  src-repo: git://github.com/tcpcloud/salt-formula-graphite
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/graphite
+  branches:
+    - "*"
+- project: salt-formula-haproxy
+  src-repo: git://github.com/tcpcloud/salt-formula-haproxy
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/haproxy
+  branches:
+    - "*"
+- project: salt-formula-heat
+  src-repo: git://github.com/openstack/salt-formula-heat
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/heat
+  branches:
+    - "*"
+- project: salt-formula-heka
+  src-repo: git://github.com/tcpcloud/salt-formula-heka
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/heka
+  branches:
+    - "*"
+- project: salt-formula-horizon
+  src-repo: git://github.com/openstack/salt-formula-horizon
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/horizon
+  branches:
+    - "*"
+- project: salt-formula-influxdb
+  src-repo: git://github.com/tcpcloud/salt-formula-influxdb
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/influxdb
+  branches:
+    - "*"
+- project: salt-formula-iptables
+  src-repo: git://github.com/tcpcloud/salt-formula-iptables
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/iptables
+  branches:
+    - "*"
+- project: salt-formula-isc-dhcp
+  src-repo: git://github.com/tcpcloud/salt-formula-isc-dhcp
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/isc-dhcp
+  branches:
+    - "*"
+- project: salt-formula-java
+  src-repo: git://github.com/tcpcloud/salt-formula-java
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/java
+  branches:
+    - "*"
+- project: salt-formula-jenkins
+  src-repo: git://github.com/tcpcloud/salt-formula-jenkins
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/jenkins
+  branches:
+    - "*"
+- project: salt-formula-kedb
+  src-repo: git://github.com/tcpcloud/salt-formula-kedb
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/kedb
+  branches:
+    - "*"
+- project: salt-formula-keepalived
+  src-repo: git://github.com/tcpcloud/salt-formula-keepalived
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/keepalived
+  branches:
+    - "*"
+- project: salt-formula-keystone
+  src-repo: git://github.com/openstack/salt-formula-keystone
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/keystone
+  branches:
+    - "*"
+- project: salt-formula-kibana
+  src-repo: git://github.com/tcpcloud/salt-formula-kibana
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/kibana
+  branches:
+    - "*"
+- project: salt-formula-kubernetes
+  src-repo: git://github.com/openstack/salt-formula-kubernetes
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/kubernetes
+  branches:
+    - "*"
+- project: salt-formula-letsencrypt
+  src-repo: git://github.com/tcpcloud/salt-formula-letsencrypt
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/letsencrypt
+  branches:
+    - "*"
+- project: salt-formula-libvirt
+  src-repo: git://github.com/tcpcloud/salt-formula-libvirt
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/libvirt
+  branches:
+    - "*"
+- project: salt-formula-linux
+  src-repo: git://github.com/tcpcloud/salt-formula-linux
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/linux
+  branches:
+    - "*"
+- project: salt-formula-logrotate
+  src-repo: git://github.com/tcpcloud/salt-formula-logrotate
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/logrotate
+  branches:
+    - "*"
+- project: salt-formula-maas
+  src-repo: git://github.com/tcpcloud/salt-formula-maas
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/maas
+  branches:
+    - "*"
+- project: salt-formula-magnum
+  src-repo: git://github.com/tcpcloud/salt-formula-magnum
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/magnum
+  branches:
+    - "*"
+- project: salt-formula-memcached
+  src-repo: git://github.com/tcpcloud/salt-formula-memcached
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/memcached
+  branches:
+    - "*"
+- project: salt-formula-midonet
+  src-repo: git://github.com/openstack/salt-formula-midonet
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/midonet
+  branches:
+    - "*"
+- project: salt-formula-mongodb
+  src-repo: git://github.com/tcpcloud/salt-formula-mongodb
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/mongodb
+  branches:
+    - "*"
+- project: salt-formula-murano
+  src-repo: git://github.com/tcpcloud/salt-formula-murano
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/murano
+  branches:
+    - "*"
+- project: salt-formula-mysql
+  src-repo: git://github.com/tcpcloud/salt-formula-mysql
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/mysql
+  branches:
+    - "*"
+- project: salt-formula-nagios
+  src-repo: git://github.com/tcpcloud/salt-formula-nagios
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/nagios
+  branches:
+    - "*"
+- project: salt-formula-network
+  src-repo: git://github.com/tcpcloud/salt-formula-network
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/network
+  branches:
+    - "*"
+- project: salt-formula-neutron
+  src-repo: git://github.com/openstack/salt-formula-neutron
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/neutron
+  branches:
+    - "*"
+- project: salt-formula-nfs
+  src-repo: git://github.com/tcpcloud/salt-formula-nfs
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/nfs
+  branches:
+    - "*"
+- project: salt-formula-nginx
+  src-repo: git://github.com/tcpcloud/salt-formula-nginx
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/nginx
+  branches:
+    - "*"
+- project: salt-formula-nodejs
+  src-repo: git://github.com/tcpcloud/salt-formula-nodejs
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/nodejs
+  branches:
+    - "*"
+- project: salt-formula-nova
+  src-repo: git://github.com/openstack/salt-formula-nova
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/nova
+  branches:
+    - "*"
+- project: salt-formula-ntp
+  src-repo: git://github.com/tcpcloud/salt-formula-ntp
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/ntp
+  branches:
+    - "*"
+- project: salt-formula-opencontrail
+  src-repo: git://github.com/openstack/salt-formula-opencontrail
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/opencontrail
+  branches:
+    - "*"
+- project: salt-formula-openssh
+  src-repo: git://github.com/tcpcloud/salt-formula-openssh
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/openssh
+  branches:
+    - "*"
+- project: salt-formula-openvpn
+  src-repo: git://github.com/tcpcloud/salt-formula-openvpn
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/openvpn
+  branches:
+    - "*"
+- project: salt-formula-openvstorage
+  src-repo: git://github.com/tcpcloud/salt-formula-openvstorage
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/openvstorage
+  branches:
+    - "*"
+- project: salt-formula-owncloud
+  src-repo: git://github.com/tcpcloud/salt-formula-owncloud
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/owncloud
+  branches:
+    - "*"
+- project: salt-formula-postfix
+  src-repo: git://github.com/tcpcloud/salt-formula-postfix
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/postfix
+  branches:
+    - "*"
+- project: salt-formula-postgresql
+  src-repo: git://github.com/tcpcloud/salt-formula-postgresql
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/postgresql
+  branches:
+    - "*"
+- project: salt-formula-pritunl
+  src-repo: git://github.com/tcpcloud/salt-formula-pritunl
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/pritunl
+  branches:
+    - "*"
+- project: salt-formula-python
+  src-repo: git://github.com/tcpcloud/salt-formula-python
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/python
+  branches:
+    - "*"
+- project: salt-formula-rabbitmq
+  src-repo: git://github.com/tcpcloud/salt-formula-rabbitmq
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/rabbitmq
+  branches:
+    - "*"
+- project: salt-formula-reclass
+  src-repo: git://github.com/tcpcloud/salt-formula-reclass
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/reclass
+  branches:
+    - "*"
+- project: salt-formula-redis
+  src-repo: git://github.com/tcpcloud/salt-formula-redis
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/redis
+  branches:
+    - "*"
+- project: salt-formula-roundcube
+  src-repo: git://github.com/tcpcloud/salt-formula-roundcube
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/roundcube
+  branches:
+    - "*"
+- project: salt-formula-rsync
+  src-repo: git://github.com/tcpcloud/salt-formula-rsync
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/rsync
+  branches:
+    - "*"
+- project: salt-formula-rsyslog
+  src-repo: git://github.com/tcpcloud/salt-formula-rsyslog
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/rsyslog
+  branches:
+    - "*"
+- project: salt-formula-sahara
+  src-repo: git://github.com/tcpcloud/salt-formula-sahara
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/sahara
+  branches:
+    - "*"
+- project: salt-formula-salt
+  src-repo: git://github.com/tcpcloud/salt-formula-salt
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/salt
+  branches:
+    - "*"
+- project: salt-formula-sensu
+  src-repo: git://github.com/tcpcloud/salt-formula-sensu
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/sensu
+  branches:
+    - "*"
+- project: salt-formula-sphinx
+  src-repo: git://github.com/tcpcloud/salt-formula-sphinx
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/sphinx
+  branches:
+    - "*"
+- project: salt-formula-statsd
+  src-repo: git://github.com/tcpcloud/salt-formula-statsd
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/statsd
+  branches:
+    - "*"
+- project: salt-formula-supervisor
+  src-repo: git://github.com/tcpcloud/salt-formula-supervisor
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/supervisor
+  branches:
+    - "*"
+- project: salt-formula-swift
+  src-repo: git://github.com/openstack/salt-formula-swift
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/swift
+  branches:
+    - "*"
+- project: salt-formula-taiga
+  src-repo: git://github.com/tcpcloud/salt-formula-taiga
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/taiga
+  branches:
+    - "*"
+- project: salt-formula-varnish
+  src-repo: git://github.com/tcpcloud/salt-formula-varnish
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/varnish
+  branches:
+    - "*"
+- project: salt-formula-zookeeper
+  src-repo: git://github.com/tcpcloud/salt-formula-zookeeper
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/salt-formulas/zookeeper
+  branches:
+    - "*"
