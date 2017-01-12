@@ -52,6 +52,12 @@
   branches:
     - "*"
 
+- project: fuel-ccp-grafana
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-grafana
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-grafana
+  branches:
+    - "*"
+
 - project: fuel-ccp-heat
   src-repo: git://git.openstack.org/openstack/fuel-ccp-heat
   dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-heat

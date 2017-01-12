@@ -83,6 +83,12 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: ccp/fuel-ccp-grafana
+  description: Fuel CCP - Grafana deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-grafana
+  acl-config: acls/ccp/ccp.config
+
+-
   project: ccp/fuel-ccp-heat
   description: Fuel CCP - Heat deployment
   upstream: git://git.openstack.org/openstack/fuel-ccp-heat
