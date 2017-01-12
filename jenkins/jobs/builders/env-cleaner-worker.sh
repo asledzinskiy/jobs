@@ -18,7 +18,7 @@ while read i; do
   env=($i);
   env_name="${env[0]}";
   creation_time="${env[1]//_/ }";
-  if [ $(($(date "+%s")-$(date -d "${creation_time}" "+%s"))) -gt 172800 ]; then
+  if [ $(($(date "+%s")-$(date -d "${creation_time}" "+%s"))) -gt 86400 ]; then
      echo "Removing environment: ${env_name}, which was created: ${creation_time}";
      dos.py erase "${env_name}";
   fi;
