@@ -3,7 +3,7 @@
     parameters:
     - string:
         name: HEAT_TEMPLATE_URL
-        default: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mk/mk-lab-salt-model'
+        default: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mk/mcp-lab-heat-templates.git'
     - string:
         name: HEAT_TEMPLATE_CREDENTIALS
         default: 'mcp-ci-gerrit'
@@ -53,33 +53,11 @@
         default: 'mirantis-zone-qa'
     - string:
         name: HEAT_STACK_PUBLIC_NET
-        default: 'inet'
-
-- job-template:
-    name: mk-kubernetes-deploy-pipeline
-    description: |
-      MK Kubernetes deployment
-    project-type: workflow
-    concurrent: false
-    parameters:
-    - heat-template-params:
-        HEAT_TEMPLATE_URL: 'ssh://mcp-ci-gerrit@{gerrit-host}:29418/mk/mcp-lab-heat-templates.git'
-        gerrit-host: '{gerrit-host}'
-    - salt-master-params
-    - openstack-api-params
-    - heat-stack-params:
-        HEAT_STACK_TEMPLATE: 'mcp_openstack_cluster'
-        HEAT_STACK_ENVIRONMENT: 'tcpisek'
-        HEAT_STACK_ZONE: 'mirantis-zone-qa'
-        HEAT_STACK_PUBLIC_NET: 'inet' #inet/inet2
-    workflow-scm:
-      scm:
-        basic-scm:
-          branch: 'master'
-          project: 'mk/mk-pipelines'
-          gerrit-host: '{gerrit-host}'
-          gerrit-port: '{gerrit-port}'
-      script-path: mk-kubernetes-deploy-pipeline.groovy
+        default: 'mirantis-private'
+    - string:
+        name: HEAT_STACK_DELETE
+        description: Delete Heat stack after job finishes
+        default: '1'
 
 - job-template:
     name: mk-maas-deploy-pipeline

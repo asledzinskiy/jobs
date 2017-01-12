@@ -288,14 +288,13 @@
       - rabbitmq
 
 - project:
-    name: 'mk-kubernetes-deploy-pipeline'
+    name: 'mk-k8s'
     jobs:
-      - 'mk-kubernetes-deploy-pipeline'
+      - 'mk-k8s-cleanup'
       - 'mk-k8s-{type}-deploy':
          type:
           - simple
           - mcp-oc
-      - 'mk-k8s-cleanup'
 
 - project:
     name: clusters
