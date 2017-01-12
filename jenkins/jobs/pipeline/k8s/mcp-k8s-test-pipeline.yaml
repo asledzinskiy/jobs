@@ -57,7 +57,7 @@
 
     properties:
       - authorization-allow-group:
-          group_name: 'mcp-k8s'
+          group_name: 'k8s-eng'
 
     dsl:
       !include-raw-escape: mcp-k8s-test-pipeline.groovy
