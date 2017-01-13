@@ -299,6 +299,12 @@
   acl-config: acls/contrail/contrail.config
 
 -
+  project: contrail/contrail-pipeline
+  description: contrail-pipeline
+  upstream: git://github.com/Mirantis/ccp-contrail-pipeline.git
+  acl-config: acls/contrail/contrail.config
+
+-
   project: contrail/contrail-sandesh
   description: contrail-sandesh
   upstream: git://github.com/Juniper/contrail-sandesh.git
@@ -1058,11 +1064,6 @@
   description: zookeeper formula
   upstream: git://github.com/tcpcloud/salt-formula-zookeeper.git
   acl-config: acls/salt-formulas/salt-formulas.config
-
--
-  project: tcp/ccp-contrail-pipeline
-  description: Opencontrail CI/CD Pipelines
-  acl-config: acls/tcp/tcp.config
 
 -
   project: tcp/ccp-devops-portal
