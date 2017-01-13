@@ -1,0 +1,30 @@
+- job-template:
+    name: 'artifactory-repos.test'
+    description: |
+        <h2>Syntax check for Artifactory repositories configuration</h2>
+
+    project-type: workflow
+    dsl:
+      !include-raw-escape: artifactory-repos.test.groovy
+
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-ci/project-config
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+              file-paths:
+                - compare-type: ANT
+                  pattern: '**/artifactory/repositories/**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
