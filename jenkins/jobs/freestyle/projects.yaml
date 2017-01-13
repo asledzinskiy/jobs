@@ -287,11 +287,12 @@
 - project:
     name: 'mk-kubernetes-deploy-pipeline'
     jobs:
-     - 'mk-kubernetes-deploy-pipeline'
-     - 'mk-k8s-{type}-deploy':
-        type: simple
-     - 'mk-k8s-{type}-deploy':
-        type: mcp-oc
+      - 'mk-kubernetes-deploy-pipeline'
+      - 'mk-k8s-{type}-deploy':
+         type:
+          - simple
+          - mcp-oc
+      - 'mk-k8s-cleanup'
 
 - project:
     name: clusters
