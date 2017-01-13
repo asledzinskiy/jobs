@@ -1,4 +1,9 @@
 -
+  project: ccp-ci/ccp-bvt-pipeline
+  description: Fuel Containerized Control Plane (CCP) bvt pipeline
+  acl-config: acls/ccp/ccp-dev.config
+
+-
   project: ccp-ci/ccp-slave-image
   description: Jenkins Swarm slave images for CCP projects
   acl-config: acls/ccp-ci/ccp-ci.project-config.config

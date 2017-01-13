@@ -201,6 +201,7 @@
 - project:
     name: ccp
     jobs:
+      - ccp-bvt
       - ccp-docker-build:
           timer: '@midnight'
       - ccp-tempest-test

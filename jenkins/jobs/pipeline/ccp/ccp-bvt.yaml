@@ -1,0 +1,25 @@
+- job-template:
+    name: ccp-bvt
+    description: |
+      Fuel CCP - CCP bvt
+    project-type: workflow
+
+    parameters:
+      - string:
+          name: KUBERNETES_URL
+          description: 'URL for kubernetes api like https://host:443/'
+
+      - string:
+          name: CREDENTIALS_ID
+          default: 'kubernetes-api'
+          description: 'Credentials for k8s api'
+
+    workflow-scm:
+      scm:
+        basic-scm:
+          branch: 'master'
+          project: 'ccp-ci/ccp-bvt-pipeline'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+      script-path: Jenkinsfile
+
