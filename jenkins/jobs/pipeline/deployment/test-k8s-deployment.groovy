@@ -48,8 +48,18 @@ node("${SLAVE_NODE_LABEL}") {
       }
      ]
     }"""
-    server.download(downloadSpec)
-    sh "ln -sf /home/jenkins/images/packer/ubuntu-16.04*.qcow2 image.qcow2"
+    def qcowPath = server.download(downloadSpec)
+    // we must have only ONE artifact if it's not true then fail
+    if (qcowPath.publishedDependencies.size() != 1) {
+      throw new RuntimeException("Please check that you correctly specified the artifact")
+    }
+    def img = qcowPath.publishedDependencies[0].getId()
+
+    // FIXME(skulanov): Let's live a little bit without cleaning:
+    // delete all images except the one we've downloaded before
+    // (just replace -exec with -delete in order to delete old images)
+    sh "find /home/jenkins/images/packer/ -type f -not -wholename ${img} -exec ls {} \\; || true"
+    sh "ln -sf ${img} image.qcow2"
   }
 
   stage('Install and configure DevOps') {
