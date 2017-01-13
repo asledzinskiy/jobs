@@ -1,3 +1,9 @@
+- project: kargo
+  src-repo: https://github.com/kubernetes-incubator/kargo
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/kubernetes/kargo
+  branches:
+    - "*"
+
 - project: kubernetes
   src-repo: https://github.com/kubernetes/kubernetes
   dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/kubernetes/kubernetes
