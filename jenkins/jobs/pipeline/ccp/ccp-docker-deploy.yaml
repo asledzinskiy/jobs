@@ -14,6 +14,11 @@
           default: 'kubernetes-api'
           description: 'Credentials for k8s api'
 
+      - bool:
+          name: CLEANUP_ENV
+          default: true
+          description: 'Cleanup env after deployment'
+
     workflow-scm:
       scm:
         basic-scm:
