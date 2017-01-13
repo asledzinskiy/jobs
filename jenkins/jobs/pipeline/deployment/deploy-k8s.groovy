@@ -3,6 +3,7 @@ ssl = new com.mirantis.mk.ssl()
 common = new com.mirantis.mk.common()
 sshCredentialsId = env.CREDENTIALS ?: 'deployments-key'
 def String KARGO_REPO = 'kubernetes/kargo'
+def String KARGO_COMMIT = env.KARGO_COMMIT ?: 'master'
 def String CLUSTER_NAME=env.CLUSTER_NAME
 def String GERRIT_HOST=env.GERRIT_HOST
 def String FUEL_CCP_INSTALLER_REPO = 'ccp/fuel-ccp-installer'
@@ -48,7 +49,7 @@ node("${SLAVE_NODE_LABEL}") {
     stage("Checkout source code") {
         gitTools.gitSSHCheckout {
             credentialsId = "mcp-ci-gerrit"
-            branch = "master"
+            branch = "${KARGO_COMMIT}"
             host = "${GERRIT_HOST}"
             project = "${KARGO_REPO}"
             targetDir = "kargo"

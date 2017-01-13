@@ -34,6 +34,10 @@
           default: '172.18.224.6'
           description: 'Upstream nameserver'
       - string:
+          name: KARGO_COMMIT
+          default: 'master'
+          description: 'Provide commit from which to checkout kargo'
+      - string:
           name: HYPERKUBE_IMAGE_TAG
           default: 'v1.5.0-beta.3-2_1482235542492'
       - string:
