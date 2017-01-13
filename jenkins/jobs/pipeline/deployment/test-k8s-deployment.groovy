@@ -2,7 +2,7 @@ def server = Artifactory.server("mcp-ci")
 def gitTools = new com.mirantis.mcp.Git()
 def String CLUSTER = env.CLUSTER_NAME
 def Boolean ERASE_ENV = env.ERASE_ENV
-def String SLAVE_NODE_LABEL = "deployment-${CLUSTER}"
+def String SLAVE_NODE_LABEL = "mcp-ci-k8s-test-deployment"
 
 node("${SLAVE_NODE_LABEL}") {
 
@@ -15,14 +15,14 @@ node("${SLAVE_NODE_LABEL}") {
   def DEVOPS_DB_ENGINE = "django.db.backends.sqlite3"
   def DEVOPS_DB_NAME = "${WORKSPACE}/venv-fuel-devops-3.0.sqlite3.db"
   def SSHPASS = "vagrant"
-  def POOL_DEFAULT = "10.100.0.0/16:24"
+  def POOL_DEFAULT = "10.109.0.0/16:24"
   def SLAVE0_IP_LEASE="+100"
   def SLAVE1_IP_LEASE="+101"
   def SLAVE2_IP_LEASE="+102"
   def NODE_JSON = "{\"nodes\":" +
-        "[{\"node1\":\"null\",\"name\":\"node1\",\"ip\":\"10.100.0.100\",\"kube_master\":\"True\"}," +
-        "{\"node2\":\"null\",\"name\":\"node2\",\"ip\":\"10.100.0.101\",\"kube_master\":\"True\"}," +
-        "{\"node3\":\"null\",\"name\":\"node3\",\"ip\":\"10.100.0.102\",\"kube_master\":\"False\"}]}"
+        "[{\"node1\":\"null\",\"name\":\"node1\",\"ip\":\"10.109.0.100\",\"kube_master\":\"True\"}," +
+        "{\"node2\":\"null\",\"name\":\"node2\",\"ip\":\"10.109.0.101\",\"kube_master\":\"True\"}," +
+        "{\"node3\":\"null\",\"name\":\"node3\",\"ip\":\"10.109.0.102\",\"kube_master\":\"False\"}]}"
   // validate NODE_JSON if it is in a working JSON forma
   new groovy.json.JsonSlurperClassic().parseText(NODE_JSON)
 
@@ -129,8 +129,7 @@ node("${SLAVE_NODE_LABEL}") {
           build job: "${CLUSTER}-deploy-k8s",
               parameters: [
                         string(name: 'SLAVE_NODE_LABEL', value: "${SLAVE_NODE_LABEL}"),
-                        string(name: 'NODE_JSON', value: "${NODE_JSON}"),
-                        booleanParam(name: 'TEST_MODE', value: true) ]
+                        string(name: 'NODE_JSON', value: "${NODE_JSON}") ]
       }
     } catch (InterruptedException x) {
         echo "The job was aborted"

@@ -2,7 +2,7 @@
 aliases:
 
   dynamic_addresses_pool:
-    - &pool_default !os_env POOL_DEFAULT, 10.100.0.0/16:24
+    - &pool_default !os_env POOL_DEFAULT, 10.109.0.0/16:24
 
   default_interface_model:
     - &interface_model !os_env INTERFACE_MODEL, e1000
