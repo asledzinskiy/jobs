@@ -4,7 +4,7 @@ set -eux
 
 echo "==> Setting up sudo"
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
-echo "vagrant ALL=(root) NOPASSWD: ALL" > /etc/sudoers.d/10_vagrant
+echo "vagrant ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/10_vagrant
 
 echo "==> Configuring logging"
 touch /var/log/daemon.log
