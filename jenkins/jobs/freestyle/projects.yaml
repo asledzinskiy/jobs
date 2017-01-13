@@ -112,6 +112,7 @@
     name: sync-upstream-repos
     project-namespace:
       - 'calico'
+      - 'debian'
       - 'fuel-ccp'
       - 'kubernetes'
       - 'mk'

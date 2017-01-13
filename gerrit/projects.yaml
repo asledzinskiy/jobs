@@ -359,6 +359,126 @@
   acl-config: acls/contrail/contrail.config
 
 -
+  project: debian/cassandra-cpp-driver
+  description: cassandra-cpp-driver Debian package
+  upstream: git://github.com/tcpcloud/debian-cassandra-cpp-driver.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/kafka
+  description: kafka Debian package
+  upstream: git://github.com/tcpcloud/debian-kafka.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/libipfix
+  description: libipfix Debian package
+  upstream: git://github.com/tcpcloud/debian-libipfix.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/librdkafka
+  description: librdkafka Debian package
+  upstream: git://github.com/tcpcloud/debian-librdkafka.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/liburcu
+  description: liburcu Debian package
+  upstream: git://github.com/tcpcloud/debian-liburcu.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/libuv1
+  description: libuv1 Debian package
+  upstream: git://github.com/tcpcloud/debian-libuv1.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-backports.ssl-match-hostname
+  description: python-backports.ssl-match-hostname Debian package
+  upstream: git://github.com/tcpcloud/debian-python-backports.ssl-match-hostname.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-cassandra-driver
+  description: python-cassandra-driver Debian package
+  upstream: git://github.com/tcpcloud/debian-python-cassandra-driver.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-certifi
+  description: python-certifi Debian package
+  upstream: git://github.com/tcpcloud/debian-python-certifi.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-consistent-hash
+  description: python-consistent-hash Debian package
+  upstream: git://github.com/tcpcloud/debian-python-consistent-hash.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-docker
+  description: python-docker Debian package
+  upstream: git://github.com/tcpcloud/debian-python-docker.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-kafka
+  description: python-kafka Debian package
+  upstream: git://github.com/tcpcloud/debian-python-kafka.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-kazoo
+  description: python-kazoo Debian package
+  upstream: git://github.com/tcpcloud/debian-python-kazoo.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-ncclient
+  description: python-ncclient Debian package
+  upstream: git://github.com/tcpcloud/debian-python-ncclient.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-pathlib
+  description: python-pathlib Debian package
+  upstream: git://github.com/tcpcloud/debian-python-pathlib.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-pycassa
+  description: python-pycassa Debian package
+  upstream: git://github.com/tcpcloud/debian-python-pycassa.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-redis
+  description: python-redis Debian package
+  upstream: git://github.com/tcpcloud/debian-python-redis.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-sseclient
+  description: python-sseclient Debian package
+  upstream: git://github.com/tcpcloud/debian-python-sseclient.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-tabulate
+  description: python-tabulate Debian package
+  upstream: git://github.com/tcpcloud/debian-python-tabulate.git
+  acl-config: acls/debian/debian.config
+
+-
+  project: debian/python-xmltodict
+  description: python-xmltodict Debian package
+  upstream: git://github.com/tcpcloud/debian-python-xmltodict.git
+  acl-config: acls/debian/debian.config
+
+-
   project: kubernetes-ci/kubernetes-slave-image
   description: Jenkins Swarm slave image for Kubernetes projects
   acl-config: acls/kubernetes-ci/kubernetes-ci.project-config.config

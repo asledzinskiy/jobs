@@ -1,0 +1,119 @@
+- project: cassandra-cpp-driver
+  src-repo: https://{GERRIT_HOST}/debian/cassandra-cpp-driver
+  dst-repo: git://github.com/tcpcloud/debian-cassandra-cpp-driver.git
+  branches:
+    - "*"
+
+- project: kafka
+  src-repo: https://{GERRIT_HOST}/debian/kafka
+  dst-repo: git://github.com/tcpcloud/debian-kafka.git
+  branches:
+    - "*"
+
+- project: libipfix
+  src-repo: https://{GERRIT_HOST}/debian/libipfix
+  dst-repo: git://github.com/tcpcloud/debian-libipfix.git
+  branches:
+    - "*"
+
+- project: librdkafka
+  src-repo: https://{GERRIT_HOST}/debian/librdkafka
+  dst-repo: git://github.com/tcpcloud/debian-librdkafka.git
+  branches:
+    - "*"
+
+- project: liburcu
+  src-repo: https://{GERRIT_HOST}/debian/liburcu
+  dst-repo: git://github.com/tcpcloud/debian-liburcu.git
+  branches:
+    - "*"
+
+- project: libuv1
+  src-repo: https://{GERRIT_HOST}/debian/libuv1
+  dst-repo: git://github.com/tcpcloud/debian-libuv1.git
+  branches:
+    - "*"
+
+- project: python-backports.ssl-match-hostname
+  src-repo: https://{GERRIT_HOST}/debian/python-backports.ssl-match-hostname
+  dst-repo: git://github.com/tcpcloud/debian-python-backports.ssl-match-hostname.git
+  branches:
+    - "*"
+
+- project: python-cassandra-driver
+  src-repo: https://{GERRIT_HOST}/debian/python-cassandra-driver
+  dst-repo: git://github.com/tcpcloud/debian-python-cassandra-driver.git
+  branches:
+    - "*"
+
+- project: python-certifi
+  src-repo: https://{GERRIT_HOST}/debian/python-certifi
+  dst-repo: git://github.com/tcpcloud/debian-python-certifi.git
+  branches:
+    - "*"
+
+- project: python-consistent-hash
+  src-repo: https://{GERRIT_HOST}/debian/python-consistent-hash
+  dst-repo: git://github.com/tcpcloud/debian-python-consistent-hash.git
+  branches:
+    - "*"
+
+- project: python-docker
+  src-repo: https://{GERRIT_HOST}/debian/python-docker
+  dst-repo: git://github.com/tcpcloud/debian-python-docker.git
+  branches:
+    - "*"
+
+- project: python-kafka
+  src-repo: https://{GERRIT_HOST}/debian/python-kafka
+  dst-repo: git://github.com/tcpcloud/debian-python-kafka.git
+  branches:
+    - "*"
+
+- project: python-kazoo
+  src-repo: https://{GERRIT_HOST}/debian/python-kazoo
+  dst-repo: git://github.com/tcpcloud/debian-python-kazoo.git
+  branches:
+    - "*"
+
+- project: python-ncclient
+  src-repo: https://{GERRIT_HOST}/debian/python-ncclient
+  dst-repo: git://github.com/tcpcloud/debian-python-ncclient.git
+  branches:
+    - "*"
+
+- project: python-pathlib
+  src-repo: https://{GERRIT_HOST}/debian/python-pathlib
+  dst-repo: git://github.com/tcpcloud/debian-python-pathlib.git
+  branches:
+    - "*"
+
+- project: python-pycassa
+  src-repo: https://{GERRIT_HOST}/debian/python-pycassa
+  dst-repo: git://github.com/tcpcloud/debian-python-pycassa.git
+  branches:
+    - "*"
+
+- project: python-redis
+  src-repo: https://{GERRIT_HOST}/debian/python-redis
+  dst-repo: git://github.com/tcpcloud/debian-python-redis.git
+  branches:
+    - "*"
+
+- project: python-sseclient
+  src-repo: https://{GERRIT_HOST}/debian/python-sseclient
+  dst-repo: git://github.com/tcpcloud/debian-python-sseclient.git
+  branches:
+    - "*"
+
+- project: python-tabulate
+  src-repo: https://{GERRIT_HOST}/debian/python-tabulate
+  dst-repo: git://github.com/tcpcloud/debian-python-tabulate.git
+  branches:
+    - "*"
+
+- project: python-xmltodict
+  src-repo: https://{GERRIT_HOST}/debian/python-xmltodict
+  dst-repo: git://github.com/tcpcloud/debian-python-xmltodict.git
+  branches:
+    - "*"
