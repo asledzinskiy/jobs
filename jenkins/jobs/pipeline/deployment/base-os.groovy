@@ -33,6 +33,7 @@ def execAnsiblePlaybook(String playbookPath,
             sh """
                 ansible-playbook --become --become-method=sudo \
                 --become-user=root --extra-vars 'ansible_ssh_pass=vagrant' \
+                --ssh-common-args='-o UserKnownHostsFile=/dev/null' \
                 -u vagrant ${extras} -e @deployment_user.yaml \
                 -i inventory/inventory.cfg ${playbookPath}
             """
