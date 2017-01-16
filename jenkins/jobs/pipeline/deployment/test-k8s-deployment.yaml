@@ -18,4 +18,4 @@
     dsl:
       !include-raw-escape: test-k8s-deployment.groovy
     triggers:
-      - timed: '@midnight'
+      - timed: '15 */4 * * *'
