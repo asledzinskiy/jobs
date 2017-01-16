@@ -7,7 +7,7 @@ node('calico'){
       stage ('Checkout mcp-qa'){
         git.gerritPatchsetCheckout ([
           credentialsId : "mcp-ci-gerrit",
-          withWipeOut = true
+          withWipeOut : true
         ])
       }
 
