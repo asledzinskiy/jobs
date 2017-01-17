@@ -14,6 +14,7 @@ def String HYPERKUBE_IMAGE_TAG = env.HYPERKUBE_IMAGE_TAG
 def String CALICO_VERSION = env.CALICO_VERSION
 def String CALICO_CNI_VERSION = env.CALICO_CNI_VERSION
 def String CALICOCTL_IMAGE_TAG = env.CALICOCTL_IMAGE_TAG
+def String CALICO_MTU = env.CALICO_MTU
 def String SLAVE_NODE_LABEL = env.SLAVE_NODE_LABEL ?: 'deployment'
 // validate NODE_JSON if it is in a working JSON format
 new groovy.json.JsonSlurperClassic().parseText(NODE_JSON)
@@ -84,7 +85,7 @@ outputText=template.render(templateVars)
 Template(outputText).stream().dump('${WORKSPACE}/inventory/inventory.cfg')"
         """
         templateStr = "{'CALICO_CNI_VERSION':'${CALICO_CNI_VERSION}','CALICOCTL_IMAGE_TAG':'${CALICOCTL_IMAGE_TAG}','CALICO_VERSION':'${CALICO_VERSION}'," +
-                "'DNS':'${DNS}','HYPERKUBE_IMAGE_TAG':'${HYPERKUBE_IMAGE_TAG}','UPSTREAM_DNS':'${UPSTREAM_DNS}'}"
+                "'DNS':'${DNS}','HYPERKUBE_IMAGE_TAG':'${HYPERKUBE_IMAGE_TAG}','UPSTREAM_DNS':'${UPSTREAM_DNS}','CALICO_MTU':'${CALICO_MTU}'}"
         sh """
           python -c "import jinja2
 from jinja2 import Template

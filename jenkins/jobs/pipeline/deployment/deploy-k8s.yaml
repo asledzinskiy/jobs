@@ -49,6 +49,9 @@
       - string:
           name: CALICOCTL_IMAGE_TAG
           default: 'v1.0.0-rc2-5-20161209154847'
+      - string:
+          name: CALICO_MTU
+          default: '1360'
 
     dsl:
       !include-raw-escape: deploy-k8s.groovy
