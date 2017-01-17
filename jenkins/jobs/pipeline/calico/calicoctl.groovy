@@ -1,4 +1,3 @@
-label = "buildpod.${env.JOB_NAME}.${env.BUILD_NUMBER}".replace('-', '_').replace('/', '_')
 // Add library functions from pipeline-library
 artifactory = new com.mirantis.mcp.MCPArtifactory()
 calico = new com.mirantis.mcp.Calico()
@@ -13,6 +12,9 @@ projectNamespace = "mirantis/projectcalico"
 docker_dev_repo = "docker-dev-local"
 docker_prod_repo = "docker-prod-local"
 
+label = "buildpod.${env.JOB_NAME}.${env.BUILD_NUMBER}".replace('-', '_').replace('/', '_')
+jenkinsSlaveImg = 'docker-prod-virtual.docker.mirantis.net/mirantis/jenkins-slave-images/projectcalico-debian-slave-20161223134732:latest'
+jnlpSlaveImg = 'docker-prod-virtual.docker.mirantis.net/mirantis/jenkins-slave-images/jnlp-slave:latest'
 
 if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
     buildCalicoContainers()
@@ -27,11 +29,17 @@ def buildCalicoContainers(){
 podTemplate(label: label,
   containers: [
       containerTemplate(
+          name: 'jnlp',
+          image: jnlpSlaveImg,
+          args: '${computer.jnlpmac} ${computer.name}'
+      ),
+      containerTemplate(
           name: 'calico-slave',
-          image: 'docker-dev-local.docker.mirantis.net/mirantis/jenkins-slave-images/projectcalico-debian-slave-20161223134732:20170111144009',
+          image: jenkinsSlaveImg,
           alwaysPullImage: false,
           ttyEnabled: true,
-          privileged: true)
+          privileged: true
+      )
   ],
   ) {
     node(label){
@@ -39,15 +47,10 @@ podTemplate(label: label,
         try {
 
           stage ('Checkout calicoctl'){
-            // git.gerritPatchsetCheckout ([
-            //   credentialsId : "mcp-ci-gerrit",
-            //   withWipeOut : true
-            // ])
-            sh """
-              git clone https://gerrit.mcp.mirantis.net/${GERRIT_PROJECT} ./
-              git fetch https://gerrit.mcp.mirantis.net/${GERRIT_PROJECT} ${GERRIT_REFSPEC}
-              git checkout FETCH_HEAD
-            """
+            git.gerritPatchsetCheckout ([
+              credentialsId : "mcp-ci-gerrit",
+              withWipeOut : true
+            ])
           }
 
           stage ('Run unittest') { sh "make test-containerized"  }
