@@ -19,6 +19,11 @@
           default: true
           description: 'Cleanup env after deployment'
 
+      - string:
+          name: REGISTRY_NAMESPACE
+          default: 'mirantis/ccp/9.0/mitaka'
+          description: 'Registry namespace'
+
     workflow-scm:
       scm:
         basic-scm:
