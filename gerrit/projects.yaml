@@ -251,6 +251,7 @@
 -
   project: clusters/kubernetes/env-01
   description: Configuration for env-01 k8s cluster for MCP CI
+  upstream: https://gerrit.mcp.mirantis.net/clusters/kubernetes/env-01
   acl-config: acls/mcp-ci/mcp-ci.project-config.config
 
 -
@@ -518,6 +519,7 @@
 -
   project: mcp-ci/ansible-k8s-base
   description: Ansible playbooks for basic configuration of operating system before k8s deployment
+  upstream: https://gerrit.mcp.mirantis.net/mcp-ci/ansible-k8s-base
   acl-config: acls/mcp-ci/mcp-ci.project-config.config
 
 -
