@@ -1,7 +1,7 @@
 gitTools = new com.mirantis.mcp.Git()
 ssl = new com.mirantis.mk.ssl()
 common = new com.mirantis.mk.common()
-sshCredentialsId = env.CREDENTIALS ?: 'deployments-key'
+sshCredentialsId = env.CREDENTIALS ?: 'mcp-ci-k8s-deployment'
 def Boolean TEST_MODE = Boolean.parseBoolean(env.TEST_MODE)
 def String KARGO_REPO = 'kubernetes/kargo'
 def String FUEL_CCP_INSTALLER_REPO = 'ccp/fuel-ccp-installer'

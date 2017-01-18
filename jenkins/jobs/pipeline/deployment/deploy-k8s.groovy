@@ -1,7 +1,7 @@
 gitTools = new com.mirantis.mcp.Git()
 ssl = new com.mirantis.mk.ssl()
 common = new com.mirantis.mk.common()
-sshCredentialsId = env.CREDENTIALS ?: 'deployments-key'
+sshCredentialsId = env.CREDENTIALS ?: 'mcp-ci-k8s-deployment'
 def String KARGO_REPO = 'kubernetes/kargo'
 def String KARGO_COMMIT = env.KARGO_COMMIT ?: 'master'
 def String CLUSTER_NAME=env.CLUSTER_NAME

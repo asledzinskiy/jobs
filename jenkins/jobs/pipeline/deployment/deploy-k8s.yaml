@@ -11,8 +11,8 @@
           description: 'Specify label to run job on specific slave'
       - string:
           name: CREDENTIALS
-          default: deployments-key
-          description: 'Ssh credentials for nodes access. Should exist in Jenkins. Used when TEST_MODE is false'
+          default: mcp-ci-k8s-deployment
+          description: 'Ssh credentials for nodes access. Should exist in Jenkins'
       - string:
           name: CLUSTER_NAME
           default: '{cluster}'
