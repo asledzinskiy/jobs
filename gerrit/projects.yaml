@@ -20,9 +20,19 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: ccp/fuel-ccp-aodh
+  description: Fuel CCP - AODH deployment
+  acl-config: acls/ccp/ccp.config
+
+-
   project: ccp/fuel-ccp-artifactory
   description: Fuel CCP - Artifcatory deployment
   acl-config: acls/mcp-ci/mcp-cicd-installer.config
+
+-
+  project: ccp/fuel-ccp-ceilometer
+  description: Fuel CCP - Ceilometer deployment
+  acl-config: acls/ccp/ccp.config
 
 -
   project: ccp/fuel-ccp-ceph
