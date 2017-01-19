@@ -38,7 +38,8 @@ def buildJnlpContainers(){
 
       stage ('Build jnlp slave'){
         dir ('jnlp-slave'){
-          sh "docker build -t ${dockerRepository}/${jnlpSlaveImageName}:${imageTag} ."
+          sh "docker rmi -f ${dockerRepository}/${jnlpSlaveImageName} || true"
+          sh "docker build --build-arg JENKINS_MASTER=${env.JENKINS_URL} -t ${dockerRepository}/${jnlpSlaveImageName}:${imageTag} ."
         }
 
       }
@@ -51,8 +52,11 @@ def buildJnlpContainers(){
                                              docker_dev_repo)
       } // publishing artifacts
 
+      //cleanup
+      sh "docker rmi -f ${dockerRepository}/${jnlpSlaveImageName}:${imageTag} || true"
+
       currentBuild.description = """
-        <b>jnlp-slave</b>: ${nodeImg}:${imageTag}<br>
+        <b>jnlp-slave</b>: ${dockerRepository}/${jnlpSlaveImageName}:${imageTag}<br>
         """
 
     }
