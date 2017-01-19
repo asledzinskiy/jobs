@@ -1,7 +1,7 @@
 git = new com.mirantis.mcp.Git()
-common = new com.mirantis.mcp-qa.Common()
-testRunner = new com.mirantis.mcp-qa.RunTest()
-env = new com.mirantis.mcp-qa.EnvActions()
+common = new com.mirantis.mcp_qa.Common()
+testRunner = new com.mirantis.mcp_qa.RunTest()
+env = new com.mirantis.mcp_qa.EnvActions()
 
 node('system-test') {
     def gerritHost = env.GERRIT_HOST
