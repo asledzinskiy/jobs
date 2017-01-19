@@ -17,7 +17,35 @@
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: 'master'
+              forbidden-file-paths:
+                - compare-type: ANT
+                  pattern: '**/jnlp-slave/**'
           custom-url: '* $JOB_NAME $BUILD_URL'
+
+- job-template:
+    name: mcp-build-jnlp-slave-image-merge-pipeline
+    description: |
+      Promote image for Jenkins jnlp slave
+    project-type: workflow
+    concurrent: true
+    dsl:
+      !include-raw-escape: jnlp-slave-image.groovy
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: ANT
+              project-pattern: 'mcp-ci/mcp-base-slave-image'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: 'master'
+              file-paths:
+                - compare-type: ANT
+                  pattern: '**/jnlp-slave/**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
 
 - job-template:
     name: mcp-build-{mcp-project}-slave-image-merge-pipeline

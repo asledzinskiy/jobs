@@ -19,6 +19,8 @@
     jobs:
       - mcp-build-base-slave-image-test-pipeline
       - mcp-build-base-slave-image-merge-pipeline
+      - mcp-build-jnlp-slave-image-test-pipeline
+      - mcp-build-jnlp-slave-image-merge-pipeline
       - mcp-build-{mcp-project}-slave-image-test-pipeline
       - mcp-build-{mcp-project}-slave-image-merge-pipeline
       - mcp-build-debian-base
