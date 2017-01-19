@@ -6,9 +6,28 @@
 
     parameters:
       - string:
+          name: KUBERNETES_URL
+          description: 'URL for kubernetes api like https://host:443/'
+
+      - string:
+          name: CREDENTIALS_ID
+          default: 'kubernetes-api'
+          description: 'Credentials for k8s api'
+
+      - string:
           name: DOCKER_REGISTRY
           default: '{docker-dev-virtual}'
           description: 'Docker registry for binaries and images'
+
+      - string:
+          name: REGISTRY_NAMESPACE
+          default: 'mirantis/ccp/9.0/mitaka'
+          description: 'Registry namespace'
+
+      - bool:
+          name: CLEANUP_ENV
+          default: true
+          description: 'Cleanup env after deployment'
 
     workflow-scm:
       scm:
