@@ -1,0 +1,31 @@
+- job-template:
+    name: ccp-cicd-bvt
+    description: |
+      Fuel CCP CI-CD BVT job
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-prod-virtual}'
+          description: 'Docker registry for docker images'
+      - string:
+          name: KUBERNETES_URL
+          description: 'URL for kubernetes api like https://host:443/'
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+          desription: 'Gerrit host'
+
+      - mcp-configuration-params:
+          gerrit-proto: 'ssh'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+          gerrit-credential-id: 'mcp-ci-gerrit'
+          gerrit-repo-ns: 'clusters/mcp/ccp-cicd'
+
+      - ccp-configuration-params:
+          conf-entrypoint: 'ccp-config/ccp.yaml'
+
+    dsl:
+      !include-raw-escape: ccp-cicd-pipeline.groovy

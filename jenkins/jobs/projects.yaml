@@ -220,6 +220,7 @@
           ccp-gate-test:
             - linters
             - validate
+      - ccp-cicd-bvt
       - 'ccp-bvt-{bvt-type}':
           bvt-type:
             - mitaka:
