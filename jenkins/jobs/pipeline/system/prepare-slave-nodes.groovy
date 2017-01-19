@@ -77,6 +77,4 @@ node('tools') {
     echo "Failed: ${err}"
     currentBuild.result = 'FAILURE'
   }
-  finally {
-  }
 }

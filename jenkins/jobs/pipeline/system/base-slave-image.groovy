@@ -1,5 +1,3 @@
-import java.net.URI
-
 docker_dev_repo = "docker-dev-local"
 docker_prod_repo = "docker-prod-local"
 namespace = 'mirantis/jenkins-slave-images'
