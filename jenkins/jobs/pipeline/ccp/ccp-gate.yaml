@@ -1,0 +1,26 @@
+- job-template:
+    name: 'gate-fuel-ccp-{ccp-gate-test}'
+    description: |
+      CCP gate tests
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: TEST_TYPE
+          default: '{ccp-gate-test}'
+          description: 'Gate test to execute'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: REG_EXP
+              project-pattern: ccp/fuel-ccp-(jenkins|artifactory|gerrit)
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    dsl:
+      !include-raw-escape: ccp-gate.groovy

@@ -209,6 +209,10 @@
           timer: '@midnight'
       - ccp-tempest-test
       - ccp-docker-deploy
+      - 'gate-fuel-ccp-{ccp-gate-test}':
+          ccp-gate-test:
+            - linters
+            - validate
 
 - project:
     name: mcp-ci-infra
