@@ -20,12 +20,22 @@
       - string:
           name: OS_CREDENTIAL_ID
           default: 'mcp-openstack-reader'
-          description: 'Gerrit credential id'
+          description: 'OS Gerrit credential id'
 
       - string:
           name: OS_BRANCH
           default: '9.0/mitaka'
           description: 'Openstack branch'
+
+      - mcp-configuration-params:
+          gerrit-proto: 'ssh'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+          gerrit-credential-id: 'mcp-ci-gerrit'
+          gerrit-repo-ns: 'clusters/mcp/'
+
+      - ccp-configuration-params:
+          conf-entrypoint: 'ccp-config/ccp.yaml'
 
     triggers:
       - timed: '{timer}'

@@ -255,6 +255,11 @@
   acl-config: acls/mcp-ci/mcp-ci.project-config.config
 
 -
+  project: clusters/mcp/demo-0
+  description: Configuration for mcp demo environment
+  acl-config: acls/ccp/ccp-dev.config
+
+-
   project: contrail/contrail-build
   description: contrail-build
   upstream: git://github.com/Juniper/contrail-build.git

@@ -46,6 +46,26 @@
         default: 'mcp'
 
 - parameter:
+    name: mcp-configuration-params
+    parameters:
+    - string:
+        name: CONF_GERRIT_URL
+        default: '{gerrit-proto}://{gerrit-host}:{gerrit-port}/{gerrit-repo-ns}'
+        description: 'Configuration-gerrit credential id'
+    - string:
+        name: CONF_GERRIT_CREDENTIAL_ID
+        default: '{gerrit-credential-id}'
+        description: 'Repository namespace'
+
+- parameter:
+    name: ccp-configuration-params
+    parameters:
+    - string:
+        name: CONF_ENTRYPOINT
+        default: '{conf-entrypoint}'
+        description: 'Path to ccp.yaml'
+
+- parameter:
     name: systest-params
     parameters:
     - string:
@@ -178,6 +198,7 @@
     - string:
         name: SOURCE_CREDENTIALS
         default: '{source-credentials}'
+
 
 - parameter:
     name: tcp-common-params

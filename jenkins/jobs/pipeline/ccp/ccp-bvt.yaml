@@ -14,6 +14,16 @@
           default: 'kubernetes-api'
           description: 'Credentials for k8s api'
 
+      - mcp-configuration-params:
+          gerrit-proto: 'ssh'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+          gerrit-credential-id: 'mcp-ci-gerrit'
+          gerrit-repo-ns: 'clusters/mcp/'
+
+      - ccp-configuration-params:
+          conf-entrypoint: 'ccp-config/ccp.yaml'
+
     workflow-scm:
       scm:
         basic-scm:
