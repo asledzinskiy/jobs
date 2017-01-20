@@ -6,6 +6,7 @@ artifactory = new com.mirantis.mcp.MCPArtifactory()
 artifactoryServer = Artifactory.server("mcp-ci")
 artifactory_url = artifactoryServer.getUrl()
 common = new com.mirantis.mcp.Common()
+gitTools = new com.mirantis.mcp.Git()
 buildInfo = Artifactory.newBuildInfo()
 docker_registry = env.DOCKER_REGISTRY
 base_slave_image = env.BASE_SLAVE_IMAGE
@@ -29,14 +30,14 @@ def build_artifacts (Boolean manual = false) {
             def gerrit_host = env.GERRIT_HOST
             deleteDir()
             if ( manual ) {
-                gitSSHCheckout ([
+                gitTools.gitSSHCheckout ([
                     credentialsId : "mcp-ci-gerrit",
                     branch : "master",
                     host : "${gerrit_host}",
                     project : "${mcp_project}-ci/${mcp_project}-slave-image"
                 ])
             } else {
-                gerritPatchsetCheckout ([
+                gitTools.gerritPatchsetCheckout ([
                     credentialsId : "mcp-ci-gerrit"
                 ])
             }
