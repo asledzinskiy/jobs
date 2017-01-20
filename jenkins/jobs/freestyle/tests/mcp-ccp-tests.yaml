@@ -54,7 +54,7 @@
           weight: '{weight}'
       - throttle:
           categories:
-            - ccp-tests
+            - one-per-node
           max-per-node: 1
           option: category
 

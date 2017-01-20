@@ -6,7 +6,7 @@
     properties:
       - throttle:
           categories:
-            - calico-gate
+            - one-per-cluster
           max-total: 1
           option: category
     project-type: workflow
@@ -43,7 +43,7 @@
     properties:
       - throttle:
           categories:
-            - calico-gate
+            - one-per-cluster
           max-total: 1
           option: category
     project-type: workflow
@@ -79,7 +79,7 @@
     properties:
       - throttle:
           categories:
-            - calico-gate
+            - one-per-cluster
           max-total: 1
           option: category
     project-type: workflow
@@ -115,7 +115,7 @@
     properties:
       - throttle:
           categories:
-            - calico-gate
+            - one-per-cluster
           max-total: 1
           option: category
     project-type: workflow
@@ -151,7 +151,7 @@
     properties:
       - throttle:
           categories:
-            - calico-gate
+            - one-per-cluster
           max-total: 1
           option: category
     project-type: workflow
@@ -187,7 +187,7 @@
     properties:
       - throttle:
           categories:
-            - calico-gate
+            - one-per-cluster
           max-total: 1
           option: category
     project-type: workflow
@@ -225,7 +225,7 @@
     properties:
       - throttle:
           categories:
-            - calico-gate
+            - one-per-cluster
           max-total: 1
           option: category
     project-type: workflow
@@ -262,7 +262,7 @@
     properties:
       - throttle:
           categories:
-            - calico-gate
+            - one-per-cluster
           max-total: 1
           option: category
     project-type: workflow
