@@ -59,6 +59,16 @@
         description: Delete Heat stack after job finishes
         default: '1'
 
+- parameter:
+    name: test-image-params
+    parameters:
+    - string:
+        name: K8S_API_SERVER
+        default: 'http://127.0.0.1:8080'
+    - string:
+        name: CONFORMANCE_IMAGE
+        default: 'docker-dev-virtual.docker.mirantis.net/mirantis/kubernetes/k8s-conformance:v1.5.1-3_1482332392819'
+
 - job-template:
     name: mk-maas-deploy-pipeline
     description: |
@@ -102,6 +112,9 @@
         HEAT_STACK_ENVIRONMENT: 'tcpisek'
         HEAT_STACK_ZONE: 'mirantis-zone-qa'
         HEAT_STACK_PUBLIC_NET: 'mirantis-private'
+    - test-image-params:
+        K8S_API_SERVER: 'http://127.0.0.1:8080'
+        CONFORMANCE_IMAGE: 'docker-dev-virtual.docker.mirantis.net/mirantis/kubernetes/k8s-conformance:v1.5.1-3_1482332392819'
     workflow-scm:
       scm:
         basic-scm:
