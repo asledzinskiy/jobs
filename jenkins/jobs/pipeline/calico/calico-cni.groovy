@@ -26,61 +26,63 @@ def buildCalicoCNI(){
   node('calico'){
 
     try {
+      dir("${env.WORKSPACE}/cni-plugin"){
+        stage ('Checkout calico-cni'){
+          git.gerritPatchsetCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            withWipeOut : true
+          ])
+        }
 
-      stage ('Checkout calico-cni'){
-        git.gerritPatchsetCheckout ([
-          credentialsId : "mcp-ci-gerrit",
-          withWipeOut : true
-        ])
+
+        // define timestamp
+        def cniBuildId = git.getGitDescribe(true) + "-" + common.getDatetime()
+
+        stage ('Switch to the downstream libcalico-go') {
+          def LIBCALICOGO_PATH = "${env.WORKSPACE}/tmp_libcalico-go"
+          def HOST = env.GERRIT_HOST
+          git.gitSSHCheckout ([
+            credentialsId : "mcp-ci-gerrit",
+            branch : "mcp",
+            host : HOST,
+            project : "projectcalico/libcalico-go",
+            targetDir : "${LIBCALICOGO_PATH}"
+          ])
+          // Let's add teardown procedure for cni-plugin
+          sh "make stop-etcd stop-k8s-apiserver stop-kubernetes-master"
+
+          // TODO(apanchenko): replace `sed` by Yaml.load() -> modify map -> Yaml.dump()
+          sh """
+            sed -e '/^- name: .*\\/libcalico-go\$/a \\  repo: file:\\/\\/\\/go\\/src\\/github.com\\/projectcalico\\/libcalico-go\\n  vcs: git' -i.bak glide.lock
+            grep -qP '.*repo:\\s+file:.*libcalico-go' glide.lock || { echo 1>&2 \'Repository (libcalico-go) path was not properly set in glide.lock!'; exit 1; }
+            """
+          sh "LIBCALICOGO_PATH=${LIBCALICOGO_PATH} make vendor"
+        }
+
+        stage ('Unit tests') {
+          sh "make static-checks test-containerized"
+        }
+
+        stage ('Build calico-cni') {
+          CALICO_CNI_IMAGE_REPO="${dockerRepository}/${projectNamespace}/${projectModule}"
+          CALICO_CNI_IMAGE_TAG = cniBuildId
+          //add LABEL to docker file, also with custom one imgTag
+          docker.setDockerfileLabels("./Dockerfile", ["docker.imgTag=${CALICO_CNI_IMAGE_TAG}"])
+          sh "make docker-image"
+          sh "docker tag calico/cni ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG}"
+        }
+
+        stage('Publishing cni artifacts') {
+          artifactory.uploadImageToArtifactory(artifactoryServer,
+                                               dockerRepository,
+                                               "${projectNamespace}/${projectModule}",
+                                               CALICO_CNI_IMAGE_TAG,
+                                               docker_dev_repo,
+                                               buildInfo)
+        } // publishing cni artifacts
+
+        currentBuild.description = "image: ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG}<br>"
       }
-
-      // define timestamp
-      def cniBuildId = git.getGitDescribe(true) + "-" + common.getDatetime()
-
-      stage ('Switch to the downstream libcalico-go') {
-        def LIBCALICOGO_PATH = "${env.WORKSPACE}/tmp_libcalico-go"
-        def HOST = env.GERRIT_HOST
-        git.gitSSHCheckout ([
-          credentialsId : "mcp-ci-gerrit",
-          branch : "mcp",
-          host : HOST,
-          project : "projectcalico/libcalico-go",
-          targetDir : "${LIBCALICOGO_PATH}"
-        ])
-        // Let's add teardown procedure for cni-plugin
-        sh "make stop-etcd stop-k8s-apiserver stop-kubernetes-master"
-
-        // TODO(apanchenko): replace `sed` by Yaml.load() -> modify map -> Yaml.dump()
-        sh """
-          sed -e '/^- name: .*\\/libcalico-go\$/a \\  repo: file:\\/\\/\\/go\\/src\\/github.com\\/projectcalico\\/libcalico-go\\n  vcs: git' -i.bak glide.lock
-          grep -qP '.*repo:\\s+file:.*libcalico-go' glide.lock || { echo 1>&2 \'Repository (libcalico-go) path was not properly set in glide.lock!'; exit 1; }
-          """
-        sh "LIBCALICOGO_PATH=${LIBCALICOGO_PATH} make vendor"
-      }
-
-      stage ('Unit tests') {
-        sh "make static-checks test-containerized"
-      }
-
-      stage ('Build calico-cni') {
-        CALICO_CNI_IMAGE_REPO="${dockerRepository}/${projectNamespace}/${projectModule}"
-        CALICO_CNI_IMAGE_TAG = cniBuildId
-        //add LABEL to docker file, also with custom one imgTag
-        docker.setDockerfileLabels("./Dockerfile", ["docker.imgTag=${CALICO_CNI_IMAGE_TAG}"])
-        sh "make docker-image"
-        sh "docker tag calico/cni ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG}"
-      }
-
-      stage('Publishing cni artifacts') {
-        artifactory.uploadImageToArtifactory(artifactoryServer,
-                                             dockerRepository,
-                                             "${projectNamespace}/${projectModule}",
-                                             CALICO_CNI_IMAGE_TAG,
-                                             docker_dev_repo,
-                                             buildInfo)
-      } // publishing cni artifacts
-
-      currentBuild.description = "image: ${CALICO_CNI_IMAGE_REPO}:${CALICO_CNI_IMAGE_TAG}<br>"
 
       stage ("Run system tests") {
          build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
@@ -100,7 +102,9 @@ def buildCalicoCNI(){
     finally {
       // fix workspace owners
       sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide || true"
-      sh "make stop-etcd stop-k8s-apiserver stop-kubernetes-master"
+      dir("${env.WORKSPACE}/cni-plugin"){
+        sh "make stop-etcd stop-k8s-apiserver stop-kubernetes-master"
+      }
     }
   }
 
