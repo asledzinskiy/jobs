@@ -86,29 +86,24 @@ def buildCalicoContainers(){
             <b>node</b>: ${nodeImg}:${calicoImgTag}<br>
             <b>ctl</b>: ${ctlImg}:${calicoImgTag}<br>
             """
-          stage ("Run system tests") {
-             // build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
-             //  [
-             //      [$class: 'StringParameterValue', name: 'CALICO_NODE_IMAGE_REPO', value: calicoContainersArts["CALICO_NODE_IMAGE_REPO"]],
-             //      [$class: 'StringParameterValue', name: 'CALICOCTL_IMAGE_REPO', value: calicoContainersArts["CALICOCTL_IMAGE_REPO"]],
-             //      [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: calicoImgTag],
-             //      [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
-             //  ]
-             echo "Done"
-          }
-
         }
         catch(err) {
           echo "Failed: ${err}"
           currentBuild.result = 'FAILURE'
         }
-        finally {
-          // fix workspace owners
-          sh "sudo chown -R jenkins:jenkins ${env.WORKSPACE} ${env.HOME}/.glide || true"
-        }
       } // container
     } // node
   } // podTemplate
+
+  stage ("Run system tests") {
+     build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
+      [
+          [$class: 'StringParameterValue', name: 'CALICO_NODE_IMAGE_REPO', value: calicoContainersArts["CALICO_NODE_IMAGE_REPO"]],
+          [$class: 'StringParameterValue', name: 'CALICOCTL_IMAGE_REPO', value: calicoContainersArts["CALICOCTL_IMAGE_REPO"]],
+          [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: calicoImgTag],
+          [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
+      ]
+  }
 
 } // buildCalicoContainers
 
