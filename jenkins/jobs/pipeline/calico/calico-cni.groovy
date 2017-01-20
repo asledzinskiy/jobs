@@ -59,7 +59,7 @@ def buildCalicoCNI(){
       }
 
       stage ('Unit tests') {
-        sh "make static-checks-containerized test-containerized"
+        sh "make static-checks test-containerized"
       }
 
       stage ('Build calico-cni') {
