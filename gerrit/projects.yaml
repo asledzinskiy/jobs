@@ -1,7 +1,7 @@
 -
   project: ccp-ci/ccp-bvt-pipeline
   description: Fuel Containerized Control Plane (CCP) bvt pipeline
-  acl-config: acls/ccp/ccp-dev.config
+  acl-config: acls/mcp-ci/mcp-ci.config
 
 -
   project: ccp-ci/ccp-slave-image
@@ -61,12 +61,12 @@
 -
   project: ccp/fuel-ccp-deploy
   description: Fuel CCP - CCP deployment
-  acl-config: acls/ccp/ccp-dev.config
+  acl-config: acls/mcp-ci/mcp-ci.config
 
 -
   project: ccp/fuel-ccp-docker
   description: Fuel CCP - CCP image builder
-  acl-config: acls/ccp/ccp-dev.config
+  acl-config: acls/mcp-ci/mcp-ci.config
 
 -
   project: ccp/fuel-ccp-entrypoint
@@ -222,7 +222,7 @@
 -
   project: ccp/fuel-ccp-tempest-pipeline
   description: Fuel CCP - Tempest against Openstack
-  acl-config: acls/ccp/ccp-dev.config
+  acl-config: acls/mcp-ci/mcp-ci.config
 
 -
   project: ccp/fuel-ccp-tests
@@ -257,12 +257,12 @@
 -
   project: clusters/mcp/ccp-ci
   description: Configuration for ccp ci environment
-  acl-config: acls/ccp/ccp-dev.config
+  acl-config: acls/ccp/ccp.config
 
 -
   project: clusters/mcp/demo-0
   description: Configuration for mcp demo environment
-  acl-config: acls/ccp/ccp-dev.config
+  acl-config: acls/ccp/ccp.config
 
 -
   project: contrail/contrail-build
