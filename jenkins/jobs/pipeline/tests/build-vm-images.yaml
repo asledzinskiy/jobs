@@ -10,6 +10,10 @@
       - string:
           name: DISTRO
           default: 'ubuntu-16.04.1-server-amd64'
+    properties:
+    - build-discarder:
+        days-to-keep: 7
+        num-to-keep: 50
     triggers:
       - gerrit:
           trigger-on:

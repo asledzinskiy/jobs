@@ -12,6 +12,11 @@
           name: GERRIT_HOST
           default: '{gerrit-host}'
 
+    properties:
+    - build-discarder:
+        days-to-keep: 7
+        num-to-keep: 50
+
     triggers:
       - timed: 'H * * * *'
       - gerrit:

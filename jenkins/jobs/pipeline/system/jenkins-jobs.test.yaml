@@ -16,6 +16,11 @@
           default: 'HEAD~1'
           description: 'Base commit for checking diffs. Defaults to HEAD of jenkins-jobs master branch.'
 
+    properties:
+    - build-discarder:
+        days-to-keep: 7
+        num-to-keep: 50
+
     triggers:
       - gerrit:
           trigger-on:

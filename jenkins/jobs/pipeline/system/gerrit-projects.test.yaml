@@ -7,6 +7,11 @@
     dsl:
       !include-raw-escape: gerrit-projects.test.groovy
 
+    properties:
+    - build-discarder:
+        days-to-keep: 7
+        num-to-keep: 50
+
     triggers:
       - gerrit:
           trigger-on:

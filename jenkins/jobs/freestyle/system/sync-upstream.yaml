@@ -44,6 +44,10 @@
     triggers:
       - timed: '*/20 * * * *'
 
+    properties:
+      - build-discarder:
+          days-to-keep: 7
+
     publishers:
     - junit:
         keep-long-stdio: false
@@ -97,6 +101,10 @@
           name: PUSH_FORCE
           description: 'Force push during repo(s) sync'
           default: 'false'
+
+    properties:
+      - build-discarder:
+          days-to-keep: 7
 
     scm:
       - git:

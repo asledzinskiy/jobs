@@ -12,6 +12,11 @@
           name: GERRIT_REFSPEC
           default: 'refs/heads/master'
 
+    properties:
+    - build-discarder:
+        days-to-keep: 7
+        num-to-keep: 50
+
     triggers:
       - gerrit:
           trigger-on:

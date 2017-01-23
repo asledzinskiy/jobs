@@ -4,8 +4,8 @@
     description: |
       Creates a python virtual environment for MCP deployment and system tests. Stores additional images.<br><br>
     project-type: workflow
-    logrotate:
-      daysToKeep: 14
+    build-discarder:
+      days-to-keep: 14
     name: mcp-prepare-env
     parameters:
       - bool:
