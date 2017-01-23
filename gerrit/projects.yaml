@@ -260,6 +260,11 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: clusters/mcp/ccp-cicd
+  description: Configuration for ccp cicd environment
+  acl-config: acls/ccp-ci/ccp-ci.project-config.config
+
+-
   project: clusters/mcp/demo-0
   description: Configuration for mcp demo environment
   acl-config: acls/ccp/ccp.config
