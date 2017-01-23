@@ -119,7 +119,6 @@
       - 'fuel-ccp'
       - 'kubernetes'
       - 'mk'
-      - 'salt-formulas'
       - 'tcp'
     jobs:
       - 'sync-upstream-MANUAL'
