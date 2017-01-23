@@ -1,7 +1,7 @@
 git = new com.mirantis.mcp.Git()
 common = new com.mirantis.mcp_qa.Common()
 testRunner = new com.mirantis.mcp_qa.RunTest()
-env = new com.mirantis.mcp_qa.EnvActions()
+environment = new com.mirantis.mcp_qa.EnvActions()
 
 node('system-test') {
     def gerritHost = env.GERRIT_HOST
@@ -63,7 +63,7 @@ node('system-test') {
                 }
 
                 stage('prepare environment') {
-                    env.prepareEnv()
+                    environment.prepareEnv()
                     def deployScript = "${env.WORKSPACE}/fuel-ccp-installer/${env.DEPLOY_SCRIPT_REL_PATH}"
                     jobSetParameters.add("DEPLOY_SCRIPT=${deployScript}")
                 }
@@ -94,7 +94,7 @@ node('system-test') {
         echo x.getMessage()
     }
     finally {
-        env.destroyEnv()
+        environment.destroyEnv()
         sh "rm -rf ${projectRepoDir}"
         archiveArtifacts allowEmptyArchive: true, artifacts: '**/nosetests.xml,logs/*,tests.log,*.txt', excludes: null
         junit keepLongStdio: false, testResults: '**/nosetests.xml'
