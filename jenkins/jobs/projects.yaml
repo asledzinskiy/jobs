@@ -265,7 +265,19 @@
     image_link: 'http://share01-scc.ng.mirantis.net/images.lst'
     image_path: '/home/jenkins/images/ubuntu-1604-server.qcow2'
     jobs:
-      - mcp.ccp.smoke-pipeline
+      - mcp.ccp.smoke-pipeline.{os_branch}:
+         os_branch: newton
+      - mcp.ccp.smoke-pipeline.{os_branch}:
+         os_branch: mitaka
+         images-namespace: "mirantis/ccp/9.0/mitaka"
+      - mcp.ccp.pipeline.{test-group}:
+         test-group: galera
+         os-mark: prepare_galera
+      - mcp.ccp.pipeline.{test-group}:
+         test-group:
+          - rabbitmq
+          - ccp_lcm
+         os-mark: prepare_os
 
 - project:
     name: 'mk-k8s'

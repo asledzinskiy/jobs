@@ -1,11 +1,11 @@
 - job-template:
-    name: 'mcp.ccp.smoke-pipeline.{os_branch}'
+    name: 'mcp.ccp.pipeline.{test-group}'
     description: 'Run ccp test '
     project-type: workflow
     dsl:
-      !include-raw-escape: smoke.groovy
+      !include-raw-escape: openstack.groovy
     test-expression: 'none'
-    conf-file-name: 'default.yaml'
+    conf-file-name: 'five_slaves.yaml'
     images-namespace: 'mirantis/ccp/stable/newton'
     concurrent: true
     timeout: '480'
@@ -13,9 +13,11 @@
     post-script: |
         source "$VENV_PATH/bin/activate"
         dos.py destroy "$ENV_NAME" || true
-    build-discarder:
-      days-to-keep: 30
-      num-to-keep: 50
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
 
     parameters:
     - string:
@@ -33,6 +35,14 @@
     - string:
         name: ENV_NAME
         default: "$JOB_NAME.$BUILD_NUMBER"
+    - string:
+        name: OS_MARK
+        default: '{os-mark}'
+        description: 'Test group to prepare OpenStack cluster'
+    - string:
+        name: TEST_MARK
+        default: '{test-group}'
+        description: 'Test group to validate OpenStack cluster'
     - string:
         name: IMAGES_NAMESPACE
         default: '{images-namespace}'

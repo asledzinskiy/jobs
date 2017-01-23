@@ -115,7 +115,12 @@ node('system-test') {
                 }
 
                 stage('deploy OpenStack') {
-                    def group = "-m smoke"
+                    def group = "-m ${env.OS_MARK}"
+                    testRunner.runTest(group, jobSetParameters)
+                }
+
+                stage('OpenStack cluster tests') {
+                    def group = "-m ${env.TEST_MARK}"
                     testRunner.runTest(group, jobSetParameters)
                 }
             }
