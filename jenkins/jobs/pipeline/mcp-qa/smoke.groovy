@@ -7,7 +7,8 @@ node('system-test') {
     def gerritHost = env.GERRIT_HOST
     def jobTimeout = 480
     def timestamp = System.currentTimeMillis().toString()
-    def projectRepoDir = "/tmp/project-config-${timestamp}"
+    def workspace = "${env.WORKSPACE}"
+    def projectRepoDir = "${workspace}/project-config-${timestamp}"
     try{
         git.gitSSHCheckout ([
           credentialsId : 'mcp-ci-gerrit',
@@ -18,11 +19,10 @@ node('system-test') {
         ])
         timeout(jobTimeout) {
             stage('download mcp systest image') {
-                sh "${projectRepoDir}/jenkins/jobs/builders/get-systest-image.sh"
+                sh "/bin/bash ${projectRepoDir}/jenkins/jobs/builders/get-systest-image.sh"
             }
             def additionalParameters = []
             def jobSetParameters = []
-            def workspace = "${env.WORKSPACE}"
 
             if (env.ADDITIONAL_PARAMETERS) {
                 additionalParameters = "${env.ADDITIONAL_PARAMETERS}".split('\n')
