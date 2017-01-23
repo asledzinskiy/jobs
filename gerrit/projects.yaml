@@ -301,6 +301,12 @@
   acl-config: acls/contrail/contrail.config
 
 -
+  project: contrail/contrail-kubernetes
+  description: contrail-kubernetes
+  upstream: git://github.com/Juniper/contrail-kubernetes.git
+  acl-config: acls/contrail/contrail.config
+
+-
   project: contrail/contrail-neutron-plugin
   description: contrail-neutron-plugin
   upstream: git://github.com/Juniper/contrail-neutron-plugin.git
