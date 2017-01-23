@@ -198,6 +198,7 @@
       - ceph-decapod-images-test-pipeline
       - ceph-whale-checks-pipeline
       - ceph-whale-test-pipeline
+      - ceph-decapod-deploy-cluster
 
 - project:
     name: ccp

@@ -1,0 +1,46 @@
+- job-template:
+    name: ceph-decapod-deploy-cluster
+    description: Deploy Ceph cluster with Decapod
+    project-type: workflow
+    concurrent: false
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: DECAPOD_BRANCH
+          default: master
+          description: Decapod branch to checkout
+      - string:
+          name: DECAPOD_DOCKER_TAG
+          default: latest
+          description: Decapod docker images tag to use
+      - string:
+          name: DECAPOD_HTTP_PORT
+          default: '9999'
+          description: HTTP port where Decapod has to bind.
+      - string:
+          name: DECAPOD_HTTPS_PORT
+          default: '10000'
+          description: HTTPS port where Decapod has to bind.
+      - string:
+          name: DECAPOD_SSH_PRIVATE_KEY
+          default: ./containerization/files/devconfigs/ansible_ssh_keyfile.pem
+          description: Path to SSH private key on hosts.
+      - string:
+          name: DOCKER_REGISTRY
+          default: "{docker-prod-virtual}"
+          description: Docker registry for test images
+      - string:
+          name: OS_AUTH_URL
+          default: "https://horizon.mcp.mirantis.net:5000/v2.0"
+          description: Authentication URL for CI/CD OpenStack installation
+      - string:
+          name: OS_TENANT_NAME
+          default: "jenkins-ci"
+          description: Tenant name for CI/CD OpenStack installation
+    dsl:
+      !include-raw-escape: ceph-decapod-deploy-cluster.groovy
+    properties:
+      - authorization-allow-group:
+          group_name: 'ceph-core'
