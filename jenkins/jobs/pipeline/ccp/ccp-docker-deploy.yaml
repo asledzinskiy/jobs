@@ -6,6 +6,11 @@
 
     parameters:
       - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for binaries and images'
+
+      - string:
           name: KUBERNETES_URL
           description: 'URL for kubernetes api like https://host:443/'
 
