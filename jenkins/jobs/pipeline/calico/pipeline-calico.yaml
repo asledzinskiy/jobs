@@ -173,38 +173,6 @@
                   branch-pattern: 'mcp'
           custom-url: '* $JOB_NAME $BUILD_URL'
 
-#FIXME(skulanov) Remove in a week after complete migration
-- job-template:
-    disabled: true
-    name: calico-containers-pipeline
-    project-name: calico-pipeline
-    description: |
-      Pipeline for calico-containers project
-    project-type: workflow
-    dsl:
-      !include-raw-escape: calico-containers.groovy
-
-    parameters:
-      - string:
-          name: GERRIT_HOST
-          default: '{gerrit-host}'
-      - string:
-          name: DOCKER_REGISTRY
-          default: '{docker-dev-virtual}'
-
-    triggers:
-      - gerrit:
-          trigger-on:
-            - patchset-created-event
-          projects:
-            - project-compare-type: PLAIN
-              project-pattern: projectcalico/calico-containers
-              branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'mcp'
-          custom-url: '* $JOB_NAME $BUILD_URL'
-#FIXME
-
 - job-template:
     name: calicoctl-pipeline
     project-name: calico-pipeline

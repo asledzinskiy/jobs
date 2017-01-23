@@ -94,7 +94,6 @@
       - calico-bird-pipeline
       - calico-cni-pipeline
       - calico-confd-pipeline
-      - calico-containers-pipeline
       - calico-felix-pipeline
       - calico-libcalico-go-pipeline
       - calico-libcalico-pipeline
@@ -107,7 +106,6 @@
       - calico-bird-merge-pipeline
       - calico-cni-merge-pipeline
       - calico-confd-merge-pipeline
-      - calico-containers-merge-pipeline
       - calico-felix-merge-pipeline
       - calico-libcalico-go-merge-pipeline
       - calico-libcalico-merge-pipeline
