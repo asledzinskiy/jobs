@@ -19,13 +19,8 @@
           default: true
           description: 'Cleanup env after deployment'
 
-      - string:
-          name: REGISTRY_NAMESPACE
-          default: 'mirantis/ccp/9.0/mitaka'
-          description: 'Registry namespace'
-
       - mcp-configuration-params:
-          gerrit-proto: 'ssh://'
+          gerrit-proto: 'ssh'
           gerrit-host: '{gerrit-host}'
           gerrit-port: '{gerrit-port}'
           gerrit-credential-id: 'mcp-ci-gerrit'

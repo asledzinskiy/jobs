@@ -22,11 +22,6 @@
           default: 'mcp-openstack-reader'
           description: 'OS Gerrit credential id'
 
-      - string:
-          name: OS_BRANCH
-          default: '9.0/mitaka'
-          description: 'Openstack branch'
-
       - mcp-configuration-params:
           gerrit-proto: 'ssh'
           gerrit-host: '{gerrit-host}'
