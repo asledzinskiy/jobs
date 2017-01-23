@@ -8,17 +8,12 @@ node('tools') {
     def INVENTORY = "${env.WORKSPACE}/conf/slave_nodes_inventory"
     def HOSTS = "${env.HOSTS_LIST}"
     def USER = "${env.USERNAME}"
-    def BRANCH = "${env.BRANCH_NAME}"
     def HOSTNAME = sh(returnStdout: true, script: "hostname").trim()
     ArrayList HOST = new ArrayList(Arrays.asList(HOSTS.split("\\s* \\s*")));
 
     stage ('Code checkout') {
-      def GERRIT_HOST = "${env.GERRIT_HOST}"
-      gitTools.gitSSHCheckout ([
+      gitTools.gerritPatchsetCheckout ([
         credentialsId : "mcp-ci-gerrit",
-        branch : BRANCH,
-        host : GERRIT_HOST,
-        project : "mcp-ci/mcp-cicd-installer"
       ])
     }
 
