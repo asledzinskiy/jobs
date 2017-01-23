@@ -26,22 +26,22 @@ if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
 
 def buildCalicoContainers(){
 
-podTemplate(label: label,
-  containers: [
-      containerTemplate(
-          name: 'jnlp',
-          image: jnlpSlaveImg,
-          args: '${computer.jnlpmac} ${computer.name}'
-      ),
-      containerTemplate(
-          name: 'calico-slave',
-          image: jenkinsSlaveImg,
-          alwaysPullImage: false,
-          ttyEnabled: true,
-          privileged: true
-      )
-  ],
-  ) {
+  podTemplate(label: label,
+    containers: [
+        containerTemplate(
+            name: 'jnlp',
+            image: jnlpSlaveImg,
+            args: '${computer.jnlpmac} ${computer.name}'
+        ),
+        containerTemplate(
+            name: 'calico-slave',
+            image: jenkinsSlaveImg,
+            alwaysPullImage: false,
+            ttyEnabled: true,
+            privileged: true
+        )
+    ],
+    ) {
     node(label){
       container('calico-slave') {
         try {
@@ -117,15 +117,14 @@ def promote_artifacts () {
   podTemplate(label: label,
     containers: [
         containerTemplate(
-            name: 'promotion-slave',
-            image: 'sandbox-docker-dev-local.docker.mirantis.net/skulanov/jenkins-slave-images/promotion-slave:1',
-            alwaysPullImage: false,
-            ttyEnabled: true,
-            privileged: false)
+            name: 'jnlp',
+            image: jnlpSlaveImg,
+            args: '${computer.jnlpmac} ${computer.name}'
+        )
     ],
     ) {
     node(label) {
-      container('promotion-slave') {
+      container('jnlp') {
         stage('promote') {
 
           // search calicoctl artifacts
