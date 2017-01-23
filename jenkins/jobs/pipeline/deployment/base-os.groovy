@@ -2,7 +2,6 @@ gitTools = new com.mirantis.mcp.Git()
 ssl = new com.mirantis.mk.ssl()
 common = new com.mirantis.mk.common()
 sshCredentialsId = env.CREDENTIALS ?: 'mcp-ci-k8s-deployment'
-def Boolean TEST_MODE = Boolean.parseBoolean(env.TEST_MODE)
 def String KARGO_REPO = 'kubernetes/kargo'
 def String FUEL_CCP_INSTALLER_REPO = 'ccp/fuel-ccp-installer'
 def String ANSIBLE_K8S_BASE_REPO = 'mcp-ci/ansible-k8s-base'
@@ -22,7 +21,7 @@ def execAnsiblePlaybook(String playbookPath,
     ssl.prepareSshAgentKey(sshCredentialsId)
     def username = common.getSshCredentials(sshCredentialsId).username
 
-    if ( TEST_MODE ) {
+    if ( Boolean.parseBoolean(env.TEST_MODE) ) {
         // then let's create deployment user
         writeFile file: 'deployment_user.yaml', text: """\
           k8s_deployment_user: ${username}
