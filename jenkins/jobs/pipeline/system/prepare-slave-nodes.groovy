@@ -1,7 +1,10 @@
 def gitTools = new com.mirantis.mcp.Git()
 node('tools') {
   try {
-
+    def GERRIT_NAME = env.GERRIT_NAME ?: "mcp-ci-gerrit"
+    def GERRIT_PORT = env.GERRIT_PORT ?: "29418"
+    def GERRIT_PROJECT = env.GERRIT_PROJECT ?: "mcp-ci/mcp-cicd-installer"
+    def GERRIT_BRANCH = env.GERRIT_BRANCH ?: "master"
     def TEST_MODE = "True"
     def VENV_PATH = "${env.WORKSPACE}/.tox/mcp-ci"
     def ANSIBLE_HOST_KEY_CHECKING="False"
@@ -11,12 +14,17 @@ node('tools') {
     def HOSTNAME = sh(returnStdout: true, script: "hostname").trim()
     ArrayList HOST = new ArrayList(Arrays.asList(HOSTS.split("\\s* \\s*")));
 
-    stage ('Code checkout') {
-      gitTools.gerritPatchsetCheckout ([
-        credentialsId : "mcp-ci-gerrit",
-      ])
+    withEnv(["GERRIT_NAME=${GERRIT_NAME}",
+             "GERRIT_PORT=${GERRIT_PORT}",
+             "GERRIT_PROJECT=${GERRIT_PROJECT}",
+             "GERRIT_BRANCH=${GERRIT_BRANCH}"
+    ]) {
+      stage ('Code checkout') {
+        gitTools.gerritPatchsetCheckout ([
+          credentialsId : "mcp-ci-gerrit",
+        ])
+      }
     }
-
     stage('Construct the inventory') {
       def str = "[slave-nodes]\n"
       for ( int i = 0; i < HOST.size(); i++ ) {
