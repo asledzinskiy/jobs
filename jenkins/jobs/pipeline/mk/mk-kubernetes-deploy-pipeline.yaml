@@ -42,6 +42,7 @@
     parameters:
     - string:
         name: HEAT_STACK_NAME
+        description: Heat stack name. Will be generated if missing.
     - string:
         name: HEAT_STACK_TEMPLATE
         default: 'mcp_fuel_aio'
@@ -54,10 +55,13 @@
     - string:
         name: HEAT_STACK_PUBLIC_NET
         default: 'mirantis-private'
-    - string:
+    - choice:
         name: HEAT_STACK_DELETE
-        description: Delete Heat stack after job finishes
+        description: Delete Heat stack after job finishes (1 - delete, 0 (or anything else) - keep stack)
         default: '1'
+        choices:
+          - '1'
+          - '0'
 
 - parameter:
     name: test-image-params
@@ -68,6 +72,12 @@
     - string:
         name: CONFORMANCE_IMAGE
         default: 'docker-dev-virtual.docker.mirantis.net/mirantis/kubernetes/k8s-conformance:v1.5.1-3_1482332392819'
+    - choice:
+        name: RUN_TESTS
+        default: '1'
+        choices:
+          - '1'
+          - '0'
 
 - job-template:
     name: mk-maas-deploy-pipeline
