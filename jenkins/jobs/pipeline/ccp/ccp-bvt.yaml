@@ -1,13 +1,20 @@
 - job-template:
-    name: ccp-bvt
+    name: "ccp-bvt-{bvt-type}"
     description: |
       Fuel CCP - CCP bvt
     project-type: workflow
 
     parameters:
       - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for binaries and images'
+
+      - string:
           name: KUBERNETES_URL
           description: 'URL for kubernetes api like https://host:443/'
+          # TODO(sryabin) fix me
+          default: 'https://kube:changeme@mcpsrv012-scc.mcp.mirantis.net'
 
       - string:
           name: CREDENTIALS_ID
@@ -19,10 +26,11 @@
           gerrit-host: '{gerrit-host}'
           gerrit-port: '{gerrit-port}'
           gerrit-credential-id: 'mcp-ci-gerrit'
-          gerrit-repo-ns: 'clusters/mcp/'
+          gerrit-repo-ns: 'clusters/mcp/ccp-ci'
+
 
       - ccp-configuration-params:
-          conf-entrypoint: 'ccp-config/ccp.yaml'
+          conf-entrypoint: "bvt/{bvt-type}.yaml"
 
     workflow-scm:
       scm:
@@ -32,4 +40,3 @@
           gerrit-host: '{gerrit-host}'
           gerrit-port: '{gerrit-port}'
       script-path: Jenkinsfile
-

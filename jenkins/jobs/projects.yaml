@@ -202,7 +202,6 @@
 - project:
     name: ccp
     jobs:
-      - ccp-bvt
       - ccp-docker-build:
           timer: '@midnight'
       - ccp-tempest-test
@@ -211,6 +210,10 @@
           ccp-gate-test:
             - linters
             - validate
+      - 'ccp-bvt-{bvt-type}':
+          bvt-type:
+            - mitaka
+            - newton
 
 - project:
     name: mcp-ci-infra
