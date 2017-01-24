@@ -16,22 +16,28 @@ jenkinsSlaveImg = 'docker-prod-virtual.docker.mirantis.net/mirantis/jenkins-slav
 jnlpSlaveImg = 'docker-prod-virtual.docker.mirantis.net/mirantis/jenkins-slave-images/jnlp-slave:latest'
 
 if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
-  def artifacts = common.runOnKubernetes([
-    function : this.&buildCalicoContainers,
-    jnlpImg  : jnlpSlaveImg,
-    slaveImg : jenkinsSlaveImg
-  ])
-  // run system test
-  node ('calico'){
-    stage ("Run system tests") {
-       build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
-        [
-            [$class: 'StringParameterValue', name: 'CALICO_NODE_IMAGE_REPO', value: artifacts["CALICO_NODE_IMAGE_REPO"]],
-            [$class: 'StringParameterValue', name: 'CALICOCTL_IMAGE_REPO', value: artifacts["CALICOCTL_IMAGE_REPO"]],
-            [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: artifacts["CALICO_VERSION"]],
-            [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
-        ]
+  try {
+    def artifacts = common.runOnKubernetes([
+      function : this.&buildCalicoContainers,
+      jnlpImg  : jnlpSlaveImg,
+      slaveImg : jenkinsSlaveImg
+    ])
+    // run system test
+    node ('calico'){
+      stage ("Run system tests") {
+         build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
+          [
+              [$class: 'StringParameterValue', name: 'CALICO_NODE_IMAGE_REPO', value: artifacts["CALICO_NODE_IMAGE_REPO"]],
+              [$class: 'StringParameterValue', name: 'CALICOCTL_IMAGE_REPO', value: artifacts["CALICOCTL_IMAGE_REPO"]],
+              [$class: 'StringParameterValue', name: 'CALICO_VERSION', value: artifacts["CALICO_VERSION"]],
+              [$class: 'StringParameterValue', name: 'MCP_BRANCH', value: 'mcp'],
+          ]
+      }
     }
+  }
+  catch(err) {
+    echo "Failed: ${err}"
+    currentBuild.result = 'FAILURE'
   }
 
 } else if ( env.GERRIT_EVENT_TYPE == 'change-merged' ) {
