@@ -2,7 +2,7 @@
     name: 'gate-fuel-ccp-{ccp-gate-test}'
     description: |
       CCP gate tests
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:

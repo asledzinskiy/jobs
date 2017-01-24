@@ -1,7 +1,7 @@
 - job-template:
     name: ceph-decapod-frontend-build-ui-image
     description: Build image for UI tests of Decapod
-    project-type: workflow
+    project-type: pipeline
     concurrent: false
     parameters:
       - string:

@@ -2,7 +2,7 @@
     name: mcp-build-base-slave-image-test-pipeline
     description: |
       Build Docker Swarm image for Jenkins Swarm slave
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:
@@ -33,7 +33,7 @@
     name: mcp-build-jnlp-slave-image-test-pipeline
     description: |
       Build Docker image for Jenkins jnlp slave
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:
@@ -64,7 +64,7 @@
     name: mcp-build-{mcp-project}-slave-image-test-pipeline
     description: |
       Build Docker Swarm image for Jenkins Swarm slave for {mcp-project} project
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:

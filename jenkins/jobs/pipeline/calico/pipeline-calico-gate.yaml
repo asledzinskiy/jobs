@@ -9,7 +9,7 @@
             - one-per-cluster
           max-total: 1
           option: category
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-felix.groovy
 
@@ -46,7 +46,7 @@
             - one-per-cluster
           max-total: 1
           option: category
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-confd.groovy
 
@@ -82,7 +82,7 @@
             - one-per-cluster
           max-total: 1
           option: category
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-bird.groovy
 
@@ -118,7 +118,7 @@
             - one-per-cluster
           max-total: 1
           option: category
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-libcalico.groovy
 
@@ -154,7 +154,7 @@
             - one-per-cluster
           max-total: 1
           option: category
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-libcalico-go.groovy
 
@@ -194,7 +194,7 @@
             - one-per-cluster
           max-total: 1
           option: category
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-cni.groovy
 
@@ -230,7 +230,7 @@
             - one-per-cluster
           max-total: 1
           option: category
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calicoctl.groovy
 

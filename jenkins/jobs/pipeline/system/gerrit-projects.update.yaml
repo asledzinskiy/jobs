@@ -3,7 +3,7 @@
     description: |
       Update Gerrit projects after the merge event
 
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: gerrit-projects.update.groovy
 

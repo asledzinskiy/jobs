@@ -1,1 +1,1 @@
--e git+git://github.com/iberezovskiy/jenkins-job-builder@custom#egg=jenkins-job-builder
+-e git+git://github.com/ibelikov/jenkins-job-builder@pipeline#egg=jenkins-job-builder

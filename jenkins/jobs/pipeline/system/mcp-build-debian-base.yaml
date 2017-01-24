@@ -3,7 +3,7 @@
     description: |
       Build debian base container.
     concurrent: false
-    project-type: workflow
+    project-type: pipeline
     parameters:
       - string:
           name: DEBIAN_DOCKER_REGISTRY

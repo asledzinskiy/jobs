@@ -2,7 +2,7 @@
     name: mcp-lint-test
     description: |
       Run ansible lint test for mcp-ci
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     dsl:
       !include-raw-escape: mcp-lint-test.groovy

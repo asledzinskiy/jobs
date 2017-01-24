@@ -2,7 +2,7 @@
     name: 'mcp-test-deploy-k8s-cluster-{cluster}'
     description: |
       Test deployment of Kubernetes Cluster using Kargo
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:

@@ -3,7 +3,7 @@
     description: |
       Job to deploy Jenkins slave configuration on a selected server
     node: tools
-    project-type: workflow
+    project-type: pipeline
     parameters:
       - string:
           name: GERRIT_HOST

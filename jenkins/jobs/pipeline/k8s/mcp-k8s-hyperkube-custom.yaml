@@ -2,7 +2,7 @@
     name: mcp-k8s-hyperkube-custom
     description: |
       Build Kubernetes Hyperkube from git SHA
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:

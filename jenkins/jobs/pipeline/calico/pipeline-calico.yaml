@@ -3,7 +3,7 @@
     project-name: calico-pipeline
     description: |
       Pipeline for calico-felix project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-felix.groovy
 
@@ -33,7 +33,7 @@
     project-name: calico-pipeline
     description: |
       Pipeline for calico-confd project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-confd.groovy
 
@@ -62,7 +62,7 @@
     project-name: calico-pipeline
     description: |
       Pipeline for calico-bird project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-bird.groovy
 
@@ -91,7 +91,7 @@
     project-name: calico-pipeline
     description: |
       Pipeline for libcalico project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-libcalico.groovy
 
@@ -120,7 +120,7 @@
     project-name: calico-pipeline
     description: |
       Pipeline for libcalico-go project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-libcalico-go.groovy
 
@@ -153,7 +153,7 @@
     project-name: calico-pipeline
     description: |
       Pipeline for libcalico-go project with dynamic slaves from k8s
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-libcalico-go.groovy
 
@@ -191,7 +191,7 @@
     project-name: calico-pipeline
     description: |
       Pipeline for calico-cni project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calico-cni.groovy
 
@@ -220,7 +220,7 @@
     project-name: calico-pipeline
     description: |
       Pipeline for calicoctl project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calicoctl.groovy
 
@@ -253,7 +253,7 @@
     project-name: calico-pipeline
     description: |
       Pipeline for calicoctl project with dynamic slaves from k8s
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: calicoctl.groovy
 

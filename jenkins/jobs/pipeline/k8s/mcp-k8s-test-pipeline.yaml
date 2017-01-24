@@ -2,7 +2,7 @@
     name: mcp-k8s-test-pipeline
     description: |
       Kubernetes tests pipeline
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:

@@ -2,7 +2,7 @@
     name: "ccp-bvt-{bvt-type}"
     description: |
       Fuel CCP - CCP bvt
-    project-type: workflow
+    project-type: pipeline
 
     parameters:
       - string:
@@ -47,11 +47,11 @@
       - ccp-configuration-params:
           conf-entrypoint: "bvt/{bvt-type}.yaml"
 
-    workflow-scm:
+    pipeline-scm:
       scm:
-        basic-scm:
-          branch: 'master'
-          project: 'ccp-ci/ccp-bvt-pipeline'
-          gerrit-host: '{gerrit-host}'
-          gerrit-port: '{gerrit-port}'
+        - basic-scm:
+            branch: 'master'
+            project: 'ccp-ci/ccp-bvt-pipeline'
+            gerrit-host: '{gerrit-host}'
+            gerrit-port: '{gerrit-port}'
       script-path: Jenkinsfile

@@ -1,7 +1,7 @@
 - job-template:
     name: 'mcp.ccp.smoke-pipeline.{os_branch}'
     description: 'Run ccp test '
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: smoke.groovy
     test-expression: 'none'

@@ -2,7 +2,7 @@
     name: ccp-tempest-test
     description: |
       Tempest tests to be run against Openstack
-    project-type: workflow
+    project-type: pipeline
 
     parameters:
 
@@ -35,12 +35,12 @@
       - ccp-configuration-params:
           conf-entrypoint: 'ccp-config/ccp.yaml'
 
-    workflow-scm:
+    pipeline-scm:
       scm:
-        basic-scm:
-          branch: 'master'
-          project: 'ccp/fuel-ccp-tempest-pipeline'
-          gerrit-host: '{gerrit-host}'
-          gerrit-port: '{gerrit-port}'
+        - basic-scm:
+            branch: 'master'
+            project: 'ccp/fuel-ccp-tempest-pipeline'
+            gerrit-host: '{gerrit-host}'
+            gerrit-port: '{gerrit-port}'
       script-path: Jenkinsfile
 

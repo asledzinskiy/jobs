@@ -2,7 +2,7 @@
     name: mcp-k8s-merge-pipeline
     description: |
       Kubernetes merge pipeline
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:

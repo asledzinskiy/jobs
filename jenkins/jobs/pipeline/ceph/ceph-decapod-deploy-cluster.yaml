@@ -1,7 +1,7 @@
 - job-template:
     name: ceph-decapod-deploy-cluster
     description: Deploy Ceph cluster with Decapod
-    project-type: workflow
+    project-type: pipeline
     concurrent: false
     parameters:
       - string:

@@ -2,7 +2,7 @@
     name: mcp-k8s-images-pipeline
     description: |
       Kubernetes unit and integration tests images build job
-    project-type: workflow
+    project-type: pipeline
     concurrent: false
     parameters:
       - string:

@@ -2,7 +2,7 @@
     name: mcp-clean-env
     description: |
       Job helper which destroys running environment on a Jenkins slave
-    project-type: workflow
+    project-type: pipeline
     parameters:
       - string:
           name: ACTION

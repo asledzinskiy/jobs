@@ -3,7 +3,7 @@
     project-name: mcp-netchecker-pipeline
     description: |
       Pipeline for mcp-netchecker-agent project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: mcp-netchecker-agent.groovy
     parameters:
@@ -30,7 +30,7 @@
     project-name: mcp-netchecker-pipeline
     description: |
       Pipeline for mcp-netchecker-server project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: mcp-netchecker-server.groovy
     parameters:
@@ -57,7 +57,7 @@
     project-name: mcp-netchecker-pipeline
     description: |
       Merge pipeline for mcp-netchecker-agent project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: mcp-netchecker-agent.groovy
     parameters:
@@ -84,7 +84,7 @@
     project-name: mcp-netchecker-pipeline
     description: |
        Merge pipeline for mcp-netchecker-server project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: mcp-netchecker-server.groovy
     parameters:

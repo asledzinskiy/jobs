@@ -3,7 +3,7 @@
       !include-raw-escape: mcp-prepare-env.groovy
     description: |
       Creates a python virtual environment for MCP deployment and system tests. Stores additional images.<br><br>
-    project-type: workflow
+    project-type: pipeline
     build-discarder:
       days-to-keep: 14
     name: mcp-prepare-env

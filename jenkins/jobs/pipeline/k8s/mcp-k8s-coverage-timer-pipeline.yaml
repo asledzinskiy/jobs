@@ -2,7 +2,7 @@
     name: mcp-k8s-coverage-timer-pipeline
     description: |
       Kubernetes coverage unit tests by timer
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:

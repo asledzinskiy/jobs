@@ -2,7 +2,7 @@
     name: mcp-build-base-slave-image-merge-pipeline
     description: |
       Promote Docker Swarm image for Jenkins Swarm slave
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     dsl:
       !include-raw-escape: base-slave-image.groovy
@@ -26,7 +26,7 @@
     name: mcp-build-jnlp-slave-image-merge-pipeline
     description: |
       Promote image for Jenkins jnlp slave
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     dsl:
       !include-raw-escape: jnlp-slave-image.groovy
@@ -51,7 +51,7 @@
     name: mcp-build-{mcp-project}-slave-image-merge-pipeline
     description: |
       Promote Docker Swarm image for Jenkins Swarm slave for {mcp-project} project
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     dsl:
       !include-raw-escape: slave-image.groovy

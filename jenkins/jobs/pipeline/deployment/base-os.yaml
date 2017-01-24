@@ -2,7 +2,7 @@
     name: '{cluster}-configure-system'
     description: |
       Configure base OS
-    project-type: workflow
+    project-type: pipeline
 
     parameters:
       - bool:

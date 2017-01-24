@@ -1,7 +1,7 @@
 - job-template:
     name: ceph-whale-test-pipeline
     description: Test pipeline for Decapod using Whale
-    project-type: workflow
+    project-type: pipeline
     concurrent: false
     parameters:
       - string:

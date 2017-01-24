@@ -83,7 +83,7 @@
     name: mk-maas-deploy-pipeline
     description: |
       MK MAAS deployment
-    project-type: workflow
+    project-type: pipeline
     concurrent: false
     parameters:
     - heat-template-params:
@@ -96,20 +96,20 @@
         HEAT_STACK_ENVIRONMENT: 'tcpisek'
         HEAT_STACK_ZONE: 'mirantis-zone-qa'
         HEAT_STACK_PUBLIC_NET: 'inet2' #inet/inet2
-    workflow-scm:
+    pipeline-scm:
       scm:
-        basic-scm:
-          branch: 'master'
-          project: 'mk/mk-pipelines'
-          gerrit-host: '{gerrit-host}'
-          gerrit-port: '{gerrit-port}'
+        - basic-scm:
+            branch: 'master'
+            project: 'mk/mk-pipelines'
+            gerrit-host: '{gerrit-host}'
+            gerrit-port: '{gerrit-port}'
       script-path: mk-maas-deploy-pipeline.groovy
 
 - job-template:
     name: 'mk-k8s-{type}-deploy'
     description: |
       MK k8s {type} deployment
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
     - heat-template-params:
@@ -125,13 +125,13 @@
     - test-image-params:
         K8S_API_SERVER: 'http://127.0.0.1:8080'
         CONFORMANCE_IMAGE: 'docker-dev-virtual.docker.mirantis.net/mirantis/kubernetes/k8s-conformance:v1.5.1-3_1482332392819'
-    workflow-scm:
+    pipeline-scm:
       scm:
-        basic-scm:
-          branch: 'master'
-          project: 'mk/mk-pipelines'
-          gerrit-host: '{gerrit-host}'
-          gerrit-port: '{gerrit-port}'
+        - basic-scm:
+            branch: 'master'
+            project: 'mk/mk-pipelines'
+            gerrit-host: '{gerrit-host}'
+            gerrit-port: '{gerrit-port}'
       script-path: mk-k8s-{type}-deploy-pipeline.groovy
     triggers:
       - timed: '@daily'
@@ -140,7 +140,7 @@
     name: 'mk-k8s-cleanup'
     description: |
       MK k8s cleanup job
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
     - openstack-api-params
@@ -149,11 +149,11 @@
         HEAT_STACK_ENVIRONMENT: 'tcpisek'
         HEAT_STACK_ZONE: 'mirantis-zone-qa'
         HEAT_STACK_PUBLIC_NET: 'mirantis-private'
-    workflow-scm:
+    pipeline-scm:
       scm:
-        basic-scm:
-          branch: 'master'
-          project: 'mk/mk-pipelines'
-          gerrit-host: '{gerrit-host}'
-          gerrit-port: '{gerrit-port}'
+        - basic-scm:
+            branch: 'master'
+            project: 'mk/mk-pipelines'
+            gerrit-host: '{gerrit-host}'
+            gerrit-port: '{gerrit-port}'
       script-path: mk-k8s-cleanup-pipeline.groovy

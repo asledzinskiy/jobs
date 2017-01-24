@@ -3,7 +3,7 @@
     description: |
       Containers building and running tests on the devops VM
     node: mcp-ci-tests
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:

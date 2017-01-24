@@ -3,7 +3,7 @@
     description: |
         <h2>Syntax check for Artifactory repositories configuration</h2>
 
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: artifactory-repos.test.groovy
 

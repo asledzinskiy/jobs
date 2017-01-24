@@ -3,7 +3,7 @@
     project-name: mcp-qa-pipeline
     description: |
       Pipeline for mcp-qa project
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: mcp-qa.groovy
     parameters:

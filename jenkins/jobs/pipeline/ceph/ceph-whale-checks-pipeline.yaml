@@ -1,7 +1,7 @@
 - job-template:
     name: ceph-whale-checks-pipeline
     description: Codestyle checkers for Whale
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:

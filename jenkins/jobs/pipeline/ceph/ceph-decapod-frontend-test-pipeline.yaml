@@ -1,7 +1,7 @@
 - job-template:
     name: ceph-decapod-frontend-test-pipeline
     description: Decapod UI tests pipeline
-    project-type: workflow
+    project-type: pipeline
     concurrent: true
     parameters:
       - string:

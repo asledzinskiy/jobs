@@ -3,7 +3,7 @@
     description: 'This job makes syntax check for jeepyb config projects.yml'
     concurrent: true
 
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: gerrit-projects.test.groovy
 

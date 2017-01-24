@@ -1,7 +1,7 @@
 - job-template:
     name: ceph-decapod-images-merge-pipeline
     description: Promote images for Decapod
-    project-type: workflow
+    project-type: pipeline
     concurrent: false
     parameters:
       - string:

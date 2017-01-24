@@ -2,7 +2,7 @@
     name: ccp-docker-deploy
     description: |
       Fuel CCP - CCP deploy
-    project-type: workflow
+    project-type: pipeline
 
     parameters:
       - string:
@@ -39,12 +39,12 @@
       - ccp-configuration-params:
           conf-entrypoint: 'ccp-config/ccp.yaml'
 
-    workflow-scm:
+    pipeline-scm:
       scm:
-        basic-scm:
-          branch: 'master'
-          project: 'ccp/fuel-ccp-deploy'
-          gerrit-host: '{gerrit-host}'
-          gerrit-port: '{gerrit-port}'
+        - basic-scm:
+            branch: 'master'
+            project: 'ccp/fuel-ccp-deploy'
+            gerrit-host: '{gerrit-host}'
+            gerrit-port: '{gerrit-port}'
       script-path: Jenkinsfile
 

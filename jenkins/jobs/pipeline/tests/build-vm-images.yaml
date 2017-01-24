@@ -2,7 +2,7 @@
     name: build-vm-{distro}-images
     description: |
       Build Ubuntu VM qcow2 image
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: build-vm-images.groovy
     concurrent: false

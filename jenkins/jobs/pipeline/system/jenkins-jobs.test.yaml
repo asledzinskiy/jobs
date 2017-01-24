@@ -3,7 +3,7 @@
     description: |
         <h2>Jenkins Job Builder Tests</h2>
 
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: jenkins-jobs.test.groovy
 

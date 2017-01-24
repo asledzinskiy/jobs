@@ -3,7 +3,7 @@
     description: |
       Update jenkins jobs after the merge event
 
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: jenkins-jobs.update.groovy
 

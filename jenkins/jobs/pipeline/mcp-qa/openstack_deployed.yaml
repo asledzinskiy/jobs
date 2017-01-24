@@ -1,7 +1,7 @@
 - job-template:
     name: 'mcp.ccp.pipeline.{test-group}'
     description: 'Run ccp test '
-    project-type: workflow
+    project-type: pipeline
     dsl:
       !include-raw-escape: openstack.groovy
     test-expression: 'none'
