@@ -21,6 +21,16 @@
           default: 'kubernetes-api'
           description: 'Credentials for k8s api'
 
+      - string:
+          name: OS_GERRIT_ENDPOINT
+          default: 'review.fuel-infra.org:29418'
+          description: 'Openstack git endpoint'
+
+      - string:
+          name: OS_CREDENTIAL_ID
+          default: 'mcp-openstack-reader'
+          description: 'OS Gerrit credential id'
+
       - mcp-configuration-params:
           gerrit-proto: 'ssh'
           gerrit-host: '{gerrit-host}'
