@@ -96,6 +96,7 @@
       - calico-confd-pipeline
       - calico-felix-pipeline
       - calico-libcalico-go-pipeline
+      - calico-libcalico-go-test-pipeline
       - calico-libcalico-pipeline
       - calicoctl-pipeline
       - calicoctl-test-pipeline
