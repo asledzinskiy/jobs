@@ -550,6 +550,12 @@
   acl-config: acls/mcp-ci/mcp-ci.gitrepo.config
 
 -
+  project: mcp-ci/jimbo
+  description: Tool to manage Artifactory repositories
+  upstream: https://github.com/ruhe/jimbo.git
+  acl-config: acls/mcp-ci/jimbo.config
+
+-
   project: mcp-ci/mcp-base-slave-image
   description: Base Docker Swarm image for Jenkins Swarm slave
   acl-config: acls/mcp-ci/mcp-ci.project-config.config
