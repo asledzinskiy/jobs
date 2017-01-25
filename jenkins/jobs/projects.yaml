@@ -216,6 +216,7 @@
       - ccp-docker-build
       - ccp-tempest-test
       - ccp-docker-deploy
+      - ccp-deploy-mitaka-to-newton-upgrade
       - 'gate-fuel-ccp-{ccp-gate-test}':
           ccp-gate-test:
             - linters
