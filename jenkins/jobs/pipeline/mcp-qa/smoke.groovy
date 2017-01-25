@@ -118,6 +118,10 @@ node('system-test') {
                     def group = "-m smoke"
                     testRunner.runTest(group, jobSetParameters)
                 }
+
+                if (!((env.KEEP_AFTER == "yes") || (env.KEEP_AFTER == "true"))){
+                    environment.eraseEnv()
+                }
             }
         }
     }
