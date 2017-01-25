@@ -15,4 +15,4 @@
       !include-raw-escape: ceph-decapod-frontend-build-ui-image.groovy
     properties:
       - authorization-allow-group:
-          group_name: 'ceph-core'
+          group_name: 'sarkhipov'

@@ -43,4 +43,4 @@
       !include-raw-escape: ceph-decapod-deploy-cluster.groovy
     properties:
       - authorization-allow-group:
-          group_name: 'ceph-core'
+          group_name: 'sarkhipov'
