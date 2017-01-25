@@ -17,12 +17,21 @@ jnlpSlaveImg = 'docker-prod-virtual.docker.mirantis.net/mirantis/jenkins-slave-i
 
 if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
   try {
-    def artifacts = common.runOnKubernetes([
-      function : this.&buildCalicoContainers,
-      jnlpImg  : jnlpSlaveImg,
-      slaveImg : jenkinsSlaveImg
-    ])
-    // run system test
+    def artifacts = []
+    if (env.RUN_ON_K8S == 'true') {
+      // run job on k8s cluster
+      artifacts = common.runOnKubernetes([
+        function : this.&buildCalicoContainers,
+        jnlpImg  : jnlpSlaveImg,
+        slaveImg : jenkinsSlaveImg
+      ])
+    } else {
+      // run job on HW node with label
+      node ('calico'){
+        artifacts = buildCalicoContainers()
+      }
+    }
+    // run system test on HW node
     node ('calico'){
       stage ("Run system tests") {
          build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:
@@ -41,11 +50,19 @@ if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
   }
 
 } else if ( env.GERRIT_EVENT_TYPE == 'change-merged' ) {
-  // for promotion we need to specify only jnlp image
-  common.runOnKubernetes([
-    function : this.&promoteArtifacts,
-    jnlpImg  : jnlpSlaveImg
-  ])
+  if (env.RUN_ON_K8S == 'true') {
+    // run promotion from slave on k8s
+    // for promotion we need to specify only jnlp image
+    common.runOnKubernetes([
+      function : this.&promoteArtifacts,
+      jnlpImg  : jnlpSlaveImg
+    ])
+  } else {
+    // run job on HW node with calico label
+    node ('calico'){
+      promoteArtifacts()
+    }
+  }
 } else {
   throw new RuntimeException("Job should be triggered only on patchset-created or change-merged events")
 }

@@ -98,7 +98,7 @@
       - calico-libcalico-go-pipeline
       - calico-libcalico-pipeline
       - calicoctl-pipeline
-      - calicoctl-pipeline-k8s
+      - calicoctl-test-pipeline
 
 - project:
     name: calico-merge-pipelines

@@ -180,7 +180,7 @@
       Pipeline for calicoctl project
     project-type: workflow
     dsl:
-      !include-raw-escape: calico-containers.groovy
+      !include-raw-escape: calicoctl.groovy
 
     parameters:
       - string:
@@ -189,6 +189,10 @@
       - string:
           name: DOCKER_REGISTRY
           default: '{docker-dev-virtual}'
+      - string:
+          name: RUN_ON_K8S
+          description: If 'true' then run job on k8s cluster, any other on HW slave
+          default: 'false'
 
     triggers:
       - gerrit:
@@ -203,7 +207,7 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: calicoctl-pipeline-k8s
+    name: calicoctl-test-pipeline
     project-name: calico-pipeline
     description: |
       Pipeline for calicoctl project with dynamic slaves from k8s
@@ -218,6 +222,10 @@
       - string:
           name: DOCKER_REGISTRY
           default: '{docker-dev-virtual}'
+      - string:
+          name: RUN_ON_K8S
+          description: If 'true' then run job on k8s cluster, any other on HW slave
+          default: 'true'
 
     triggers:
       - gerrit:
