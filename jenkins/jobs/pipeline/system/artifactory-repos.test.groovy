@@ -1,7 +1,7 @@
 def ciTools = new com.mirantis.mcp.Common()
 def gitTools = new com.mirantis.mcp.Git()
 
-node('tools') {
+node('verify-tests') {
 
     stage('Code checkout') {
         gitTools.gerritPatchsetCheckout ([

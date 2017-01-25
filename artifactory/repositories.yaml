@@ -1,0 +1,13 @@
+local:
+  - key: _genericRepository-local
+    packageType: generic
+remote:
+  - key: _genericRepository-remote
+    packageType: generic
+    url: http://localhost
+virtual:
+  - key: _genericRepository-virtual
+    packageType: generic
+    repositories:
+      - _genericRepository-local
+      - _genericRepository-remote

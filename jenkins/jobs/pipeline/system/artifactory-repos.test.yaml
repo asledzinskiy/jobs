@@ -31,5 +31,5 @@
                   branch-pattern: '**'
               file-paths:
                 - compare-type: ANT
-                  pattern: '**/artifactory/repositories/**'
+                  pattern: '**/artifactory/repositories.yaml'
           custom-url: '* $JOB_NAME $BUILD_URL'
