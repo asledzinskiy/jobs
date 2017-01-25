@@ -79,4 +79,4 @@
     - ansicolor:
         colormap: xterm
     triggers:
-      - timed: 'H 8,12,16 * * *'
+      - timed: '0 22 * * *'
