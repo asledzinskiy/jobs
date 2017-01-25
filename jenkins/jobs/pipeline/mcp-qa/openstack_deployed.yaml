@@ -47,6 +47,10 @@
         name: IMAGES_NAMESPACE
         default: '{images-namespace}'
         description: "OpenStack branch to deploy from"
+    - string:
+        name: REGISTRY
+        default: "{docker-dev-virtual}"
+        description: 'Registry with CCP component images'
     - systest-params:
         conf-file-name: '{conf-file-name}'
         docker-prod-virtual: '{docker-prod-virtual}'
