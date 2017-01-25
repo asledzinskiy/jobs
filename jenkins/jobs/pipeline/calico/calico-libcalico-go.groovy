@@ -1,5 +1,5 @@
-def gitTools = new com.mirantis.mcp.Git()
-def common = new com.mirantis.mcp.Common()
+gitTools = new com.mirantis.mcp.Git()
+common = new com.mirantis.mcp.Common()
 
 jenkinsSlaveImg = 'docker-prod-virtual.docker.mirantis.net/mirantis/jenkins-slave-images/projectcalico-debian-slave-20161223134732:latest'
 jnlpSlaveImg = 'docker-prod-virtual.docker.mirantis.net/mirantis/jenkins-slave-images/jnlp-slave:latest'
