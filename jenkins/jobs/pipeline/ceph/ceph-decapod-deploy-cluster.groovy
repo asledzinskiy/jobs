@@ -11,7 +11,7 @@ DECAPOD_BRANCH = env.DECAPOD_BRANCH
 DECAPOD_DOCKER_TAG = env.DECAPOD_DOCKER_TAG
 DECAPOD_LOGIN = 'root'
 DECAPOD_PASSWORD = 'root'
-INSTANCE_COUNT = 5 // this is coded in HOT template
+INSTANCE_COUNT = 5 // this is parameter from HOT template
 
 
 node('decapod') {
@@ -35,6 +35,8 @@ node('decapod') {
         sh '''\
             virtualenv -p python2.7 --clear venv
             . venv/bin/activate
+
+            pip install 'setuptools<34'
             pip install 'docker-compose==1.9.0' jmespath
         '''.stripIndent()
     }
@@ -62,7 +64,11 @@ node('decapod') {
             ]) {
                 sh '''\
                     . venv/bin/activate
+
+                    docker-compose -f ./docker-compose.yml -p decapod pull
                     docker-compose -f ./docker-compose.yml -p decapod up -d
+                    docker pull ${DECAPOD_REGISTRY_URL}${DECAPOD_NAMESPACE}decapod/migrations
+                    docker tag ${DECAPOD_REGISTRY_URL}${DECAPOD_NAMESPACE}decapod/migrations decapod/migrations
                     ./scripts/migrate.sh -c decapod_database_1 apply
                 '''.stripIndent()
             }
@@ -83,7 +89,7 @@ node('decapod') {
             sh '''\
                 . venv/bin/activate
                 pip install -e ./decapodlib -e ./decapodcli
-                server_discovery_token="$(grep server_discovery_token config.yaml | cut -f 2 -d '"')"
+                server_discovery_token="$(grep server_discovery_token ./containerization/files/devconfigs/config.yaml | cut -f 2 -d '"')"
                 public_ip="$(ip r g 8.8.8.8 | head -n 1 | awk '{print $NF}')"
 
                 decapod -u "http://${public_ip}:9999" cloud-config \
@@ -100,10 +106,14 @@ node('decapod') {
              usernameVariable: 'JENKINS_LOGIN']
         ]) {
             withEnv([
-                "OS_TENANT_NAME=${env.OS_TENANT_NAME}",
                 "OS_AUTH_URL=${env.OS_AUTH_URL}",
-                "OS_USERNAME=${JENKINS_LOGIN}",
                 "OS_PASSWORD=${JENKINS_PASSWORD}",
+                "OS_PROJECT_DOMAIN_NAME=${env.OS_PROJECT_DOMAIN_NAME}",
+                "OS_PROJECT_ID=${env.OS_PROJECT_ID}",
+                "OS_PROJECT_NAME=${env.OS_PROJECT_NAME}",
+                "OS_REGION_NAME=${env.OS_REGION_NAME}",
+                "OS_USER_DOMAIN_NAME=${env.OS_USER_DOMAIN_NAME}",
+                "OS_USERNAME=${JENKINS_LOGIN}",
                 "BUILD_TAG=${env.BUILD_TAG}",
                 "DECAPOD_LOGIN=${DECAPOD_LOGIN}",
                 "DECAPOD_PASSWORD=${DECAPOD_PASSWORD}",
@@ -120,8 +130,8 @@ node('decapod') {
                             . venv/bin/activate
 
                             pip install python-heatclient
-                            cd ./decapod/whale_templates
-                            heat stack-create --poll -e parameters.yaml -f heat_template.yaml "$BUILD_TAG"
+                            cd ./whale_templates
+                            heat stack-create --poll -e parameters.yaml -f heat-template.yaml "$BUILD_TAG"
                         '''.stripIndent()
                     }
 
@@ -146,7 +156,7 @@ node('decapod') {
                         sh '''\
                             . venv/bin/activate
 
-                            decapod server wait-until 5
+                            decapod server wait-until -t 600 5
                             decapod server get-all -c | tail -n +2 | cut -f 2 -d '"' | tee server_ids.txt
                         '''.stripIndent()
                     }
@@ -178,7 +188,7 @@ node('decapod') {
                             . venv/bin/activate
 
                             decapod execution create \
-                                --wait -1 \
+                                --wait 3600 \
                                 $(cat playbook_congiuration.txt) 1
                         '''.stripIndent()
                     }
@@ -197,7 +207,7 @@ node('decapod') {
                             jp.py id | cut -f 2 -d '"' | tee cinder.txt
 
                             decapod execution create \
-                                --wait -1 \
+                                --wait 300 \
                                 $(cat cinder.txt) 1
                         '''.stripIndent()
                     }
@@ -238,10 +248,22 @@ node('decapod') {
         currentBuild.result = 'FAILURE'
     } finally {
         stage('Stop Decapod') {
-            sh '''\
-                . venv/bin/activate
-                docker-compose -f ./docker-compose.yml -p decapod down -v
-            '''.stripIndent()
+            withEnv([
+                "DECAPOD_HTTP_PORT=${env.DECAPOD_HTTP_PORT}",
+                "DECAPOD_HTTPS_PORT=${env.DECAPOD_HTTPS_PORT}",
+                "DECAPOD_NAMESPACE=${DECAPOD_NAMESPACE}",
+                "DECAPOD_REGISTRY_URL=${env.DOCKER_REGISTRY}/",
+                "DECAPOD_SSH_PRIVATE_KEY=${env.DECAPOD_SSH_PRIVATE_KEY}",
+                "DECAPOD_VERSION=${env.DECAPOD_DOCKER_TAG}",
+            ]) {
+                sh '''\
+                    . venv/bin/activate
+
+                    docker-compose -f ./docker-compose.yml -p decapod down -v --rmi all
+                    docker rmi ${DECAPOD_REGISTRY_URL}${DECAPOD_NAMESPACE}decapod/migrations decapod/migrations
+                    rm -r ./venv
+                '''.stripIndent()
+            }
         }
     }
 }
