@@ -215,6 +215,7 @@
           bvt-type:
             - mitaka
             - newton
+      - demo-deploy
 
 - project:
     name: mcp-ci-infra
