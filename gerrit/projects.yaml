@@ -749,6 +749,12 @@
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
+  project: salt-formulas/avinetworks
+  description: avinetworks formula
+  upstream: git://github.com/salt-formulas/salt-formula-avinetworks.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
   project: salt-formulas/backupninja
   description: backupninja formula
   upstream: git://github.com/tcpcloud/salt-formula-backupninja.git
@@ -824,6 +830,12 @@
   project: salt-formulas/collectd
   description: collectd formula
   upstream: git://github.com/tcpcloud/salt-formula-collectd.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/dekapod
+  description: dekapod formula
+  upstream: git://github.com/salt-formulas/salt-formula-dekapod.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -1257,6 +1269,36 @@
   description: zookeeper formula
   upstream: git://github.com/tcpcloud/salt-formula-zookeeper.git
   acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-models/qa
+  description: QA Salt model
+  acl-config: acls/salt-models/salt-models.config
+
+-
+  project: salt-models/reclass-system
+  description: Reclass Salt model
+  acl-config: acls/salt-models/salt-models.config
+
+-
+  project: salt-models/slovaktelekom
+  description: Slovaktelekom Salt model
+  acl-config: acls/salt-models/salt-models.config
+
+-
+  project: salt-models/stacklight
+  description: Stacklight Salt model
+  acl-config: acls/salt-models/salt-models.config
+
+-
+  project: salt-models/statens
+  description: Statens Salt model
+  acl-config: acls/salt-models/salt-models.config
+
+-
+  project: salt-models/training
+  description: Training Salt model
+  acl-config: acls/salt-models/salt-models.config
 
 -
   project: tcp/ccp-devops-portal
