@@ -4,6 +4,17 @@
       Fuel CCP - Demo trigger
     project-type: pipeline
 
+    parameters:
+      - mcp-configuration-params:
+          gerrit-proto: 'ssh'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+          gerrit-credential-id: 'mcp-ci-gerrit'
+          gerrit-repo-ns: 'clusters/mcp/demo-0'
+
+      - ccp-configuration-params:
+          conf-entrypoint: 'ccp-config/ccp.yaml'
+
     triggers:
       - gerrit:
           trigger-on:
