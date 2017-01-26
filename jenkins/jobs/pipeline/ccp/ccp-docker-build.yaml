@@ -22,6 +22,11 @@
           default: 'mcp-openstack-reader'
           description: 'OS Gerrit credential id'
 
+      - bool:
+          name: USE_REGISTRY_PROXY
+          default: false
+          description: 'Use registry proxy for insecure connection'
+
       - mcp-configuration-params:
           gerrit-proto: 'ssh'
           gerrit-host: '{gerrit-host}'
