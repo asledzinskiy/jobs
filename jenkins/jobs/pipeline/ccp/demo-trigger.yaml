@@ -1,0 +1,22 @@
+- job-template:
+    name: demo-trigger
+    description: |
+      Fuel CCP - Demo trigger
+    project-type: pipeline
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: clusters/mcp/demo-0
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+              file-paths:
+                - compare-type: REG_EXP
+                  pattern: ccp-config/(config|version)s\.yaml
+
+    dsl:
+      !include-raw-escape: ccp-demo-trigger.groovy

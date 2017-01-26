@@ -217,6 +217,7 @@
             - newton
       - demo-deploy
       - demo-build
+      - demo-trigger
 
 - project:
     name: mcp-ci-infra
