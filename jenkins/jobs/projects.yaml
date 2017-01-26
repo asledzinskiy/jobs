@@ -263,8 +263,13 @@
       - mcp.ccp.pipeline.{test-group}:
          test-group:
           - rabbitmq
-          - ccp_lcm
+          - updates
          os-mark: prepare_os
+      - mcp.ccp.pipeline.{test-group}:
+         test-group:
+          - upgrades
+         os-mark: prepare_os
+         images-namespace: "mirantis/ccp/9.0/mitaka"
 
 - project:
     name: 'mk-k8s'
