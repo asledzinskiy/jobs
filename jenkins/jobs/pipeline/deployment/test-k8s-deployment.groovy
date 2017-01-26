@@ -20,9 +20,9 @@ node("${SLAVE_NODE_LABEL}") {
   def SLAVE1_IP_LEASE="+101"
   def SLAVE2_IP_LEASE="+102"
   def NODE_JSON = "{\"nodes\":" +
-        "[{\"node1\":\"null\",\"name\":\"node1\",\"ip\":\"10.109.0.100\",\"bind_ip\":\"10.109.0.100\",\"kube_master\":\"True\"}," +
-        "{\"node2\":\"null\",\"name\":\"node2\",\"ip\":\"10.109.0.101\",\"bind_ip\":\"10.109.0.101\",\"kube_master\":\"True\"}," +
-        "{\"node3\":\"null\",\"name\":\"node3\",\"ip\":\"10.109.0.102\",\"bind_ip\":\"10.109.0.102\",\"kube_master\":\"False\"}]}"
+        "[{\"node1\":\"null\",\"name\":\"node1\",\"ip\":\"10.109.0.100\",\"bind_ip\":\"10.109.0.100\",\"kube_master\":\"True\",\"etcd\":\"True\"}," +
+        "{\"node2\":\"null\",\"name\":\"node2\",\"ip\":\"10.109.0.101\",\"bind_ip\":\"10.109.0.101\",\"kube_master\":\"True\",\"etcd\":\"True\"}," +
+        "{\"node3\":\"null\",\"name\":\"node3\",\"ip\":\"10.109.0.102\",\"bind_ip\":\"10.109.0.102\",\"kube_master\":\"False\",\"etcd\":\"True\"}]}"
   // validate NODE_JSON if it is in a working JSON forma
   new groovy.json.JsonSlurperClassic().parseText(NODE_JSON)
 
