@@ -1,0 +1,34 @@
+- job-template:
+    name: demo-build
+    description: |
+      Fuel CCP - Demo build
+    project-type: pipeline
+
+    parameters:
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for binaries and images'
+
+      - string:
+          name: OS_GERRIT_ENDPOINT
+          default: 'review.fuel-infra.org:29418'
+          description: 'Openstack git endpoint'
+
+      - string:
+          name: OS_CREDENTIAL_ID
+          default: 'mcp-openstack-reader'
+          description: 'OS Gerrit credential id'
+
+      - mcp-configuration-params:
+          gerrit-proto: 'ssh'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+          gerrit-credential-id: 'mcp-ci-gerrit'
+          gerrit-repo-ns: 'clusters/mcp/demo-0'
+
+      - ccp-configuration-params:
+          conf-entrypoint: 'ccp-config/ccp.yaml'
+
+    dsl:
+      !include-raw-escape: ccp-demo-build.groovy

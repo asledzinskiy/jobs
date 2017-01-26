@@ -216,6 +216,7 @@
             - mitaka
             - newton
       - demo-deploy
+      - demo-build
 
 - project:
     name: mcp-ci-infra
