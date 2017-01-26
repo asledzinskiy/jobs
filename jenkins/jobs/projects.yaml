@@ -248,24 +248,6 @@
          test-mark: 'k8s_installed_custom'
 
 - project:
-    name: 'mcp-ccp-tests'
-    # TODO(apanchenko): take the latest image from artifactory
-    image_link: 'http://share01-scc.ng.mirantis.net/ubuntu-1604-server-34.qcow2'
-    image_path: '/home/jenkins/images/ubuntu-1604-server.qcow2'
-    timeout: 360
-    description: 'fuel-ccp tests'
-    weight: '1'
-    jobs:
-     - 'mcp.ccp.{test-mark}':
-         test-mark:
-          - system_few_os
-          - galera
-          - rabbitmq
-         conf-file-name: 'five_slaves.yaml'
-     - 'mcp.ccp.{test-mark}':
-         test-mark: smoke
-
-- project:
     name: mcp-qa-pipeline-tests
     image_link: 'http://share01-scc.ng.mirantis.net/images.lst'
     image_path: '/home/jenkins/images/ubuntu-1604-server.qcow2'
