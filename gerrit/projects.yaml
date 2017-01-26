@@ -650,6 +650,18 @@
   acl-config: acls/mk/mk.config
 
 -
+
+  project: oss/fuel-ccp-security-monkey
+  description: Fuel CCP - Security Monkey deployment
+  acl-config: acls/oss/oss.config
+
+-
+
+  project: oss/fuel-ccp-spinnaker
+  description: Fuel CCP - Spinnaker deployment
+  acl-config: acls/oss/oss.config
+
+-
   project: projectcalico
   description: Parent project for projectcalico
   acl-config: acls/projectcalico/calico.config
