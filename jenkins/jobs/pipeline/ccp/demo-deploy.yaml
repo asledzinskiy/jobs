@@ -13,7 +13,7 @@
       - string:
           name: KUBERNETES_URL
           description: 'http://172.16.164.24:6666'
-          default: ''
+          default: 'http://172.16.164.24:6666'
 
       - bool:
           name: CLEANUP_ENV
