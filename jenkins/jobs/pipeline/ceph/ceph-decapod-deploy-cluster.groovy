@@ -17,7 +17,6 @@ INSTANCE_COUNT = 5 // this is coded in HOT template
 node('decapod') {
     stage('Checkout SCM') {
         def gerritHost = env.GERRIT_HOST
-        def whaleBranch = WHALE_BRANCH
         def decapodBranch = DECAPOD_BRANCH
 
         gitTools.gitSSHCheckout ([
@@ -58,7 +57,7 @@ node('decapod') {
                 "DECAPOD_HTTPS_PORT=${env.DECAPOD_HTTPS_PORT}",
                 "DECAPOD_NAMESPACE=${DECAPOD_NAMESPACE}",
                 "DECAPOD_REGISTRY_URL=${env.DOCKER_REGISTRY}/",
-                "DECAPOD_SSH_PRIVATE_KEY=${env.DECAPOD_SSH_PRIVATE_KEY}"
+                "DECAPOD_SSH_PRIVATE_KEY=${env.DECAPOD_SSH_PRIVATE_KEY}",
                 "DECAPOD_VERSION=${env.DECAPOD_DOCKER_TAG}",
             ]) {
                 sh '''\
