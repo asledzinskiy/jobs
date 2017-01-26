@@ -112,6 +112,12 @@
   branches:
     - "*"
 
+- project: fuel-ccp-nginx
+  src-repo: git://git.openstack.org/openstack/fuel-ccp-nginx
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-nginx
+  branches:
+    - "*"
+
 - project: fuel-ccp-nova
   src-repo: git://git.openstack.org/openstack/fuel-ccp-nova
   dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/ccp/fuel-ccp-nova

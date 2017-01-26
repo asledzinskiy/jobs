@@ -163,6 +163,12 @@
   acl-config: acls/ccp/ccp.config
 
 -
+  project: ccp/fuel-ccp-nginx
+  description: Fuel CCP - Nginx deployment
+  upstream: git://git.openstack.org/openstack/fuel-ccp-nginx
+  acl-config: acls/ccp/ccp.config
+
+-
   project: ccp/fuel-ccp-nova
   description: Fuel CCP - Nova deployment
   upstream: git://git.openstack.org/openstack/fuel-ccp-nova
