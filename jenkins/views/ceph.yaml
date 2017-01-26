@@ -1,0 +1,4 @@
+- view:
+    name: ceph
+    view-type: list
+    regex: ceph.*

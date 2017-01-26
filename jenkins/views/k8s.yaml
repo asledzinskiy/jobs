@@ -1,0 +1,11 @@
+- view:
+    name: k8s
+    view-type: list
+    job-name:
+      - k8s-repo-cloner
+      - k8s-repo-cloner-runner
+      - k8s.system-test.k8s_installed_custom
+      - mcp-k8s-coverage-timer-pipeline
+      - mcp-k8s-hyperkube-custom
+      - mcp-k8s-merge-pipeline
+      - mcp-k8s-test-pipeline

@@ -1,0 +1,4 @@
+- view:
+    name: infra
+    view-type: list
+    regex: (artifactory|jenkins|gerrit|gitrepo|db-|env|mcp-build|prepare|mcp-prepare).*

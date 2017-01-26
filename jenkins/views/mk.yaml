@@ -1,0 +1,4 @@
+- view:
+    name: mk
+    view-type: list
+    regex: mk.*

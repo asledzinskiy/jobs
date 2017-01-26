@@ -1,0 +1,7 @@
+- view:
+    name: ccp
+    view-type: list
+    job-name:
+      - ccp-docker-build
+      - ccp-docker-deploy
+      - ccp-tempest-test

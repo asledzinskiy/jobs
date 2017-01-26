@@ -1,0 +1,6 @@
+- view:
+    name: bvt
+    view-type: list
+    job-name:
+      - ccp-bvt-mitaka
+      - ccp-bvt-newton

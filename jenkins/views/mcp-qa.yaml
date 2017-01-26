@@ -1,0 +1,9 @@
+- view:
+    name: mcp-qa
+    view-type: list
+    job-name:
+      - mcp.ccp.smoke-pipeline.newton
+      - mcp.ccp.smoke-pipeline.mitaka
+      - mcp.ccp.pipeline.rabbitmq
+      - mcp.ccp.pipeline.galera
+      - mcp.ccp.pipeline.ccp_lcm

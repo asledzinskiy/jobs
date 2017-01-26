@@ -1,0 +1,17 @@
+- view:
+    name: sync
+    view-type: list
+    regex: sync.*
+    description: |
+      All the sync stuff from upstream project are stored here<br>
+
+      <ul>
+        <li><b>sync-uptream-{projects-namespace}</b>. Used for sync code from github (or other upstream) to gerrit.mcp.mirantis.net</li>
+        <li><b>sync-downstream-{project-name}-{upstream-branch}-{downstream-branch}</b>. Used to create merge request in gerrit</li>
+        <li><b>sync-upstream-MANUAL</b>. Used for manual sync per project, e.g. can be used to push smth with force flag</li>
+      </ul>
+
+      Usefull links: <br>
+      <ul>
+        <li><a href=https://gerrit.mcp.mirantis.net/#/q/topic:sync/master/mcp>Sync requests from-master-to-mcp for calico projects</a></li>
+      </ul>
