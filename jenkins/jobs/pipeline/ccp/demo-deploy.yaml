@@ -1,0 +1,47 @@
+- job-template:
+    name: demo-deploy
+    description: |
+      Fuel CCP - Demo deploy
+    project-type: pipeline
+
+    parameters:
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for binaries and images'
+
+      - string:
+          name: KUBERNETES_URL
+          description: 'http://172.16.164.24:6666'
+          default: ''
+
+      - bool:
+          name: CLEANUP_ENV
+          default: false
+          description: 'Cleanup env after deployment'
+
+      - mcp-configuration-params:
+          gerrit-proto: 'ssh'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+          gerrit-credential-id: 'mcp-ci-gerrit'
+          gerrit-repo-ns: 'clusters/mcp/demo-0'
+
+      - ccp-configuration-params:
+          conf-entrypoint: 'ccp-config/ccp.yaml'
+
+#    triggers:
+#      - gerrit:
+#          trigger-on:
+#            - patchset-created-event
+#            - comment-added-contains-event:
+#                comment-contains-value: '(recheck|reverify)'
+#          projects:
+#            - project-compare-type: REG_EXP
+#              project-pattern: ccp/fuel-ccp-(jenkins|artifactory|gerrit)
+#              branches:
+#                - branch-compare-type: ANT
+#                  branch-pattern: '**'
+#          custom-url: '* $JOB_NAME $BUILD_URL'
+    dsl:
+      !include-raw-escape: ccp-demo-deploy.groovy
