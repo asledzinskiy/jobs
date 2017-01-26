@@ -29,7 +29,7 @@ node {
         project : confGerritPath,
         targetDir: targetDir
       ])
-      def changedFile = sh(
+      changedFile = sh(
         script: """
 cd $targetDir
 git show `git rev-parse HEAD` | grep -m 1 -oE '\\/(config|version)s\\.yaml\$'
@@ -39,6 +39,9 @@ git show `git rev-parse HEAD` | grep -m 1 -oE '\\/(config|version)s\\.yaml\$'
 
     }
     stage('Apply changes') {
-      echo changedFile
+      if (changedFile == '/configs.yaml') {
+        build job: 'demo-build'
+      }
+      build job: 'demo-deploy'
     }
 }
