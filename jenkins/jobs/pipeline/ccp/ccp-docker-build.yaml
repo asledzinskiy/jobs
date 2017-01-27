@@ -22,6 +22,11 @@
           default: 'mcp-openstack-reader'
           description: 'OS Gerrit credential id'
 
+      - string:
+          name: CCP_COMPONENT
+          default: ''
+          description: 'Component to build'
+
       - bool:
           name: USE_REGISTRY_PROXY
           default: false
