@@ -27,7 +27,4 @@
               file-paths:
                 - compare-type: ANT
                   pattern: '**/gerrit/**'
-              file-paths:
-                - compare-type: ANT
-                  pattern: '**/tests/**'
           custom-url: '* $JOB_NAME $BUILD_URL'
