@@ -42,7 +42,7 @@ git show `git rev-parse HEAD` | grep -m 1 -oE '\\/(config|version)s\\.yaml\$'
     echo 'changedFile: ' + changedFile
 
     stage('Apply changes') {
-      if (changedFile == '/configs.yaml') {
+      if (changedFile == '/versions.yaml') {
         build job: 'demo-build'
       }
       build job: 'demo-deploy'
