@@ -89,36 +89,34 @@ def buildBird(){
 
       }// dir
 
-      // we need to have separate valiable to correctly pass it to
-      // buildCalicoContainers() build step
       def artifactoryUrl = artifactoryServer.getUrl()
-      def dockerRepository = env.DOCKER_REGISTRY
-      def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
-      def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
+      def nodeImg = "calico/node"
+      def ctlImg = "calico/ctl"
       def bird = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/bird-${binaryTag}"
       def bird6 = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/bird6-${binaryTag}"
       def birdcl = artifactoryServer.getUrl() + "/${binaryDevRepo}/${projectNamespace}/bird/birdcl-${binaryTag}"
       // start building calicoctl
-      def calicoContainersArts = calico.buildCalicoContainers {
-        artifactoryURL = "${artifactoryUrl}/binary-prod-virtual"
-        dockerRepo = dockerRepository
-        birdUrl = bird
-        bird6Url = bird6
-        birdclUrl = birdcl
-        nodeImage = nodeImg
-        ctlImage = ctlImg
-      }
+      def calicoContainersArts = calico.buildCalicoContainers([
+        artifactoryURL: "${artifactoryUrl}/binary-prod-virtual",
+        dockerRegistry: env.DOCKER_REGISTRY,
+        nodeImage: nodeImg,
+        ctlImage: ctlImg,
+        projectNamespace: projectNamespace,
+        birdUrl : bird,
+        bird6Url : bird6,
+        birdclUrl : birdcl,
+      ])
 
       def calicoImgTag = calicoContainersArts["CALICO_VERSION"]
 
       stage('Publishing containers artifacts') {
         artifactory.uploadImageToArtifactory(artifactoryServer,
-                                             dockerRepository,
+                                             env.DOCKER_REGISTRY,
                                              "${projectNamespace}/calico/node",
                                              calicoImgTag,
                                              docker_dev_repo)
         artifactory.uploadImageToArtifactory(artifactoryServer,
-                                             dockerRepository,
+                                             env.DOCKER_REGISTRY,
                                              "${projectNamespace}/calico/ctl",
                                              calicoImgTag,
                                              docker_dev_repo)
@@ -128,8 +126,8 @@ def buildBird(){
         <b>bird</b>: ${bird}<br>
         <b>bird6</b>: ${bird6}<br>
         <b>birdcl</b>: ${birdcl}<br>
-        <b>node</b>: ${nodeImg}:${calicoImgTag}<br>
-        <b>ctl</b>: ${ctlImg}:${calicoImgTag}<br>
+        <b>node</b>: ${calicoContainersArts["CALICO_NODE_IMAGE_REPO"]}:${calicoContainersArts["CALICO_VERSION"]}<br>
+        <b>ctl</b>: ${calicoContainersArts["CALICOCTL_IMAGE_REPO"]}:${calicoContainersArts["CALICO_VERSION"]}<br>
         """
       stage ("Run system tests") {
          build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:

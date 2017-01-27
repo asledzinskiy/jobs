@@ -29,9 +29,8 @@ def buildCalicoBuildImg(){
     try {
 
       def artifactoryUrl = artifactoryServer.getUrl()
-      def dockerRepository = env.DOCKER_REGISTRY
       // define global variables for images
-      def buildImg = "${dockerRepository}/${projectNamespace}/${projectModule}"
+      def buildImg = "${env.DOCKER_REGISTRY}/${projectNamespace}/${projectModule}"
       // depends on git, so will be defined after checkout
       def buildImgTag = ""
 
@@ -73,39 +72,36 @@ def buildCalicoBuildImg(){
 
       stage('Publishing libcalico artifacts') {
         artifactory.uploadImageToArtifactory(artifactoryServer,
-                                             dockerRepository,
+                                             env.DOCKER_REGISTRY,
                                              "${projectNamespace}/${projectModule}",
                                              buildImgTag,
                                              docker_dev_repo,
                                              buildInfo)
       } // publishing artifacts
 
-      currentBuild.description = "build image: ${buildImg}:${buildImgTag}<br>"
-
-      // we need to have separate valiable to correctly pass it to
-      // buildCalicoContainers() build step
-      def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
-      def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
+      def nodeImg = "calico/node"
+      def ctlImg = "calico/ctl"
       def buildContainerName = buildImg + ":" + buildImgTag
       // start building calicoctl
-      def calicoContainersArts = calico.buildCalicoContainers {
-        artifactoryURL = "${artifactoryUrl}/binary-prod-virtual"
-        dockerRepo = dockerRepository
-        buildImage = buildContainerName
-        nodeImage = nodeImg
-        ctlImage = ctlImg
-      }
+      def calicoContainersArts = calico.buildCalicoContainers([
+        artifactoryURL: "${artifactoryUrl}/binary-prod-virtual",
+        dockerRegistry: env.DOCKER_REGISTRY,
+        nodeImage: nodeImg,
+        ctlImage: ctlImg,
+        buildImage: buildContainerName,
+        projectNamespace: projectNamespace,
+      ])
 
       def calicoImgTag = calicoContainersArts["CALICO_VERSION"]
 
       stage('Publishing containers artifacts') {
         artifactory.uploadImageToArtifactory(artifactoryServer,
-                                             dockerRepository,
+                                             env.DOCKER_REGISTRY,
                                              "${projectNamespace}/calico/node",
                                              calicoImgTag,
                                              docker_dev_repo)
         artifactory.uploadImageToArtifactory(artifactoryServer,
-                                             dockerRepository,
+                                             env.DOCKER_REGISTRY,
                                              "${projectNamespace}/calico/ctl",
                                              calicoImgTag,
                                              docker_dev_repo)
@@ -113,8 +109,8 @@ def buildCalicoBuildImg(){
 
       currentBuild.description = """
         <b>build</b>: ${buildImg}:${buildImgTag}<br>
-        <b>node</b>: ${nodeImg}:${calicoImgTag}<br>
-        <b>ctl</b>: ${ctlImg}:${calicoImgTag}<br>
+        <b>node</b>: ${calicoContainersArts["CALICO_NODE_IMAGE_REPO"]}:${calicoContainersArts["CALICO_VERSION"]}<br>
+        <b>ctl</b>: ${calicoContainersArts["CALICOCTL_IMAGE_REPO"]}:${calicoContainersArts["CALICO_VERSION"]}<br>
         """
       stage ("Run system tests") {
          build job: 'calico.system-test.deploy', propagate: true, wait: true, parameters:

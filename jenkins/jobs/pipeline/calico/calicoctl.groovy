@@ -82,34 +82,34 @@ def buildCalicoContainers(){
 
     // start building calicoctl
     def artifactoryUrl = artifactoryServer.getUrl()
-    def dockerRepository = env.DOCKER_REGISTRY
-    def nodeImg = "${dockerRepository}/${projectNamespace}/calico/node"
-    def ctlImg = "${dockerRepository}/${projectNamespace}/calico/ctl"
-    def calicoContainersArts = calico.buildCalicoContainers {
-      artifactoryURL = "${artifactoryUrl}/binary-prod-virtual"
-      dockerRepo = dockerRepository
-      nodeImage = nodeImg
-      ctlImage = ctlImg
-    }
+    def nodeImg = "calico/node"
+    def ctlImg = "calico/ctl"
+    def calicoContainersArts = calico.buildCalicoContainers([
+      artifactoryURL: "${artifactoryUrl}/binary-prod-virtual",
+      dockerRegistry: env.DOCKER_REGISTRY,
+      nodeImage: nodeImg,
+      ctlImage: ctlImg,
+      projectNamespace: projectNamespace
+    ])
 
     def calicoImgTag = calicoContainersArts["CALICO_VERSION"]
 
     stage('Publishing containers artifacts') {
       artifactory.uploadImageToArtifactory(artifactoryServer,
-                                           dockerRepository,
+                                           env.DOCKER_REGISTRY,
                                            "${projectNamespace}/calico/node",
                                            calicoImgTag,
                                            docker_dev_repo)
       artifactory.uploadImageToArtifactory(artifactoryServer,
-                                           dockerRepository,
+                                           env.DOCKER_REGISTRY,
                                            "${projectNamespace}/calico/ctl",
                                            calicoImgTag,
                                            docker_dev_repo)
     } // publishing artifacts
 
     currentBuild.description = """
-      <b>node</b>: ${nodeImg}:${calicoImgTag}<br>
-      <b>ctl</b>: ${ctlImg}:${calicoImgTag}<br>
+        <b>node</b>: ${calicoContainersArts["CALICO_NODE_IMAGE_REPO"]}:${calicoContainersArts["CALICO_VERSION"]}<br>
+        <b>ctl</b>: ${calicoContainersArts["CALICOCTL_IMAGE_REPO"]}:${calicoContainersArts["CALICO_VERSION"]}<br>
       """
 
     return calicoContainersArts
