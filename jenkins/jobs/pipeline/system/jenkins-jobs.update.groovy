@@ -29,6 +29,7 @@ node('tools') {
                     recursive=True
                     """.stripIndent()
             }
+            sh "chmod 0400 ${WORKSPACE}/jenkins_jobs.ini"
             sh 'tox -e mcp-ci -r'
             sh """${WORKSPACE}/.tox/mcp-ci/bin/jenkins-jobs \
                     --flush-cache \
