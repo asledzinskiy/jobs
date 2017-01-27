@@ -18,9 +18,12 @@ import logging
 import os
 import sys
 
+import git
 import jsonschema
 import yaml
 
+
+logging.basicConfig(level=logging.INFO)
 
 # Only lower case letters (a-z), digits (0-9), plus (+) and minus (-)
 # and periods (.).
@@ -130,12 +133,34 @@ def check_acls_config_path(data):
         sys.exit(1)
 
 
+def check_upstream_clonable(data):
+    clonable = True
+
+    for item in data:
+        upstream_repo = item.get('upstream')
+        if not upstream_repo:
+            continue
+        logging.info("Checking availability: {0}".format(upstream_repo))
+        try:
+            g = git.cmd.Git()
+            g.ls_remote(upstream_repo)
+        except git.exc.GitCommandError as e:
+            err_msg = ("Unable to clone '{0}':"
+                       "{1}".format(upstream_repo, str(e)))
+            logging.error(err_msg)
+            clonable = False
+
+    if not clonable:
+        sys.exit(1)
+
+
 def run_checks(file_to_check):
     data = parse_yaml_file(file_to_check)
     validate_data_by_schema(data, file_to_check)
     check_duplicate_projects(data)
     check_alphabetical_order(data)
     check_acls_config_path(data)
+    check_upstream_clonable(data)
 
 
 if __name__ == '__main__':

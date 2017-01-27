@@ -398,7 +398,7 @@
 -
   project: contrail/ifmap-python-client
   description: ifmap-python-client
-  upstream: git://github.com/Juniper/ifmap-python-client.git
+  upstream: git://github.com/tcpcloud/ifmap-python-client.git
   acl-config: acls/contrail/contrail.config
 
 -
