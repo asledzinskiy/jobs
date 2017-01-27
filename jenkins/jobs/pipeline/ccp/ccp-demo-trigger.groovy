@@ -19,6 +19,7 @@ node {
 
     def targetDir = "conf-repo-" + env.BUILD_ID
     def changedFile = null
+    def buildComponent = null
 
     stage('Checkout env configuration') {
       def gitTools = new com.mirantis.mcp.Git()
@@ -37,14 +38,24 @@ git show `git rev-parse HEAD` | grep -m 1 -oE '\\/(config|version)s\\.yaml\$'
         returnStdout: true
       ).trim()
 
+      buildComponent = sh(
+        script: """
+git show `git rev-parse HEAD` | grep tag:'
+""",
+        returnStdout: true
+      ).trim()
+
     }
 
     echo 'changedFile: ' + changedFile
 
     stage('Apply changes') {
       if (changedFile == '/versions.yaml') {
-        build job: 'demo-build'
+        build job: 'demo-build', parameters: [
+          [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: (buildComponent != "") ? buildComponent : "" ],
+        ]
       }
       build job: 'demo-deploy'
+
     }
 }
