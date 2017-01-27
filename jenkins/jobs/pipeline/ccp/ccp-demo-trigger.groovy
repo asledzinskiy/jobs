@@ -41,7 +41,7 @@ git show `git rev-parse HEAD` | grep -m 1 -oE '\\/(config|version)s\\.yaml\$'
       buildComponent = sh(
         script: """
 cd $targetDir
-git show `git rev-parse HEAD` | grep tag:
+git show `git rev-parse HEAD` | grep -E '^\\+.*tag:'
 """,
         returnStdout: true
       ).trim()
@@ -55,7 +55,7 @@ git show `git rev-parse HEAD` | grep tag:
     stage('Apply changes') {
       if (changedFile == '/versions.yaml') {
         build job: 'demo-build', parameters: [
-          [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: (buildComponent != "") ? buildComponent : "" ],
+          [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: (buildComponent != "") ? "horizon" : "" ],
         ]
       }
       build job: 'demo-deploy'
