@@ -7,6 +7,7 @@ node {
   def confEntryPoint = env.CONF_ENTRYPOINT
   def kubernetesUrl = env.KUBERNETES_URL
   def kubernetesCredentialsId = 'kubernetes-api'
+  def ccpComponent = env.CCP_COMPONENT
 
   stage('Build') {
     build job: 'ccp-docker-build', parameters: [
@@ -15,7 +16,8 @@ node {
       [$class: 'StringParameterValue', name: 'OS_CREDENTIAL_ID', value: osCredentialId ],
       [$class: 'StringParameterValue', name: 'CONF_GERRIT_URL', value: confGerritUrl ],
       [$class: 'StringParameterValue', name: 'CONF_GERRIT_CREDENTIAL_ID', value: confGerritCredentialId ],
-      [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: confEntryPoint ]
+      [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: confEntryPoint ],
+      [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: ccpComponent ]
     ]
   }
 

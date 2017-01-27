@@ -20,6 +20,11 @@
           default: 'mcp-openstack-reader'
           description: 'OS Gerrit credential id'
 
+      - string:
+          name: CCP_COMPONENT
+          default: ''
+          description: 'Component to build'
+
       - mcp-configuration-params:
           gerrit-proto: 'ssh'
           gerrit-host: '{gerrit-host}'
