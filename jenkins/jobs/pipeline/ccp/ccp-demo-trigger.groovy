@@ -35,9 +35,12 @@ cd $targetDir
 git show `git rev-parse HEAD` | grep -m 1 -oE '\\/(config|version)s\\.yaml\$'
 """,
         returnStdout: true
-      )
+      ).trim()
 
     }
+
+    echo 'changedFile: ' + changedFile
+
     stage('Apply changes') {
       if (changedFile == '/configs.yaml') {
         build job: 'demo-build'
