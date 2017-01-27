@@ -17,7 +17,7 @@ node {
     def confGerritPath = parseGerritURL(CONF_GERRIT_URL, 'path')
 
 
-    def targetDir = "conf-repo-" + env.BUILD_ID
+    def targetDir = "/tmp/conf-repo-" + env.BUILD_ID
     def changedFile = null
     def buildComponent = null
 
@@ -47,6 +47,8 @@ git show `git rev-parse HEAD` | grep tag:
       ).trim()
 
     }
+
+    sh "rm -rf $targetDir"
 
     echo 'changedFile: ' + changedFile
 
