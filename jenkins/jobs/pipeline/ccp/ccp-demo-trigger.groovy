@@ -40,7 +40,7 @@ git show `git rev-parse HEAD` | grep -m 1 -oE '\\/(config|version)s\\.yaml\$'
 
       buildComponent = sh(
         script: """
-git show `git rev-parse HEAD` | grep tag:'
+git show `git rev-parse HEAD` | grep tag:
 """,
         returnStdout: true
       ).trim()
