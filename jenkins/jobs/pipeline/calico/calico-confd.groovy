@@ -121,6 +121,7 @@ def buildConfd(){
         dockerRegistry: env.DOCKER_REGISTRY,
         nodeImage: nodeImg,
         ctlImage: ctlImg,
+        confdUrl: confd,
         projectNamespace: projectNamespace
       ])
 
