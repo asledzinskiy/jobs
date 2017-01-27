@@ -64,6 +64,12 @@
   branches:
     - "*"
 
+- project: python-geventhttpclient
+  src-repo: https://${GERRIT_HOST}/debian/python-geventhttpclient
+  dst-repo: git@github.com:tcpcloud/debian-python-geventhttpclient.git
+  branches:
+    - "*"
+
 - project: python-kafka
   src-repo: https://${GERRIT_HOST}/debian/python-kafka
   dst-repo: git@github.com:tcpcloud/debian-python-kafka.git

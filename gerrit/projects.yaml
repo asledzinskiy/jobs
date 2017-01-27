@@ -468,6 +468,12 @@
   acl-config: acls/debian/debian.config
 
 -
+  project: debian/python-geventhttpclient
+  description: python-geventhttpclient Debian package
+  upstream: git://github.com/tcpcloud/debian-python-geventhttpclient.git
+  acl-config: acls/debian/debian.config
+
+-
   project: debian/python-kafka
   description: python-kafka Debian package
   upstream: git://github.com/tcpcloud/debian-python-kafka.git
