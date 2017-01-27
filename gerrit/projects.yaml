@@ -656,6 +656,11 @@
   acl-config: acls/mk/mk.config
 
 -
+  project: mk/packer-templates
+  description: Packer templates for building images
+  acl-config: acls/mk/mk.config
+
+-
 
   project: oss/fuel-ccp-security-monkey
   description: Fuel CCP - Security Monkey deployment
