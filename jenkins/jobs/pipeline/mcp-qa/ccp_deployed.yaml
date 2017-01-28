@@ -1,9 +1,9 @@
 - job-template:
-    name: 'mcp.ccp.pipeline.{os-test-group}'
+    name: 'mcp.ccp.pipeline.{ccp-test-group}'
     description: 'Run ccp test '
     project-type: pipeline
     dsl:
-      !include-raw-escape: openstack.groovy
+      !include-raw-escape: ccp.groovy
     test-expression: 'none'
     conf-file-name: 'five_slaves.yaml'
     images-namespace: 'mirantis/ccp/stable/newton'
@@ -36,12 +36,8 @@
         name: ENV_NAME
         default: "$JOB_NAME.$BUILD_NUMBER"
     - string:
-        name: OS_MARK
-        default: '{os-mark}'
-        description: 'Test group to prepare OpenStack cluster'
-    - string:
         name: TEST_MARK
-        default: '{os-test-group}'
+        default: '{ccp-test-group}'
         description: 'Test group to validate OpenStack cluster'
     - string:
         name: IMAGES_NAMESPACE

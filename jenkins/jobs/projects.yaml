@@ -267,19 +267,23 @@
       - mcp.ccp.smoke-pipeline.{os_branch}:
          os_branch: mitaka
          images-namespace: "mirantis/ccp/9.0/mitaka"
-      - mcp.ccp.pipeline.{test-group}:
-         test-group: galera
+      - mcp.ccp.pipeline.{os-test-group}:
+         os-test-group: galera
          os-mark: prepare_galera
-      - mcp.ccp.pipeline.{test-group}:
-         test-group:
+      - mcp.ccp.pipeline.{os-test-group}:
+         os-test-group:
           - rabbitmq
           - updates
          os-mark: prepare_os
-      - mcp.ccp.pipeline.{test-group}:
-         test-group:
+      - mcp.ccp.pipeline.{os-test-group}:
+         os-test-group:
           - upgrades
          os-mark: prepare_os
          images-namespace: "mirantis/ccp/9.0/mitaka"
+      - mcp.ccp.pipeline.{ccp-test-group}:
+         ccp-test-group:
+          - ccp_containerized
+          - system_few_os
 
 - project:
     name: 'mk-k8s'
