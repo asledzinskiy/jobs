@@ -6,4 +6,7 @@
       - mcp.ccp.smoke-pipeline.mitaka
       - mcp.ccp.pipeline.rabbitmq
       - mcp.ccp.pipeline.galera
-      - mcp.ccp.pipeline.ccp_lcm
+      - mcp.ccp.pipeline.updates
+      - mcp.ccp.pipeline.upgrades
+      - mcp.ccp.pipeline.system_few_os
+      - mcp.ccp.pipeline.ccp_containerized
