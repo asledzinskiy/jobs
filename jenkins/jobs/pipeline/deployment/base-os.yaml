@@ -28,5 +28,14 @@
           name: NODE_JSON
           default: ''
           description: 'List of Nodes specified in a JSON format'
+      - text:
+          name: ANSIBLE_INVENTORY
+          default: ''
+          description: 'String containing ansible inventory'
+      - string:
+          name: INV_SOURCE
+          default: 'json'
+          description: 'Inventory source if not from cluster repo (empty, json, or ansible_inventory)'
+
     dsl:
       !include-raw-escape: base-os.groovy

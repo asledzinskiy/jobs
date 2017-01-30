@@ -8,7 +8,9 @@ def String FUEL_CCP_INSTALLER_REPO = 'ccp/fuel-ccp-installer'
 def String ANSIBLE_K8S_BASE_REPO = 'mcp-ci/ansible-k8s-base'
 def String CLUSTER_NAME=env.CLUSTER_NAME
 def String GERRIT_HOST=env.GERRIT_HOST
+def String INV_SOURCE=env.INV_SOURCE ?: ''
 def String NODE_JSON=env.NODE_JSON
+def String ANSIBLE_INVENTORY=env.ANSIBLE_INVENTORY ?: ""
 def String SLAVE_NODE_LABEL = env.SLAVE_NODE_LABEL ?: 'deployment'
 // validate NODE_JSON if it is in a working JSON format
 new groovy.json.JsonSlurperClassic().parseText(NODE_JSON)
@@ -89,11 +91,16 @@ node("${SLAVE_NODE_LABEL}") {
     }
 
     stage('Update configs') {
-        mcpCommon.renderJinjaTemplate(
-            "${NODE_JSON}",
-            "${WORKSPACE}/inventory/inventory.cfg",
-            "${WORKSPACE}/inventory/inventory.cfg"
-        )
+        if (INV_SOURCE == "json") {
+            mcpCommon.renderJinjaTemplate(
+                "${NODE_JSON}",
+                "${WORKSPACE}/inventory/inventory.cfg",
+                "${WORKSPACE}/inventory/inventory.cfg"
+            )
+        } else if (INV_SOURCE == "ansible_inventory") {
+            writeFile file: "${WORKSPACE}/inventory/inventory.cfg", text: \
+                "${ANSIBLE_INVENTORY}"
+        }
     }
 
     stage("Prepare Operating System") {

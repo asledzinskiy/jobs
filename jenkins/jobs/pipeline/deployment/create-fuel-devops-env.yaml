@@ -1,0 +1,15 @@
+- job-template:
+    name: '{cluster}-create-fuel-devops-env'
+    description: |
+      Create fuel-devops environment
+    project-type: workflow
+    concurrent: false
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: CLUSTER_NAME
+          default: '{cluster}'
+    dsl:
+      !include-raw-escape: create-fuel-devops-env.groovy

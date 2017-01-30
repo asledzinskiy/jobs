@@ -11,6 +11,13 @@
       - string:
           name: CLUSTER_NAME
           default: '{cluster}'
+      - string:
+          name: UNDERLAY
+          default: 'fuel-devops'
+      - string:
+          name: INV_SOURCE
+          default: 'json'
+          description: 'Inventory format for deployment: json or ansible_inventory'
       - bool:
           name: ERASE_ENV
           default: true
