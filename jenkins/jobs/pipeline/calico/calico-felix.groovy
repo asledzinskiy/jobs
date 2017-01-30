@@ -54,12 +54,11 @@ def buildFelix(){
         felixImgTag = git.getGitDescribe(true) + "-" + common.getDatetime()
 
         stage ('Run felix unittests'){
-          // inject COMPARE_BRANCH variable for felix coverage test
-          sh "make ut UT_COMPARE_BRANCH=gerrit/${env.GERRIT_BRANCH}"
+          sh "make ut"
         }
 
         stage ('Build calico/felix image') {
-          docker.setDockerfileLabels("./Dockerfile", ["docker.imgTag=${felixImgTag}"])
+          docker.setDockerfileLabels("./docker-image/Dockerfile", ["docker.imgTag=${felixImgTag}"])
 
           sh """
                 make calico/felix
