@@ -47,6 +47,9 @@
       - ccp-configuration-params:
           conf-entrypoint: "bvt/{bvt-type}.yaml"
 
+    triggers:
+      - timed: '{timer}'
+
     pipeline-scm:
       scm:
         - basic-scm:

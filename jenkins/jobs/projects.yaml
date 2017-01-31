@@ -210,8 +210,7 @@
 - project:
     name: ccp
     jobs:
-      - ccp-docker-build:
-          timer: '@midnight'
+      - ccp-docker-build
       - ccp-tempest-test
       - ccp-docker-deploy
       - 'gate-fuel-ccp-{ccp-gate-test}':
@@ -220,8 +219,10 @@
             - validate
       - 'ccp-bvt-{bvt-type}':
           bvt-type:
-            - mitaka
-            - newton
+            - mitaka:
+                timer: '0 0,6,12,18 * * *'
+            - newton:
+                timer: '0 1,7,13,19 * * *'
       - demo-deploy
       - demo-build
       - demo-trigger

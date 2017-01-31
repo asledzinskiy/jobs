@@ -4,8 +4,6 @@
       Fuel CCP - CCP image builder container
     project-type: pipeline
 
-    timer: ''
-
     parameters:
       - string:
           name: DOCKER_REGISTRY
@@ -41,9 +39,6 @@
 
       - ccp-configuration-params:
           conf-entrypoint: 'ccp-config/ccp.yaml'
-
-    triggers:
-      - timed: '{timer}'
 
     pipeline-scm:
       scm:
