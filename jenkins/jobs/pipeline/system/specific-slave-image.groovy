@@ -4,29 +4,29 @@ common = new com.mirantis.mcp.Common()
 gitTools = new com.mirantis.mcp.Git()
 // Artifactory server
 artifactoryServer = Artifactory.server("mcp-ci")
-buildInfo = Artifactory.newBuildInfo()
 
 projectNamespace = "mirantis/jenkins-slave-images"
-jnlpSlaveImageName = "${projectNamespace}/jnlp-slave"
+slaveType = env.SLAVE_TYPE
+slaveImageName = "${projectNamespace}/${slaveType}-slave"
 docker_dev_repo = "docker-dev-local"
 docker_prod_repo = "docker-prod-local"
 
 
 if ( env.GERRIT_EVENT_TYPE == 'patchset-created' ) {
-    buildJnlpContainers()
+    buildContainers()
 } else if ( env.GERRIT_EVENT_TYPE == 'change-merged' ) {
     promoteArtifacts()
 } else {
   throw new RuntimeException("Job should be triggered only on patchset-created or change-merged events")
 }
 
-def buildJnlpContainers(){
+def buildContainers(){
 
   node('docker'){
 
     try {
       deleteDir()
-      stage ('Checkout calicoctl'){
+      stage ('checkout code'){
         gitTools.gerritPatchsetCheckout ([
           credentialsId : "mcp-ci-gerrit",
           withWipeOut : true
@@ -36,27 +36,30 @@ def buildJnlpContainers(){
       def imageTag = common.getDatetime()
       def dockerRepository = env.DOCKER_REGISTRY
 
-      stage ('Build jnlp slave'){
-        dir ('jnlp-slave'){
-          sh "docker rmi -f ${dockerRepository}/${jnlpSlaveImageName} || true"
-          sh "docker build --build-arg JENKINS_MASTER=${env.JENKINS_URL} -t ${dockerRepository}/${jnlpSlaveImageName}:${imageTag} ."
+      stage ("Build ${slaveType} slave"){
+        dir ("${slaveType}-slave"){
+          sh "docker rmi -f ${dockerRepository}/${slaveImageName} || true"
+          if ("${slaveType}" == "jnlp") {
+            sh "docker build --build-arg JENKINS_MASTER=${env.JENKINS_URL} -t ${dockerRepository}/${slaveImageName}:${imageTag} ."
+          } else {
+            sh "docker build -t ${dockerRepository}/${slaveImageName}:${imageTag} ."
+          }
         }
-
       }
 
       stage('Publishing container') {
         artifactory.uploadImageToArtifactory(artifactoryServer,
                                              dockerRepository,
-                                             jnlpSlaveImageName,
+                                             slaveImageName,
                                              imageTag,
                                              docker_dev_repo)
       } // publishing artifacts
 
       //cleanup
-      sh "docker rmi -f ${dockerRepository}/${jnlpSlaveImageName}:${imageTag} || true"
+      sh "docker rmi -f ${dockerRepository}/${slaveImageName}:${imageTag} || true"
 
       currentBuild.description = """
-        <b>jnlp-slave</b>: ${dockerRepository}/${jnlpSlaveImageName}:${imageTag}<br>
+        <b>${slaveType}-slave</b>: ${dockerRepository}/${slaveImageName}:${imageTag}<br>
         """
 
     }
@@ -87,14 +90,14 @@ def promoteArtifacts () {
                 artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
                         docker_dev_repo,
                         docker_prod_repo,
-                        jnlpSlaveImageName,
+                        slaveImageName,
                         buildProperties.get('com.mirantis.targetTag').join(','),
                         buildProperties.get('com.mirantis.targetTag').join(','),
                         true)
                 artifactory.promoteDockerArtifact(artifactoryServer.getUrl(),
                         docker_dev_repo,
                         docker_prod_repo,
-                        jnlpSlaveImageName,
+                        slaveImageName,
                         buildProperties.get('com.mirantis.targetTag').join(','),
                         'latest')
             } else {

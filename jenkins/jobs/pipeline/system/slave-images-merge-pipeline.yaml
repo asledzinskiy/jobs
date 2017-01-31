@@ -20,16 +20,18 @@
               forbidden-file-paths:
                 - compare-type: ANT
                   pattern: '**/jnlp-slave/**'
+                - compare-type: ANT
+                  pattern: '**/swarm-slave/**'
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 - job-template:
-    name: mcp-build-jnlp-slave-image-merge-pipeline
+    name: mcp-build-{slave-type}-slave-image-merge-pipeline
     description: |
-      Promote image for Jenkins jnlp slave
+      Promote image for Jenkins {slave-type} slave
     project-type: pipeline
     concurrent: true
     dsl:
-      !include-raw-escape: jnlp-slave-image.groovy
+      !include-raw-escape: specific-slave-image.groovy
 
     triggers:
       - gerrit:
@@ -43,7 +45,7 @@
                   branch-pattern: 'master'
               file-paths:
                 - compare-type: ANT
-                  pattern: '**/jnlp-slave/**'
+                  pattern: '**/{slave-type}-slave/**'
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 
