@@ -654,21 +654,37 @@
   acl-config: acls/mk/mk.config
 
 -
+  project: oss/SimianArmy
+  description: OSS Simian Army (Janitor Monkey)
+  upstream: git://github.com/Symantec/SimianArmy.git
+  acl-config: acls/oss/oss.config
+
+-
+  project: oss/chaosmonkey
+  description: OSS Chaos Monkey
+  upstream: git://github.com/Netflix/chaosmonkey.git
+  acl-config: acls/oss/oss.config
+
+-
   project: oss/devops-portal
   description: DevOps Portal
   upstream: git://github.com/seecloud/fuel-devops-portal.git
   acl-config: acls/oss/oss.config
 
 -
-
   project: oss/fuel-ccp-security-monkey
   description: Fuel CCP - Security Monkey deployment
   acl-config: acls/oss/oss.config
 
 -
-
   project: oss/fuel-ccp-spinnaker
   description: Fuel CCP - Spinnaker deployment
+  acl-config: acls/oss/oss.config
+
+-
+  project: oss/security-monkey
+  description: OSS Security Monkey
+  upstream: git://github.com/Netflix/security_monkey.git
   acl-config: acls/oss/oss.config
 
 -
