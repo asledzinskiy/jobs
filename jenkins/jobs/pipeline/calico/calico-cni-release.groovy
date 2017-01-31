@@ -71,7 +71,7 @@ def promote_containers(artifacts) {
   calico.promoteCalicoImage([
     imageProperties: cniImageProperties,
     artifactoryServerName : env.ARTIFACTORY_SERVER,
-    dockerLookupRepo : env.VIRTUAL_DEV_DOCKER_REGISTRY,
+    dockerLookupRepo : env.DEV_DOCKER_REGISTRY,
     dockerPromoteRepo : env.PROD_DOCKER_REGISTRY,
     imageName: 'calico/cni',
     imageTag: promoteTag,
@@ -79,6 +79,6 @@ def promote_containers(artifacts) {
   ])
 
   return [
-    cniImage: "${env.PROD_DOCKER_REGISTRY}/${env.PROJECT_NAMESPACE}/calico/cni:${promoteTag}",
+    cniImage: "${env.VIRTUAL_PROD_DOCKER_REGISTRY}/${env.PROJECT_NAMESPACE}/calico/cni:${promoteTag}",
   ]
 }

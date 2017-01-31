@@ -39,6 +39,9 @@
           name: DEV_DOCKER_REGISTRY
           default: 'docker-dev-local'
       - string:
+          name: VIRTUAL_PROD_DOCKER_REGISTRY
+          default: '{docker-prod-virtual}'
+      - string:
           name: PROD_DOCKER_REGISTRY
           default: 'docker-prod-local'
       - string:

@@ -185,7 +185,7 @@ def promote_containers(artifacts) {
   calico.promoteCalicoImage([
     imageProperties: nodeImageProperties,
     artifactoryServerName : env.ARTIFACTORY_SERVER,
-    dockerLookupRepo : env.VIRTUAL_DEV_DOCKER_REGISTRY,
+    dockerLookupRepo : env.DEV_DOCKER_REGISTRY,
     dockerPromoteRepo : env.PROD_DOCKER_REGISTRY,
     imageName: 'calico/node',
     imageTag: promoteTag,
@@ -194,14 +194,14 @@ def promote_containers(artifacts) {
   calico.promoteCalicoImage([
     imageProperties: ctlImageProperties,
     artifactoryServerName : env.ARTIFACTORY_SERVER,
-    dockerLookupRepo : env.VIRTUAL_DEV_DOCKER_REGISTRY,
+    dockerLookupRepo : env.DEV_DOCKER_REGISTRY,
     dockerPromoteRepo : env.PROD_DOCKER_REGISTRY,
     imageName: 'calico/ctl',
     imageTag: promoteTag,
     defineLatest: true
   ])
   return [
-    nodeImage: "${env.PROD_DOCKER_REGISTRY}/${env.PROJECT_NAMESPACE}/calico/node:${promoteTag}",
-    ctlImage: "${env.PROD_DOCKER_REGISTRY}/${env.PROJECT_NAMESPACE}/calico/ctl:${promoteTag}",
+    nodeImage: "${env.VIRTUAL_PROD_DOCKER_REGISTRY}/${env.PROJECT_NAMESPACE}/calico/node:${promoteTag}",
+    ctlImage: "${env.VIRTUAL_PROD_DOCKER_REGISTRY}/${env.PROJECT_NAMESPACE}/calico/ctl:${promoteTag}",
   ]
 }
