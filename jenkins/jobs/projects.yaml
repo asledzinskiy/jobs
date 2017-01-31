@@ -116,8 +116,8 @@
 - project:
     name: calico-release
     jobs:
-      - calicoctl-release-pipeline
-      - calico-cni-release-pipeline
+      - calico-release-calicoctl-pipeline
+      - calico-release-cni-plugin-pipeline
 
 - project:
     name: sync-upstream-repos

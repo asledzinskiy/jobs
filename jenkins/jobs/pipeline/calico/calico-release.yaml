@@ -1,5 +1,5 @@
 - job-template:
-    name: calicoctl-release-pipeline
+    name: calico-release-calicoctl-pipeline
     project-name: calico-release-pipelines
     description: |
       Pipeline for calicoctl project release
@@ -13,7 +13,7 @@
         gerrit-host: '{gerrit-host}'
 
 - job-template:
-    name: calico-cni-release-pipeline
+    name: calico-release-cni-plugin-pipeline
     project-name: calico-release-pipelines
     description: |
       Pipeline for cni-plugin project release
@@ -33,11 +33,14 @@
           name: ARTIFACTORY_SERVER
           default: 'mcp-ci'
       - string:
-          name: TEST_DOCKER_REGISTRY
+          name: VIRTUAL_DEV_DOCKER_REGISTRY
           default: '{docker-dev-virtual}'
       - string:
+          name: DEV_DOCKER_REGISTRY
+          default: 'docker-dev-local'
+      - string:
           name: PROD_DOCKER_REGISTRY
-          default: '{docker-prod-virtual}'
+          default: 'docker-prod-local'
       - string:
           name: TEST_BINARY_REPO
           default: 'binary-dev-local'

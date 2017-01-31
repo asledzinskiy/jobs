@@ -42,12 +42,13 @@ def prepare_libcalico() {
     ])
     calico.testLibcalico()
     def buildImageData = calico.buildLibcalico([
-      dockerRegistry : env.TEST_DOCKER_REGISTRY,
+      dockerRegistry : env.VIRTUAL_DEV_DOCKER_REGISTRY,
       projectNamespace : env.PROJECT_NAMESPACE,
     ])
     return calico.publishCalicoImage([
       artifactoryServerName : env.ARTIFACTORY_SERVER,
-      dockerRegistry : env.TEST_DOCKER_REGISTRY,
+      dockerRegistry : env.VIRTUAL_DEV_DOCKER_REGISTRY,
+      dockerRepo : env.DEV_DOCKER_REGISTRY,
       imageName : buildImageData['buildImage'],
       imageTag : buildImageData['buildImageTag'],
       projectNamespace : env.PROJECT_NAMESPACE,
@@ -104,12 +105,13 @@ def prepare_felix() {
     calico.switchCalicoToDownstreamLibcalicoGo(env.LIBCALICOGO_COMMIT, env.GERRIT_HOST, "./go/glide.lock")
     calico.testFelix()
     def felixImageData = calico.buildFelix([
-      dockerRegistry : env.TEST_DOCKER_REGISTRY,
+      dockerRegistry : env.VIRTUAL_DEV_DOCKER_REGISTRY,
       projectNamespace : env.PROJECT_NAMESPACE,
     ])
     return calico.publishCalicoImage([
       artifactoryServerName : env.ARTIFACTORY_SERVER,
-      dockerRegistry : env.TEST_DOCKER_REGISTRY,
+      dockerRegistry : env.VIRTUAL_DEV_DOCKER_REGISTRY,
+      dockerRepo : env.DEV_DOCKER_REGISTRY,
       imageName : felixImageData['felixImage'],
       imageTag : felixImageData['felixImageTag'],
       projectNamespace : env.PROJECT_NAMESPACE,
@@ -128,7 +130,7 @@ def build_containers(String buildImage, String felixImage, String confdBuildId, 
     ])
     calico.testCalicoctl()
     def calicoContainersArts = calico.buildCalicoContainers([
-      dockerRegistry : env.TEST_DOCKER_REGISTRY,
+      dockerRegistry : env.VIRTUAL_DEV_DOCKER_REGISTRY,
       artifactoryURL : artifactoryURL,
       projectNamespace : env.PROJECT_NAMESPACE,
       buildImage : buildImage,
@@ -138,7 +140,8 @@ def build_containers(String buildImage, String felixImage, String confdBuildId, 
     ])
     calico.publishCalicoImage([
       artifactoryServerName : env.ARTIFACTORY_SERVER,
-      dockerRegistry : env.TEST_DOCKER_REGISTRY,
+      dockerRegistry : env.VIRTUAL_DEV_DOCKER_REGISTRY,
+      dockerRepo : env.DEV_DOCKER_REGISTRY,
       imageName : calicoContainersArts['NODE_CONTAINER_NAME'],
       imageTag : calicoContainersArts['CALICO_VERSION'],
       projectNamespace : env.PROJECT_NAMESPACE,
@@ -146,7 +149,8 @@ def build_containers(String buildImage, String felixImage, String confdBuildId, 
     ])
     calico.publishCalicoImage([
       artifactoryServerName : env.ARTIFACTORY_SERVER,
-      dockerRegistry : env.TEST_DOCKER_REGISTRY,
+      dockerRegistry : env.VIRTUAL_DEV_DOCKER_REGISTRY,
+      dockerRepo : env.DEV_DOCKER_REGISTRY,
       imageName : calicoContainersArts['CTL_CONTAINER_NAME'],
       imageTag : calicoContainersArts['CALICO_VERSION'],
       projectNamespace : env.PROJECT_NAMESPACE,
@@ -181,7 +185,7 @@ def promote_containers(artifacts) {
   calico.promoteCalicoImage([
     imageProperties: nodeImageProperties,
     artifactoryServerName : env.ARTIFACTORY_SERVER,
-    dockerLookupRepo : env.TEST_DOCKER_REGISTRY,
+    dockerLookupRepo : env.VIRTUAL_DEV_DOCKER_REGISTRY,
     dockerPromoteRepo : env.PROD_DOCKER_REGISTRY,
     imageName: 'calico/node',
     imageTag: promoteTag,
@@ -190,7 +194,7 @@ def promote_containers(artifacts) {
   calico.promoteCalicoImage([
     imageProperties: ctlImageProperties,
     artifactoryServerName : env.ARTIFACTORY_SERVER,
-    dockerLookupRepo : env.TEST_DOCKER_REGISTRY,
+    dockerLookupRepo : env.VIRTUAL_DEV_DOCKER_REGISTRY,
     dockerPromoteRepo : env.PROD_DOCKER_REGISTRY,
     imageName: 'calico/ctl',
     imageTag: promoteTag,

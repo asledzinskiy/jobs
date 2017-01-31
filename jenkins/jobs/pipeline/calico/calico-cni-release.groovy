@@ -29,12 +29,13 @@ def build_cni(){
     calico.switchCalicoToDownstreamLibcalicoGo(env.LIBCALICOGO_COMMIT, env.GERRIT_HOST, "./glide.lock")
     calico.testCniPlugin()
     def cniImageData = calico.buildCniPlugin([
-      dockerRegistry : env.TEST_DOCKER_REGISTRY,
+      dockerRegistry : env.VIRTUAL_DEV_DOCKER_REGISTRY,
       projectNamespace : env.PROJECT_NAMESPACE,
     ])
     def cniTestImage = calico.publishCalicoImage([
       artifactoryServerName : env.ARTIFACTORY_SERVER,
-      dockerRegistry : env.TEST_DOCKER_REGISTRY,
+      dockerRegistry : env.VIRTUAL_DEV_DOCKER_REGISTRY,
+      dockerRepo : env.DEV_DOCKER_REGISTRY,
       imageName : cniImageData['cniImage'],
       imageTag : cniImageData['cniImageTag'],
       projectNamespace : env.PROJECT_NAMESPACE,
@@ -70,7 +71,7 @@ def promote_containers(artifacts) {
   calico.promoteCalicoImage([
     imageProperties: cniImageProperties,
     artifactoryServerName : env.ARTIFACTORY_SERVER,
-    dockerLookupRepo : env.TEST_DOCKER_REGISTRY,
+    dockerLookupRepo : env.VIRTUAL_DEV_DOCKER_REGISTRY,
     dockerPromoteRepo : env.PROD_DOCKER_REGISTRY,
     imageName: 'calico/cni',
     imageTag: promoteTag,
