@@ -1,0 +1,22 @@
+- job-template:
+    name: jimbo-pipeline
+    description: |
+      Pipeline for Jimbo (Artifactory configuration management tool).
+    project-type: pipeline
+    dsl:
+      !include-raw-escape: jimbo.groovy
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: mcp-ci/jimbo
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
