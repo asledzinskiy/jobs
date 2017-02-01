@@ -644,6 +644,12 @@
   acl-config: acls/mk/mk.config
 
 -
+  project: oss/devops-portal
+  description: DevOps Portal
+  upstream: git://github.com/seecloud/fuel-devops-portal.git
+  acl-config: acls/oss/oss.config
+
+-
 
   project: oss/fuel-ccp-security-monkey
   description: Fuel CCP - Security Monkey deployment
