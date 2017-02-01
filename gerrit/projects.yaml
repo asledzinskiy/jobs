@@ -9,6 +9,11 @@
   acl-config: acls/ccp-ci/ccp-ci.project-config.config
 
 -
+  project: ccp-ci/jenkins-pipelines
+  description: Collection of Jenkinsfiles for deploy,build,tempest,cleanup pipelines
+  acl-config: acls/mcp-ci/mcp-ci.config
+
+-
   project: ccp/ccp-pipeline
   description: CCP jenkins pipelines
   acl-config: acls/ccp/ccp.config

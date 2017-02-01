@@ -1,0 +1,34 @@
+- job-template:
+    name: ccp-cleanup
+    description: |
+      Fuel CCP - CCP cleanup
+    project-type: pipeline
+
+    parameters:
+      - string:
+          name: KUBERNETES_URL
+          description: 'URL for kubernetes api like https://host:443/'
+
+      - string:
+          name: CREDENTIALS_ID
+          default: 'kubernetes-api'
+          description: 'Credentials for k8s api'
+
+      - mcp-configuration-params:
+          gerrit-proto: 'ssh'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+          gerrit-credential-id: 'mcp-ci-gerrit'
+          gerrit-repo-ns: 'clusters/mcp/'
+
+      - ccp-configuration-params:
+          conf-entrypoint: 'ccp-config/ccp.yaml'
+
+    pipeline-scm:
+      scm:
+        - basic-scm:
+            branch: 'master'
+            project: 'ccp/jenkins-pipelines'
+            gerrit-host: '{gerrit-host}'
+            gerrit-port: '{gerrit-port}'
+      script-path: 'Jenkinsfile.cleanup'
