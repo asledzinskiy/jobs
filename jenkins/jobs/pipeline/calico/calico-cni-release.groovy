@@ -68,6 +68,10 @@ def promote_containers(artifacts) {
   ]
   promoteTag = artifacts['cniImageTag'].split('-[0-9]+$')[0] // remote a timestamp from image tag
 
+  if (env.DOCKER_IMAGE_TAG_SUFFIX) {
+    promoteTag = "${promoteTag}-${env.DOCKER_IMAGE_TAG_SUFFIX}"
+  }
+
   calico.promoteCalicoImage([
     imageProperties: cniImageProperties,
     artifactoryServerName : env.ARTIFACTORY_SERVER,
@@ -75,7 +79,8 @@ def promote_containers(artifacts) {
     dockerPromoteRepo : env.PROD_DOCKER_REGISTRY,
     imageName: 'calico/cni',
     imageTag: promoteTag,
-    defineLatest: true
+    projectNamespace : env.PROJECT_NAMESPACE,
+    defineLatest: false,
   ])
 
   return [

@@ -182,6 +182,10 @@ def promote_containers(artifacts) {
   ]
   promoteTag = artifacts['CALICO_VERSION'].split('-[0-9]+$')[0] // remote a timestamp from image tag
 
+  if (env.DOCKER_IMAGE_TAG_SUFFIX) {
+    promoteTag = "${promoteTag}-${env.DOCKER_IMAGE_TAG_SUFFIX}"
+  }
+
   calico.promoteCalicoImage([
     imageProperties: nodeImageProperties,
     artifactoryServerName : env.ARTIFACTORY_SERVER,
@@ -189,7 +193,8 @@ def promote_containers(artifacts) {
     dockerPromoteRepo : env.PROD_DOCKER_REGISTRY,
     imageName: 'calico/node',
     imageTag: promoteTag,
-    defineLatest: true
+    projectNamespace : env.PROJECT_NAMESPACE,
+    defineLatest: false,
   ])
   calico.promoteCalicoImage([
     imageProperties: ctlImageProperties,
@@ -198,7 +203,8 @@ def promote_containers(artifacts) {
     dockerPromoteRepo : env.PROD_DOCKER_REGISTRY,
     imageName: 'calico/ctl',
     imageTag: promoteTag,
-    defineLatest: true
+    projectNamespace : env.PROJECT_NAMESPACE,
+    defineLatest: false,
   ])
   return [
     nodeImage: "${env.VIRTUAL_PROD_DOCKER_REGISTRY}/${env.PROJECT_NAMESPACE}/calico/node:${promoteTag}",

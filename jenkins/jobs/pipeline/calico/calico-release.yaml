@@ -30,6 +30,10 @@
     name: calico-release-parameters
     parameters:
       - string:
+          name: DOCKER_IMAGE_TAG_SUFFIX
+          default: 'mcp'
+          description: 'Suffix to append to tags of released docker images'
+      - string:
           name: ARTIFACTORY_SERVER
           default: 'mcp-ci'
       - string:
