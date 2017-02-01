@@ -1,6 +1,7 @@
 gitTools = new com.mirantis.mcp.Git()
 ssl = new com.mirantis.mk.ssl()
 common = new com.mirantis.mk.common()
+mcpCommon = new com.mirantis.mcp.Common()
 sshCredentialsId = env.CREDENTIALS ?: 'mcp-ci-k8s-deployment'
 def String KARGO_REPO = 'kubernetes/kargo'
 def String FUEL_CCP_INSTALLER_REPO = 'ccp/fuel-ccp-installer'
@@ -88,17 +89,11 @@ node("${SLAVE_NODE_LABEL}") {
     }
 
     stage('Update configs') {
-        sh """
-            python -c "import jinja2
-from jinja2 import Template
-templateLoader=jinja2.FileSystemLoader(searchpath='/')
-templateEnv=jinja2.Environment(loader=templateLoader)
-TEMPLATE_FILE='${WORKSPACE}/inventory/inventory.cfg'
-template=templateEnv.get_template(TEMPLATE_FILE)
-templateVars=${NODE_JSON}
-outputText=template.render(templateVars)
-Template(outputText).stream().dump('${WORKSPACE}/inventory/inventory.cfg')"
-        """
+        mcpCommon.renderJinjaTemplate(
+            "${NODE_JSON}",
+            "${WORKSPACE}/inventory/inventory.cfg",
+            "${WORKSPACE}/inventory/inventory.cfg"
+        )
     }
 
     stage("Prepare Operating System") {
