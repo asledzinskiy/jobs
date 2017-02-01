@@ -222,7 +222,7 @@
             - mitaka:
                 timer: '0 0,6,12,18 * * *'
             - newton:
-                timer: '0 1,7,13,19 * * *'
+                timer: '0 3,9,15,21 * * *'
       - demo-deploy
       - demo-build
       - demo-trigger
