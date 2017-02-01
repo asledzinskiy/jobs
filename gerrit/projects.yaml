@@ -597,8 +597,18 @@
 
 -
   project: mcp-ci/project-config
-  description: project-config for MCP-CICD POC project
+  description: project-config for CI-only jobs and repositories of MCP-CICD
   acl-config: acls/mcp-ci/mcp-ci.project-config.config
+
+-
+  project: mcp-ci/project-config-base
+  description: a base project-config to define common repositories and jobs
+  acl-config: acls/mcp-ci/mcp-ci.config
+
+-
+  project: mcp-ci/project-config-local
+  description: a project-config to define local deployment repositories and jobs
+  acl-config: acls/mcp-ci/mcp-ci.config
 
 -
   project: mcp-netchecker/mcp-netchecker-agent
