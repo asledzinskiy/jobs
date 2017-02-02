@@ -45,8 +45,7 @@ node("${SLAVE_NODE_LABEL}") {
     def qcowPath = server.download(downloadSpec)
     // we must have only ONE artifact if it's not true then fail
     if (qcowPath.publishedDependencies.size() != 1) {
-      throw new RuntimeException("Please check that you correctly specified
-      the artifact")
+      throw new RuntimeException("Please check that you correctly specified the artifact")
     }
     def img = qcowPath.publishedDependencies[0].getId()
 
