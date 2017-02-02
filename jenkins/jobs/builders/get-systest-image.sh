@@ -26,7 +26,7 @@ if [ -n "${IMAGE_LINK}" ]; then
         wget -N "${LATEST_IMAGE_LINK}"
     fi
 
-    ln -sf "${IMAGES_DIR}/${IMAGE_FILE}" "${IMAGE_PATH}"
+    ln -sf "${IMAGES_DIR}/${IMAGE_FILE}" "${IMAGE_PATH}" || test -f "${IMAGE_PATH}"
 
     popd
 fi
