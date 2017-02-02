@@ -5,6 +5,9 @@
     concurrent: false
     parameters:
       - string:
+          name: MANUAL_EVENT_TYPE
+          default: 'deploy-cluster'
+      - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
       - string:
@@ -56,7 +59,7 @@
           default: 'Mirantis'
           description: Name of the user domain in CI/CD OpenStack installation
     dsl:
-      !include-raw-escape: ceph-decapod-deploy-cluster.groovy
+      !include-raw-escape: ceph-test-pipeline.groovy
     properties:
       - authorization-allow-group:
           group_name: 'sarkhipov'

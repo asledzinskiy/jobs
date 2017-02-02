@@ -2,6 +2,7 @@ def gitTools = new com.mirantis.mcp.Git()
 def ciTools = new com.mirantis.mcp.Common()
 def artifactory = new com.mirantis.mcp.MCPArtifactory()
 
+TASK_TYPE = env.MANUAL_EVENT_TYPE
 ARTIFACTORY_SERVER = Artifactory.server('mcp-ci')
 ARTIFACTORY_URL = ARTIFACTORY_SERVER.getUrl()
 ARTIFACTORY_PYPI_URL = "${ARTIFACTORY_URL}/api/pypi/pypi-virtual/simple/"
@@ -14,16 +15,142 @@ DECAPOD_PASSWORD = 'root'
 INSTANCE_COUNT = 5 // this is parameter from HOT template
 
 
+def deploy_cluster() {
+    stage('Create cluster') {
+        // To deploy Ceph, first we have to create cluster
+        // model. This cluster model will be responsible to
+        // hold all data, related to the actual cluster.
+        //
+        // ID of cluster will be stored in cluster_id.txt file
+
+        sh '''\
+            . venv/bin/activate
+            cd ./decapod
+
+            decapod cluster create ceph | jp.py id | cut -f 2 -d '"' | tee cluster_id.txt
+        '''.stripIndent()
+    }
+
+    stage('Wait until all servers are discovered') {
+        // It takes time to discover all servers. Because they
+        // have to have deployed OS and executed cloud-init.
+
+        sh '''\
+            . venv/bin/activate
+            cd ./decapod
+
+            decapod server wait-until -t 600 5
+            decapod server get-all -c | tail -n +2 | cut -f 2 -d '"' | tee server_ids.txt
+        '''.stripIndent()
+    }
+
+    stage('Create playbook configuration') {
+        // To deploy cluster, we need to configure playbook
+        // plugin. Configuration is trivial: we need to
+        // propagate cluster_id and server list to Decapod.
+
+        sh '''\
+            . venv/bin/activate
+            cd ./decapod
+
+            cat server_ids.txt | \
+            xargs -r decapod playbook-configuration create \
+                deploy \
+                cluster_deploy \
+                $(cat cluster_id.txt) | \
+            jp.py id | cut -f 2 -d '"' | tee playbook_congiuration.txt
+        '''.stripIndent()
+    }
+
+    stage('Deploy Ceph') {
+        // To deploy Ceph with Decapod, we need to have ID
+        // of playbook configuration and it's version. Default
+        // version is 1. Since, we've just created
+        // configuration, it's version is 1.
+
+        sh '''\
+            . venv/bin/activate
+            cd ./decapod
+
+            decapod execution create \
+                --wait 3600 \
+                $(cat playbook_congiuration.txt) 1
+        '''.stripIndent()
+    }
+
+    stage('Run Cinder integration') {
+        // To integrate OpenStack with deployed Ceph cluster,
+        // we need to run another playbook.
+
+        sh '''\
+            . venv/bin/activate
+            cd ./decapod
+
+            decapod playbook-configuration create \
+                cinder \
+                cinder_integration \
+                $(cat cluster_id.txt) | \
+            jp.py id | cut -f 2 -d '"' | tee cinder.txt
+
+            decapod execution create \
+                --wait 300 \
+                $(cat cinder.txt) 1
+        '''.stripIndent()
+    }
+
+    stage('Get data for Cinder integration.') {
+        // Request data for Cinder integration.
+        //
+        // Data will be printed in output and stored on
+        // filesystem.
+
+        sh '''\
+            . venv/bin/activate
+            cd ./decapod
+
+            decapod cluster cinder-integration \
+                --root $(pwd)/cinder \
+                --store \
+                $(cat cluster_id.txt)
+
+            find ./cinder -type f | \
+            xargs -r -n 1 -I file \
+                sh -c 'echo "\n=================\nfile\n=================\n" && cat file && echo'
+        '''.stripIndent()
+    }
+}
+
+
+def run_whale_tests() {
+    stage('Run Whale tests') {
+        sh 'cd ./whale && tox -v -e decapod_ui'
+    }
+}
+
+
 node('decapod') {
     stage('Checkout SCM') {
         def gerritHost = env.GERRIT_HOST
         def decapodBranch = DECAPOD_BRANCH
+        def taskType = env.MANUAL_EVENT_TYPE
 
+        if ( TASK_TYPE == 'whale-tests' ) {
+            def whaleBranch = env.WHALE_BRANCH
+
+            gitTools.gitSSHCheckout ([
+                credentialsId : 'mcp-ci-gerrit',
+                branch : whaleBranch,
+                host : gerritHost,
+                project: 'ceph/whale',
+                targetDir : './whale'
+            ])
+        }
         gitTools.gitSSHCheckout ([
             credentialsId : 'mcp-ci-gerrit',
             branch : decapodBranch,
             host : gerritHost,
             project : 'ceph/decapod',
+            targetDir: './decapod'
         ])
     }
 
@@ -38,6 +165,7 @@ node('decapod') {
 
             pip install 'setuptools<34'
             pip install 'docker-compose==1.9.0' jmespath
+            pip install ./decapod/decapodlib ./decapod/decapodcli
         '''.stripIndent()
     }
 
@@ -64,10 +192,12 @@ node('decapod') {
             ]) {
                 sh '''\
                     . venv/bin/activate
+                    cd ./decapod
 
-                    docker-compose -f ./docker-compose.yml -p decapod pull
-                    docker-compose -f ./docker-compose.yml -p decapod up -d
-                    docker-compose -f ./docker-compose.yml -p decapod exec admin decapod-admin migration apply
+                    docker-compose -p decapod pull
+                    docker-compose -p decapod up -d
+                    docker-compose -p decapod exec -T admin \
+                        decapod-admin migration apply
                 '''.stripIndent()
             }
         }
@@ -81,20 +211,22 @@ node('decapod') {
             // cloud-init) and notifies Decapod about its' existence. After
             // that Decapod comes to host and fetches facts from the host.
             //
-            // Host appears in the list ONLY if it is accessible by SSH
+            // Host appears in tГлавный приз World Press Photo — фотограф Бурхан Озбилиджи. Человек пришел на мероприятие, которое не предвещало ничего выдающегося (подумаешь, какое-то открытие выставки), а в итоге снял главный кадр года. Тут должно быть что-то про бога журналистики или умение оказаться в нужное время в нужном месте, но если не вдаваться в философские рассуждения, то вообще-то даже представить сложно, как страшно было в момент съемки фотографу.he list ONLY if it is accessible by SSH
             // and facts are collectable.
 
-            sh '''\
-                . venv/bin/activate
-                pip install -e ./decapodlib -e ./decapodcli
-                server_discovery_token="$(grep server_discovery_token ./containerization/files/devconfigs/config.yaml | cut -f 2 -d '"')"
-                public_ip="$(ip r g 8.8.8.8 | head -n 1 | awk '{print $NF}')"
+            withEnv(["DECAPOD_HTTP_PORT=${env.DECAPOD_HTTP_PORT}"]) {
+                sh '''\
+                    . venv/bin/activate
+                    cd ./decapod
 
-                decapod -u "http://${public_ip}:9999" cloud-config \
-                        ${server_discovery_token} \
-                        containerization/files/devconfigs/ansible_ssh_keyfile.pub \
-                    > ./whale_templates/user-data.txt
-            '''.stripIndent()
+                    public_ip="$(ip r g 8.8.8.8 | head -n 1 | awk '{print $NF}')"
+                    decapod_url="http://${public_ip}:${DECAPOD_HTTP_PORT}"
+
+                    docker-compose -p decapod exec -T admin \
+                        decapod-admin cloud-config "${decapod_url}" \
+                        > ./whale_templates/user-data.txt
+                '''.stripIndent()
+            }
         }
 
         withCredentials([
@@ -126,6 +258,7 @@ node('decapod') {
                     stage('Boot VMs') {
                         sh '''\
                             . venv/bin/activate
+                            cd ./decapod
 
                             pip install python-heatclient
                             cd ./whale_templates
@@ -133,109 +266,18 @@ node('decapod') {
                         '''.stripIndent()
                     }
 
-                    stage('Create cluster') {
-                        // To deploy Ceph, first we have to create cluster
-                        // model. This cluster model will be responsible to
-                        // hold all data, related to the actual cluster.
-                        //
-                        // ID of cluster will be stored in cluster_id.txt file
-
-                        sh '''\
-                            . venv/bin/activate
-
-                            decapod cluster create ceph | jp.py id | cut -f 2 -d '"' | tee cluster_id.txt
-                        '''.stripIndent()
+                    if ( TASK_TYPE == 'whale-tests' ) {
+                        run_whale_tests()
+                    } else {
+                        deploy_cluster()
                     }
-
-                    stage('Wait until all servers are discovered') {
-                        // It takes time to discover all servers. Because they
-                        // have to have deployed OS and executed cloud-init.
-
-                        sh '''\
-                            . venv/bin/activate
-
-                            decapod server wait-until -t 600 5
-                            decapod server get-all -c | tail -n +2 | cut -f 2 -d '"' | tee server_ids.txt
-                        '''.stripIndent()
-                    }
-
-                    stage('Create playbook configuration') {
-                        // To deploy cluster, we need to configure playbook
-                        // plugin. Configuration is trivial: we need to
-                        // propagate cluster_id and server list to Decapod.
-
-                        sh '''\
-                            . venv/bin/activate
-
-                            cat server_ids.txt | \
-                            xargs -r decapod playbook-configuration create \
-                                deploy \
-                                cluster_deploy \
-                                $(cat cluster_id.txt) | \
-                            jp.py id | cut -f 2 -d '"' | tee playbook_congiuration.txt
-                        '''.stripIndent()
-                    }
-
-                    stage('Deploy Ceph') {
-                        // To deploy Ceph with Decapod, we need to have ID
-                        // of playbook configuration and it's version. Default
-                        // version is 1. Since, we've just created
-                        // configuration, it's version is 1.
-
-                        sh '''\
-                            . venv/bin/activate
-
-                            decapod execution create \
-                                --wait 3600 \
-                                $(cat playbook_congiuration.txt) 1
-                        '''.stripIndent()
-                    }
-
-                    stage('Run Cinder integration') {
-                        // To integrate OpenStack with deployed Ceph cluster,
-                        // we need to run another playbook.
-
-                        sh '''\
-                            . venv/bin/activate
-
-                            decapod playbook-configuration create \
-                                cinder \
-                                cinder_integration \
-                                $(cat cluster_id.txt) | \
-                            jp.py id | cut -f 2 -d '"' | tee cinder.txt
-
-                            decapod execution create \
-                                --wait 300 \
-                                $(cat cinder.txt) 1
-                        '''.stripIndent()
-                    }
-
-                    stage('Get data for Cinder integration.') {
-                        // Request data for Cinder integration.
-                        //
-                        // Data will be printed in output and stored on
-                        // filesystem.
-
-                        sh '''\
-                            . venv/bin/activate
-
-                            decapod cluster cinder-integration \
-                                --root $(pwd)/cinder \
-                                --store \
-                                $(cat cluster_id.txt)
-
-                            find ./cinder -type f | \
-                            xargs -r -n 1 -I file \
-                                sh -c 'echo "\n=================\nfile\n=================\n" && cat file && echo'
-                        '''.stripIndent()
-                    }
-
                 } catch(err) {
                     echo 'Build is aborted, start to cleanup Heat stack'
                     currentBuild.result = 'FAILURE'
                 } finally {
                     sh '''\
                         . venv/bin/activate
+
                         heat stack-delete "$BUILD_TAG"
                     '''.stripIndent()
                 }
@@ -256,8 +298,9 @@ node('decapod') {
             ]) {
                 sh '''\
                     . venv/bin/activate
+                    cd ./decapod
 
-                    docker-compose -f ./docker-compose.yml -p decapod down -v --rmi all
+                    docker-compose -p decapod down -v --rmi all
                     rm -r ./venv
                 '''.stripIndent()
             }

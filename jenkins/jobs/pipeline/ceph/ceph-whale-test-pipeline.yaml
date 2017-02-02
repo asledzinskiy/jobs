@@ -5,6 +5,9 @@
     concurrent: false
     parameters:
       - string:
+          name: MANUAL_EVENT_TYPE
+          default: 'whale-tests'
+      - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
       - string:
@@ -20,19 +23,43 @@
           default: latest
           description: Decapod docker images tag to use
       - string:
+          name: DECAPOD_HTTP_PORT
+          default: '9999'
+          description: HTTP port where Decapod has to bind.
+      - string:
+          name: DECAPOD_HTTPS_PORT
+          default: '10000'
+          description: HTTPS port where Decapod has to bind.
+      - string:
           name: DOCKER_REGISTRY
           default: "{docker-prod-virtual}"
           description: Docker registry for test images
       - string:
           name: OS_AUTH_URL
-          default: "https://horizon.mcp.mirantis.net:5000/v2.0"
+          default: "https://horizon.mcp.mirantis.net:5000/v3"
           description: Authentication URL for CI/CD OpenStack installation
       - string:
-          name: OS_TENANT_NAME
-          default: "jenkins-ci"
-          description: Tenant name for CI/CD OpenStack installation
+          name: OS_PROJECT_DOMAIN_NAME
+          default: "Mirantis"
+          description: Name of the project domain in CI/CD OpenStack installation
+      - string:
+          name: OS_PROJECT_ID
+          default: 'ad85cea868bb4fc885facd6af1966365'
+          description: ID of the project in CI/CD OpenStack installation
+      - string:
+          name: OS_PROJECT_NAME
+          default: 'jenkins-ci'
+          description: Name of the project in CI/CD OpenStack installation
+      - string:
+          name: OS_REGION_NAME
+          default: 'RegionOne'
+          description: Name of the region in CI/CD OpenStack installation
+      - string:
+          name: OS_USER_DOMAIN_NAME
+          default: 'Mirantis'
+          description: Name of the user domain in CI/CD OpenStack installation
     dsl:
-      !include-raw-escape: ceph-whale-test-pipeline.groovy
+      !include-raw-escape: ceph-test-pipeline.groovy
     properties:
       - authorization-allow-group:
           group_name: 'ceph-whale'
