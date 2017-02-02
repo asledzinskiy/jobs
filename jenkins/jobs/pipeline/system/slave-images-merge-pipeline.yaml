@@ -30,6 +30,11 @@
       Promote image for Jenkins {slave-type} slave
     project-type: pipeline
     concurrent: true
+    parameters:
+      - string:
+          name: SLAVE_TYPE
+          default: '{slave-type}'
+          description: 'jnlp or swarm'
     dsl:
       !include-raw-escape: specific-slave-image.groovy
 
