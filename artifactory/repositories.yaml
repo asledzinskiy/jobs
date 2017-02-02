@@ -1,13 +1,215 @@
 local:
   - key: _genericRepository-local
     packageType: generic
+  - key: apk-local
+    packageType: generic
+  - key: binary-dev-local
+    packageType: generic
+  - key: binary-prod-local
+    packageType: generic
+  - key: centos-local
+    packageType: yum
+  - key: debian-local
+    packageType: debian
+  - key: docker-dev-local
+    packageType: docker
+    enableDockerSupport: true
+    dockerApiVersion: V2
+  - key: docker-prod-local
+    packageType: docker
+    enableDockerSupport: true
+    dockerApiVersion: V2
+  - key: k8s-tests-images
+    packageType: docker
+    enableDockerSupport: true
+    dockerApiVersion: V2
+  - key: maven-local
+    packageType: maven
+  - key: mcp-ci-images
+    packageType: docker
+    enableDockerSupport: true
+    dockerApiVersion: V2
+  - key: mcp-k8s-ci
+    packageType: docker
+    enableDockerSupport: true
+    dockerApiVersion: V2
+  - key: mcp-k8s-local
+    packageType: docker
+    enableDockerSupport: true
+    dockerApiVersion: V2
+  - key: pypi-local
+    packageType: pypi
+  - key: sandbox
+    packageType: generic
+  - key: sandbox-binary-dev-local
+    packageType: generic
+  - key: sandbox-binary-prod-local
+    packageType: generic
+  - key: sandbox-docker-dev-local
+    packageType: docker
+    enableDockerSupport: true
+    maxUniqueTags: 30
+    dockerApiVersion: V2
+  - key: sandbox-docker-prod-local
+    packageType: docker
+    dockerApiVersion: V2
+    enableDockerSupport: true
+  - key: sandbox-github-local
+    packageType: generic
+  - key: ubuntu-local
+    packageType: debian
+  - key: vm-images
+    packageType: generic
 remote:
   - key: _genericRepository-remote
     packageType: generic
     url: http://localhost
+  - key: apk-remote
+    packageType: generic
+    url: http://dl-cdn.alpinelinux.org/alpine/
+  - key: apt-docker-project
+    packageType: debian
+    url: https://apt.dockerproject.org/repo
+  - key: artifactory-pro-debian
+    packageType: debian
+    url: https://jfrog.bintray.com/artifactory-pro-debs
+  - key: artifactory-pro-rpm
+    packageType: yum
+    url: http://jfrog.bintray.com/artifactory-pro-rpms
+  - key: binary-remote
+    packageType: generic
+    url: https://artifactory.mcp.mirantis.net/artifactory/binary-prod-virtual
+  - key: centos-remote
+    packageType: yum
+    url: http://mirror.centos.org/centos/
+  - key: debian-mariadb-remote
+    packageType: debian
+    url: http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.1/debian/
+  - key: debian-nginx
+    packageType: debian
+    url: http://nginx.org/packages/debian/
+  - key: debian-percona-remote
+    packageType: debian
+    url: http://repo.percona.com/apt
+  - key: debian-rabbitmq-remote
+    packageType: debian
+    url: http://www.rabbitmq.com/debian/
+  - key: debian-remote
+    packageType: debian
+    url: http://ftp.us.debian.org/debian/
+  - key: debian-security-remote
+    packageType: debian
+    url: http://security.debian.org/
+  - key: docker-remote
+    packageType: docker
+    dockerApiVersion: V2
+    enableDockerSupport: true
+    url: https://registry-1.docker.io/
+  - key: gcs-remote
+    packageType: generic
+    url: https://storage.googleapis.com
+  - key: gerrit-plugins
+    packageType: generic
+    url: http://builds.quelltextlich.at/gerrit/nightly
+  - key: jcenter
+    packageType: maven
+    url: https://jcenter.bintray.com
+  - key: jenkins-deb-pkgs
+    packageType: generic
+    url: https://pkg.jenkins.io/debian-stable/binary
+  - key: jenkins-plugins
+    packageType: generic
+    url: http://mirrors.jenkins-ci.org/plugins
+  - key: jenkins-plugins-jars
+    packageType: maven
+    url: https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/
+  - key: jenkins-updates
+    packageType: generic
+    url: https://updates.jenkins.io/
+  - key: mysql-connector-java
+    packageType: maven
+    url: "http://repo.jfrog.org/artifactory/remote-repos/\
+         mysql/mysql-connector-java/"
+  - key: pypi-remote
+    packageType: pypi
+    url: https://pypi.python.org
+  - key: sandbox-github
+    packageType: vcs
+    url: https://github.com/
+  - key: sandbox-github-http
+    packageType: generic
+    url: https://github.com/
+  - key: ubuntu-remote
+    packageType: debian
+    url: http://us.archive.ubuntu.com/ubuntu/
 virtual:
   - key: _genericRepository-virtual
     packageType: generic
     repositories:
       - _genericRepository-local
       - _genericRepository-remote
+  - key: apk-virtual
+    packageType: generic
+    repositories:
+      - apk-local
+      - apk-remote
+  - key: binary-dev-virtual
+    packageType: generic
+    repositories:
+      - binary-dev-local
+      - binary-prod-local
+      - binary-remote
+  - key: binary-prod-virtual
+    packageType: generic
+    repositories:
+      - binary-prod-local
+      - binary-remote
+      - gcs-remote
+  - key: centos
+    packageType: yum
+    repositories:
+      - centos-local
+      - centos-remote
+      - artifactory-pro-rpm
+  - key: centos-virtual
+    packageType: yum
+    repositories:
+      - centos-local
+      - centos-remote
+  - key: debian-virtual
+    packageType: generic
+    repositories:
+      - debian-local
+      - debian-remote
+      - debian-security-remote
+  - key: docker-dev-virtual
+    packageType: docker
+    dockerApiVersion: V1
+    enableDockerSupport: true
+    repositories:
+      - docker-dev-local
+      - docker-prod-local
+      - docker-remote
+  - key: docker-prod-virtual
+    packageType: docker
+    dockerApiVersion: V1
+    enableDockerSupport: true
+    repositories:
+      - docker-prod-local
+      - docker-remote
+  - key: mcp-k8s
+    packageType: docker
+    dockerApiVersion: V1
+    enableDockerSupport: true
+    repositories:
+      - mcp-k8s-local
+  - key: pypi-virtual
+    packageType: pypi
+    repositories:
+      - pypi-local
+      - pypi-remote
+  - key: ubuntu-virtual
+    packageType: generic
+    repositories:
+      - ubuntu-local
+      - ubuntu-remote
