@@ -54,6 +54,10 @@ def buildContainers(){
                                              imageTag,
                                              docker_dev_repo)
       } // publishing artifacts
+      def artifactory_url = artifactoryServer.getUrl()
+      def custom_properties = ['com.mirantis.imageType': "${slaveType}"]
+      def artifact_url = "${artifactory_url}/api/storage/${docker_dev_repo}/${slaveImageName}/${imageTag}"
+      artifactory.setProperties(artifact_url, custom_properties, true)
 
       //cleanup
       sh "docker rmi -f ${dockerRepository}/${slaveImageName}:${imageTag} || true"
@@ -80,7 +84,8 @@ def promoteArtifacts () {
           def imgProperties = [
             'com.mirantis.gerritChangeId': "${env.GERRIT_CHANGE_ID}",
             'com.mirantis.gerritPatchsetNumber': "${env.GERRIT_PATCHSET_NUMBER}",
-            'com.mirantis.gerritChangeNumber' : "${env.GERRIT_CHANGE_NUMBER}"
+            'com.mirantis.gerritChangeNumber': "${env.GERRIT_CHANGE_NUMBER}",
+            'com.mirantis.imageType': "${slaveType}"
           ]
           // Search for an artifact with required properties
           def artifactURI = artifactory.uriByProperties(artifactoryServer.getUrl(), imgProperties)
