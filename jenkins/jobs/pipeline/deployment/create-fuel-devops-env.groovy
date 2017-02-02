@@ -33,12 +33,13 @@ node("${SLAVE_NODE_LABEL}") {
   }
 
   stage('Fetch the VM image') {
+    def imgPath = '/home/jenkins/images'
     def downloadSpec = """{
       "files": [
       {
         "pattern": "vm-images/packer/ubuntu-16.04*.qcow2",
         "props": "com.mirantis.latest=true",
-        "target": "/home/jenkins/images/"
+        "target": "${imgPath}/"
       }
      ]
     }"""
@@ -47,12 +48,14 @@ node("${SLAVE_NODE_LABEL}") {
     if (qcowPath.publishedDependencies.size() != 1) {
       throw new RuntimeException("Please check that you correctly specified the artifact")
     }
-    def img = qcowPath.publishedDependencies[0].getId()
+    // Get downloaded filename
+    String img = new File(qcowPath.publishedDependencies[0].getId()).getName()
 
     // FIXME(skulanov): Let's live a little bit without cleaning:
     // delete all images except the one we've downloaded before
     // (just replace -exec with -delete in order to delete old images)
-    sh "find /home/jenkins/images/packer/ -type f -not -wholename ${img} -exec ls {} \\; || true"
+    sh "find ${imgPath}/packer/ -type f -not -name ${img} -exec ls {} \\; || true"
+    sh "ln -sf ${imgPath}/packer/${img} image.qcow2"
   }
 
   stage('Install and configure DevOps') {
