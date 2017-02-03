@@ -77,8 +77,8 @@ node("${SLAVE_NODE_LABEL}") {
         }
     }
 
-    stage("Run ${CLUSTER}-configure-system-test job") {
-        build job: "${CLUSTER}-configure-system-test",
+    stage("Run ${CLUSTER}-configure-system job") {
+        build job: "${CLUSTER}-configure-system",
             parameters: [
                       string(name: 'SLAVE_NODE_LABEL', value: "${SLAVE_NODE_LABEL}"),
                       string(name: 'NODE_JSON', value: "${NODE_JSON}"),
@@ -87,8 +87,8 @@ node("${SLAVE_NODE_LABEL}") {
                       booleanParam(name: 'TEST_MODE', value: true) ]
     }
 
-    stage("Run ${CLUSTER}-deploy-k8s-test job") {
-        build job: "${CLUSTER}-deploy-k8s-test",
+    stage("Run ${CLUSTER}-deploy-k8s job") {
+        build job: "${CLUSTER}-deploy-k8s",
             parameters: [
                       string(name: 'SLAVE_NODE_LABEL', value: "${SLAVE_NODE_LABEL}"),
                       string(name: 'NODE_JSON', value: "${NODE_JSON}"),
