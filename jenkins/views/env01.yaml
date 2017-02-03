@@ -1,0 +1,4 @@
+- view:
+    name: env-01
+    view-type: list
+    regex: .*env-01.*
