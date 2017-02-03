@@ -67,6 +67,7 @@ node("${SLAVE_NODE_LABEL}") {
         def node_json = parseJsonText(NODE_JSON)
         for(int i=0; i<node_json.nodes.size();i++) {
           node_json.nodes[i].ip = node_ips[i]
+          node_json.nodes[i].bind_ip = node_ips[i]
         }
         NODE_JSON = groovy.json.JsonOutput.toJson(node_json)
 
