@@ -79,7 +79,7 @@ node("${SLAVE_NODE_LABEL}") {
     }
 
     stage("Run ${CLUSTER}-configure-system job") {
-        build job: "${CLUSTER}-configure-system",
+        build job: "${CLUSTER}-configure-system", propagate: true, wait: true,
             parameters: [
                       string(name: 'SLAVE_NODE_LABEL', value: "${SLAVE_NODE_LABEL}"),
                       string(name: 'NODE_JSON', value: "${NODE_JSON}"),
@@ -89,7 +89,7 @@ node("${SLAVE_NODE_LABEL}") {
     }
 
     stage("Run ${CLUSTER}-deploy-k8s job") {
-        build job: "${CLUSTER}-deploy-k8s",
+        build job: "${CLUSTER}-deploy-k8s", propagate: true, wait: true,
             parameters: [
                       string(name: 'SLAVE_NODE_LABEL', value: "${SLAVE_NODE_LABEL}"),
                       string(name: 'NODE_JSON', value: "${NODE_JSON}"),
