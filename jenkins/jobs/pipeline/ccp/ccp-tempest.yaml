@@ -4,6 +4,14 @@
       Tempest tests to be run against Openstack
     project-type: pipeline
 
+    properties:
+      - build-blocker:
+          use-build-blocker: true
+          blocking-jobs:
+            - "ccp-docker-deploy"
+          block_level: 'GLOBAL'
+          queue-scanning: 'BUILDABLE'
+
     parameters:
 
       - string:

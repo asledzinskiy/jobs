@@ -30,7 +30,15 @@
     description: |
       CCP gate build/deploy test
     project-type: workflow
-    concurrent: true
+
+    properties:
+      - build-blocker:
+          use-build-blocker: true
+          blocking-jobs:
+            - "ccp-cicd-bvt"
+          block_level: 'GLOBAL'
+          queue-scanning: 'BUILDABLE'
+
     parameters:
       - string:
           name: DOCKER_REGISTRY

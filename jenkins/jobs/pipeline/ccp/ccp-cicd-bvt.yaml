@@ -3,7 +3,15 @@
     description: |
       Fuel CCP CI-CD BVT job
     project-type: workflow
-    concurrent: true
+
+    properties:
+      - build-blocker:
+          use-build-blocker: true
+          blocking-jobs:
+            - "gate-fuel-ccp-cicd"
+          block_level: 'GLOBAL'
+          queue-scanning: 'BUILDABLE'
+
     parameters:
       - string:
           name: DOCKER_REGISTRY

@@ -4,6 +4,14 @@
       Fuel CCP - CCP deploy
     project-type: pipeline
 
+    properties:
+      - build-blocker:
+          use-build-blocker: true
+          blocking-jobs:
+            - "ccp-tempest-test"
+          block_level: 'GLOBAL'
+          queue-scanning: 'BUILDABLE'
+
     parameters:
       - string:
           name: DOCKER_REGISTRY
