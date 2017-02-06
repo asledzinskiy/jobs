@@ -55,8 +55,7 @@ node("decapod") {
     }
 
     stage("Upload to development registry") {
-        def images = ["base", "base-plugins", "api", "controller", "cron",
-                      "db-data", "db", "frontend", "migrations"];
+        def images = ["api", "controller", "admin", "db-data", "db", "frontend"];
         for (image in images) {
             def imageName = "decapod/${image}"
             def imageRegistryName = "${IMAGE_NAMESPACE}/${imageName}"
@@ -72,5 +71,7 @@ node("decapod") {
             sh "docker rmi -f ${imageName}:${tagVersion} || true"
             sh "docker rmi -f ${imageName}:latest || true"
         }
+        sh "docker rmi -f decapod/base:${tagVersion} || true"
+        sh "docker rmi -f decapod/base:latest || true"
     }
 }

@@ -13,8 +13,7 @@ if (!env.DOCKER_REGISTRY) {
 
 node("decapod") {
     stage("Promote artifacts") {
-        def images = ["base", "base-plugins", "api", "controller", "cron",
-                      "db-data", "db", "frontend", "migrations"];
+        def images = ["api", "controller", "admin", "db-data", "db", "frontend"];
         for (image in images) {
             def imageRegistryName = "${IMAGE_NAMESPACE}/decapod/${image}"
             def properties = [

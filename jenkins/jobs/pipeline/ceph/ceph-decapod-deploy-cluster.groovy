@@ -67,9 +67,7 @@ node('decapod') {
 
                     docker-compose -f ./docker-compose.yml -p decapod pull
                     docker-compose -f ./docker-compose.yml -p decapod up -d
-                    docker pull ${DECAPOD_REGISTRY_URL}${DECAPOD_NAMESPACE}decapod/migrations
-                    docker tag ${DECAPOD_REGISTRY_URL}${DECAPOD_NAMESPACE}decapod/migrations decapod/migrations
-                    ./scripts/migrate.sh -c decapod_database_1 apply
+                    docker-compose -f ./docker-compose.yml -p decapod exec admin decapod-admin migration apply
                 '''.stripIndent()
             }
         }
@@ -260,7 +258,6 @@ node('decapod') {
                     . venv/bin/activate
 
                     docker-compose -f ./docker-compose.yml -p decapod down -v --rmi all
-                    docker rmi ${DECAPOD_REGISTRY_URL}${DECAPOD_NAMESPACE}decapod/migrations decapod/migrations
                     rm -r ./venv
                 '''.stripIndent()
             }
