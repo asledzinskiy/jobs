@@ -30,8 +30,6 @@ def run_linters () {
 def run_ccp_validate () {
 
     def CURRENT_PROJECT = "${env.GERRIT_PROJECT}".split("/")[-1]
-    def PROJECTS = [ "artifactory", "debian-base", "entrypoint", "etcd",
-                     "gerrit", "jenkins", "mariadb" ]
 
     node('ccp-docker-build') {
         def WORKSPACE = env.WORKSPACE
@@ -46,47 +44,41 @@ def run_ccp_validate () {
                     project : "ccp/fuel-ccp",
                     targetDir : "fuel-ccp"
             ])
-            for (PROJECT in PROJECTS) {
-                gitTools.gitSSHCheckout ([
-                        credentialsId : "mcp-ci-gerrit",
-                        branch : "master",
-                        host : "${GERRIT_HOST}",
-                        project : "ccp/fuel-ccp-${PROJECT}",
-                        targetDir : "fuel-ccp-${PROJECT}"
-                ])
+
+            // we need config file from this repo
+            gitTools.gitSSHCheckout ([
+                    credentialsId : "mcp-ci-gerrit",
+                    branch : "master",
+                    host : "${GERRIT_HOST}",
+                    project : "clusters/mcp/ccp-cicd",
+                    targetDir : "ccp-cicd"
+            ])
+        }
+
+        stage('Prepare config file'){
+            writeFile file: CONFIG_FILE, text: """\
+                !include
+                    - ${WORKSPACE}/ccp-cicd/ccp-config/ccp.yaml
+                ---
+                repositories:
+                  path: ${WORKSPACE}
+            """.stripIndent()
+        }
+        // clone projects as well
+        stage('Execute ccp config dump') {
+            dir("fuel-ccp"){
+                commonTools.runTox "venv -- ccp --config-file ${CONFIG_FILE} config dump"
             }
-            dir("fuel-ccp-${CURRENT_PROJECT}"){
-                gitTools.gerritPatchsetCheckout([
-                        credentialsId: "mcp-ci-gerrit"
-                ])
-            }
+        }
+        // checkout to patchset that should be checked
+        dir("${CURRENT_PROJECT}"){
+            gitTools.gerritPatchsetCheckout([
+                    credentialsId: "mcp-ci-gerrit"
+            ])
         }
 
         stage('Execute ccp validate') {
-            writeFile file: CONFIG_FILE, text: """\
-                debug: True
-                repositories:
-                  skip_empty: True
-                  repos:
-                  - git_url: https://gerrit.mcp.mirantis.net/ccp/fuel-ccp-artifactory
-                    name: fuel-ccp-artifactory
-                  - git_url: https://gerrit.mcp.mirantis.net/ccp/fuel-ccp-debian-base
-                    name: fuel-ccp-debian-base
-                  - git_url: https://gerrit.mcp.mirantis.net/ccp/fuel-ccp-entrypoint
-                    name: fuel-ccp-entrypoint
-                  - git_url: https://gerrit.mcp.mirantis.net/ccp/fuel-ccp-etcd
-                    name: fuel-ccp-etcd
-                  - git_url: https://gerrit.mcp.mirantis.net/ccp/fuel-ccp-gerrit
-                    name: fuel-ccp-gerrit
-                  - git_url: https://gerrit.mcp.mirantis.net/ccp/fuel-ccp-jenkins
-                    name: fuel-ccp-jenkins
-                  - git_url: https://gerrit.mcp.mirantis.net/ccp/fuel-ccp-mariadb
-                    name: fuel-ccp-mariadb
-                  clone: False
-                  path: "${WORKSPACE}"
-            """.stripIndent()
             dir("fuel-ccp"){
-                commonTools.runTox "venv -- ccp --config-file ${CONFIG_FILE} config dump"
                 commonTools.runTox "venv -- ccp --config-file ${CONFIG_FILE} validate"
             }
         }
