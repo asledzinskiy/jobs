@@ -55,12 +55,18 @@ node('ccp-docker-build') {
         }
 
         stage('build ci images') {
-            build job: 'ccp-docker-build', parameters: [
+            def jobParameters = [
                 [$class: 'StringParameterValue', name: 'DOCKER_REGISTRY', value: "${kubernetesAddress}:${port}" ],
                 [$class: 'StringParameterValue', name: 'CONF_GERRIT_URL', value: env.CONF_GERRIT_URL ],
                 [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: env.CONF_ENTRYPOINT ],
                 [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: true ],
             ]
+            if ( env.GERRIT_REFSPEC && env.GERRIT_PROJECT ) {
+                jobParameters << [$class: 'StringParameterValue', name: 'GERRIT_REFSPEC', value: env.GERRIT_REFSPEC ]
+                def component = env.GERRIT_PROJECT.split('/')[-1].minus('fuel-ccp-')
+                jobParameters << [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: component ]
+            }
+            build job: 'ccp-docker-build', parameters: jobParameters
         }
 
         // wait for 1 minute, while port used by nginx will be freed from TW state

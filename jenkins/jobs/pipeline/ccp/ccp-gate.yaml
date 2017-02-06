@@ -24,3 +24,45 @@
           custom-url: '* $JOB_NAME $BUILD_URL'
     dsl:
       !include-raw-escape: ccp-gate.groovy
+
+- job-template:
+    name: gate-fuel-ccp-cicd
+    description: |
+      CCP gate build/deploy test
+    project-type: workflow
+    concurrent: true
+    parameters:
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-prod-virtual}'
+          description: 'Docker registry for docker images'
+      - string:
+          name: KUBERNETES_URL
+          description: 'URL for kubernetes api like https://host:443/'
+
+      - mcp-configuration-params:
+          gerrit-proto: 'ssh'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+          gerrit-credential-id: 'mcp-ci-gerrit'
+          gerrit-repo-ns: 'clusters/mcp/ccp-cicd'
+
+      - ccp-configuration-params:
+          conf-entrypoint: 'ccp-config/ccp.yaml'
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: REG_EXP
+              project-pattern: ccp/fuel-ccp-(jenkins|artifactory|gerrit)
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+    dsl:
+      !include-raw-escape: ccp-cicd-pipeline.groovy

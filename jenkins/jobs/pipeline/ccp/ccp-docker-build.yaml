@@ -25,6 +25,11 @@
           default: ''
           description: 'Component to build'
 
+      - string:
+          name: GERRIT_REFSPEC
+          default: ''
+          description: 'Gerrit ref spec to some patch for some ccp component'
+
       - bool:
           name: USE_REGISTRY_PROXY
           default: false
