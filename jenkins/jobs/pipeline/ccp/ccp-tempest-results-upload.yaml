@@ -1,0 +1,67 @@
+- job-template:
+    name: ccp-tempest-results-upload
+    description: |
+      Fuel CCP - Tempest/TestRail results convert and upload
+    project-type: pipeline
+
+    parameters:
+      - string:
+          name: TESTRAIL_URL
+          default: 'https://mirantis.testrail.com'
+          description: 'Testrail URL to report to'
+
+      - string:
+          name: TESTRAIL_SUITE
+          default: 'Tempest 14.0.0'
+          description: 'Testrail suite to upload results'
+
+      - string:
+          name: TESTRAIL_MILESTONE
+          default: 'MCP1.0'
+          description: 'Testrail milestone to upload results'
+
+      - string:
+          name: TESTRAIL_PROJECT
+          default: 'Mirantis Cloud Platform'
+          description: 'Testrail project to upload results to'
+
+      - string:
+          name: BVT_BUILD_ID
+          description: 'BVT number to determine build'
+
+      - string:
+          name: BVT_TYPE
+          description: 'Openstack branch (mitaka/newton)'
+
+      - string:
+          name: TEMPEST_BUILD_ID
+          description: 'Tempest build number to get results from static'
+
+      - string:
+          name: TEMPEST_STATIC_URL
+          default: 'http://static.mcp.mirantis.net/tempest/'
+          description: 'Static URL where tempest results stored'
+
+      - string:
+          name: TEMPEST_JOB_URL
+          default: 'https://jenkins.mcp.mirantis.net/view/ccp/job/ccp-tempest-test/'
+          description: 'Tempest job link to add build links to the Testrail'
+
+      - string:
+          name: PASTE_URL
+          default: 'https://paste.mirantis.net'
+          description: 'Pastebin service for publishing tracebacks(if any)'
+
+      - string:
+          name: TEST_ENVIRONMENT
+          default: 'CCP OpenStack'
+          description: 'Environment description (What exactly we are testing?)'
+
+
+
+    dsl:
+      !include-raw-escape: tempest-results-upload.groovy
+
+
+
+

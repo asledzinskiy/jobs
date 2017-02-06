@@ -216,6 +216,7 @@
     jobs:
       - ccp-docker-build
       - ccp-tempest-test
+      - ccp-tempest-results-upload
       - ccp-docker-deploy
       - ccp-deploy-mitaka-to-newton-upgrade
       - 'gate-fuel-ccp-{ccp-gate-test}':
