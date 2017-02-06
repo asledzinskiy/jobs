@@ -32,6 +32,7 @@
 -
   project: ccp/fuel-ccp-artifactory
   description: Fuel CCP - Artifcatory deployment
+  upstream: https://gerrit.mcp.mirantis.net/ccp/fuel-ccp-artifactory
   acl-config: acls/mcp-ci/mcp-cicd-installer.config
 
 -
@@ -94,6 +95,7 @@
 -
   project: ccp/fuel-ccp-gerrit
   description: Fuel CCP - Gerrit deployment
+  upstream: https://gerrit.mcp.mirantis.net/ccp/fuel-ccp-gerrit
   acl-config: acls/mcp-ci/mcp-cicd-installer.config
 
 -
@@ -135,6 +137,7 @@
 -
   project: ccp/fuel-ccp-jenkins
   description: Fuel CCP - Jenkins deployment
+  upstream: https://gerrit.mcp.mirantis.net/ccp/fuel-ccp-jenkins
   acl-config: acls/mcp-ci/mcp-cicd-installer.config
 
 -
