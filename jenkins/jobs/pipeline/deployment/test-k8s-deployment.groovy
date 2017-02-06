@@ -99,9 +99,11 @@ node("${SLAVE_NODE_LABEL}") {
   } catch (InterruptedException x) {
       echo "The job was aborted"
       echo x.getMessage()
+      currentBuild.result = 'FAILURE'
   } catch (err) {
       echo "The job was aborted"
       echo err.getMessage()
+      currentBuild.result = 'FAILURE'
   } finally {
       if (ERASE_ENV) {
         sh "${WORKSPACE}/erase_env.sh"
