@@ -647,6 +647,11 @@
   acl-config: acls/mk/mk.config
 
 -
+  project: mk/mcp-lab-heat-templates-qa
+  description: OpenStack Heat QA templates for MCP infrastructures
+  acl-config: acls/mk/mk-qa.config
+
+-
   project: mk/mk-pipelines
   description: Jenkins pipelines for MK deployment jobs
   acl-config: acls/mk/mk.config
