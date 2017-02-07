@@ -686,6 +686,11 @@
   acl-config: acls/oss/oss.config
 
 -
+  project: oss/security-monkey-openstack
+  description: OSS OpenStack plugins and drivers for Security Monkey
+  acl-config: acls/oss/oss.config
+
+-
   project: projectcalico-ci/projectcalico-slave-image
   description: Jenkins Swarm slave image for Calico projects
   upstream: https://gerrit.mcp.mirantis.net/projectcalico-ci/projectcalico-slave-image
