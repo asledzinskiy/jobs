@@ -220,6 +220,7 @@
           ccp-gate-test:
             - linters
             - validate
+      - gate-fuel-ccp-cicd
       - ccp-cicd-bvt
       - 'ccp-bvt-{bvt-type}':
           bvt-type:

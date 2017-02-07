@@ -75,10 +75,7 @@ node('ccp-docker-build') {
         timeout(10) {
             stage('deploy ci images') {
                 build job: 'ccp-docker-deploy', parameters: [
-                    // TODO degorenko: currently deploy job uses same K8S url with API credentials inline
-                    // since this approach will be refactored - k8s credentials should be placed
-                    // in config file - or added one more k8s cluster this line must be uncommented.
-                    //[$class: 'StringParameterValue', name: 'KUBERNETES_URL', value: kubernetesURL ],
+                    [$class: 'StringParameterValue', name: 'KUBERNETES_URL', value: kubernetesURL ],
                     [$class: 'StringParameterValue', name: 'DOCKER_REGISTRY', value: "${kubernetesAddress}:${port}" ],
                     [$class: 'StringParameterValue', name: 'CREDENTIALS_ID', value: 'kubernetes-api' ],
                     [$class: 'StringParameterValue', name: 'CONF_GERRIT_URL', value: env.CONF_GERRIT_URL ],
