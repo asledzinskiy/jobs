@@ -91,6 +91,9 @@ node("${SLAVE_NODE_LABEL}") {
     stage("Run ${CLUSTER}-deploy-k8s job") {
         build job: "${CLUSTER}-deploy-k8s", propagate: true, wait: true,
             parameters: [
+                      string(name: 'KARGO_COMMIT', value: "${KARGO_COMMIT}"),
+                      string(name: 'FUEL_CCP_INSTALLER_COMMIT', value: "${FUEL_CCP_INSTALLER_COMMIT}"),
+                      string(name: 'FUEL_CCP_INSTALLER_REFS', value: "${FUEL_CCP_INSTALLER_REFS}"),
                       string(name: 'SLAVE_NODE_LABEL', value: "${SLAVE_NODE_LABEL}"),
                       string(name: 'NODE_JSON', value: "${NODE_JSON}"),
                       textParam(name: 'ANSIBLE_INVENTORY', value: "${ansible_inventory}"),

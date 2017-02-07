@@ -2,9 +2,11 @@ gitTools = new com.mirantis.mcp.Git()
 ssl = new com.mirantis.mk.ssl()
 common = new com.mirantis.mk.common()
 mcpCommon = new com.mirantis.mcp.Common()
+qaCommon = new com.mirantis.mcp_qa.Common()
 sshCredentialsId = env.CREDENTIALS ?: 'mcp-ci-k8s-deployment'
 def String KARGO_REPO = 'kubernetes/kargo'
 def String KARGO_COMMIT = env.KARGO_COMMIT ?: 'master'
+def String FUEL_CCP_INSTALLER_COMMIT = env.FUEL_CCP_INSTALLER_COMMIT ?: 'master'
 def String WRITE_CONFIG = env.WRITE_CONFIG
 def String CLUSTER_NAME=env.CLUSTER_NAME
 def String GERRIT_HOST=env.GERRIT_HOST
@@ -67,7 +69,7 @@ node("${SLAVE_NODE_LABEL}") {
 
         gitTools.gitSSHCheckout ([
             credentialsId : "mcp-ci-gerrit",
-            branch : "master",
+            branch : "${FUEL_CCP_INSTALLER_COMMIT}",
             host : "${GERRIT_HOST}",
             project : "${FUEL_CCP_INSTALLER_REPO}",
             targetDir : "fuel-ccp-installer"
@@ -80,6 +82,10 @@ node("${SLAVE_NODE_LABEL}") {
             project : "clusters/kubernetes/${CLUSTER_NAME}",
             targetDir : 'inventory'
         ])
+        if ( env.FUEL_CCP_INSTALLER_REFS && ! env.FUEL_CCP_INSTALLER_REFS.equals('none') ) {
+             def refs = "${FUEL_CCP_INSTALLER_REFS}".split("\n")
+             qaCommon.getCustomRefs("https://git.openstack.org", 'openstack/fuel-ccp-installer', "${WORKSPACE}/fuel-ccp-installer", refs)
+        }
     }
     if ( Boolean.parseBoolean(env.WRITE_CONFIG) ) {
         stage('Update configs') {

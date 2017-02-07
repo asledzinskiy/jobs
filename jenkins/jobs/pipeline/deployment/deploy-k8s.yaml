@@ -38,6 +38,16 @@
           default: 'master'
           description: 'Provide commit from which to checkout kargo'
       - string:
+          name: FUEL_CCP_INSTALLER_COMMIT
+          default: 'master'
+          description: "fuel-ccp-installer commit"
+      - string:
+          name: FUEL_CCP_INSTALLER_REFS
+          default: 'none'
+          description: |
+            Refspecs in UPSTREAM for commits in fuel-ccp-installer gerrit separated by spaces. <br>
+            For example: refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
           name: HYPERKUBE_IMAGE_TAG
           default: 'v1.5.2-4'
       - string:

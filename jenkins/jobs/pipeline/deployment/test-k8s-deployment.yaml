@@ -18,6 +18,21 @@
           name: INV_SOURCE
           default: 'json'
           description: 'Inventory format for deployment: json or ansible_inventory'
+      - string:
+          name: KARGO_COMMIT
+          default: 'master'
+          description: 'Provide commit from which to checkout kargo'
+      - string:
+          name: FUEL_CCP_INSTALLER_COMMIT
+          default: 'master'
+          description: "Provide commit from which to checkout fuel-ccp-installer"
+      - string:
+          name: FUEL_CCP_INSTALLER_REFS
+          default: 'none'
+          description: |
+            Refspecs in UPSTREAM gerrit for commits in fuel-ccp-installer project<br>
+            For example: refs/changes/10/55310/1 refs/changes/10/55310/2
+
       - bool:
           name: ERASE_ENV
           default: true
