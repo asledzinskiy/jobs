@@ -9,8 +9,10 @@
           name: DOCKER_REGISTRY
           default: '{docker-prod-virtual}'
           description: 'Docker registry for docker images'
+      # TODO degorenko do not hardcode k8s url
       - string:
           name: KUBERNETES_URL
+          default: https://kube:changeme@172.18.248.226:8443
           description: 'URL for kubernetes api like https://host:443/'
       - string:
           name: GERRIT_HOST

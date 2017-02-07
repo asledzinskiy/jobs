@@ -63,8 +63,9 @@ node('ccp-docker-build') {
             ]
             if ( env.GERRIT_REFSPEC && env.GERRIT_PROJECT ) {
                 jobParameters << [$class: 'StringParameterValue', name: 'GERRIT_REFSPEC', value: env.GERRIT_REFSPEC ]
-                def component = env.GERRIT_PROJECT.split('/')[-1].minus('fuel-ccp-')
-                jobParameters << [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: component ]
+                // disable component building until prepared artifactory repo with stable images
+                //def component = env.GERRIT_PROJECT.split('/')[-1].minus('fuel-ccp-')
+                //jobParameters << [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: component ]
             }
             build job: 'ccp-docker-build', parameters: jobParameters
         }
