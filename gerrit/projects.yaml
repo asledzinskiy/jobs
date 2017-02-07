@@ -632,16 +632,6 @@
   acl-config: acls/mcp/mcp-qa.config
 
 -
-  project: mk-ci/mk-ci-salt-model
-  description: project-config for Mk CI Reclass
-  acl-config: acls/mk-ci/mk-ci.config
-
--
-  project: mk-ci/project-config
-  description: project-config for Mk CI project
-  acl-config: acls/mk-ci/mk-ci.config
-
--
   project: mk/mcp-lab-heat-templates
   description: OpenStack Heat templates for MCP infrastructures
   acl-config: acls/mk/mk.config
@@ -1288,6 +1278,11 @@
   description: zookeeper formula
   upstream: git://github.com/tcpcloud/salt-formula-zookeeper.git
   acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-models/mk-ci
+  description: Mk CI infrastructure Salt model
+  acl-config: acls/salt-models/salt-models.config
 
 -
   project: salt-models/qa
