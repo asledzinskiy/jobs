@@ -378,8 +378,8 @@ def build_publish_binaries () {
                                 artifactory_tools.uploadImageToArtifactory(server, "${kube_docker_registry}",
                                                                "${kube_namespace}/${kube_docker_repo}",
                                                                "${kube_docker_version}", "${docker_dev_repo}")
-                                buildDesc = "hyperkube-image: ${kube_docker_registry}/${kube_namespace}/${kube_docker_repo}:${kube_docker_version}<br>\
-                                             hyperkube-binary: ${artifactoryUrl}/${binary_dev_repo}/${kube_namespace}/hyperkube-binaries/hyperkube_${kube_docker_version}<br>"
+                                buildDesc = "<b>hyperkube-image:</b> ${kube_docker_registry}/${kube_namespace}/${kube_docker_repo}:${kube_docker_version}<br>\
+                                             <b>hyperkube-binary:</b> ${artifactoryUrl}/${binary_dev_repo}/${kube_namespace}/hyperkube-binaries/hyperkube_${kube_docker_version}<br>"
                                 currentBuild.description = buildDesc
                             }
                         } catch (InterruptedException x) {
@@ -543,6 +543,8 @@ def promote_artifacts () {
             // Get build info: build id and job name
             if ( artifact_uri ) {
                 def buildInfo = artifactory_tools.getPropertiesForArtifact(artifact_uri)
+                def currentTag = buildInfo.get('com.mirantis.targetTag').join(',')
+                def targetTag = currentTag.split("_")[0]
                 def promotionConfig = [
                         'buildName'  : buildInfo.get('com.mirantis.buildName').join(','), // value for each key property is an array
                         'buildNumber': buildInfo.get('com.mirantis.buildNumber').join(','),
@@ -554,15 +556,18 @@ def promote_artifacts () {
                                             docker_dev_repo,
                                             docker_prod_repo,
                                             "${kube_namespace}/${kube_docker_repo}",
-                                            buildInfo.get('com.mirantis.targetTag').join(','),
-                                            buildInfo.get('com.mirantis.targetTag').join(',').split("_")[0],
+                                            currentTag,
+                                            targetTag,
                                             true)
                 artifactory_tools.promoteDockerArtifact(server.getUrl(),
                                             docker_dev_repo,
                                             docker_prod_repo,
                                             "${kube_namespace}/${kube_docker_repo}",
-                                            buildInfo.get('com.mirantis.targetTag').join(','),
+                                            currentTag,
                                             'latest')
+                buildDesc = "<b>hyperkube-image:</b> ${kube_docker_registry}/${kube_namespace}/${kube_docker_repo}:${targetTag}<br>\
+                             <b>hyperkube-binary:</b> ${artifactoryUrl}/${binary_prod_repo}/${kube_namespace}/hyperkube-binaries/hyperkube_${currentTag}<br>"
+                currentBuild.description = buildDesc
             } else {
                 echo 'Artifacts were not found, nothing to promote'
             }
