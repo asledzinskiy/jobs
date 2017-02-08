@@ -1329,7 +1329,7 @@
 -
   project: salt-models/stacklight
   description: Stacklight Salt model
-  acl-config: acls/salt-models/salt-models.config
+  acl-config: acls/salt-models/salt-models-stacklight.config
 
 -
   project: salt-models/statens
