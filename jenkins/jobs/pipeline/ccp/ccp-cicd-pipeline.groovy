@@ -1,5 +1,6 @@
 def gitTools = new com.mirantis.mcp.Git()
 def envName = "cicd-bvt-${env.BUILD_ID}"
+def deployTimeout = '10'
 def registry = env.DOCKER_REGISTRY
 def kubernetesURL = env.KUBERNETES_URL
 
@@ -73,17 +74,16 @@ node('ccp-docker-build') {
         // wait for 1 minute, while port used by nginx will be freed from TW state
         sleep(60)
 
-        timeout(10) {
-            stage('deploy ci images') {
-                build job: 'ccp-docker-deploy', parameters: [
-                    [$class: 'StringParameterValue', name: 'KUBERNETES_URL', value: kubernetesURL ],
-                    [$class: 'StringParameterValue', name: 'DOCKER_REGISTRY', value: "${kubernetesAddress}:${port}" ],
-                    [$class: 'StringParameterValue', name: 'CREDENTIALS_ID', value: 'kubernetes-api' ],
-                    [$class: 'StringParameterValue', name: 'CONF_GERRIT_URL', value: env.CONF_GERRIT_URL ],
-                    [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: env.CONF_ENTRYPOINT ],
-                    [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: true ],
-                ]
-            }
+        stage('deploy ci images') {
+            build job: 'ccp-docker-deploy', parameters: [
+                [$class: 'StringParameterValue', name: 'KUBERNETES_URL', value: kubernetesURL ],
+                [$class: 'StringParameterValue', name: 'DOCKER_REGISTRY', value: "${kubernetesAddress}:${port}" ],
+                [$class: 'StringParameterValue', name: 'CREDENTIALS_ID', value: 'kubernetes-api' ],
+                [$class: 'StringParameterValue', name: 'CONF_GERRIT_URL', value: env.CONF_GERRIT_URL ],
+                [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: env.CONF_ENTRYPOINT ],
+                [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: true ],
+                 [$class: 'StringParameterValue', name: 'DEPLOY_TIMEOUT', value: deployTimeout ],
+            ]
         }
     } catch (err) {
         errMess = err.toString()

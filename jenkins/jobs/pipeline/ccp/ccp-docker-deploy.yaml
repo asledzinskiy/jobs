@@ -29,6 +29,11 @@
           default: false
           description: 'Use registry proxy for insecure connection'
 
+      - string:
+          name: DEPLOY_TIMEOUT
+          default: '45'
+          description: 'Timeout for deploy stage'
+
       - mcp-configuration-params:
           gerrit-proto: 'ssh'
           gerrit-host: '{gerrit-host}'
