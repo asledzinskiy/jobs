@@ -77,6 +77,10 @@ def build_artifacts (Boolean manual = false) {
             }
             // Cleanup
             sh "docker rmi ${docker_image}:${imageTag} ${docker_registry}/${docker_image}:${imageTag}"
+            // set job description
+            currentBuild.description = """
+              <b>${mcp_project}-slave-image</b>: ${docker_registry}/${docker_image}:${imageTag}<br>
+            """
         }
     }
 }
