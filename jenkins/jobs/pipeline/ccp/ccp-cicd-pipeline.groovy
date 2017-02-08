@@ -9,11 +9,11 @@ if ( ! env.KUBERNETES_URL ) {
 }
 
 node('ccp-docker-build') {
-    try {
-        // get host for k8s url
-        URI k8sURL = new URI(kubernetesURL)
-        def kubernetesAddress = k8sURL?.getHost()
+    // get host for k8s url
+    URI k8sURL = new URI(kubernetesURL)
+    def kubernetesAddress = k8sURL?.getHost()
 
+    try {
         stage('clone fuel-ccp') {
             gitTools.gitSSHCheckout([
                 credentialsId : "mcp-ci-gerrit",
@@ -82,7 +82,7 @@ node('ccp-docker-build') {
                 [$class: 'StringParameterValue', name: 'CONF_GERRIT_URL', value: env.CONF_GERRIT_URL ],
                 [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: env.CONF_ENTRYPOINT ],
                 [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: true ],
-                 [$class: 'StringParameterValue', name: 'DEPLOY_TIMEOUT', value: deployTimeout ],
+                [$class: 'StringParameterValue', name: 'DEPLOY_TIMEOUT', value: deployTimeout ],
             ]
         }
     } catch (err) {
@@ -95,8 +95,14 @@ node('ccp-docker-build') {
         }
     } finally {
         sh """
-            kubectl delete --kubeconfig ${WORKSPACE}/kubeconfig ns ${envName}
+            kubectl delete --kubeconfig ${WORKSPACE}/kubeconfig ns ${envName} || true
             rm ${WORKSPACE}/kubeconfig
         """
+        def k8sCreds = env.K8S_DEPLOYMENT_CREDS
+        def common = new com.mirantis.mk.common()
+        def osUser = common.getSshCredentials(k8sCreds).getUsername()
+        sshagent ([k8sCreds]) {
+            sh "ssh -o StrictHostKeyChecking=no -l ${osUser} ${kubernetesAddress} sudo rm -rf /srv/mcp-data/*"
+        }
     }
 }

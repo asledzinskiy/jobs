@@ -15,6 +15,10 @@
           default: https://kube:changeme@172.18.248.226:8443
           description: 'URL for kubernetes api like https://host:443/'
       - string:
+          name: K8S_DEPLOYMENT_CREDS
+          default: 'mcp-ci-k8s-deployment'
+          description: 'Credential ID which were used for K8S deployment'
+      - string:
           name: GERRIT_HOST
           default: '{gerrit-host}'
           desription: 'Gerrit host'
