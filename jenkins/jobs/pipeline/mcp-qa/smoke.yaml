@@ -54,11 +54,13 @@
     properties:
       - heavy-job:
           weight: '{weight}'
-      - throttle:
-          categories:
-            - one-per-node
-          max-per-node: 1
-          option: category
+      - build-blocker:
+          use-build-blocker: true
+          blocking-jobs:
+           - "^mcp.ccp.pipeline.*"
+           - "^mcp.ccp.smoke-pipeline.*"
+          block_level: 'GLOBAL'
+          queue-scanning: 'BUILDABLE'
 
     wrappers:
     - credentials-binding:
