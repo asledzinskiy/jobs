@@ -64,83 +64,135 @@ remote:
   - key: _genericRepository-remote
     packageType: generic
     url: http://localhost
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
   - key: apk-remote
     packageType: generic
     url: http://dl-cdn.alpinelinux.org/alpine/
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
   - key: apt-docker-project
     packageType: debian
     url: https://apt.dockerproject.org/repo
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
   - key: artifactory-pro-debian
     packageType: debian
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: https://jfrog.bintray.com/artifactory-pro-debs
   - key: artifactory-pro-rpm
     packageType: yum
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: http://jfrog.bintray.com/artifactory-pro-rpms
   - key: binary-remote
     packageType: generic
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: https://artifactory.mcp.mirantis.net/artifactory/binary-prod-virtual
   - key: centos-remote
     packageType: yum
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: http://mirror.centos.org/centos/
   - key: debian-mariadb-remote
     packageType: debian
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.1/debian/
   - key: debian-nginx
     packageType: debian
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: http://nginx.org/packages/debian/
   - key: debian-percona-remote
     packageType: debian
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: http://repo.percona.com/apt
   - key: debian-rabbitmq-remote
     packageType: debian
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: http://www.rabbitmq.com/debian/
   - key: debian-remote
     packageType: debian
-    url: http://ftp.us.debian.org/debian/
+    url: http://ftp.us.debian.org/debian
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
   - key: debian-security-remote
     packageType: debian
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: http://security.debian.org/
   - key: docker-remote
     packageType: docker
     dockerApiVersion: V2
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     enableDockerSupport: true
     url: https://registry-1.docker.io/
   - key: gcs-remote
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     packageType: generic
     url: https://storage.googleapis.com
   - key: gerrit-plugins
     packageType: generic
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: http://builds.quelltextlich.at/gerrit/nightly
   - key: jcenter
     packageType: maven
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: https://jcenter.bintray.com
   - key: jenkins-deb-pkgs
     packageType: generic
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: https://pkg.jenkins.io/debian-stable/binary
   - key: jenkins-plugins
     packageType: generic
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: http://mirrors.jenkins-ci.org/plugins
   - key: jenkins-plugins-jars
     packageType: maven
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/
   - key: jenkins-updates
     packageType: generic
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: https://updates.jenkins.io/
   - key: mysql-connector-java
     packageType: maven
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: "http://repo.jfrog.org/artifactory/remote-repos/\
          mysql/mysql-connector-java/"
   - key: pypi-remote
     packageType: pypi
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: https://pypi.python.org
   - key: sandbox-github
     packageType: vcs
     url: https://github.com/
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
   - key: sandbox-github-http
     packageType: generic
     url: https://github.com/
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
   - key: ubuntu-remote
     packageType: debian
+    blockMismatchingMimeTypes: false
+    mismatchingMimeTypesOverrideList: "**"
     url: http://us.archive.ubuntu.com/ubuntu/
 virtual:
   - key: _genericRepository-virtual
