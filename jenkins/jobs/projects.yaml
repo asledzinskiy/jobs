@@ -13,12 +13,6 @@
       - ubuntu
 
 - project:
-    name: tmp
-    jobs:
-      - tmp-jenkins-jobs.test
-      - tmp-jenkins-jobs.update
-
-- project:
     name: mcp
     jobs:
       - mcp-build-base-slave-image-test-pipeline
