@@ -670,6 +670,11 @@
   acl-config: acls/oss/oss.config
 
 -
+  project: oss/docker-security-monkey
+  description: Dockerfiles for security-monkey
+  acl-config: acls/oss/oss.config
+
+-
   project: oss/fuel-ccp-security-monkey
   description: Fuel CCP - Security Monkey deployment
   acl-config: acls/oss/oss.config
@@ -677,6 +682,11 @@
 -
   project: oss/fuel-ccp-spinnaker
   description: Fuel CCP - Spinnaker deployment
+  acl-config: acls/oss/oss.config
+
+-
+  project: oss/salt-formula-security-monkey
+  description: Salt formula for security-monkey deployment
   acl-config: acls/oss/oss.config
 
 -
