@@ -1,1 +1,1 @@
--e git+git://github.com/ibelikov/jenkins-job-builder@pipeline#egg=jenkins-job-builder
+-e git+https://gerrit.mcp.mirantis.net/mcp-ci/jenkins-job-builder@mcp-0.1#egg=jenkins-job-builder
