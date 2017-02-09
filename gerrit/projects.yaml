@@ -1079,6 +1079,12 @@
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
+  project: salt-formulas/monasca
+  description: monasca formula
+  upstream: git://github.com/salt-formulas/salt-formula-monasca
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
   project: salt-formulas/mongodb
   description: mongodb formula
   upstream: git://github.com/tcpcloud/salt-formula-mongodb.git
