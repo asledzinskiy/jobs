@@ -30,6 +30,16 @@
           description: 'Use registry proxy for insecure connection'
 
       - string:
+          name: CCP_COMPONENT
+          default: ''
+          description: 'Component to build'
+
+      - string:
+          name: GERRIT_REFSPEC
+          default: ''
+          description: 'Gerrit ref spec to some patch for some ccp component'
+
+      - string:
           name: DEPLOY_TIMEOUT
           default: '45'
           description: 'Timeout for deploy stage'

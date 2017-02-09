@@ -56,18 +56,19 @@ node('ccp-docker-build') {
             echo "Registry port is ${port}."
         }
 
+        def jobParameters = [
+            [$class: 'StringParameterValue', name: 'DOCKER_REGISTRY', value: "${kubernetesAddress}:${port}" ],
+            [$class: 'StringParameterValue', name: 'CONF_GERRIT_URL', value: env.CONF_GERRIT_URL ],
+            [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: env.CONF_ENTRYPOINT ],
+            [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: true ],
+        ]
+        if ( env.GERRIT_REFSPEC && env.GERRIT_PROJECT ) {
+            jobParameters << [$class: 'StringParameterValue', name: 'GERRIT_REFSPEC', value: env.GERRIT_REFSPEC ]
+            def component = env.GERRIT_PROJECT.split('/')[-1].minus('fuel-ccp-')
+            jobParameters << [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: component ]
+        }
+
         stage('build ci images') {
-            def jobParameters = [
-                [$class: 'StringParameterValue', name: 'DOCKER_REGISTRY', value: "${kubernetesAddress}:${port}" ],
-                [$class: 'StringParameterValue', name: 'CONF_GERRIT_URL', value: env.CONF_GERRIT_URL ],
-                [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: env.CONF_ENTRYPOINT ],
-                [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: true ],
-            ]
-            if ( env.GERRIT_REFSPEC && env.GERRIT_PROJECT ) {
-                jobParameters << [$class: 'StringParameterValue', name: 'GERRIT_REFSPEC', value: env.GERRIT_REFSPEC ]
-                def component = env.GERRIT_PROJECT.split('/')[-1].minus('fuel-ccp-')
-                jobParameters << [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: component ]
-            }
             build job: 'ccp-docker-build', parameters: jobParameters
         }
 
@@ -75,15 +76,10 @@ node('ccp-docker-build') {
         sleep(60)
 
         stage('deploy ci images') {
-            build job: 'ccp-docker-deploy', parameters: [
-                [$class: 'StringParameterValue', name: 'KUBERNETES_URL', value: kubernetesURL ],
-                [$class: 'StringParameterValue', name: 'DOCKER_REGISTRY', value: "${kubernetesAddress}:${port}" ],
-                [$class: 'StringParameterValue', name: 'CREDENTIALS_ID', value: 'kubernetes-api' ],
-                [$class: 'StringParameterValue', name: 'CONF_GERRIT_URL', value: env.CONF_GERRIT_URL ],
-                [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: env.CONF_ENTRYPOINT ],
-                [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: true ],
-                [$class: 'StringParameterValue', name: 'DEPLOY_TIMEOUT', value: deployTimeout ],
-            ]
+            jobParameters << [$class: 'StringParameterValue', name: 'KUBERNETES_URL', value: kubernetesURL ]
+            jobParameters << [$class: 'StringParameterValue', name: 'CREDENTIALS_ID', value: 'kubernetes-api' ]
+            jobParameters << [$class: 'StringParameterValue', name: 'DEPLOY_TIMEOUT', value: deployTimeout ]
+            build job: 'ccp-docker-deploy', parameters: jobParameters
         }
     } catch (err) {
         errMess = err.toString()
