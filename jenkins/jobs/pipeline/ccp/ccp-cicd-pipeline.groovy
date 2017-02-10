@@ -112,7 +112,10 @@ node('ccp-docker-build') {
         def common = new com.mirantis.mk.common()
         def osUser = common.getSshCredentials(k8sCreds).getUsername()
         sshagent ([k8sCreds]) {
-            sh "ssh -o StrictHostKeyChecking=no -l ${osUser} ${kubernetesAddress} sudo rm -rf /srv/mcp-data/*"
+            retry(10) {
+                sleep(20)
+                sh "ssh -o StrictHostKeyChecking=no -l ${osUser} ${kubernetesAddress} sudo rm -rf /srv/mcp-data/*"
+            }
         }
     }
 }
