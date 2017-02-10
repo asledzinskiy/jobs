@@ -569,6 +569,12 @@
   acl-config: acls/mcp-ci/mcp-ci.gitrepo.config
 
 -
+  project: mcp-ci/jenkins-job-builder
+  description: Tools to make Jenkins jobs from templates
+  upstream: git://git.openstack.org/openstack-infra/jenkins-job-builder
+  acl-config: acls/mcp-ci/mcp-ci.upstream.config
+
+-
   project: mcp-ci/jimbo
   description: Tool to manage Artifactory repositories
   upstream: https://gerrit.mcp.mirantis.net/mcp-ci/jimbo.git
