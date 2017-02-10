@@ -4,3 +4,4 @@
     job-name:
       - ccp-bvt-mitaka
       - ccp-bvt-newton
+      - ccp-bvt-ocata
