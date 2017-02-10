@@ -1,11 +1,11 @@
 - job-template:
-    name: jenkins-jobs.update
+    name: gerrit-projects-ci.update
     description: |
-      Update jenkins jobs after the merge event
+      Update Gerrit projects after the merge event
 
     project-type: pipeline
     dsl:
-      !include-raw-escape: jenkins-jobs.update.groovy
+      !include-raw-escape: gerrit-projects-ci.update.groovy
 
     parameters:
       - string:
@@ -18,7 +18,6 @@
         num-to-keep: 50
 
     triggers:
-      - timed: 'H * * * *'
       - gerrit:
           trigger-on:
             - change-merged-event
@@ -30,5 +29,5 @@
                   branch-pattern: '**'
               file-paths:
                 - compare-type: ANT
-                  pattern: '**/jenkins/**'
+                  pattern: '**/gerrit/**'
           custom-url: '* $JOB_NAME $BUILD_URL'

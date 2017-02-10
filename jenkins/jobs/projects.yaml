@@ -4,10 +4,7 @@
       - 'build-vm-{distro}-images'
       - k8s-repo-cloner
       - k8s-repo-cloner-runner
-      - gerrit-projects.update
-      - gerrit-projects.test
-      - jenkins-jobs.update
-      - jenkins-jobs.test
+      - gerrit-projects-ci.update
       - prepare-slave-nodes
       - artifactory-repos.test
       - artifactory-repos.update
