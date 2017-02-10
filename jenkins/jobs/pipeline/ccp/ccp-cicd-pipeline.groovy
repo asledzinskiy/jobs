@@ -80,7 +80,7 @@ node('ccp-docker-build') {
             jobParameters << [$class: 'StringParameterValue', name: 'CREDENTIALS_ID', value: 'kubernetes-api' ]
             jobParameters << [$class: 'StringParameterValue', name: 'DEPLOY_TIMEOUT', value: deployTimeout ]
             jobParameters << [$class: 'StringParameterValue', name: 'KUBERNETES_NAMESPACE', value: envName ]
-            jobParameters << [$class: 'BooleanParameterValue', name: 'CLEANUP_ENV', value: false ],
+            jobParameters << [$class: 'BooleanParameterValue', name: 'CLEANUP_ENV', value: false ]
             build job: 'ccp-docker-deploy', parameters: jobParameters
         }
     } catch (err) {
@@ -91,9 +91,9 @@ node('ccp-docker-build') {
         } else {
             currentBuild.result = 'FAILED'
             stage('collect logs') {
-              def pods = sh(script:"kubectl --kubeconfig ${WORKSPACE}/kubeconfig -n ${envName} get pods | grep -vw STATUS | awk '{print $1}'",
+              def pods = sh(script:"kubectl --kubeconfig ${WORKSPACE}/kubeconfig -n ${envName} get pods | grep -vw STATUS | cut -d ' ' -f1",
                             returnStdout: true).trim()
-              if ( pods != '' || pods != 'No resources found.' ) {
+              if ( pods != '' ) {
                 // usual split methods is not working in groovy as expected
                 def failedPods = pods.tokenize('\n')
                 for(String pod in failedPods) {
