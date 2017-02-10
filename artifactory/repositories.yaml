@@ -132,6 +132,7 @@ remote:
     blockMismatchingMimeTypes: false
     mismatchingMimeTypesOverrideList: "**"
     enableDockerSupport: true
+    enableTokenAuthentication: true
     url: https://registry-1.docker.io/
   - key: gcs-remote
     blockMismatchingMimeTypes: false
