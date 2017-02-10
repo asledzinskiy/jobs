@@ -614,16 +614,16 @@
   acl-config: acls/mcp-ci/mcp-ci.config
 
 -
-  project: mcp-netchecker/mcp-netchecker-agent
-  description: MCP network checker agent
-  upstream: https://gerrit.mcp.mirantis.net/mcp-netchecker/mcp-netchecker-agent
-  acl-config: acls/mcp-netchecker/mcp-netchecker.config
+  project: mcp/k8s-netchecker-agent
+  description: Basic network checker agent to check DNS and connectivity in kubernetes cluster
+  upstream: https://github.com/Mirantis/k8s-netchecker-agent
+  acl-config: acls/mcp/k8s-netchecker.config
 
 -
-  project: mcp-netchecker/mcp-netchecker-server
-  description: MCP network checker server
-  upstream: https://gerrit.mcp.mirantis.net/mcp-netchecker/mcp-netchecker-server
-  acl-config: acls/mcp-netchecker/mcp-netchecker.config
+  project: mcp/k8s-netchecker-server
+  description: Basic network checker service to check DNS and connectivity in kubernetes cluster
+  upstream: https://github.com/Mirantis/k8s-netchecker-server
+  acl-config: acls/mcp/k8s-netchecker.config
 
 -
   project: mcp/mcp-qa
