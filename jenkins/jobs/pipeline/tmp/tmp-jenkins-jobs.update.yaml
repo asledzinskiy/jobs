@@ -1,0 +1,45 @@
+- job-template:
+    name: tmp-jenkins-jobs.update
+    description: |
+      Temporary: Update jenkins jobs after the merge event
+
+    project-type: pipeline
+    dsl:
+      !include-raw-escape: tmp-jenkins-jobs.update.groovy
+
+    parameters:
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+
+    triggers:
+      - timed: 'H * * * *'
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'mcp-ci/project-config'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+              file-paths:
+                - compare-type: ANT
+                  pattern: '**/jenkins/**'
+            - project-compare-type: PLAIN
+              project-pattern: 'mcp-ci/project-config-base'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+              file-paths:
+                - compare-type: ANT
+                  pattern: '**/jenkins/**'
+            - project-compare-type: PLAIN
+              project-pattern: 'mcp-ci/project-config-local'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+              file-paths:
+                - compare-type: ANT
+                  pattern: '**/jenkins/**'
+          custom-url: '* $JOB_NAME $BUILD_URL'

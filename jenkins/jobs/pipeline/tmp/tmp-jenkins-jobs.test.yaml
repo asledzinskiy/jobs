@@ -1,0 +1,47 @@
+- job-template:
+    name: 'tmp-jenkins-jobs.test'
+    description: |
+        <h2>Temporary Jenkins Job Builder Tests</h2>
+
+    project-type: pipeline
+    dsl:
+      !include-raw-escape: tmp-jenkins-jobs.test.groovy
+
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: BASE_COMMIT
+          default: 'HEAD~1'
+          description: 'Base commit for checking diffs. Defaults to HEAD of jenkins-jobs master branch.'
+
+    properties:
+    - build-discarder:
+        days-to-keep: 7
+        num-to-keep: 50
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '(recheck|reverify)'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'mcp-ci/project-config'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+            - project-compare-type: PLAIN
+              project-pattern: 'mcp-ci/project-config-base'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+            - project-compare-type: PLAIN
+              project-pattern: 'mcp-ci/project-config-local'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+
+          custom-url: '* $JOB_NAME $BUILD_URL'
