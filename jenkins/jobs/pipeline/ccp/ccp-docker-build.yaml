@@ -30,6 +30,11 @@
           default: ''
           description: 'Gerrit ref spec to some patch for some ccp component'
 
+      - text:
+          name: ADDITIONAL_CCP_CONFIG
+          default: ''
+          description: 'Additional ccp config which should be used'
+
       - bool:
           name: USE_REGISTRY_PROXY
           default: false

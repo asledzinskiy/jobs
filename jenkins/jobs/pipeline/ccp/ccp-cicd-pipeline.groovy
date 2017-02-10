@@ -1,15 +1,45 @@
-def gitTools = new com.mirantis.mcp.Git()
-def id = env.GERRIT_CHANGE_NUMBER ?: 'bvt'
-def envName = "cicd-${id}-${env.BUILD_ID}"
-def deployTimeout = '10'
-def registry = env.DOCKER_REGISTRY
-def kubernetesURL = env.KUBERNETES_URL
+artifactoryTools = new com.mirantis.mcp.MCPArtifactory()
+gitTools = new com.mirantis.mcp.Git()
+commonTools = new com.mirantis.mcp.Common()
+id = env.GERRIT_CHANGE_NUMBER ?: 'bvt'
+event = env.GERRIT_EVENT_TYPE ?: 'bvt'
+envName = "cicd-${id}-${env.BUILD_ID}"
+deployTimeout = '10'
+kubernetesURL = env.KUBERNETES_URL
+imagesNamespace = 'mirantis/ccp/ci-cd'
 
-if ( ! env.KUBERNETES_URL ) {
-    error("KUBERNETES_URL have to be specified.")
+if (event == 'change-merged') {
+  node {
+    promote_image()
+  }
+} else {
+  if ( ! env.KUBERNETES_URL ) {
+      error("KUBERNETES_URL have to be specified.")
+  }
+
+  node('ccp-docker-build') {
+    run_tests()
+  }
 }
 
-node('ccp-docker-build') {
+def promote_image() {
+    def devRepo = 'docker-dev-local'
+    def prodRepo = 'docker-prod-local'
+    def tag = env.GERRIT_CHANGE_NUMBER
+    def server = Artifactory.server('mcp-ci')
+    def imagesByTag = artifactoryTools.getImagesByTag(server.getUrl(), devRepo, tag)
+    for(image in imagesByTag) {
+      imagePath = image['path'].minus("/${tag}")
+      artifactoryTools.promoteDockerArtifact(server.getUrl(),
+                                             devRepo,
+                                             prodRepo,
+                                             imagePath, // repo + image name
+                                             tag,       // cur image tag
+                                             'latest')  // dest image tag
+   }
+}
+
+def run_tests() {
     // get host for k8s url
     URI k8sURL = new URI(kubernetesURL)
     def kubernetesAddress = k8sURL?.getHost()
@@ -37,35 +67,62 @@ node('ccp-docker-build') {
                 kubectl config --kubeconfig ${WORKSPACE}/kubeconfig set-cluster kube --insecure-skip-tls-verify=true --server=${kubernetesURL}
                 kubectl config --kubeconfig ${WORKSPACE}/kubeconfig set-context my-context --user=kubeuser/kube --cluster=kube
                 kubectl config --kubeconfig ${WORKSPACE}/kubeconfig use-context my-context
+                kubectl create --kubeconfig ${WORKSPACE}/kubeconfig namespace ${envName}
             """
         }
 
-        def port
+        def registry
         stage('deploy registry') {
-            def podFile = "${WORKSPACE}/tools/registry/registry-pod.yaml"
-            def serviceFile = "${WORKSPACE}/tools/registry/registry-service.yaml"
-            sh """
-                kubectl create --kubeconfig ${WORKSPACE}/kubeconfig namespace ${envName}
-                sed '/hostPort:/d' -i ${podFile}
-                sed '/nodePort:/d' -i ${serviceFile}
-                kubectl --namespace ${envName} apply --kubeconfig ${WORKSPACE}/kubeconfig -f ${podFile}
-                kubectl --namespace ${envName} apply --kubeconfig ${WORKSPACE}/kubeconfig -f ${serviceFile}
-            """
-            port = sh(script: "kubectl -n ${envName} describe --kubeconfig ${WORKSPACE}/kubeconfig svc registry | grep 'NodePort:' | grep -Po '[0-9]+'",
-                      returnStdout: true).trim()
-            echo "Registry port is ${port}."
+            if ( env.GERRIT_REFSPEC && env.GERRIT_PROJECT ) {
+                echo "Using Artifactory registry"
+                registry = env.DOCKER_REGISTRY
+            } else {
+                def podFile = "${WORKSPACE}/tools/registry/registry-pod.yaml"
+                def serviceFile = "${WORKSPACE}/tools/registry/registry-service.yaml"
+                sh """
+                    sed '/hostPort:/d' -i ${podFile}
+                    sed '/nodePort:/d' -i ${serviceFile}
+                    kubectl --namespace ${envName} apply --kubeconfig ${WORKSPACE}/kubeconfig -f ${podFile}
+                    kubectl --namespace ${envName} apply --kubeconfig ${WORKSPACE}/kubeconfig -f ${serviceFile}
+                """
+                def port = sh(script: "kubectl -n ${envName} describe --kubeconfig ${WORKSPACE}/kubeconfig svc registry | grep 'NodePort:' | grep -Po '[0-9]+'",
+                              returnStdout: true).trim()
+                echo "Registry port is ${port}."
+                registry = "${kubernetesAddress}:${port}"
+            }
         }
 
         def jobParameters = [
-            [$class: 'StringParameterValue', name: 'DOCKER_REGISTRY', value: "${kubernetesAddress}:${port}" ],
+            [$class: 'StringParameterValue', name: 'DOCKER_REGISTRY', value: registry ],
             [$class: 'StringParameterValue', name: 'CONF_GERRIT_URL', value: env.CONF_GERRIT_URL ],
             [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: env.CONF_ENTRYPOINT ],
             [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: true ],
         ]
         if ( env.GERRIT_REFSPEC && env.GERRIT_PROJECT ) {
+            def patchDir = ${env.GERRIT_PROJECT}
+            dir(patchDir) {
+                gitTools.gerritPatchsetCheckout([
+                    credentialsId: 'mcp-ci-gerrit'
+                ])
+            }
+            def names = sh(script: "ls ${patchDir}/docker", returnStdout: true).trim().tokenize('\n')
             jobParameters << [$class: 'StringParameterValue', name: 'GERRIT_REFSPEC', value: env.GERRIT_REFSPEC ]
             def component = env.GERRIT_PROJECT.split('/')[-1].minus('fuel-ccp-')
             jobParameters << [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: component ]
+            // configure images hash for ccp config with simple string concat
+            //  until CCPCICD object model is ready to use
+            def config = """\
+                images:
+                  namespace: ${imagesNamespace}
+                  image_specs:
+            """.stripIndent()
+            def tagLine = "tag: ${env.GERRIT_CHANGE_NUMBER}"
+            tagLine = tagLine.padLeft(tagLine.length() + 6)
+            for(name in names) {
+                def componentLine = name.padLeft(name.length() + 4)
+                config += componentLine + '\n' + tagLine + '\n'
+            }
+            jobParameters << [$class: 'TextParameterValue', name: 'ADDITIONAL_CCP_CONFIG', value: config ]
         }
 
         stage('build ci images') {

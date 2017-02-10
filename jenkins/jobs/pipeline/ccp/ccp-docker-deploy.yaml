@@ -47,6 +47,11 @@
           default: ''
           description: 'Component to build'
 
+      - text:
+          name: ADDITIONAL_CCP_CONFIG
+          default: ''
+          description: 'Additional ccp config which should be used'
+
       - string:
           name: GERRIT_REFSPEC
           default: ''

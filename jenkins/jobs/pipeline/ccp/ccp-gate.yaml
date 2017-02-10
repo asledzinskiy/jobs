@@ -42,7 +42,7 @@
     parameters:
       - string:
           name: DOCKER_REGISTRY
-          default: '{docker-prod-virtual}'
+          default: '{docker-dev-virtual}'
           description: 'Docker registry for docker images'
       # TODO degorenko do not hardcode k8s url
       - string:
