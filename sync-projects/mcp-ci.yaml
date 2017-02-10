@@ -1,0 +1,5 @@
+- project: jenkins-job-builder
+  src-repo: git://git.openstack.org/openstack-infra/jenkins-job-builder
+  dst-repo: ssh://mcp-ci-mirroring@${GERRIT_HOST}:29418/mcp-ci/jenkins-job-builder
+  branches:
+    - "*"

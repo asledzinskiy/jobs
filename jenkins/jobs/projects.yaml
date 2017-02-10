@@ -129,6 +129,7 @@
       - 'debian'
       - 'fuel-ccp'
       - 'kubernetes'
+      - 'mcp-ci'
       - 'mk'
       - 'tcp'
     jobs:
