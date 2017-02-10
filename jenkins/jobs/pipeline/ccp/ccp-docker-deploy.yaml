@@ -23,6 +23,11 @@
           description: 'URL for kubernetes api like https://host:443/'
 
       - string:
+          name: KUBERNETES_NAMESPACE
+          default: 'ccp'
+          description: 'Kubernetes namespace to use'
+
+      - string:
           name: CREDENTIALS_ID
           default: 'kubernetes-api'
           description: 'Credentials for k8s api'

@@ -79,6 +79,8 @@ node('ccp-docker-build') {
             jobParameters << [$class: 'StringParameterValue', name: 'KUBERNETES_URL', value: kubernetesURL ]
             jobParameters << [$class: 'StringParameterValue', name: 'CREDENTIALS_ID', value: 'kubernetes-api' ]
             jobParameters << [$class: 'StringParameterValue', name: 'DEPLOY_TIMEOUT', value: deployTimeout ]
+            jobParameters << [$class: 'StringParameterValue', name: 'KUBERNETES_NAMESPACE', value: envName ]
+            jobParameters << [$class: 'BooleanParameterValue', name: 'CLEANUP_ENV', value: false ],
             build job: 'ccp-docker-deploy', parameters: jobParameters
         }
     } catch (err) {
@@ -88,8 +90,20 @@ node('ccp-docker-build') {
             currentBuild.result = 'ABORTED'
         } else {
             currentBuild.result = 'FAILED'
+            stage('collect logs') {
+              def pods = sh(script:"kubectl --kubeconfig ${WORKSPACE}/kubeconfig -n ${envName} get pods | grep -vw STATUS | awk '{print $1}'",
+                            returnStdout: true).trim()
+              if ( pods != '' || pods != 'No resources found.' ) {
+                // usual split methods is not working in groovy as expected
+                def failedPods = pods.tokenize('\n')
+                for(String pod in failedPods) {
+                   sh "kubectl --kubeconfig ${WORKSPACE}/kubeconfig -n ${envName} logs ${pod} > ${WORKSPACE}/${pod}.log"
+                }
+              }
+            }
         }
     } finally {
+        archiveArtifacts allowEmptyArchive: true, artifacts: '*.log', excludes: null
         sh """
             kubectl delete --kubeconfig ${WORKSPACE}/kubeconfig ns ${envName} || true
             rm ${WORKSPACE}/kubeconfig
