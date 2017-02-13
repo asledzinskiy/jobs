@@ -36,6 +36,36 @@
           default: false
           description: 'Use registry proxy for insecure connection'
 
+      - string:
+          name: BVT_TYPE
+          default: '{bvt-type}'
+          description: 'Openstack branch (mitaka/newton)'
+
+      - bool:
+          name: ENABLE_TEST_RESULTS_UPLOAD
+          default: true
+          description: 'Upload results or not (Set to false on prod)'
+
+      - string:
+          name: TESTRAIL_SUITE
+          default: 'Tempest 14.0.0'
+          description: 'Testrail suite to upload results'
+
+      - string:
+          name: TESTRAIL_MILESTONE
+          default: 'MCP1.0'
+          description: 'Testrail milestone to upload results'
+
+      - string:
+          name: TESTRAIL_PROJECT
+          default: 'Mirantis Cloud Platform'
+          description: 'Testrail project to upload results to'
+
+      - string:
+          name: TEST_ENVIRONMENT
+          default: 'CCP OpenStack'
+          description: 'Environment description (What exactly we are testing?)'
+
       - mcp-configuration-params:
           gerrit-proto: 'ssh'
           gerrit-host: '{gerrit-host}'

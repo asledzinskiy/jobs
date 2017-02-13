@@ -14,7 +14,7 @@ def report(String venvDir, reportfile, pasteUrl, testrailUrl, testrailUser, test
            testrailSuite, testrailMilestone, testrailProject, bvtBuildId, bvtType, tempestBuildId) {
 
   testrailPlanName = testrailMilestone + ' Tempest ' + 'BVT-' + bvtType + ' ' + '#' + bvtBuildId
-  buildUrl = tempestJobUrl + tempestBuildId
+  buildUrl = tempestJobUrl + tempestBuildId + '/'
   dir(venvDir) {
     sh(script: ". bin/activate && report -v --testrail-plan-name \"${testrailPlanName}\" --env-description \"${envDescription}\" " +
             "--testrail-url ${testrailUrl} --testrail-user ${testrailUser} --testrail-password ${testrailPassword} " +
@@ -72,6 +72,7 @@ node('ccp-docker-build') {
   }
   catch (Exception x) {
     echo x.getMessage()
+    currentBuild.result = 'FAILURE'
   }
   finally {
     removeTempDir(virtualEnv)
