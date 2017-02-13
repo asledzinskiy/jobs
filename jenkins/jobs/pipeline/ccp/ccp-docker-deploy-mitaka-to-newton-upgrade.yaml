@@ -1,0 +1,54 @@
+- job-template:
+    name: ccp-deploy-mitaka-to-newton-upgrade
+    description: |
+      Fuel CCP - deploy Mitaka then upgrade to Newton
+    project-type: pipeline
+
+    parameters:
+      - string:
+          name: JENKINS_EXECUTOR_LABEL
+          default: 'ccp-docker-build'
+          description: 'Label of Jenkins executor on which to run this pipeline'
+
+      - string:
+          name: DOCKER_REGISTRY
+          default: '{docker-dev-virtual}'
+          description: 'Docker registry for CCP images'
+
+      - string:
+          name: KUBERNETES_URL
+          description: 'URL for kubernetes api e.g. http://localhost:8080'
+
+      - bool:
+          name: CLEANUP_ENV
+          default: true
+          description: 'Cleanup env after deployment'
+
+      - string:
+          name: DEPLOYMENT_TIMEOUT
+          default: '45'
+          description: 'Timeout value (in minutes) for CCP deployment'
+
+      - string:
+          name: PRIVATE_INTERFACE
+          default: 'ens3'
+          description: 'Name of network interface on K8s minions with private IP address'
+
+      - mcp-configuration-params:
+          gerrit-proto: 'ssh'
+          gerrit-host: '{gerrit-host}'
+          gerrit-port: '{gerrit-port}'
+          gerrit-credential-id: 'mcp-ci-gerrit'
+          gerrit-repo-ns: 'clusters/mcp/ccp-ci/'
+
+      - ccp-configuration-params:
+          conf-entrypoint: 'mitaka_to_newton_upgrade/'
+
+    pipeline-scm:
+      scm:
+        - basic-scm:
+            branch: 'master'
+            project: 'ccp-ci/jenkins-pipelines'
+            gerrit-host: '{gerrit-host}'
+            gerrit-port: '{gerrit-port}'
+      script-path: ccp/ccp-deploy-mitaka-to-newton-upgrade.groovy
