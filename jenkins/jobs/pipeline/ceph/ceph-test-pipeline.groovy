@@ -211,7 +211,7 @@ node('decapod') {
             // cloud-init) and notifies Decapod about its' existence. After
             // that Decapod comes to host and fetches facts from the host.
             //
-            // Host appears in tГлавный приз World Press Photo — фотограф Бурхан Озбилиджи. Человек пришел на мероприятие, которое не предвещало ничего выдающегося (подумаешь, какое-то открытие выставки), а в итоге снял главный кадр года. Тут должно быть что-то про бога журналистики или умение оказаться в нужное время в нужном месте, но если не вдаваться в философские рассуждения, то вообще-то даже представить сложно, как страшно было в момент съемки фотографу.he list ONLY if it is accessible by SSH
+            // Host appears in the list ONLY if it is accessible by SSH
             // and facts are collectable.
 
             withEnv(["DECAPOD_HTTP_PORT=${env.DECAPOD_HTTP_PORT}"]) {
