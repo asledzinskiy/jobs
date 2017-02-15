@@ -101,6 +101,7 @@
       - calico-libcalico-pipeline
       - calicoctl-pipeline
       - calicoctl-test-pipeline
+      - calico-component-testing-pipeline
 
 - project:
     name: calico-merge-pipelines

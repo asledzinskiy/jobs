@@ -1,0 +1,45 @@
+- job-template:
+    name: calico-component-testing-pipeline
+    project-name: calico-component-testing
+    description: |
+      Pipeline for Calico component tests execution
+    project-type: pipeline
+    triggers:
+    - timed: "@midnight"
+    dsl:
+      !include-raw-escape: calico-test.groovy
+    parameters:
+    - calico-test-parameters:
+        docker-prod-virtual: '{docker-prod-virtual}'
+        gerrit-host: '{gerrit-host}'
+
+- parameter:
+    name: calico-test-parameters
+    parameters:
+      - string:
+          name: ARTIFACTORY_SERVER
+          default: 'mcp-ci'
+      - string:
+          name: VIRTUAL_PROD_DOCKER_REGISTRY
+          default: '{docker-prod-virtual}'
+      - string:
+          name: PROD_BINARY_REPO
+          default: 'binary-prod-local'
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: CALICOCTL_COMMIT
+          default: 'mcp'
+      - string:
+          name: CNI_PLUGIN_COMMIT
+          default: 'mcp'
+      - string:
+          name: PROJECT_NAMESPACE
+          default: 'mirantis/projectcalico'
+      - string:
+          name: TESTRAIL_TEST_SUITE
+          default: 'Calico component tests'
+      - string:
+          name: TESTRAIL_MILESTONE
+          default: 'MCP1.0'
