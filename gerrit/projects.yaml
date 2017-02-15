@@ -269,6 +269,11 @@
   acl-config: acls/mcp-ci/mcp-ci.project-config.config
 
 -
+  project: clusters/kubernetes/env-ccp
+  description: Configuration for env-ccp k8s cluster for CCP tests
+  acl-config: acls/mcp-ci/mcp-ci.project-config.config
+
+-
   project: clusters/mcp/ccp-ci
   description: Configuration for ccp ci environment
   upstream: https://gerrit.mcp.mirantis.net/clusters/mcp/ccp-ci
