@@ -701,6 +701,17 @@
   acl-config: acls/oss/oss.config
 
 -
+  project: oss/pushkin
+  description: OSS Pushkin
+  upstream: git://github.com/Nordeus/pushkin.git
+  acl-config: acls/oss/oss.config
+
+-
+  project: oss/pushkin-extensions
+  description: OSS notifications senders for Pushkin
+  acl-config: acls/oss/oss.config
+
+-
   project: oss/salt-formula-security-monkey
   description: Salt formula for security-monkey deployment
   acl-config: acls/oss/oss.config
