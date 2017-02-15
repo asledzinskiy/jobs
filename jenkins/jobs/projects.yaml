@@ -314,3 +314,11 @@
       - "mcp-test-deploy-k8s-cluster-{cluster}"
     cluster:
       - env-01
+
+- project:
+    name: ccp-clusters
+    jobs:
+      - "{cluster}-configure-system"
+      - "{cluster}-deploy-k8s"
+    cluster:
+      - env-ccp
