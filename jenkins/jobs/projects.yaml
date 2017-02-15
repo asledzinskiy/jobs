@@ -130,7 +130,6 @@
       - 'fuel-ccp'
       - 'kubernetes'
       - 'mcp-ci'
-      - 'mk'
       - 'tcp'
     jobs:
       - 'sync-upstream-MANUAL'
