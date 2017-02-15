@@ -3,7 +3,7 @@
     description: 'Run custom system test for "MCP" project'
     test-expression: 'none'
     conf-file-name: 'default.yaml'
-    node: 'system-test'
+    node: 'system-test-custom'
     concurrent: true
     timeout: '360'
     weight: '1'
