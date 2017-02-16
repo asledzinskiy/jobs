@@ -133,8 +133,6 @@
             gerrit-host: '{gerrit-host}'
             gerrit-port: '{gerrit-port}'
       script-path: mk-k8s-{type}-deploy-pipeline.groovy
-    triggers:
-      - timed: '@daily'
 
 - job-template:
     name: 'mk-k8s-cleanup'
