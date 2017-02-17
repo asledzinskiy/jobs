@@ -117,7 +117,7 @@ def run_tests() {
                   namespace: ${imagesNamespace}
                   image_specs:
             """.stripIndent()
-            def tagLine = "tag: ${env.GERRIT_CHANGE_NUMBER}"
+            def tagLine = "tag: \"${env.GERRIT_CHANGE_NUMBER}\""
             tagLine = tagLine.padLeft(tagLine.length() + 6)
             for(name in names) {
                 def componentLine = name.padLeft(name.length() + 4)
