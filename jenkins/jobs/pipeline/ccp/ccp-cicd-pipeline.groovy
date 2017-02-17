@@ -71,11 +71,11 @@ def run_tests() {
             """
         }
 
-        def registry
+        def registry = env.DOCKER_REGISTRY
+        def useProxy = false
         stage('deploy registry') {
             if ( env.GERRIT_REFSPEC && env.GERRIT_PROJECT ) {
                 echo "Using Artifactory registry"
-                registry = env.DOCKER_REGISTRY
             } else {
                 def podFile = "${WORKSPACE}/tools/registry/registry-pod.yaml"
                 def serviceFile = "${WORKSPACE}/tools/registry/registry-service.yaml"
@@ -89,6 +89,7 @@ def run_tests() {
                               returnStdout: true).trim()
                 echo "Registry port is ${port}."
                 registry = "${kubernetesAddress}:${port}"
+                useProxy = true
             }
         }
 
@@ -96,10 +97,10 @@ def run_tests() {
             [$class: 'StringParameterValue', name: 'DOCKER_REGISTRY', value: registry ],
             [$class: 'StringParameterValue', name: 'CONF_GERRIT_URL', value: env.CONF_GERRIT_URL ],
             [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: env.CONF_ENTRYPOINT ],
-            [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: true ],
+            [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: useProxy ],
         ]
         if ( env.GERRIT_REFSPEC && env.GERRIT_PROJECT ) {
-            def patchDir = ${env.GERRIT_PROJECT}
+            def patchDir = env.GERRIT_PROJECT
             dir(patchDir) {
                 gitTools.gerritPatchsetCheckout([
                     credentialsId: 'mcp-ci-gerrit'
