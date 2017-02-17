@@ -319,3 +319,25 @@
       - "{cluster}-deploy-k8s"
     cluster:
       - env-ccp
+
+- project:
+    name: openstack-clusters
+
+    stack_public_float_id: admin_floating_net
+    stack_net_router_id: jenkins_ci_router
+
+    kargo_template_repo: clusters/kubernetes/env-01
+
+    # Number of nodes in cluster
+    cluster_size: '3'
+
+    jobs:
+      - "{cluster}-deployment"
+      - "{cluster}-create-os-heat-env"
+      - "{cluster}-configure-system"
+      - "{cluster}-deploy-k8s"
+    cluster:
+      - env-k8s-os-01:
+          stack_lan_network_class: 172.25.1
+      - env-k8s-os-02:
+          stack_lan_network_class: 172.25.2

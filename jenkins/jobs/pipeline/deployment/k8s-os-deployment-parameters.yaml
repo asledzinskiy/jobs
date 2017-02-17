@@ -1,0 +1,51 @@
+- parameter:
+    name: mcp-k8s-deployment-stack-parameters
+    parameters:
+      - string:
+          name: STACK_NAME
+          describtion: Name used for Openstack stack environment
+          default: '{cluster}'
+      - string:
+          name: STACK_NET_ROUTER_ID
+          describtion: Router name
+          default: '{stack_net_router_id}'
+      - string:
+          name: STACK_LAN_NETWORK_CLASS
+          describtion: First 3 octets for LAN network
+          default: '{stack_lan_network_class}'
+      - string:
+          name: STACK_PUBLIC_FLOAT_ID
+          describtion: Plublic network with float IP
+          default: '{stack_public_float_id}'
+
+- parameter:
+    name: mcp-k8s-deployment-os-parameters
+    parameters:
+      - string:
+          name: OS_AUTH_URL
+          default: "https://horizon.mcp.mirantis.net:5000/v3"
+          description: Authentication URL for CI/CD OpenStack installation
+      - string:
+          name: IDENTITY_API_VERSION
+          default: "3"
+          description: Authentication API version for CI/CD OpenStack installation
+      - string:
+          name: OS_PROJECT_DOMAIN_NAME
+          default: "Mirantis"
+          description: Name of the project domain in CI/CD OpenStack installation
+      - string:
+          name: OS_PROJECT_ID
+          default: 'ad85cea868bb4fc885facd6af1966365'
+          description: ID of the project in CI/CD OpenStack installation
+      - string:
+          name: OS_PROJECT_NAME
+          default: 'jenkins-ci'
+          description: Name of the project in CI/CD OpenStack installation
+      - string:
+          name: OS_REGION_NAME
+          default: 'RegionOne'
+          description: Name of the region in CI/CD OpenStack installation
+      - string:
+          name: OS_USER_DOMAIN_NAME
+          default: 'Mirantis'
+          description: Name of the user domain in CI/CD OpenStack installation

@@ -36,6 +36,10 @@
           name: INV_SOURCE
           default: 'json'
           description: 'Inventory source if not from cluster repo (empty, json, or ansible_inventory)'
+      - string:
+          name: KARGO_TEMPLATE_REPO
+          default: 'clusters/kubernetes/{cluster}'
+          description: Repository with template configuration used to execute kargo
 
     dsl:
       !include-raw-escape: base-os.groovy

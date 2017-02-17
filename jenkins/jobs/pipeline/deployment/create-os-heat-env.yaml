@@ -1,0 +1,28 @@
+- job-template:
+    name: '{cluster}-create-os-heat-env'
+    description: |
+      Create Openstack heat environment for k8s
+    project-type: workflow
+    concurrent: false
+    parameters:
+      - mcp-k8s-deployment-os-parameters
+      - mcp-k8s-deployment-stack-parameters:
+          cluster: '{cluster}'
+          stack_net_router_id: '{stack_net_router_id}'
+          stack_lan_network_class: '{stack_lan_network_class:}'
+          stack_public_float_id: '{stack_public_float_id}'
+
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+      - string:
+          name: STACK_NAME
+          default: '{cluster}'
+      - string:
+          name: SSH_PUBKEY
+      - string:
+          name: CLUSTER_SIZE
+          default: '{cluster_size}'
+
+    dsl:
+      !include-raw-escape: create-os-heat-env.groovy

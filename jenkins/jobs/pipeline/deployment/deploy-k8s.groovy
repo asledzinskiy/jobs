@@ -1,5 +1,4 @@
 gitTools = new com.mirantis.mcp.Git()
-ssl = new com.mirantis.mk.Ssl()
 common = new com.mirantis.mk.Common()
 mcpCommon = new com.mirantis.mcp.Common()
 qaCommon = new com.mirantis.mcp_qa.Common()
@@ -9,6 +8,7 @@ def String KARGO_COMMIT = env.KARGO_COMMIT ?: 'master'
 def String FUEL_CCP_INSTALLER_COMMIT = env.FUEL_CCP_INSTALLER_COMMIT ?: 'master'
 def String WRITE_CONFIG = env.WRITE_CONFIG
 def String CLUSTER_NAME=env.CLUSTER_NAME
+def String KARGO_TEMPLATE_REPO = env.KARGO_TEMPLATE_REPO ?: 'clusters/kubernetes/' + env.CLUSTER_NAME
 def String GERRIT_HOST=env.GERRIT_HOST
 def String FUEL_CCP_INSTALLER_REPO = 'ccp/fuel-ccp-installer'
 def String NODE_JSON= env.NODE_JSON
@@ -40,14 +40,15 @@ def execAnsiblePlaybook(String playbookPath,
             "-e host_key_checking=False " +
             extra
 
-    ssl.prepareSshAgentKey(sshCredentialsId)
     def username = common.getSshCredentials(sshCredentialsId).username
-    withEnv(["ANSIBLE_CONFIG=${ANSIBLE_CONFIG}"]) {
-        sh """
-            ansible-playbook --private-key=~/.ssh/id_rsa_${sshCredentialsId} \
-            --become --become-method=sudo --become-user=root -u ${username} \
-            ${scale_opts} ${extras} -i inventory/inventory.cfg ${playbookPath}
-        """
+    sshagent (credentials: [sshCredentialsId]) {
+        withEnv(["ANSIBLE_CONFIG=${ANSIBLE_CONFIG}"]) {
+            sh """
+                ansible-playbook \
+                --become --become-method=sudo --become-user=root -u ${username} \
+                ${scale_opts} ${extras} -i inventory/inventory.cfg ${playbookPath}
+            """
+        }
     }
 }
 
@@ -79,7 +80,7 @@ node("${SLAVE_NODE_LABEL}") {
             credentialsId : "mcp-ci-gerrit",
             branch : "master",
             host : "${GERRIT_HOST}",
-            project : "clusters/kubernetes/${CLUSTER_NAME}",
+            project : "${KARGO_TEMPLATE_REPO}",
             targetDir : 'inventory'
         ])
         if ( env.FUEL_CCP_INSTALLER_REFS && ! env.FUEL_CCP_INSTALLER_REFS.equals('none') ) {
@@ -115,6 +116,11 @@ node("${SLAVE_NODE_LABEL}") {
 
     stage("Post-install basic verification") {
         execAnsiblePlaybook('fuel-ccp-installer/utils/kargo/postinstall.yml')
+    }
+
+    stage("Archive config files") {
+        sh "cp inventory/inventory.cfg inventory/kargo/custom.yaml ${WORKSPACE}/"
+        archiveArtifacts artifacts: 'inventory.cfg, custom.yaml'
     }
 
 }

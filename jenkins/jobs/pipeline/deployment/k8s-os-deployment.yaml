@@ -1,0 +1,51 @@
+- job-template:
+    name: '{cluster}-deployment'
+    description: |
+      Deployment of Kubernetes Cluster with Kargon on Openstack instances created from heat template<br>
+      To use this job you need:<ul>
+        <li>jenkins credentials for user with access to Openstack (id: mcp-jenkins) </li>
+        <li>jenkins credentials with SSH key which will be used to connect with created nodes (id: mcp-ci-k8s-deployment)</li>
+        <li>slave with deployment label and ansible installed</li></ul>
+    project-type: pipeline
+    concurrent: true
+    parameters:
+      - mcp-k8s-deployment-os-parameters:
+      - mcp-k8s-deployment-stack-parameters:
+          cluster: '{cluster}'
+          stack_net_router_id: '{stack_net_router_id}'
+          stack_lan_network_class: '{stack_lan_network_class:}'
+          stack_public_float_id: '{stack_public_float_id}'
+
+      - string:
+          name: CLUSTER_NAME
+          describtion: Cluster name
+          default: '{cluster}'
+      - string:
+          name: CLUSTER_SIZE
+          describtion: Number of nodes in cluster
+          default: '{cluster_size}'
+
+      - string:
+          name: GERRIT_HOST
+          default: '{gerrit-host}'
+
+      - string:
+          name: KARGO_COMMIT
+          default: 'master'
+          description: 'Provide commit from which to checkout kargo'
+      - string:
+          name: KARGO_TEMPLATE_REPO
+          default: '{kargo_template_repo}'
+          description: Repository with template configuration used to execute kargo
+
+      - string:
+          name: SSH_PUBKEY
+          description: Additional SSH pubkeys which will be addedd to nodes
+
+      - bool:
+          name: DELETE_OLD_ENV
+          default: false
+          description: 'Delete old env'
+
+    dsl:
+      !include-raw-escape: k8s-os-deployment.groovy

@@ -98,8 +98,6 @@ node("${SLAVE_NODE_LABEL}") {
           source ${VENV_DIR}/bin/activate
           dos.py create-env ${CONF_PATH}
           dos.py start ${ENV_NAME}
-          echo 'Waiting for VMs to become up'
-          sleep 20
         """.stripIndent()
         writeFile file: WORKSPACE + '/node_ips.sh', text: """\
           #!/bin/bash -ex
@@ -132,6 +130,34 @@ node("${SLAVE_NODE_LABEL}") {
       }
     }
   }
+
+  stage('Wait for nodes start') {
+    withEnv(["SSHPASS=${SSHPASS}"]) {
+      def node_ips_string = readFile "${WORKSPACE}/node-ips.txt"
+      def node_ips = node_ips_string.split()
+      for(i=0; i<node_ips.size(); i++) {
+        def node_ip = node_ips[i]
+        for(int c=0; c<=30; c++) {
+          def test_code = sh script: """
+                timeout 2 sshpass -e ssh -o UserKnownHostsFile=/dev/null \
+                -o StrictHostKeyChecking=no \
+                -o PreferredAuthentications=password \
+                -o PubkeyAuthentication=no \
+                vagrant@${node_ip} w
+            """.stripIndent(), returnStatus: true
+          if (c == 30) {
+            error("Cannot connect to node ${node_ip} by SSH")
+          } else if (test_code != 0) {
+            print "Wait for SSH on node ${node_ip} [${c}]"
+            sleep 2
+          } else {
+            break
+          }
+        }
+      }
+    }
+  }
+
   stage('Archive artifacts') {
     archiveArtifacts artifacts: 'node-ips.txt, erase_env.sh'
   }

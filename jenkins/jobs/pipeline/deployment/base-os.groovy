@@ -1,5 +1,4 @@
 gitTools = new com.mirantis.mcp.Git()
-ssl = new com.mirantis.mk.Ssl()
 common = new com.mirantis.mk.Common()
 mcpCommon = new com.mirantis.mcp.Common()
 sshCredentialsId = env.CREDENTIALS ?: 'mcp-ci-k8s-deployment'
@@ -7,6 +6,7 @@ def String KARGO_REPO = 'kubernetes/kargo'
 def String FUEL_CCP_INSTALLER_REPO = 'ccp/fuel-ccp-installer'
 def String ANSIBLE_K8S_BASE_REPO = 'mcp-ci/ansible-k8s-base'
 def String CLUSTER_NAME=env.CLUSTER_NAME
+def String KARGO_TEMPLATE_REPO = env.KARGO_TEMPLATE_REPO ?: 'clusters/kubernetes/' + env.CLUSTER_NAME
 def String GERRIT_HOST=env.GERRIT_HOST
 def String INV_SOURCE=env.INV_SOURCE ?: ''
 def String NODE_JSON=env.NODE_JSON
@@ -21,32 +21,33 @@ def execAnsiblePlaybook(String playbookPath,
 
     def String extras = "-e host_key_checking=False ${extra}"
 
-    ssl.prepareSshAgentKey(sshCredentialsId)
     def username = common.getSshCredentials(sshCredentialsId).username
 
-    if ( Boolean.parseBoolean(env.TEST_MODE) ) {
-        // then let's create deployment user
-        writeFile file: 'deployment_user.yaml', text: """\
-          k8s_deployment_user: ${username}
-          k8s_deployment_user_pkey_path: ~/.ssh/id_rsa_${sshCredentialsId}
-        """.stripIndent()
-
-        withEnv(["ANSIBLE_CONFIG=kargo/ansible.cfg"]) {
-            sh """
-                ansible-playbook --become --become-method=sudo \
-                --become-user=root --extra-vars 'ansible_ssh_pass=vagrant' \
-                --ssh-common-args='-o UserKnownHostsFile=/dev/null' \
-                -u vagrant ${extras} -e @deployment_user.yaml \
-                -i inventory/inventory.cfg ${playbookPath}
-            """
-        }
-    } else {
-        withEnv(["ANSIBLE_CONFIG=kargo/ansible.cfg"]) {
-            sh """
-                ansible-playbook --private-key=~/.ssh/id_rsa_${sshCredentialsId} \
-                --become --become-method=sudo --become-user=root -u ${username} \
-                ${extras} -i inventory/inventory.cfg ${playbookPath}
-            """
+    sshagent (credentials: [sshCredentialsId]) {
+        def ssh_jenkins_pubkeys = sh(script: """
+          ssh-add -L
+        """, returnStdout: true).trim()
+        if ( Boolean.parseBoolean(env.TEST_MODE) ) {
+            withEnv(["ANSIBLE_CONFIG=kargo/ansible.cfg"]) {
+                sh """
+                    ansible-playbook --become --become-method=sudo \
+                    --extra-vars 'k8s_deployment_user=${username}' \
+                    --extra-vars "k8s_deployment_user_pubkey='${ssh_jenkins_pubkeys}'" \
+                    --become-user=root --extra-vars 'ansible_ssh_pass=vagrant' \
+                    --ssh-common-args='-o UserKnownHostsFile=/dev/null' \
+                    -u vagrant ${extras} \
+                    -i inventory/inventory.cfg ${playbookPath}
+                """
+            }
+        } else {
+            withEnv(["ANSIBLE_CONFIG=kargo/ansible.cfg"]) {
+                sh """
+                    ansible-playbook --extra-vars 'k8s_deployment_user=${username}' \
+                    --become --become-method=sudo --become-user=root -u ${username} \
+                    --extra-vars "k8s_deployment_user_pubkey='${ssh_jenkins_pubkeys}'" \
+                    ${extras} -i inventory/inventory.cfg ${playbookPath}
+                """
+            }
         }
     }
 }
@@ -85,7 +86,7 @@ node("${SLAVE_NODE_LABEL}") {
             credentialsId : "mcp-ci-gerrit",
             branch : "master",
             host : "${GERRIT_HOST}",
-            project : "clusters/kubernetes/${CLUSTER_NAME}",
+            project : "${KARGO_TEMPLATE_REPO}",
             targetDir : 'inventory'
         ])
     }
