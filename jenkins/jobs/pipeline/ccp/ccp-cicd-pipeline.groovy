@@ -121,7 +121,7 @@ def run_tests() {
             tagLine = tagLine.padLeft(tagLine.length() + 6)
             for(name in names) {
                 def componentLine = name.padLeft(name.length() + 4)
-                config += componentLine + '\n' + tagLine + '\n'
+                config += componentLine + ':\n' + tagLine + '\n'
             }
             jobParameters << [$class: 'TextParameterValue', name: 'ADDITIONAL_CCP_CONFIG', value: config ]
         }
