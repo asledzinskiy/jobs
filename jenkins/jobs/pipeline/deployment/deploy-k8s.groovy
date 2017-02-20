@@ -1,6 +1,6 @@
 gitTools = new com.mirantis.mcp.Git()
-ssl = new com.mirantis.mk.ssl()
-common = new com.mirantis.mk.common()
+ssl = new com.mirantis.mk.Ssl()
+common = new com.mirantis.mk.Common()
 mcpCommon = new com.mirantis.mcp.Common()
 qaCommon = new com.mirantis.mcp_qa.Common()
 sshCredentialsId = env.CREDENTIALS ?: 'mcp-ci-k8s-deployment'
