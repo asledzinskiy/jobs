@@ -84,7 +84,7 @@
       scm:
         - basic-scm:
             branch: 'master'
-            project: 'ccp-ci/ccp-bvt-pipeline'
+            project: 'ccp-ci/jenkins-pipelines'
             gerrit-host: '{gerrit-host}'
             gerrit-port: '{gerrit-port}'
-      script-path: Jenkinsfile
+      script-path: 'Jenkinsfile.bvt'
