@@ -782,25 +782,25 @@
 -
   project: salt-formulas/aodh
   description: aodh formula
-  upstream: git://github.com/tcpcloud/salt-formula-aodh.git
+  upstream: git://github.com/salt-formulas/salt-formula-aodh.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/apache
   description: apache formula
-  upstream: git://github.com/tcpcloud/salt-formula-apache.git
+  upstream: git://github.com/salt-formulas/salt-formula-apache.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/aptly
   description: aptly formula
-  upstream: git://github.com/tcpcloud/salt-formula-aptly.git
+  upstream: git://github.com/salt-formulas/salt-formula-aptly.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/artifactory
   description: artifactory formula
-  upstream: git://github.com/tcpcloud/salt-formula-artifactory.git
+  upstream: git://github.com/salt-formulas/salt-formula-artifactory.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -812,49 +812,49 @@
 -
   project: salt-formulas/backupninja
   description: backupninja formula
-  upstream: git://github.com/tcpcloud/salt-formula-backupninja.git
+  upstream: git://github.com/salt-formulas/salt-formula-backupninja.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/billometer
   description: billometer formula
-  upstream: git://github.com/tcpcloud/salt-formula-billometer.git
+  upstream: git://github.com/salt-formulas/salt-formula-billometer.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/bind
   description: bind formula
-  upstream: git://github.com/tcpcloud/salt-formula-bind.git
+  upstream: git://github.com/salt-formulas/salt-formula-bind.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/bird
   description: bird formula
-  upstream: git://github.com/tcpcloud/salt-formula-bird.git
+  upstream: git://github.com/salt-formulas/salt-formula-bird.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/cadf
   description: cadf formula
-  upstream: git://github.com/tcpcloud/salt-formula-cadf.git
+  upstream: git://github.com/salt-formulas/salt-formula-cadf.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/calico
   description: calico formula
-  upstream: git://github.com/tcpcloud/salt-formula-calico.git
+  upstream: git://github.com/salt-formulas/salt-formula-calico.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/cassandra
   description: cassandra formula
-  upstream: git://github.com/tcpcloud/salt-formula-cassandra.git
+  upstream: git://github.com/salt-formulas/salt-formula-cassandra.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/ccp
   description: ccp formula
-  upstream: git://github.com/tcpcloud/salt-formula-ccp.git
+  upstream: git://github.com/salt-formulas/salt-formula-ccp.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -866,13 +866,13 @@
 -
   project: salt-formulas/ceph
   description: ceph formula
-  upstream: git://github.com/tcpcloud/salt-formula-ceph.git
+  upstream: git://github.com/salt-formulas/salt-formula-ceph.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/chrony
   description: chrony formula
-  upstream: git://github.com/tcpcloud/salt-formula-chrony.git
+  upstream: git://github.com/salt-formulas/salt-formula-chrony.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -884,7 +884,7 @@
 -
   project: salt-formulas/collectd
   description: collectd formula
-  upstream: git://github.com/tcpcloud/salt-formula-collectd.git
+  upstream: git://github.com/salt-formulas/salt-formula-collectd.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -896,61 +896,61 @@
 -
   project: salt-formulas/docker
   description: docker formula
-  upstream: git://github.com/tcpcloud/salt-formula-docker.git
+  upstream: git://github.com/salt-formulas/salt-formula-docker.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/dovecot
   description: dovecot formula
-  upstream: git://github.com/tcpcloud/salt-formula-dovecot.git
+  upstream: git://github.com/salt-formulas/salt-formula-dovecot.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/elasticsearch
   description: elasticsearch formula
-  upstream: git://github.com/tcpcloud/salt-formula-elasticsearch.git
+  upstream: git://github.com/salt-formulas/salt-formula-elasticsearch.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/etcd
   description: etcd formula
-  upstream: git://github.com/tcpcloud/salt-formula-etcd.git
+  upstream: git://github.com/salt-formulas/salt-formula-etcd.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/foreman
   description: foreman formula
-  upstream: git://github.com/tcpcloud/salt-formula-foreman.git
+  upstream: git://github.com/salt-formulas/salt-formula-foreman.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/freeipa
   description: freeipa formula
-  upstream: git://github.com/tcpcloud/salt-formula-freeipa.git
+  upstream: git://github.com/salt-formulas/salt-formula-freeipa.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/galera
   description: galera formula
-  upstream: git://github.com/tcpcloud/salt-formula-galera.git
+  upstream: git://github.com/salt-formulas/salt-formula-galera.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/gerrit
   description: gerrit formula
-  upstream: git://github.com/tcpcloud/salt-formula-gerrit.git
+  upstream: git://github.com/salt-formulas/salt-formula-gerrit.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/git
   description: git formula
-  upstream: git://github.com/tcpcloud/salt-formula-git.git
+  upstream: git://github.com/salt-formulas/salt-formula-git.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/gitlab
   description: gitlab formula
-  upstream: git://github.com/tcpcloud/salt-formula-gitlab.git
+  upstream: git://github.com/salt-formulas/salt-formula-gitlab.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -962,25 +962,25 @@
 -
   project: salt-formulas/glusterfs
   description: glusterfs formula
-  upstream: git://github.com/tcpcloud/salt-formula-glusterfs.git
+  upstream: git://github.com/salt-formulas/salt-formula-glusterfs.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/grafana
   description: grafana formula
-  upstream: git://github.com/tcpcloud/salt-formula-grafana.git
+  upstream: git://github.com/salt-formulas/salt-formula-grafana.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/graphite
   description: graphite formula
-  upstream: git://github.com/tcpcloud/salt-formula-graphite.git
+  upstream: git://github.com/salt-formulas/salt-formula-graphite.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/haproxy
   description: haproxy formula
-  upstream: git://github.com/tcpcloud/salt-formula-haproxy.git
+  upstream: git://github.com/salt-formulas/salt-formula-haproxy.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -992,7 +992,7 @@
 -
   project: salt-formulas/heka
   description: heka formula
-  upstream: git://github.com/tcpcloud/salt-formula-heka.git
+  upstream: git://github.com/salt-formulas/salt-formula-heka.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -1004,43 +1004,43 @@
 -
   project: salt-formulas/influxdb
   description: influxdb formula
-  upstream: git://github.com/tcpcloud/salt-formula-influxdb.git
+  upstream: git://github.com/salt-formulas/salt-formula-influxdb.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/iptables
   description: iptables formula
-  upstream: git://github.com/tcpcloud/salt-formula-iptables.git
+  upstream: git://github.com/salt-formulas/salt-formula-iptables.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/isc-dhcp
   description: isc-dhcp formula
-  upstream: git://github.com/tcpcloud/salt-formula-isc-dhcp.git
+  upstream: git://github.com/salt-formulas/salt-formula-isc-dhcp.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/java
   description: java formula
-  upstream: git://github.com/tcpcloud/salt-formula-java.git
+  upstream: git://github.com/salt-formulas/salt-formula-java.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/jenkins
   description: jenkins formula
-  upstream: git://github.com/tcpcloud/salt-formula-jenkins.git
+  upstream: git://github.com/salt-formulas/salt-formula-jenkins.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/kedb
   description: kedb formula
-  upstream: git://github.com/tcpcloud/salt-formula-kedb.git
+  upstream: git://github.com/salt-formulas/salt-formula-kedb.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/keepalived
   description: keepalived formula
-  upstream: git://github.com/tcpcloud/salt-formula-keepalived.git
+  upstream: git://github.com/salt-formulas/salt-formula-keepalived.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -1052,7 +1052,7 @@
 -
   project: salt-formulas/kibana
   description: kibana formula
-  upstream: git://github.com/tcpcloud/salt-formula-kibana.git
+  upstream: git://github.com/salt-formulas/salt-formula-kibana.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -1064,43 +1064,43 @@
 -
   project: salt-formulas/letsencrypt
   description: letsencrypt formula
-  upstream: git://github.com/tcpcloud/salt-formula-letsencrypt.git
+  upstream: git://github.com/salt-formulas/salt-formula-letsencrypt.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/libvirt
   description: libvirt formula
-  upstream: git://github.com/tcpcloud/salt-formula-libvirt.git
+  upstream: git://github.com/salt-formulas/salt-formula-libvirt.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/linux
   description: linux formula
-  upstream: git://github.com/tcpcloud/salt-formula-linux.git
+  upstream: git://github.com/salt-formulas/salt-formula-linux.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/logrotate
   description: logrotate formula
-  upstream: git://github.com/tcpcloud/salt-formula-logrotate.git
+  upstream: git://github.com/salt-formulas/salt-formula-logrotate.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/maas
   description: maas formula
-  upstream: git://github.com/tcpcloud/salt-formula-maas.git
+  upstream: git://github.com/salt-formulas/salt-formula-maas.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/magnum
   description: magnum formula
-  upstream: git://github.com/tcpcloud/salt-formula-magnum.git
+  upstream: git://github.com/salt-formulas/salt-formula-magnum.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/memcached
   description: memcached formula
-  upstream: git://github.com/tcpcloud/salt-formula-memcached.git
+  upstream: git://github.com/salt-formulas/salt-formula-memcached.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -1118,31 +1118,31 @@
 -
   project: salt-formulas/mongodb
   description: mongodb formula
-  upstream: git://github.com/tcpcloud/salt-formula-mongodb.git
+  upstream: git://github.com/salt-formulas/salt-formula-mongodb.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/murano
   description: murano formula
-  upstream: git://github.com/tcpcloud/salt-formula-murano.git
+  upstream: git://github.com/salt-formulas/salt-formula-murano.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/mysql
   description: mysql formula
-  upstream: git://github.com/tcpcloud/salt-formula-mysql.git
+  upstream: git://github.com/salt-formulas/salt-formula-mysql.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/nagios
   description: nagios formula
-  upstream: git://github.com/tcpcloud/salt-formula-nagios.git
+  upstream: git://github.com/salt-formulas/salt-formula-nagios.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/network
   description: network formula
-  upstream: git://github.com/tcpcloud/salt-formula-network.git
+  upstream: git://github.com/salt-formulas/salt-formula-network.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -1154,19 +1154,19 @@
 -
   project: salt-formulas/nfs
   description: nfs formula
-  upstream: git://github.com/tcpcloud/salt-formula-nfs.git
+  upstream: git://github.com/salt-formulas/salt-formula-nfs.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/nginx
   description: nginx formula
-  upstream: git://github.com/tcpcloud/salt-formula-nginx.git
+  upstream: git://github.com/salt-formulas/salt-formula-nginx.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/nodejs
   description: nodejs formula
-  upstream: git://github.com/tcpcloud/salt-formula-nodejs.git
+  upstream: git://github.com/salt-formulas/salt-formula-nodejs.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -1178,7 +1178,7 @@
 -
   project: salt-formulas/ntp
   description: ntp formula
-  upstream: git://github.com/tcpcloud/salt-formula-ntp.git
+  upstream: git://github.com/salt-formulas/salt-formula-ntp.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -1190,121 +1190,127 @@
 -
   project: salt-formulas/openssh
   description: openssh formula
-  upstream: git://github.com/tcpcloud/salt-formula-openssh.git
+  upstream: git://github.com/salt-formulas/salt-formula-openssh.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/openvpn
   description: openvpn formula
-  upstream: git://github.com/tcpcloud/salt-formula-openvpn.git
+  upstream: git://github.com/salt-formulas/salt-formula-openvpn.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/openvstorage
   description: openvstorage formula
-  upstream: git://github.com/tcpcloud/salt-formula-openvstorage.git
+  upstream: git://github.com/salt-formulas/salt-formula-openvstorage.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/owncloud
   description: owncloud formula
-  upstream: git://github.com/tcpcloud/salt-formula-owncloud.git
+  upstream: git://github.com/salt-formulas/salt-formula-owncloud.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/postfix
   description: postfix formula
-  upstream: git://github.com/tcpcloud/salt-formula-postfix.git
+  upstream: git://github.com/salt-formulas/salt-formula-postfix.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/postgresql
   description: postgresql formula
-  upstream: git://github.com/tcpcloud/salt-formula-postgresql.git
+  upstream: git://github.com/salt-formulas/salt-formula-postgresql.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/pritunl
   description: pritunl formula
-  upstream: git://github.com/tcpcloud/salt-formula-pritunl.git
+  upstream: git://github.com/salt-formulas/salt-formula-pritunl.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/python
   description: python formula
-  upstream: git://github.com/tcpcloud/salt-formula-python.git
+  upstream: git://github.com/salt-formulas/salt-formula-python.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/rabbitmq
   description: rabbitmq formula
-  upstream: git://github.com/tcpcloud/salt-formula-rabbitmq.git
+  upstream: git://github.com/salt-formulas/salt-formula-rabbitmq.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/reclass
   description: reclass formula
-  upstream: git://github.com/tcpcloud/salt-formula-reclass.git
+  upstream: git://github.com/salt-formulas/salt-formula-reclass.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/redis
   description: redis formula
-  upstream: git://github.com/tcpcloud/salt-formula-redis.git
+  upstream: git://github.com/salt-formulas/salt-formula-redis.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/roundcube
   description: roundcube formula
-  upstream: git://github.com/tcpcloud/salt-formula-roundcube.git
+  upstream: git://github.com/salt-formulas/salt-formula-roundcube.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/rsync
   description: rsync formula
-  upstream: git://github.com/tcpcloud/salt-formula-rsync.git
+  upstream: git://github.com/salt-formulas/salt-formula-rsync.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/rsyslog
   description: rsyslog formula
-  upstream: git://github.com/tcpcloud/salt-formula-rsyslog.git
+  upstream: git://github.com/salt-formulas/salt-formula-rsyslog.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/sahara
   description: sahara formula
-  upstream: git://github.com/tcpcloud/salt-formula-sahara.git
+  upstream: git://github.com/salt-formulas/salt-formula-sahara.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/salt
   description: salt formula
-  upstream: git://github.com/tcpcloud/salt-formula-salt.git
+  upstream: git://github.com/salt-formulas/salt-formula-salt.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/sensu
   description: sensu formula
-  upstream: git://github.com/tcpcloud/salt-formula-sensu.git
+  upstream: git://github.com/salt-formulas/salt-formula-sensu.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
+  project: salt-formulas/sentry
+  description: sentry formula
+  upstream: git://github.com/salt-formulas/salt-formula-sentry.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/sphinx
   description: sphinx formula
-  upstream: git://github.com/tcpcloud/salt-formula-sphinx.git
+  upstream: git://github.com/salt-formulas/salt-formula-sphinx.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/statsd
   description: statsd formula
-  upstream: git://github.com/tcpcloud/salt-formula-statsd.git
+  upstream: git://github.com/salt-formulas/salt-formula-statsd.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/supervisor
   description: supervisor formula
-  upstream: git://github.com/tcpcloud/salt-formula-supervisor.git
+  upstream: git://github.com/salt-formulas/salt-formula-supervisor.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
@@ -1316,19 +1322,19 @@
 -
   project: salt-formulas/taiga
   description: taiga formula
-  upstream: git://github.com/tcpcloud/salt-formula-taiga.git
+  upstream: git://github.com/salt-formulas/salt-formula-taiga.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/varnish
   description: varnish formula
-  upstream: git://github.com/tcpcloud/salt-formula-varnish.git
+  upstream: git://github.com/salt-formulas/salt-formula-varnish.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
   project: salt-formulas/zookeeper
   description: zookeeper formula
-  upstream: git://github.com/tcpcloud/salt-formula-zookeeper.git
+  upstream: git://github.com/salt-formulas/salt-formula-zookeeper.git
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
