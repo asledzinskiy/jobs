@@ -665,7 +665,6 @@
 -
   project: oss/SimianArmy
   description: OSS Simian Army (Janitor Monkey)
-  upstream: git://github.com/Symantec/SimianArmy.git
   acl-config: acls/oss/oss.config
 
 -
