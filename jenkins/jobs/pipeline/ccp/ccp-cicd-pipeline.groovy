@@ -167,7 +167,7 @@ def run_tests() {
             rm ${WORKSPACE}/kubeconfig
         """
         def k8sCreds = env.K8S_DEPLOYMENT_CREDS
-        def common = new com.mirantis.mk.common()
+        def common = new com.mirantis.mk.Сommon()
         def osUser = common.getSshCredentials(k8sCreds).getUsername()
         sshagent ([k8sCreds]) {
             retry(10) {
