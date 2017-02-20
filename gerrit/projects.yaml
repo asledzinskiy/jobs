@@ -413,6 +413,131 @@
   acl-config: acls/contrail/contrail.config
 
 -
+  project: csb-app/channels
+  description: Channels
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/csb-azurepack
+  description: Csb Azurepack
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/csb-heat
+  description: Csb Heat
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/csb-office365
+  description: Csb Office365
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/csb-openstack
+  description: Csb Openstack
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/csb-vmware
+  description: Csb VMware
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/django-leonardo
+  description: Django Leonardo
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/django-oscar
+  description: Django Oscar
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/django-oscar-accounts
+  description: Django Oscar Accounts
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-accounts
+  description: Leonardo Accounts
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-admin-dashboard
+  description: Leonardo Admin Dashboard
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-celery
+  description: Leonardo Celery
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-channels
+  description: Leonardo Channels
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-cookie-law
+  description: Leonardo Cookie Law
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-csb
+  description: Leonardo Csb
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-hijack
+  description: Leonardo Hijack
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-module-forms
+  description: Leonardo Module Forms
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-module-links
+  description: Django Module Links
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-module-sentry
+  description: Leonardo Module Sentry
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-newsletter
+  description: Leonardo Newsletter
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-oembed
+  description: Leonardo Oembed
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-questionnaire
+  description: Leonardo Questionnaire
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-store
+  description: Leonardo Store
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/leonardo-store-cz
+  description: Leonardo Store CZ
+  acl-config: acls/csb-app/csb-app.config
+
+-
+  project: csb-app/o2bd-theme
+  description: O2bd Theme
+  acl-config: acls/csb-app/csb-app.config
+
+-
   project: debian/cassandra-cpp-driver
   description: cassandra-cpp-driver Debian package
   upstream: git://github.com/tcpcloud/debian-cassandra-cpp-driver.git
@@ -537,6 +662,196 @@
   description: python-xmltodict Debian package
   upstream: git://github.com/tcpcloud/debian-python-xmltodict.git
   acl-config: acls/debian/debian.config
+
+-
+  project: horizon-modules/horizon-api-mask
+  description: Horizon Api Mask
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-benchmark-dashboard
+  description: Horizon Benchmark Dashboard
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-billing-dashboard
+  description: Horizon Billing Dashboard
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-cold-panels
+  description: Horizon Cold Panels
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-contrail-panels
+  description: Horizon Contrail Panels
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-contrib
+  description: Horizon Contrib
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-csb-dashboard
+  description: Horizon Csb Dashboard
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-heat-server-templates
+  description: Horizon Heat Server Templates
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-helpdesk-dashboard
+  description: Horizon Helpdesk Dashboard
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-jenkins-dashboard
+  description: Horizon Jenkins Dashboard
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-murano-dashboard
+  description: Horizon Murano Dashboard
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-network-allocation-panel
+  description: Horizon Network Allocation
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-overrides-plugin
+  description: Horizon Overrides Plugin
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-sensu-dashboard
+  description: Horizon Sensu Dashboard
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-modules/horizon-telemetry-dashboard
+  description: Horizon Telemetry Dashboard
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
+  project: horizon-themes/horizon-100percentit-theme
+  description: Horizon 100percentit Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-aaaadminlte-theme
+  description: Horizon Aaaadminlte Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-adminlte-theme
+  description: Horizon Adminlte Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-avg-theme
+  description: Horizon AVG Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-bootstrap-theme
+  description: Horizon Bootstrap Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-cdis-theme
+  description: Horizon Cdis Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-cepsos-theme
+  description: Horizon Cepsos Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-cloudempire-theme
+  description: Horizon Cloudempire Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-czechit-theme
+  description: Horizon Czechit Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-dns-theme
+  description: Horizon DNS Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-ed-theme
+  description: Horizon Ed Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-lithium-theme
+  description: Horizon Lithium Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-mall-theme
+  description: Horizon Mall Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-mirantis-theme
+  description: Horizon Mirantis Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-o2-theme
+  description: Horizon O2 Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-redhat-theme
+  description: Horizon RedHat Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-reliance-theme
+  description: Horizon Reliance Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-srot-theme
+  description: Horizon Srot Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-tcp-theme
+  description: Horizon Tcp Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-tcpisek-theme
+  description: Horizon Tcpisek Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-telekom-theme
+  description: Horizon Telekom Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-tieto-theme
+  description: Horizon Tieto Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
+
+-
+  project: horizon-themes/horizon-ubuntu-theme
+  description: Horizon Ubuntu Theme
+  acl-config: acls/horizon-themes/horizon-themes.config
 
 -
   project: kubernetes-ci/kubernetes-slave-image
