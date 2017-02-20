@@ -1230,6 +1230,12 @@
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
+  project: salt-formulas/prometheus
+  description: prometheus formula
+  upstream: git://github.com/salt-formulas/salt-formula-prometheus.git
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
   project: salt-formulas/python
   description: python formula
   upstream: git://github.com/salt-formulas/salt-formula-python.git
