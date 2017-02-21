@@ -23,9 +23,6 @@ template:
           ip_ranges:
             dhcp: [+2, -2]
 
-      public-pool01:
-        net: *pool_default
-
     groups:
      - name: default
        driver:
@@ -40,7 +37,6 @@ template:
 
        network_pools:  # Address pools for OpenStack networks.
          private: private-pool01
-         public: public-pool01
 
        l2_network_devices:  # Libvirt bridges. It is *NOT* Nailgun networks
          private:
@@ -50,7 +46,6 @@ template:
              mode: nat
 
          public:
-           address_pool: public-pool01
            dhcp: false
 
        nodes:
