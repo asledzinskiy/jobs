@@ -28,7 +28,7 @@ def execAnsiblePlaybook(String playbookPath,
         // then let's create deployment user
         writeFile file: 'deployment_user.yaml', text: """\
           k8s_deployment_user: ${username}
-          k8s_deployment_user_pkey_path: /home/jenkins/.ssh/id_rsa_${sshCredentialsId}
+          k8s_deployment_user_pkey_path: ~/.ssh/id_rsa_${sshCredentialsId}
         """.stripIndent()
 
         withEnv(["ANSIBLE_CONFIG=kargo/ansible.cfg"]) {
