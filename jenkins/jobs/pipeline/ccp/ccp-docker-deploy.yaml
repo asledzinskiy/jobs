@@ -9,7 +9,7 @@
           use-build-blocker: true
           blocking-jobs:
             - "ccp-tempest-test"
-          block_level: 'GLOBAL'
+          block-level: 'GLOBAL'
           queue-scanning: 'BUILDABLE'
 
     parameters:

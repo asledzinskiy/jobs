@@ -36,7 +36,7 @@
           use-build-blocker: true
           blocking-jobs:
             - "ccp-cicd-bvt"
-          block_level: 'GLOBAL'
+          block-level: 'GLOBAL'
           queue-scanning: 'BUILDABLE'
 
     parameters:

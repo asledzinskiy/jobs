@@ -59,7 +59,7 @@
           blocking-jobs:
            - "^mcp.ccp.pipeline.*"
            - "^mcp.ccp.smoke-pipeline.*"
-          block_level: 'NODE'
+          block-level: 'NODE'
           queue-scanning: 'BUILDABLE'
 
     wrappers:

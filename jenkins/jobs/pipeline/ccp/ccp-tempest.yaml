@@ -9,7 +9,7 @@
           use-build-blocker: true
           blocking-jobs:
             - "ccp-docker-deploy"
-          block_level: 'GLOBAL'
+          block-level: 'GLOBAL'
           queue-scanning: 'BUILDABLE'
 
     parameters:
