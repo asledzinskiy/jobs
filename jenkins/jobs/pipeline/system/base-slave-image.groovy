@@ -46,7 +46,7 @@ def build_artifacts () {
                 sh "sed -i 's/${old_registry}/${docker_registry}/g' ${img}/Dockerfile"
                 // Remove old one if exists
                 sh "docker rmi -f ${docker_image} || true"
-                sh "docker build --build-arg artifactory_host=${artifactory_host} -t ${docker_image}:${imageTag} ${img}"
+                sh "docker build --pull --build-arg artifactory_host=${artifactory_host} -t ${docker_image}:${imageTag} ${img}"
 
                 // Upload
                 sh "docker tag ${docker_image}:${imageTag} ${dockerRepository}/${docker_image}:${imageTag}"

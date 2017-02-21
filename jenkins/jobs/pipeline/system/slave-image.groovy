@@ -59,7 +59,7 @@ def build_artifacts (Boolean manual = false) {
             }
             // Remove old one if exists
             sh "docker rmi -f ${docker_image} || true"
-            sh "docker build -t ${docker_image}:${imageTag} ."
+            sh "docker build --pull -t ${docker_image}:${imageTag} ."
 
             // Upload
             sh "docker tag ${docker_image}:${imageTag} ${docker_registry}/${docker_image}:${imageTag}"

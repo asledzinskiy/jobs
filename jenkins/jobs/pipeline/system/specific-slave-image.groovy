@@ -40,9 +40,9 @@ def buildContainers(){
         dir ("${slaveType}-slave"){
           sh "docker rmi -f ${dockerRepository}/${slaveImageName} || true"
           if ("${slaveType}" == "jnlp") {
-            sh "docker build --build-arg JENKINS_MASTER=${env.JENKINS_URL} -t ${dockerRepository}/${slaveImageName}:${imageTag} ."
+            sh "docker build --pull --build-arg JENKINS_MASTER=${env.JENKINS_URL} -t ${dockerRepository}/${slaveImageName}:${imageTag} ."
           } else {
-            sh "docker build -t ${dockerRepository}/${slaveImageName}:${imageTag} ."
+            sh "docker build --pull -t ${dockerRepository}/${slaveImageName}:${imageTag} ."
           }
         }
       }
