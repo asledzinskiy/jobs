@@ -9,7 +9,7 @@
     parameters:
       - string:
           name: DISTRO
-          default: 'ubuntu-16.04.1-server-amd64'
+          default: 'ubuntu-16.04.2-server-amd64'
     properties:
     - build-discarder:
         days-to-keep: 7
