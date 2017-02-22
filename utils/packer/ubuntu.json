@@ -1,5 +1,5 @@
 {
-  "_comment": "Build with `PACKER_LOG=1 UBUNTU_MAJOR_VERSION=16.04 UBUNTU_MINOR_VERSION=.1 UBUNTU_TYPE=server ARCH=amd64 HEADLESS=true packer build ubuntu.json`",
+  "_comment": "Build with `PACKER_LOG=1 UBUNTU_MAJOR_VERSION=16.04 UBUNTU_MINOR_VERSION=.2 UBUNTU_TYPE=server ARCH=amd64 HEADLESS=true packer build ubuntu.json`",
   "_comment": "Use `build -only=qemu`",
   "_comment": "See checksums at {{ user `ubuntu_mirror` }}{{ user `ubuntu_version` }}/SHA256SUMS",
   "variables": {
