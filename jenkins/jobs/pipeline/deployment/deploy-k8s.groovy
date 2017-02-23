@@ -33,8 +33,8 @@ def execAnsiblePlaybook(String playbookPath,
 
     def String scale_opts = '--forks=50 --timeout=600'
 
-    def String extras = "-e @kargo/inventory/group_vars/all.yml " +
-            "-e @$CCP_KARGO/kargo_default_common.yaml " +
+    sh "ln -sf ${WORKSPACE}/kargo/inventory/group_vars ${WORKSPACE}/inventory/group_vars"
+    def String extras ="-e @$CCP_KARGO/kargo_default_common.yaml " +
             "-e @$CCP_KARGO/kargo_default_ubuntu.yaml " +
             "-e @inventory/kargo/custom.yaml " +
             "-e host_key_checking=False " +
