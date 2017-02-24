@@ -538,6 +538,11 @@
   acl-config: acls/csb-app/csb-app.config
 
 -
+  project: csb-app/o2csb-theme
+  description: O2csd Theme
+  acl-config: acls/csb-app/csb-app.config
+
+-
   project: debian/cassandra-cpp-driver
   description: cassandra-cpp-driver Debian package
   upstream: git://github.com/tcpcloud/debian-cassandra-cpp-driver.git
