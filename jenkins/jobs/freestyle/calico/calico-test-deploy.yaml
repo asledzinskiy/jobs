@@ -3,7 +3,7 @@
     description: 'Run system test "{test-name}" for "Calico" project'
     test-expression: 'none'
     conf-file-name: 'default.yaml'
-    node: 'system-test'
+    node: 'calico-system-test'
     concurrent: true
     timeout: '60'
     weight: '1'
