@@ -104,7 +104,7 @@ node("${SLAVE_NODE_LABEL}") {
         writeFile file: WORKSPACE + '/node_ips.sh', text: """\
           #!/bin/bash -ex
           source ${VENV_DIR}/bin/activate
-          dos.py slave-ip-list ${ENV_NAME}
+          dos.py slave-ip-list ${ENV_NAME} --address-pool-name=private-pool01 --ip-only
         """.stripIndent()
         writeFile file: WORKSPACE + '/erase_env.sh', text: """\
           #!/bin/bash -ex
