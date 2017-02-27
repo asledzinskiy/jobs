@@ -17,7 +17,7 @@
                 comment-contains-value: '(recheck|reverify)'
           projects:
             - project-compare-type: REG_EXP
-              project-pattern: ccp/fuel-ccp-(jenkins|artifactory|gerrit)
+              project-pattern: (ccp/fuel-ccp-(jenkins|artifactory|gerrit))|clusters/mcp/ccp-cicd
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'
