@@ -168,7 +168,7 @@
 
     - string:
         name: KARGO_COMMIT
-        default: '0f6e08d34f1497960bf6331ae3ba8315dc44e444'
+        default: 'c6cb0d3984a39090bb6d39647546bf4d616f1644'
 
     - text:
         name: ADDITIONAL_PARAMETERS
