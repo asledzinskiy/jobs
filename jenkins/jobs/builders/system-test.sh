@@ -95,10 +95,6 @@ set_latest_artifacts () {
 
 # check that 'net.bridge.bridge-nf-call-iptables' is disabled
 if ! grep -q 0 /proc/sys/net/bridge/bridge-nf-call-iptables; then
-  if [[ "$(sudo -n id -u 2>/dev/null)" -eq 0 ]]; then
-    echo "Trying to disable 'net.bridge.bridge-nf-call-iptables'...."
-    sudo -n sysctl -w net.bridge.bridge-nf-call-iptables=0
-  fi
   if ! grep -q 0 /proc/sys/net/bridge/bridge-nf-call-iptables; then
     error_exit "Kernel parameter 'net.bridge.bridge-nf-call-iptables' is enabled! Disable it to run the tests!"
   fi
