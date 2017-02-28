@@ -1674,6 +1674,16 @@
   acl-config: acls/salt-models/salt-models.config
 
 -
+  project: salt-models/mcp-baremetal-lab
+  description: Baremetal Lab Salt model
+  acl-config: acls/salt-models/salt-models.config
+
+-
+  project: salt-models/mcp-virtual-lab
+  description: Virtual Lab Salt model
+  acl-config: acls/salt-models/salt-models.config
+
+-
   project: salt-models/mk-ci
   description: Mk CI infrastructure Salt model
   acl-config: acls/salt-models/salt-models.config
