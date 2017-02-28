@@ -1031,6 +1031,11 @@
   acl-config: acls/oss/oss.config
 
 -
+  project: oss/salt-formula-devops-portal
+  description: Salt formula for OSS Tooling DevOps Portal deployment
+  acl-config: acls/oss/oss.config
+
+-
   project: oss/salt-formula-security-monkey
   description: Salt formula for security-monkey deployment
   acl-config: acls/oss/oss.config
