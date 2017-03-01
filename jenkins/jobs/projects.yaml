@@ -223,12 +223,12 @@
       - ccp-cicd-bvt
       - 'ccp-bvt-{bvt-type}':
           bvt-type:
-            - mitaka:
-                timer: '0 0,6,12,18 * * *'
-            - newton:
-                timer: '0 2,8,14,20 * * *'
-            - ocata:
-                timer: '0 4,10,16,22 * * *'
+            - mitaka
+#                timer: '0 0,6,12,18 * * *'
+            - newton
+#                timer: '0 2,8,14,20 * * *'
+            - ocata
+#                timer: '0 4,10,16,22 * * *'
       - ccp-cleanup
       - demo-deploy
       - demo-build
