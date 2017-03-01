@@ -115,7 +115,7 @@ def run_integration_tests () {
 
     }, conformance: {
         stage('e2e-tests') {
-            node('k8s') {
+            node('system-test') {
 
                 def k8s_repo_dir = "${env.WORKSPACE}/kubernetes"
                 def WORKSPACE = "${env.WORKSPACE}"
