@@ -150,6 +150,7 @@
 
 - job-template:
     name: calico-libcalico-go-test-pipeline
+    disabled: true
     project-name: calico-pipeline
     description: |
       Pipeline for libcalico-go project with dynamic slaves from k8s
@@ -250,6 +251,7 @@
 
 - job-template:
     name: calicoctl-test-pipeline
+    disabled: true
     project-name: calico-pipeline
     description: |
       Pipeline for calicoctl project with dynamic slaves from k8s
