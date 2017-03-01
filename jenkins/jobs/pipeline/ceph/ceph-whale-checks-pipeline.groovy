@@ -21,6 +21,7 @@ node("whale") {
                 project : "ceph/whale"
             ])
         }
+        sh 'git submodule update --init --recursive'
     }
 
     withEnv(["PIP_INDEX_URL=${ARTIFACTORY_PYPI_URL}"]) {
