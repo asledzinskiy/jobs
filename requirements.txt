@@ -1,1 +1,2 @@
 -e git+https://gerrit.mcp.mirantis.net/mcp-ci/jenkins-job-builder@mcp-0.1#egg=jenkins-job-builder
+pbr>=1.8,<2.0
