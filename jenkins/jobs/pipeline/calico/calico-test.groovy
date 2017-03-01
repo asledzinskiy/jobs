@@ -14,7 +14,7 @@ def testContainers(){
     ])
 
     //FIXME: remove this
-    sh "git rebase origin/mcp"
+    sh "GIT_COMMITTER_NAME=jenkins EMAIL=jenkins@mcp-ci git rebase origin/mcp"
 
     calico.systestCalico(
       "${env.VIRTUAL_PROD_DOCKER_REGISTRY}/${env.PROJECT_NAMESPACE}/calico/node:latest",
@@ -39,7 +39,7 @@ def testCni(){
     ])
 
     //FIXME: remove this
-    sh "git rebase origin/mcp"
+    sh "GIT_COMMITTER_NAME=jenkins EMAIL=jenkins@mcp-ci git rebase origin/mcp"
 
     calico.testCniPlugin()
     sh "cp junit.xml ${WORKSPACE}/calico.cni.junit.xml"
