@@ -95,6 +95,7 @@ node("${SLAVE_NODE_LABEL}") {
               string(name: 'SSH_PUBKEY', value: "${env.SSH_PUBKEY}"),
               string(name: 'STACK_NAME', value: "${STACK_NAME}"),
               string(name: 'CLUSTER_SIZE', value: "${env.CLUSTER_SIZE}"),
+              string(name: 'STACK_LAN_NETWORK_CLASS', value: "${env.STACK_LAN_NETWORK_CLASS}"),
             ]
         step([$class: 'CopyArtifact',
                 filter: 'node-ips.json',
