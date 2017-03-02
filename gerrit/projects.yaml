@@ -974,6 +974,12 @@
   acl-config: acls/mcp/mcp-qa.config
 
 -
+  project: mcp/rally-tempest
+  description: Rally and Temepst in Docker
+  upstream: https://github.com/obutenko/rally_tempest_docker.git
+  acl-config: acls/mcp/mcp-qa.config
+
+-
   project: mk/mcp-lab-heat-templates
   description: OpenStack Heat templates for MCP infrastructures
   acl-config: acls/mk/mk.config
