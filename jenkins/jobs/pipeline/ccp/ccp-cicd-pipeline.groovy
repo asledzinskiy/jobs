@@ -99,6 +99,7 @@ def run_tests() {
             [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: env.CONF_ENTRYPOINT ],
             [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: useProxy ],
         ]
+        def componentParameter
         if ( env.GERRIT_REFSPEC && env.GERRIT_PROJECT ) {
             def patchDir = env.GERRIT_PROJECT
             dir(patchDir) {
@@ -109,7 +110,8 @@ def run_tests() {
             def names = sh(script: "ls ${patchDir}/docker", returnStdout: true).trim().tokenize('\n')
             jobParameters << [$class: 'StringParameterValue', name: 'GERRIT_REFSPEC', value: env.GERRIT_REFSPEC ]
             def component = env.GERRIT_PROJECT.split('/')[-1].minus('fuel-ccp-')
-            jobParameters << [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: component ]
+            componentParameter = [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: component ]
+            jobParameters << componentParameter
             // configure images hash for ccp config with simple string concat
             //  until CCPCICD object model is ready to use
             def config = """\
@@ -140,8 +142,8 @@ def run_tests() {
             jobParameters << [$class: 'StringParameterValue', name: 'KUBERNETES_NAMESPACE', value: envName ]
             jobParameters << [$class: 'BooleanParameterValue', name: 'CLEANUP_ENV', value: false ]
             // don't pass CCP_COMPONENT parameter to deployment pipeline
-            if (jobParameters.find{ it.key == "CCP_COMPONENT" }?.value) {
-              jobParameters.remove('CCP_COMPONENT')
+            if (componentParameter) {
+              jobParameters.remove(componentParameter)
             }
             build job: 'ccp-docker-deploy', parameters: jobParameters
         }
