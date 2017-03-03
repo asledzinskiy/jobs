@@ -576,20 +576,9 @@ def promote_artifacts () {
 }
 
 def clone_k8s_repo () {
-    def k8s_repo_url = "ssh://${env.GERRIT_NAME}@${env.GERRIT_HOST}:${env.GERRIT_PORT}/${env.GERRIT_PROJECT}.git"
-    sshagent (credentials: ['mcp-ci-gerrit']) {
-        withEnv(["GIT_K8S_CACHE_DIR=${git_k8s_cache_dir}",
-                 "GIT_K8S_REPO_URL=${k8s_repo_url}"]) {
-            sh '''
-                git clone file://${GIT_K8S_CACHE_DIR} .
-                git remote add kubernetes ${GIT_K8S_REPO_URL}
-                git reset --hard
-                if ! git clean -x -f -d -q ; then
-                  sleep 1
-                  git clean -x -f -d -q
-                fi
-                git fetch kubernetes --tags
-            '''
-        }
-    }
+  gitTools.gitSSHCheckout ([
+    credentialsId : "mcp-ci-gerrit",
+    host : "${env.GERRIT_HOST}",
+    project : "kubernetes/kubernetes"
+  ])
 }
