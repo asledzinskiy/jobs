@@ -1,7 +1,7 @@
 ciTools = new com.mirantis.mcp.Common()
 git = new com.mirantis.mcp.Git()
 
-node('verify-tests'){
+node('system-tests'){
     try {
 
       stage ('Checkout mcp-qa'){
