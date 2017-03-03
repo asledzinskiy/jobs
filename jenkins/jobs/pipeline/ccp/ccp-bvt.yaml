@@ -13,8 +13,7 @@
       - string:
           name: KUBERNETES_URL
           description: 'URL for kubernetes api like https://host:443/'
-          # TODO(sryabin) fix me
-          default: 'https://kube:changeme@mcpsrv012-scc.mcp.mirantis.net'
+          default: 'https://mcpsrv012-scc.mcp.mirantis.net:6443'
 
       - string:
           name: CREDENTIALS_ID
