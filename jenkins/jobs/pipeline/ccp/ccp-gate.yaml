@@ -29,7 +29,7 @@
     name: gate-fuel-ccp-cicd
     description: |
       CCP gate build/deploy test
-    project-type: workflow
+    project-type: pipeline
 
     properties:
       - build-blocker:
@@ -76,6 +76,30 @@
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+    dsl:
+      !include-raw-escape: ccp-cicd-pipeline.groovy
+
+- job-template:
+    name: promote-fuel-ccp-cicd
+    description: |
+      Promote CCP CI images to stable latest.
+    project-type: pipeline
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: REG_EXP
+              project-pattern: ccp/fuel-ccp-(jenkins|artifactory|gerrit)
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+              file-paths:
+                - compare-type: ANT
+                  pattern: '**/docker/**'
           custom-url: '* $JOB_NAME $BUILD_URL'
 
     dsl:

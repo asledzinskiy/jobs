@@ -221,6 +221,7 @@
             - linters
             - validate
       - gate-fuel-ccp-cicd
+      - promote-fuel-ccp-cicd
       - ccp-cicd-bvt
       - 'ccp-bvt-{bvt-type}':
           bvt-type:
