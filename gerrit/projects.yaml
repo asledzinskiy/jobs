@@ -6,12 +6,12 @@
 -
   project: ccp-ci/jenkins-pipelines
   description: Collection of Jenkinsfiles for deploy,build,tempest,cleanup pipelines
-  acl-config: acls/mcp-ci/mcp-ci.config
+  acl-config: acls/ccp-ci/ccp-ci.project-config.config
 
 -
   project: ccp/ccp-pipeline
   description: CCP jenkins pipelines
-  acl-config: acls/ccp/ccp.config
+  acl-config: acls/ccp-ci/ccp-ci.project-config.config
 
 -
   project: ccp/fuel-ccp
@@ -62,12 +62,12 @@
 -
   project: ccp/fuel-ccp-deploy
   description: Fuel CCP - CCP deployment
-  acl-config: acls/mcp-ci/mcp-ci.config
+  acl-config: acls/ccp-ci/ccp-ci.project-config.config
 
 -
   project: ccp/fuel-ccp-docker
   description: Fuel CCP - CCP image builder
-  acl-config: acls/mcp-ci/mcp-ci.config
+  acl-config: acls/ccp-ci/ccp-ci.project-config.config
 
 -
   project: ccp/fuel-ccp-entrypoint
@@ -231,7 +231,7 @@
 -
   project: ccp/fuel-ccp-tempest-pipeline
   description: Fuel CCP - Tempest against Openstack
-  acl-config: acls/mcp-ci/mcp-ci.config
+  acl-config: acls/ccp-ci/ccp-ci.project-config.config
 
 -
   project: ccp/fuel-ccp-tests
