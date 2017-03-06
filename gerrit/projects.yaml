@@ -1036,6 +1036,11 @@
   acl-config: acls/oss/oss.config
 
 -
+  project: oss/salt-formula-rundeck
+  description: Salt formula for Rundeck deployment
+  acl-config: acls/oss/oss.config
+
+-
   project: oss/salt-formula-security-monkey
   description: Salt formula for security-monkey deployment
   acl-config: acls/oss/oss.config
