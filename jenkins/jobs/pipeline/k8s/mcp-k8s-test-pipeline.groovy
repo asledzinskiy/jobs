@@ -44,7 +44,6 @@ def run_unit_tests () {
             def docker_image_unit = "${env.DOCKER_IMAGE_UNIT}"
             deleteDir()
             if ( env.GERRIT_EVENT_TYPE ) {
-                clone_k8s_repo()
                 gitTools.gerritPatchsetCheckout([
                     credentialsId : "mcp-ci-gerrit"
                 ])
@@ -87,7 +86,6 @@ def run_integration_tests () {
         stage('integration-tests') {
             node('k8s') {
                 deleteDir()
-                clone_k8s_repo()
                 gitTools.gerritPatchsetCheckout ([
                     credentialsId : "mcp-ci-gerrit"
                 ])
@@ -137,7 +135,6 @@ def run_integration_tests () {
                   project : "mcp-ci/project-config"
                 ])
                 dir("${k8s_repo_dir}") {
-                  clone_k8s_repo()
                   gitTools.gerritPatchsetCheckout ([
                       credentialsId : "mcp-ci-gerrit"
                   ])
@@ -276,7 +273,6 @@ def build_publish_binaries () {
 
                 dir("${k8s_repo_dir}") {
                     if ( env.GERRIT_EVENT_TYPE ) {
-                        clone_k8s_repo()
                         gitTools.gerritPatchsetCheckout([
                             credentialsId : "mcp-ci-gerrit"
                         ])
@@ -410,7 +406,6 @@ def build_publish_binaries () {
 
                 def gerrit_host = "${env.GERRIT_HOST}"
                 if ( env.GERRIT_EVENT_TYPE ) {
-                    clone_k8s_repo()
                     gitTools.gerritPatchsetCheckout([
                         credentialsId : "mcp-ci-gerrit"
                     ])
@@ -573,12 +568,4 @@ def promote_artifacts () {
             }
         }
     }
-}
-
-def clone_k8s_repo () {
-  gitTools.gitSSHCheckout ([
-    credentialsId : "mcp-ci-gerrit",
-    host : "${env.GERRIT_HOST}",
-    project : "kubernetes/kubernetes"
-  ])
 }
