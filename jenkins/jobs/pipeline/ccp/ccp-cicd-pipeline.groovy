@@ -99,14 +99,23 @@ def run_tests() {
             [$class: 'StringParameterValue', name: 'CONF_ENTRYPOINT', value: env.CONF_ENTRYPOINT ],
             [$class: 'BooleanParameterValue', name: 'USE_REGISTRY_PROXY', value: useProxy ],
         ]
+
+        def dockerFilesChanged = false
         if ( env.GERRIT_REFSPEC && env.GERRIT_PROJECT ) {
             def patchDir = env.GERRIT_PROJECT
             dir(patchDir) {
                 gitTools.gerritPatchsetCheckout([
                     credentialsId: 'mcp-ci-gerrit'
                 ])
+                def changedFiles = sh(script: "git diff --name-only HEAD HEAD~1",
+                                      returnStdout: true).trim().tokenize('\n')
+                for (file in changedFiles) {
+                    if ( file ==~ /docker\/.*/ ) {
+                        dockerFilesChanged = true
+                        break
+                    }
+                }
             }
-            def names = sh(script: "ls ${patchDir}/docker", returnStdout: true).trim().tokenize('\n')
             jobParameters << [$class: 'StringParameterValue', name: 'GERRIT_REFSPEC', value: env.GERRIT_REFSPEC ]
             def component = env.GERRIT_PROJECT.split('/')[-1].minus('fuel-ccp-')
             jobParameters << [$class: 'StringParameterValue', name: 'CCP_COMPONENT', value: component ]
@@ -115,23 +124,30 @@ def run_tests() {
             def config = """\
                 images:
                   namespace: ${imagesNamespace}
-                  image_specs:
             """.stripIndent()
-            def tagLine = "tag: \"${env.GERRIT_CHANGE_NUMBER}\""
-            tagLine = tagLine.padLeft(tagLine.length() + 6)
-            for(name in names) {
-                def componentLine = name.padLeft(name.length() + 4)
-                config += componentLine + ':\n' + tagLine + '\n'
+            if ( dockerFilesChanged ) {
+                def imageSpecsLine = "image_specs"
+                imageSpecsLine = imageSpecsLine.padLeft(imageSpecsLine.length() + 2)
+                def tagLine = "tag: \"${env.GERRIT_CHANGE_NUMBER}\""
+                tagLine = tagLine.padLeft(tagLine.length() + 6)
+                def names = sh(script: "ls ${patchDir}/docker", returnStdout: true).trim().tokenize('\n')
+                config += imageSpecsLine + ':\n'
+                for(name in names) {
+                   def componentLine = name.padLeft(name.length() + 4)
+                   config += componentLine + ':\n' + tagLine + '\n'
+                }
             }
             jobParameters << [$class: 'TextParameterValue', name: 'ADDITIONAL_CCP_CONFIG', value: config ]
         }
 
-        stage('build ci images') {
-            build job: 'ccp-docker-build', parameters: jobParameters
-        }
+        if ( useProxy || dockerFilesChanged ) {
+          stage('build ci images') {
+              build job: 'ccp-docker-build', parameters: jobParameters
+          }
 
-        // wait for 1 minute, while port used by nginx will be freed from TW state
-        sleep(60)
+          // wait for 1 minute, while port used by nginx will be freed from TW state
+          sleep(60)
+        }
 
         stage('deploy ci images') {
             jobParameters << [$class: 'StringParameterValue', name: 'KUBERNETES_URL', value: kubernetesURL ]
