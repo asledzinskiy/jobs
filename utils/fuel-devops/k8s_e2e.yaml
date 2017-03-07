@@ -27,31 +27,31 @@ template:
         net: *pool_default
 
     groups:
-      - name: default
-        driver:
-          name: devops.driver.libvirt
-          params:
-            connection_string: !os_env CONNECTION_STRING, qemu:///system
-            storage_pool_name: !os_env STORAGE_POOL_NAME, default
-            stp: False
-            hpet: False
-            use_host_cpu: !os_env DRIVER_USE_HOST_CPU, true
-            enable_acpi: True
+     - name: default
+       driver:
+         name: devops.driver.libvirt
+         params:
+           connection_string: !os_env CONNECTION_STRING, qemu:///system
+           storage_pool_name: !os_env STORAGE_POOL_NAME, default
+           stp: False
+           hpet: False
+           use_host_cpu: !os_env DRIVER_USE_HOST_CPU, true
+           enable_acpi: True
 
-        network_pools:  # Address pools for OpenStack networks.
-          private: private-pool01
-          public: public-pool01
+       network_pools:  # Address pools for OpenStack networks.
+         private: private-pool01
+         public: public-pool01
 
-        l2_network_devices:  # Libvirt bridges. It is *NOT* Nailgun networks
-          private:
-            address_pool: private-pool01
-            dhcp: true
-            forward:
-              mode: nat
+       l2_network_devices:  # Libvirt bridges. It is *NOT* Nailgun networks
+         private:
+           address_pool: private-pool01
+           dhcp: true
+           forward:
+             mode: nat
 
-          public:
-            address_pool: public-pool01
-            dhcp: false
+         public:
+           address_pool: public-pool01
+           dhcp: false
 
        nodes:
         - name: generic-node
