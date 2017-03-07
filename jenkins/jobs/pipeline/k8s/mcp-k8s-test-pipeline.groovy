@@ -118,7 +118,7 @@ def run_integration_tests () {
                 def k8s_repo_dir = "${env.WORKSPACE}/kubernetes"
                 def WORKSPACE = "${env.WORKSPACE}"
                 def DEVOPS_DIR = WORKSPACE + "/utils/fuel-devops"
-                def CONF_PATH = DEVOPS_DIR + "/default.yaml"
+                def CONF_PATH = DEVOPS_DIR + "/k8s_e2e.yaml"
                 def IMAGE_PATH = WORKSPACE + "/image.qcow2"
                 def ENV_NAME = "mcp-k8s-e2e-conformance.${env.BUILD_NUMBER}"
                 def VENV_DIR = "/home/jenkins/venv-fuel-devops-3.0"
