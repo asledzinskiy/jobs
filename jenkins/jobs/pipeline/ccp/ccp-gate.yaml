@@ -100,6 +100,8 @@
               file-paths:
                 - compare-type: ANT
                   pattern: '**/docker/**'
+                - compare-type: ANT
+                  pattern: '**/service/files/defaults.yaml'
           custom-url: '* $JOB_NAME $BUILD_URL'
 
     dsl:

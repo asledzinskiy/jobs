@@ -110,7 +110,7 @@ def run_tests() {
                 def changedFiles = sh(script: "git diff --name-only HEAD HEAD~1",
                                       returnStdout: true).trim().tokenize('\n')
                 for (file in changedFiles) {
-                    if ( file ==~ /docker\/.*/ ) {
+                    if ( file ==~ /docker\/.*/ || file ==~ /service\/files\/defaults.yaml/ ) {
                         dockerFilesChanged = true
                         break
                     }
