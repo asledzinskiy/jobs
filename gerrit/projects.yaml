@@ -674,6 +674,12 @@
   acl-config: acls/horizon-modules/horizon-modules.config
 
 -
+  project: horizon-modules/horizon-avi-panels
+  description: Horizon Avi LBAAS Panel
+  upstream: https://github.com/avinetworks/avi-horizon-dashboard.git
+  acl-config: acls/horizon-modules/horizon-modules.config
+
+-
   project: horizon-modules/horizon-benchmark-dashboard
   description: Horizon Benchmark Dashboard
   acl-config: acls/horizon-modules/horizon-modules.config
