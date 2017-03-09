@@ -99,7 +99,6 @@
       - calico-libcalico-go-pipeline
       - calico-libcalico-pipeline
       - calicoctl-pipeline
-      - calicoctl-test-pipeline
       - calico-component-testing-pipeline
 
 - project:

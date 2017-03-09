@@ -237,10 +237,6 @@
       - string:
           name: DOCKER_REGISTRY
           default: '{docker-dev-virtual}'
-      - string:
-          name: RUN_ON_K8S
-          description: If 'true' then run job on k8s cluster, any other on HW slave
-          default: 'false'
 
     triggers:
       - gerrit:
