@@ -1673,6 +1673,11 @@
   acl-config: acls/salt-formulas/salt-formulas.config
 
 -
+  project: salt-formulas/telegraf
+  description: telegraf formula
+  acl-config: acls/salt-formulas/salt-formulas.config
+
+-
   project: salt-formulas/varnish
   description: varnish formula
   upstream: git://github.com/salt-formulas/salt-formula-varnish.git
