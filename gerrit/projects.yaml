@@ -951,6 +951,11 @@
   acl-config: acls/mcp-ci/mcp-ci.config
 
 -
+  project: mcp/docker-prometheus
+  description: Dockerfiles for Prometheus
+  acl-config: acls/mcp/mcp-docker.config
+
+-
   project: mcp/k8s-netchecker-agent
   description: Basic network checker agent to check DNS and connectivity in kubernetes cluster
   upstream: https://github.com/Mirantis/k8s-netchecker-agent
