@@ -5,12 +5,12 @@ def testContainers(){
   dir("${env.WORKSPACE}/calicoctl") {
     calico.checkoutCalico([
       project_name : 'calicoctl',
-      //FIXME(apanchenko): use env.CALICOCTL_COMMIT here when CR#1479 is merged to upstream
+      //FIXME(apanchenko): use env.CALICOCTL_COMMIT here when CR#1479 and CR#2538 are merged to upstream
       commit : "FETCH_HEAD",
       host : env.GERRIT_HOST,
       credentialsId: 'mcp-ci-gerrit',
       //FIXME: remove this
-      refspec: 'refs/changes/79/1479/3'
+      refspec: 'refs/changes/38/2538/1'
     ])
 
     //FIXME: remove this
