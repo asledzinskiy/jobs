@@ -31,6 +31,10 @@
           default: '10000'
           description: HTTPS port where Decapod has to bind.
       - string:
+          name: DECAPOD_SSH_PRIVATE_KEY
+          default: ./containerization/files/devconfigs/ansible_ssh_keyfile.pem
+          description: Path to SSH private key on hosts.
+      - string:
           name: DOCKER_REGISTRY
           default: "{docker-prod-virtual}"
           description: Docker registry for test images
