@@ -1,0 +1,22 @@
+- job:
+    name: 'java.tests'
+    project-type: freestyle
+    description: 'Java system tests'
+    scm:
+      - git:
+          url: https://github.com/asledzinskiy/twitter-java.git
+          branches:
+            - origin/master
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/target/surefire-reports/**.xml,**/log.out'
+          latest-only: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/target/surefire-reports/**.xml'
+    builders:
+        - shell: |
+            mvn test
+    triggers:
+        - timed: '0 22 * * *'
